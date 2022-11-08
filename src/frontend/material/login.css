@@ -1,0 +1,123 @@
+#logo_parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group {
+  margin: 20px 0px 20px 0px;
+}
+
+.signin {
+  min-height: 300px;
+
+  align-items: center;
+
+  text-align: center;
+}
+
+.forgot-pass-link {
+  float: right;
+}
+
+.group input {
+  width: 280px;
+
+  height: 35px;
+
+  border: 0px;
+
+  outline: none;
+
+  font-size: 13px;
+
+  padding: 0px 10px 0px 10px;
+
+  border-bottom: 1px solid #aaa;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+.group input:hover {
+  border-bottom: 1px solid #000;
+}
+
+.group button {
+  width: 300px;
+
+  height: 45px;
+
+  outline: none;
+
+  border: none;
+
+  background-color: #651fff;
+
+  color: #fff;
+
+  font-family: 'Poppins', sans-serif;
+
+  font-weight: 600;
+
+  font-size: 16px;
+}
+
+.sign-up-link {
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+
+  color: gray;
+
+  font-weight: 400;
+
+  cursor: none;
+}
+
+a:hover {
+  color: #651fff;
+}
+
+label {
+  font-weight: 400;
+
+  float: left;
+}
+
+.head {
+  float: left;
+}
+
+.head p {
+  margin-top: -20px;
+
+  color: gray;
+
+  font-weight: 500;
+
+  padding-bottom: 50px;
+
+  float: left;
+}
+
+.field-icon {
+  float: right;
+
+  margin-left: -30px;
+
+  margin-top: 8px;
+
+  position: absolute;
+
+  z-index: 2;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+
+    opacity: 0;
+  }
+}

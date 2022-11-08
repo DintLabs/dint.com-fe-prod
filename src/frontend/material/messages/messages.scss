@@ -1,0 +1,119 @@
+@import './../utilities/colors.scss';
+
+.messages-container {
+  height: calc(100vh - 80px);
+  overflow: hidden;
+  .user-list {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    // height: 100%;
+    border-right: 1px solid;
+    .message-header {
+      max-height: 60px;
+    }
+    .selected-user {
+      background-color: #242529;
+    }
+    .selected-user-light {
+      background-color: #C4CDD5;
+    }
+    .users {
+      height: 100%;
+      overflow-y: scroll;
+      .user-list-item {
+        &:hover {
+          background-color: #242529;
+        }
+      }
+      .user-list-light {
+        &:hover {
+          background-color: #C4CDD5;
+        }
+      }
+    }
+  }
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .chat-section {
+    position: relative;
+
+    .chat-header {
+      max-height: 60px;
+    }
+    .message-list {
+      overflow: auto;
+      padding: 8px;
+      padding-bottom: 60px;
+      .message-list-divider {
+        margin-bottom: 22px;
+        .MuiDivider-wrapper {
+          position: relative;
+          top: 50%;
+        }
+      }
+      .sender-message {
+        // .message-time {
+        //   align-self: flex-end;
+        // }
+        .message {
+          background: #272727;
+          padding: 8px;
+          border-radius: 8px;
+          word-break: break-all;
+          color: $primary-color;
+        }
+      }
+      .receiver-message {
+        // .message-time {
+        //   align-self: flex-start;
+        // }
+        .message {
+          color: $primary-color;
+          background: #434343;
+          padding: 8px;
+          border-radius: 8px;
+          word-break: break-all;
+        }
+      }
+
+      .message-item {
+        position: relative;
+        display: flex;
+        margin-bottom: 8px;
+        .message-container {
+          max-width: 65%;
+          .message-time {
+            color: $secondary-color;
+            text-align: right;
+          }
+        }
+      }
+    }
+    .message-input {
+      position: absolute;
+      min-width: 100%;
+      bottom: 0;
+      background-color: $primary-bg-color;
+    }
+  }
+}
+
+.add-new-user-modal-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #0f1318;
+  box-shadow: 24;
+  padding: 14px;
+}
+
+@media (max-width: 900px) {
+  .messages-container {
+    height: calc(100vh - 148px);
+  }
+}

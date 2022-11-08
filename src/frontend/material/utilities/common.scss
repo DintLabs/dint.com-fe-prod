@@ -1,0 +1,218 @@
+@import './colors.scss';
+
+.primary-text-color {
+  color: $secondary-color;
+}
+
+.secondary-text-color {
+  color: $secondary-color;
+}
+
+.link-text-color {
+  color: $link-color;
+}
+
+.active-chip-color {
+  background-color: $active-chip-bg !important;
+}
+
+.inactive-chip-color {
+  background-color: $inactive-chip-bg;
+  color: $secondary-color;
+}
+
+.clickable-chip-color {
+  background-color: $inactive-chip-bg;
+}
+
+.success-text-color {
+  color: $success-color;
+}
+
+.error-text-color {
+  color: $error-color;
+}
+
+.secondary-bg-color {
+  background-color: $secondary-bg-color;
+}
+
+/* font styles */
+.capitalize-text {
+  text-transform: uppercase;
+}
+
+/* font-sizes */
+.fs-14 {
+  font-size: 14;
+}
+
+/* cursor-events */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+// flex
+
+.d-flex {
+  display: flex;
+}
+
+.d-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.d-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+// .justify-content-end {
+//   justify-content: flex-end;
+// }
+
+.align-center {
+  align-items: center;
+}
+
+.search-input-base {
+  border: 1px solid $link-color;
+  border-radius: 12px;
+  padding: 0px 12px;
+}
+
+// for loader
+.custom-loader {
+  position: absolute;
+  color: $primary-color;
+  // background-color: ;
+  z-index: 9;
+  filter: invert(0.8);
+}
+
+//  for full cover images
+.full-image-container {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+// for disabled outline button
+.disabled-outlined-button-div {
+  color: $link-color;
+  border: 1px solid rgba($color: $link-color, $alpha: 0.5);
+  border-radius: 8px;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+//  for hove effect on the unsubscribe button
+.hoverable-disabled-unsubscribe-button {
+  color: $primary-color;
+  background-color: $link-color;
+}
+
+// for card's action button
+.card-action-button {
+  background-color: rgba($color: $link-color, $alpha: 0.2);
+  border: 1px solid rgba($color: $link-color, $alpha: 0.5);
+}
+
+// for view more divider
+.view-more-divider {
+  &:hover {
+    color: $link-color;
+  }
+}
+
+//  for video dialog
+.video-dialog {
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  background-size: cover;
+}
+
+// for media left and right navigation
+.media-dialog-left-navigation-icon {
+  transform: translate(0, -50%);
+  position: absolute;
+  top: 50%;
+  left: 1%;
+  background-color: rgba($color: $secondary-bg-color, $alpha: 0.4);
+  color: $primary-color;
+  &:hover {
+    background-color: rgba($color: $secondary-bg-color, $alpha: 0.6);
+  }
+}
+
+.media-dialog-right-navigation-icon {
+  transform: translate(0, -50%);
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  background-color: rgba($color: $secondary-bg-color, $alpha: 0.4);
+  color: $primary-color;
+  &:hover {
+    background-color: rgba($color: $secondary-bg-color, $alpha: 0.6);
+  }
+}
+
+// videos cards on mobile.
+.video-cards-container {
+  position: relative;
+  height: 80vh;
+  width: 70%;
+  max-width: 450px;
+  max-height: 1200px;
+  overflow: scroll;
+  scroll-snap-type: y mandatory;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  .video-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    .video-card-header {
+      position: absolute;
+      top: 0;
+    }
+    .video-card-footer {
+      position: absolute;
+      bottom: 0;
+    }
+    .video-card-player {
+      object-fit: fill;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+/*Google Translator */
+.goog-logo-link {
+  display:none !important;
+}
+
+.goog-te-gadget {
+  color: transparent !important;
+}
+
+.goog-tooltip {
+  display: none !important;
+}
+.goog-tooltip:hover {
+  display: none !important;
+}
+#goog-gt-tt, .goog-te-balloon-frame{display: none !important;}
+
+.goog-text-highlight { background: none !important; box-shadow: none !important;}
+
+.goog-te-banner-frame{display: none !important;}
+

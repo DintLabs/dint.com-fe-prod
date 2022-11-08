@@ -1,0 +1,113 @@
+/* ---------------------------
+        sidebar code
+------------------------------- */
+
+#wallet_btn,
+#profile_btn {
+  background-color: transparent;
+  border: 0;
+  color: white;
+}
+#nav_last_part {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: rgb(255, 255, 255);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  border-left: 1px solid gray;
+}
+
+#nav_last_part {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.sidenav p {
+  margin: 0;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  background-color: transparent;
+  border: none;
+  height: auto;
+}
+
+.sidenav_child {
+  min-height: 400px;
+  margin: 15px;
+}
+
+.sidenav_top_div {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.sidenav_top_div div {
+  margin-left: 7px;
+}
+.sidenav_top_div div p {
+  margin: 0;
+  font-weight: 600;
+}
+.wallets_div p {
+  margin-left: 15px;
+}
+
+#main {
+  transition: margin-left 0.5s;
+  padding: 16px;
+}
+
+#balance_parent {
+  text-align: center;
+}
+.wallets_parent_div {
+  border-radius: 5px;
+  margin-top: 30px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  width: 100%;
+  border: 1px solid rgba(128, 128, 128, 0.395);
+}
+
+.wallets_div {
+  width: 100%;
+  padding-left: 15px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  border-bottom: 1px solid gainsboro;
+}
+
+.wallets_div :hover {
+  cursor: pointer;
+}

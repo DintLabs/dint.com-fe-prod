@@ -1,0 +1,89 @@
+@import './../material/utilities/common.scss';
+@import './../material/messages/messages.scss';
+@import './../material/subscriptions/subscriptions.scss';
+@import './../material/pages/createPage.scss';
+@import './../material/utilities/colors.scss';
+@import './../material/pages/viewPage.scss';
+@import './../material/pages/settings.scss';
+@import './../material/pages//subscribers.scss';
+
+img {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.dark-mode {
+  th {
+    color: white !important;
+  }
+  td {
+    color: white !important;
+  }
+  .form-label {
+    color: white;
+  }
+  h4 {
+    color: white;
+  }
+  h1 {
+    color: white;
+  }
+  button {
+    color: white;
+    :hover {
+      color: white !important;
+    }
+  }
+}
+
+.mui-outlinedInput-with-label {
+  .MuiOutlinedInput-root {
+    legend {
+      display: block !important;
+    }
+  }
+}
+
+.MuiOutlinedInput-root {
+  legend {
+    display: none;
+  }
+  fieldset {
+    top: 0;
+  }
+}
+
+.MuiFormHelperText-root {
+  color: $error-color;
+}
+
+//disable button color
+.MuiButton-root.Mui-disabled {
+  pointer-events: auto;
+  cursor: not-allowed;
+  background-color: $link-color;
+  .MuiCircularProgress-root {
+    color: $primary-color;
+  }
+}
+
+// for removing the number up side arrows from input
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.white-content{
+  background-color: white !important;
+  color: #161C24;
+}

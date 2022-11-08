@@ -1,0 +1,19 @@
+#light {
+    background-color: white;
+}
+
+#dark {
+    background-color: #161c24;
+}
+
+/*.custom-mode {*/
+/*    color: black;*/
+/*}*/
+
+#light .primary-text-color{
+    color: #161c24;
+}
+
+#dark .primary-text-color{
+    color: white;
+}

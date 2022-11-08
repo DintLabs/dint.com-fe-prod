@@ -1,0 +1,154 @@
+@import './../../material/utilities/colors.scss';
+
+.view-page-container {
+  height: calc(100vh - 80px);
+  .left-side-panel {
+    width: 20%;
+  }
+  .center-page-container {
+    position: relative;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    background-color: rgba($color: $primary-color, $alpha: 0.1);
+    border: 1px solid;
+    overflow-y: auto;
+    .creator-floating-menu {
+      background-color: $primary-bg-color;
+      color: $primary-color;
+      position: absolute;
+      top: 4px;
+      right: 4px;
+    }
+    hr {
+      margin: 12px 0px 8px 0px;
+    }
+    .page-profile-section {
+      background-color: $primary-bg-color;
+    }
+    .cover-photo-container {
+      height: 300px;
+    }
+    .tab-body {
+      padding: 16px;
+      .info-cards {
+        padding: 8px;
+        background-color: $primary-bg-color;
+        .card-header {
+          margin-bottom: 16px;
+        }
+      }
+    }
+  }
+  .right-side-panel {
+    width: 25%;
+    padding: 8px;
+    overflow: auto;
+  }
+}
+
+.navigation-menu {
+  .selected-menu-item {
+    color: $primary-color;
+  }
+  .navigation-menu-item {
+    cursor: pointer;
+    &:hover {
+      color: $secondary-bg-color;
+    }
+  }
+}
+
+.subscriptions-container {
+  height: fit-content;
+  .accordion-container {
+    .accordion-details {
+      .campaign-message {
+        background-color: rgba($color: $primary-color, $alpha: 0.1);
+        border-radius: 8px;
+        padding: 8px;
+      }
+    }
+  }
+}
+
+.subscription-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subscription-modal {
+  border: 1px solid;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: $modal-bg-color;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  .cover-picture-container {
+    height: 200px;
+  }
+  .subscription-modal-body {
+    .subscription-detail-container {
+      padding: 0px 8px;
+    }
+    .page-profile-container {
+      width: 80px;
+      height: 80px;
+      margin-top: -34px;
+    }
+  }
+}
+
+.view-media-modal {
+  .MuiDialog-container {
+    .MuiPaper-root {
+      position: static;
+    }
+  }
+}
+
+.page-media-container {
+  .card-container {
+    height: 285px;
+  }
+  .loader-card {
+    background-color: rgba($color: $secondary-bg-color, $alpha: 0.4);
+  }
+  .image-cards {
+    border-radius: 0;
+    cursor: pointer;
+  }
+  .video-cards {
+    border-radius: 0;
+    cursor: pointer;
+    position: relative;
+    .floating-play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: $card-bg-color;
+      color: $link-color;
+    }
+  }
+}
+
+.unsubscribe-modal {
+  border: 1px solid;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: $modal-bg-color;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  .modal-header {
+    padding: 8px;
+    border-bottom: 1px solid;
+  }
+}

@@ -1,0 +1,9 @@
+declare module '*.png';
+declare module '*.svg';
+declare module '*.jpeg';
+declare module '*.jpg';
+declare module '*.mp4';
+declare module '*.MP4';
+declare module '*.MOV';
+declare module '*.mov';
+declare module '*.quicktime';

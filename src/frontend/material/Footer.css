@@ -1,0 +1,138 @@
+/*FOOTER*/
+.footer * {
+  letter-spacing: 0.08em;
+  line-height: 1.8em;
+}
+
+#footer_logo {
+  height: 45px;
+  margin-right: 5px;
+}
+
+#leptop_social {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  display: none;
+}
+
+.social_parent {
+  display: flex;
+}
+
+.social_box {
+  border-radius: 10px;
+  margin-left: 10px;
+  height: 40px;
+  width: 40px;
+  background-color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.social_box:hover {
+  border: 2px solid #000;
+}
+.social_box svg {
+  fill: black;
+}
+.footer {
+  background-color: rgb(0, 0, 0);
+  width: 100%;
+  display: flex;
+  align-items: top;
+  padding: 0 3rem 5rem 3rem;
+}
+
+.footer section {
+  min-height: 300px;
+  padding: 1rem 2rem;
+  width: 350px;
+  vertical-align: top;
+}
+
+.footer section h4,
+h3 {
+  color: white;
+}
+#company_desc_footer {
+  text-align: left;
+  color: white;
+}
+
+.footer section a {
+  color: white;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin: 15px 0;
+}
+
+.footer section a:hover {
+  color: #4a00e0;
+}
+
+.footer_link_title {
+  text-align: left;
+}
+
+.footer section a span {
+  margin: 0 10px;
+}
+
+.sub-footer {
+  color: aliceblue;
+  background-color: black;
+  text-align: Center;
+  padding: 1rem 0;
+}
+
+@media (max-width: 1020px) {
+  .footer {
+    display: block;
+  }
+
+  .footer section {
+    padding: 1rem 1rem;
+  }
+
+  .footer section:nth-child(2),
+  .footer section:nth-child(3) {
+    display: inline-block;
+  }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .footer {
+    padding: 20px;
+    display: block;
+  }
+
+  .footer section {
+    padding: 1rem 1rem;
+    min-height: 0;
+    text-align: center;
+  }
+  .middle_on_mobile {
+    margin: auto;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1300px) {
+  #leptop_social {
+    display: flex;
+  }
+  .hide_on_leptop {
+    display: none;
+  }
+  .footer {
+    padding: 0 3rem 0 3rem;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+}

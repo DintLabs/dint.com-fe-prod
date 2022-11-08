@@ -1,0 +1,129 @@
+@import './../../material/utilities/colors.scss';
+
+.subscription-setting-container {
+  border-left: solid 1px;
+  border-right: solid 1px;
+  border-bottom: solid 1px;
+  .container-header {
+    padding: 16px;
+    border-bottom: solid 1px;
+  }
+  .container-body {
+    overflow: auto;
+    background-color: $primary-bg-color;
+    .settings-section-header {
+      padding: 16px 16px;
+    }
+    .settings-section-container {
+      background-color: $card-bg-color;
+      border-top: 1px solid;
+      border-bottom: 1px solid;
+      .bundle-container {
+        padding: 6px;
+        border-radius: 8px;
+        border: 1.5px solid $link-color;
+        &:hover {
+          background-color: rgba($link-color, 0.1);
+          // background-color: rgba(118, 53, 220, 0.15);
+        }
+        .MuiIconButton-root {
+          &:hover {
+            background-color: $link-color;
+            color: $primary-color;
+          }
+        }
+      }
+    }
+    .setting-section{
+      background-color: #DFE3E8;
+    }
+  }
+}
+
+.promotion-campaign-modal {
+  border-radius: 16px;
+  border: 1px solid;
+  background-color: $modal-bg-color;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  .promotion-modal-header {
+    padding: 16px;
+    border-bottom: 1px solid;
+  }
+  .promotion-modal-body {
+    padding: 16px;
+  }
+  .promotion-modal-footer {
+    padding: 16px;
+  }
+}
+
+.free-trial-link-modal {
+  border-radius: 16px;
+  border: 1px solid;
+  background-color: $modal-bg-color;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  padding: 16px;
+}
+
+.free-trial-container {
+  .free-trial-detail-grid {
+    margin: 12px 0px;
+    .free-trial-card {
+      position: relative;
+      overflow: hidden;
+      padding: 8px;
+      margin: 0px 8px;
+      height: 100%;
+      border-radius: 8px;
+      border: 1px solid $link-color;
+      &:hover {
+        background-color: rgba($link-color, 0.1);
+      }
+      hr {
+        margin: 4px 0px !important;
+      }
+      .MuiIconButton-root {
+        &:hover {
+          background-color: $link-color;
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+.promotion-campaign-card {
+  position: relative;
+  border: 1px solid $link-color;
+  border-radius: 8px;
+  padding: 16px;
+  &:hover {
+    background-color: rgba($link-color, 0.1);
+  }
+  .campaign-message {
+    background-color: rgba($color: $primary-color, $alpha: 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+  .promotion-title {
+    margin-bottom: 8px;
+    .MuiIconButton-root {
+      &:hover {
+        background-color: $link-color;
+        color: $primary-color;
+      }
+    }
+  }
+  hr {
+    margin: 8px 0px;
+  }
+}

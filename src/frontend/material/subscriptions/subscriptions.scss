@@ -1,0 +1,39 @@
+@import '../utilities/colors.scss';
+
+.subscriptions-page-container {
+  height: calc(100vh - 80px);
+  overflow: hidden;
+
+  .container-header {
+    border-bottom: 1px solid;
+  }
+  .container-body {
+    overflow: auto;
+  }
+  .subscription-details-container {
+    color: $primary-color;
+    .page-detail-grid {
+      margin: 12px 0px;
+      width: 100%;
+      .page-detail-card {
+        margin: 0px 12px;
+        height: 280px;
+        border-radius: 8px;
+        border: 1px solid #2b2b2b;
+        overflow: auto;
+
+        .page-cover-picture-container {
+          height: 100px;
+        }
+        .page-detail-body {
+          padding: 8px 16px 16px 16px;
+          .page-profile-container {
+            margin-top: -24px;
+            height: 72px;
+            width: 72px;
+          }
+        }
+      }
+    }
+  }
+}

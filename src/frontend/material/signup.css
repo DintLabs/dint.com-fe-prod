@@ -1,0 +1,125 @@
+.login_divs .form {
+  padding: 30px 40px;
+}
+#signup_here {
+  color: rgba(25, 25, 236, 0.596);
+  text-decoration: none;
+}
+
+#signup_here:hover {
+  color: blue;
+  text-decoration: none;
+}
+
+#forgotPassText {
+  color: rgba(25, 25, 236, 0.596);
+}
+#forgotPassText:hover {
+  color: blue;
+  text-decoration: none;
+}
+
+#forgotpassBtn {
+  margin-top: 10px;
+  border: none;
+  background-color: transparent;
+}
+
+#signup_line {
+  margin-top: 10px;
+}
+
+.login_divs .form-control {
+  margin-bottom: 10px;
+  /* padding-bottom: 20px; */
+  position: relative;
+}
+
+.login_divs .form-control label {
+  display: inline-block;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.login_divs .form-control input {
+  border: 2px solid #f0f0f0;
+  border-radius: 4px;
+  display: block;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px;
+  width: 100%;
+}
+
+.login_divs .form-control input:focus {
+  outline: 0;
+  border-color: #777;
+}
+
+.login_divs .form-control.success input {
+  border-color: #2ecc71;
+}
+
+.login_divs .form-control.error input {
+  border-color: #e74c3c;
+}
+
+.login_divs .form-control i {
+  visibility: hidden;
+  position: absolute;
+  top: 40px;
+  right: 10px;
+}
+
+.login_divs .form-control.success i.fa-check-circle {
+  color: #2ecc71;
+  visibility: visible;
+}
+
+.login_divs .form-control.error i.fa-exclamation-circle {
+  color: #e74c3c;
+  visibility: visible;
+}
+
+.login_divs .form-control small {
+  color: #e74c3c;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  visibility: hidden;
+}
+
+.login_divs .form-control.error small {
+  visibility: visible;
+}
+
+#signup_btn {
+  background-color: #8e44ad;
+  border: 2px solid #8e44ad;
+  border-radius: 4px;
+  color: #fff;
+  display: block;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 10px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+#error_signup {
+  color: red;
+}
+
+.login_divs {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+.authbtnsocial {
+  padding: 10px;
+  margin-left: 25px;
+  border-radius: 15px;
+  border: 0;
+  color: white;
+}

@@ -1,0 +1,361 @@
+import VideoCardsMobileView from 'frontend/components/view-page/VideoCardsMobileView';
+import AuthGuard from 'frontend/guards/AuthGuard';
+import GuestGuard from 'frontend/guards/GuestGuard';
+import LoungeLayout from 'frontend/layouts/lounge';
+import MainLayout from 'frontend/layouts/main';
+import SecondaryMainNavBar from 'frontend/layouts/main/SecondaryMainNavBar';
+import MarketPlaceLayout from 'frontend/layouts/marketPlace';
+import Bookmarks from 'frontend/pages/Bookmarks';
+import CreatePage from 'frontend/pages/Create-Page/CreatePage';
+import Events from 'frontend/pages/Events/Events';
+import Followers from 'frontend/pages/Followers';
+import Home from 'frontend/pages/Home/Home';
+import BankContainer from 'frontend/pages/Your-Bank';
+import PaymentCard from 'frontend/pages/Your-Bank/BankingSteps/PaymentCard';
+// import Home from 'frontend/pages/Home/Home';
+import Lists from 'frontend/pages/Lists';
+import Login from 'frontend/pages/Login/Login';
+import NewHome from 'frontend/pages/Lounge/Lounge';
+import MarketPlace from 'frontend/pages/MarketPlace/MarketPlace';
+import MarketPlaceCreate from 'frontend/pages/MarketPlace/MarketPlaceCreate/MarketPlaceCreate';
+import MyPurchases from 'frontend/pages/MarketPlace/MyPurchases/MyPurchases';
+import MyEvents from 'frontend/pages/my-events';
+import NotFound from 'frontend/pages/NotFound';
+import AddCard from 'frontend/pages/payment/AddCard';
+import CookieNotice from 'frontend/pages/Privacy/CookieNotice';
+import PrivacyPolicy from 'frontend/pages/Privacy/PrivacyPolicy';
+import TermsOfServices from 'frontend/pages/Privacy/TermsOfServices';
+import Profile from 'frontend/pages/Profile/Profile';
+import BuyToken from 'frontend/pages/BuyToken';
+import PublicEvents from 'frontend/pages/PublicEvents/PublicEvents';
+import Referrals from 'frontend/pages/Referrals';
+import Register from 'frontend/pages/Register/Register';
+import Search from 'frontend/pages/search';
+import Settings from 'frontend/pages/Settings';
+import TicketCreate from 'frontend/pages/TicketCreate/TicketCreate';
+import ViewPage from 'frontend/pages/View-Page/ViewPage';
+import { fetchUserData } from 'frontend/redux/slices/user';
+import { AppDispatch } from 'frontend/redux/store';
+import ThemeConfig from 'frontend/theme';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useRoutes } from 'react-router-dom';
+
+// ----------------------------------------------------------------------
+
+const win = window as any;
+
+export default function Router() {
+  const dispatch = useDispatch<AppDispatch>();
+  win.objNavigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
+
+  return useRoutes([
+    {
+      path: 'auth',
+      element: <MainLayout />,
+      children: [
+        {
+          path: 'login',
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          )
+        },
+        {
+          path: 'signup',
+          element: (
+            <GuestGuard>
+              <Register />
+            </GuestGuard>
+          )
+        }
+      ]
+    },
+    {
+      path: '/',
+      element: <MainLayout />,
+      children: [
+        { path: '/home', element: <Home /> },
+        { path: '/', element:  (
+            <GuestGuard>
+              <Login />
+              </GuestGuard>
+          ) },
+        {
+          path: '/events',
+          element: (
+            <AuthGuard>
+              <Events />
+            </AuthGuard>
+          )
+        },
+        { path: '/public/events', element: <PublicEvents /> },
+        {
+          path: '/ticketcreate',
+          element: (
+            <AuthGuard>
+              <TicketCreate />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/profile',
+          element: (
+            <AuthGuard>
+              <Profile />
+            </AuthGuard>
+          )
+        }
+      ]
+    },
+    {
+      path: '/',
+      element: (
+        <ThemeConfig>
+          <SecondaryMainNavBar />
+        </ThemeConfig>
+      ),
+      children: [
+        {
+          path: 'ig',
+          element: <VideoCardsMobileView />
+        },
+        {
+          path: '/404',
+          element: <NotFound />
+        },
+        {
+          path: '/buy-dint-token',
+          element: (
+            <AuthGuard>
+              <NewHome />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/dint-wallet',
+          element: (
+            <AuthGuard>
+              <NewHome />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/lounge',
+          element: (
+            <AuthGuard>
+              <NewHome />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/lounge/events',
+          element: (
+            <AuthGuard>
+              <MyEvents />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/privacy',
+          element: <PrivacyPolicy />
+        },
+        {
+          path: '/cookies',
+          element: <CookieNotice />
+        },
+        {
+          path: '/terms',
+          element: <TermsOfServices />
+        },
+        {
+          path: '/lounge/:page',
+          element: (
+            <AuthGuard>
+              <NewHome />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/lounge/:page/:username',
+          element: (
+            <AuthGuard>
+              <NewHome />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/lounge/messages/user/:uid',
+          element: (
+            <AuthGuard>
+              <NewHome />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/lounge/messages/newMessage',
+          element: (
+            <AuthGuard>
+              <NewHome />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/page/creation',
+          element: (
+            <AuthGuard>
+              <CreatePage />
+            </AuthGuard>
+          )
+        },
+
+        {
+          path: ':username/subscribers',
+          element: (
+            <AuthGuard>
+              <ViewPage />
+            </AuthGuard>
+          )
+        },
+        {
+          path: ':username/settings',
+          element: (
+            <AuthGuard>
+              <ViewPage />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/en/fiat/withdraw/:currency',
+          element: (
+            <AuthGuard>
+              <NewHome />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/processWithdraw',
+          element: (
+            <AuthGuard>
+              <NewHome />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/:username',
+          element: <NewHome />
+        },
+        {
+          path: '/*',
+          element: <NotFound />
+        }
+      ]
+    },
+    {
+      path: '/marketplace',
+      element: <MarketPlaceLayout />,
+      children: [
+        { path: '/marketplace/', element: <MarketPlace /> },
+        { path: '/marketplace/create', element: <MarketPlaceCreate /> },
+        { path: '/marketplace/my-purchases', element: <MyPurchases /> }
+      ]
+    },
+    {
+      path: '/',
+      element: (
+        <ThemeConfig>
+          <LoungeLayout />
+        </ThemeConfig>
+      ),
+      children: [
+        {
+          path: '/followers/*',
+          element: (
+            <AuthGuard>
+              <Followers />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/payment/add',
+          element: (
+            <AuthGuard>
+              <AddCard />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/settings/*',
+          element: (
+            <AuthGuard>
+              <Settings />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/cards',
+          element: (
+            <AuthGuard>
+              <PaymentCard />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/referrals/*',
+          element: (
+            <AuthGuard>
+              <Referrals />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/your-bank',
+          element: (
+            <AuthGuard>
+              <BankContainer />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/bookmarks/*',
+          element: (
+            <AuthGuard>
+              <Bookmarks />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/lists/*',
+          element: (
+            <AuthGuard>
+              <Lists />
+            </AuthGuard>
+          )
+        }
+      ]
+    },
+    {
+      path: '/',
+      element: (
+        <ThemeConfig>
+          <LoungeLayout isSearchPage={true} />
+        </ThemeConfig>
+      ),
+      children: [
+        {
+          path: '/search',
+          element: (
+            <AuthGuard>
+              <Search />
+            </AuthGuard>
+          )
+        }
+      ]
+    }
+  ]);
+}
