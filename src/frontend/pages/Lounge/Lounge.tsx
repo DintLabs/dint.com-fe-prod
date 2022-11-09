@@ -6,6 +6,7 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import _axios from 'frontend/api/axios';
+import {  isMobile } from "frontend/utils";
 import { HOME_SIDE_MENU } from 'frontend/redux/slices/newHome';
 import { useLounge } from 'frontend/contexts/LoungeContext';
 import { dispatch, RootState } from 'frontend/redux/store';
@@ -99,6 +100,10 @@ const NewHome = () => {
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
+  const isMobileScreen =  useMemo(()=>{
+    return  isMobile()
+  },[widthScreen])
+
   const styleSidebarMobile = {
     display: widthScreen >= 900 ? 'none' : '',
     position: 'fixed',
@@ -179,11 +184,11 @@ const NewHome = () => {
       </Helmet>
       <Box>
         <Grid container>
-          <Grid item xs={0} md={3} sx={{ display: widthScreen >= 900 ? '' : 'none' }}>
+          <Grid item xs={0} md={3} sx={{ display: !isMobileScreen ? '' : 'none' }}>
             {userData && !!userData.id && <Sidebar />}
           </Grid>
           <Grid item sx={styleSidebarMobile}>
-            {userData && !!userData.id && <SidebarMobile widthScreen={widthScreen} />}
+            {userData && !!userData.id && isMobileScreen &&  <SidebarMobile widthScreen={widthScreen} />}
           </Grid>
           <Grid item xs={12} md={9}>
             {isLounge ? renderComponent : null}

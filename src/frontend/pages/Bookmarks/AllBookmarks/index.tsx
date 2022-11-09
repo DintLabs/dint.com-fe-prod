@@ -53,7 +53,7 @@ const HomeTab = () => {
   const [isLoadingBookmarks , setIsLoadingBookmarks] = useState(false)
   // const [bookmarkups, setBookmarkups] = useState([])
   const [bookmarkedPosts, setBookmarkedPosts] = useState([])
-  
+
 
   const {
     counts,
@@ -270,7 +270,7 @@ const HomeTab = () => {
                 }
                 custom_username={item?.user ? item?.user?.custom_username : ''}
                 image={item?.post?.media || null}
-                post={item}
+                post={item?.post}
                 onDelete={postDeleted}
               />
             ))}
