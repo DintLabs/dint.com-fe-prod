@@ -43,7 +43,7 @@ const Sidebar = () => {
       window.location.assign('https://paydev.dint.com');
     }
   });
-  
+
   return (
     <>
       <MoreOptionsDrawer open={showMoreDrawer} onClose={() => setShowMoreDrawer(false)} />
@@ -132,11 +132,11 @@ const Sidebar = () => {
             cursor: 'pointer',
             color: HOME_SIDE_MENU.LISTS === selectedMenu ? toggle ? 'text.primary' : '#161C24' : 'text.secondary'
           }}
-          
+
           onClick={() => {
-            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.LISTS })); 
+            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.LISTS }));
             navigate(`/lists`);
-          
+
           }}
         >
           <ListItemAvatar>
@@ -146,7 +146,7 @@ const Sidebar = () => {
         </ListItem>
 
         <ListItem
-        
+
           sx={{
             cursor: 'pointer',
             color: HOME_SIDE_MENU.TOKEN === selectedMenu ? toggle ? 'text.primary' : '#161C24' : 'text.secondary'

@@ -107,7 +107,7 @@ const PostItem = ({
 
     setPost((prevState) => ({
       ...prevState,
-      post_comment: [...prevState.post_comment, commentResp]
+      post_comment: [...prevState.post_comment || [], commentResp]
     }));
 
     setCommentText('');
@@ -122,7 +122,7 @@ const PostItem = ({
       ) {
         setAlreadyLike(true);
       }
-      // if(post.bookmark_post.find((item) => 
+      // if(post.bookmark_post.find((item) =>
       // typeof item.user !== 'number' ? item.user?.id === user.id : item.user === user.id
       // )
       // ){
@@ -155,6 +155,7 @@ const PostItem = ({
   };
 
   const sendLike = async () => {
+
     if (alreadyLike) {
       toast.warn('You have Alread like this post');
       return;
@@ -165,13 +166,11 @@ const PostItem = ({
       return;
     }
 
-    console.log('user', user);
-    console.log('post', post);
     const likeResp: LikePostInterface = await dispatch(addLikeForPost(user.id, post.id));
 
     setAlreadyLike(true);
 
-    setPost((prevState) => ({ ...prevState, like_post: [...prevState?.like_post, likeResp] }));
+    setPost((prevState) => ({ ...prevState, like_post: [...prevState?.like_post || [], likeResp] }));
   };
 
   const sendBookmark = async () => {
@@ -198,11 +197,11 @@ const PostItem = ({
     }
 
     await dispatch(deleteBookmarkForPost(post.id));
-      
+
       if(isBookmarksPage){
         if (onDelete) {
           onDelete(post.id);
-        }  
+        }
       }
 
     setAlreadyBookmark(false);
@@ -341,7 +340,7 @@ const PostItem = ({
 
         {showComments && (
           <Box sx={{ p: 3 }}>
-            <h4 style={{color : toggle ? 'white' : '#161C24'}}>Comments ({comments.length ?? 0})</h4>
+            <h4 style={{color : toggle ? 'white' : '#161C24'}}>Comments ({comments?.length ?? 0})</h4>
             {comments?.map((item, i) => {
               return (
                 <div
