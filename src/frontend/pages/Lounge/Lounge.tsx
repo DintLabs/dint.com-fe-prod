@@ -6,6 +6,7 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import _axios from 'frontend/api/axios';
+import {  isMobile } from "frontend/utils";
 import { HOME_SIDE_MENU } from 'frontend/redux/slices/newHome';
 import { useLounge } from 'frontend/contexts/LoungeContext';
 import { dispatch, RootState } from 'frontend/redux/store';
@@ -100,7 +101,7 @@ const NewHome = () => {
   }, []);
 
   const isMobileScreen =  useMemo(()=>{
-    return  widthScreen < 900
+    return  isMobile()
   },[widthScreen])
 
   const styleSidebarMobile = {

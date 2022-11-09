@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 
 import { Box, Grid } from '@mui/material';
 
-import { isIPhone } from 'frontend/utils';
+import { isIPhone, isMobile } from "frontend/utils";
 
 import Sidebar from 'frontend/pages/Lounge/Sidebar';
 import SidebarMobile from 'frontend/pages/Lounge/SidebarMobile';
@@ -38,6 +38,7 @@ export default function LoungeLayout({ isSearchPage = false }) {
     width: '100%',
     zIndex: '120'
   };
+
 
   return (
     <div
@@ -73,11 +74,11 @@ export default function LoungeLayout({ isSearchPage = false }) {
                   <Grid item xs={0} md={3} />
                 ) : (
                   <Grid item xs={0} md={3} sx={{ display: widthScreen >= 900 ? '' : 'none' }}>
-                    {user && !!user.id && <Sidebar />}
+                    {user && !!user.id && !isMobile() && <Sidebar />}
                   </Grid>
                 )}
                 <Grid item sx={styleSidebarMobile}>
-                  {user && !!user.id && <SidebarMobile widthScreen={widthScreen} />}
+                  {user && !!user.id && isMobile() && <SidebarMobile widthScreen={widthScreen} />}
                 </Grid>
                 <Grid item xs={12} md={isSearchPage ? 6 : 9}>
                   <Outlet />

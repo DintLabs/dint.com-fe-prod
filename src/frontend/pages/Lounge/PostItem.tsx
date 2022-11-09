@@ -346,20 +346,20 @@ const PostItem = ({
                 <div
                   className=" my-3"
                   style={{ background: 'transparent' }}
-                  key={`comments_${item.created_at}_${i}`}
+                  key={`comments_${item?.created_at}_${i}`}
                 >
                   <div className="d-flex justify-content-between align-items-center">
                     <div className="user d-flex flex-row align-items-center">
                       <ListItemAvatar>
-                        {typeof item.user !== 'number' && <Avatar src={item.user.profile_image} />}
+                        {typeof item?.user !== 'number' && <Avatar src={item?.user?.profile_image} />}
                       </ListItemAvatar>
 
                       <span>
-                        <small style={{color : toggle ? 'white' : '#161C24'}}>{item.comment}</small>
+                        <small style={{color : toggle ? 'white' : '#161C24'}}>{item?.comment}</small>
                       </span>
                     </div>
 
-                    <small className="text-muted">{moment(item.created_at).fromNow()}</small>
+                    <small className="text-muted">{moment(item?.created_at).fromNow()}</small>
                   </div>
                 </div>
               );
