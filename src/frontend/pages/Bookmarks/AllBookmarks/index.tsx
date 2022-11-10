@@ -262,13 +262,13 @@ const HomeTab = () => {
                 description={item?.post?.content}
                 createdAt={item?.post?.created_at}
                 userName={
-                  item?.user
-                    ? item?.user?.display_name ||
-                      item?.user?.first_name ||
-                      item?.user?.custom_username
+                  item?.post?.user
+                    ? item?.post?.user?.display_name ||
+                      item?.post?.user?.first_name ||
+                      item?.post?.user?.custom_username
                     : ''
                 }
-                custom_username={item?.user ? item?.user?.custom_username : ''}
+                custom_username={item?.post?.user ? item?.post?.user?.custom_username : ''}
                 image={item?.post?.media || null}
                 post={item?.post}
                 onDelete={postDeleted}
