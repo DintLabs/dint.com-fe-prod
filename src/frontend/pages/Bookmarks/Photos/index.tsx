@@ -6,45 +6,22 @@ import styled from 'styled-components';
 import { useContext, useEffect, useState } from 'react';
 import {ThemeContext} from '../../../contexts/ThemeContext'
 import _axios from '../../../api/axios';
+import { GetUserBookmark } from "../../../hooks/bookmark";
+import { postTypes } from "../../../data";
 
 const ImgStyled = styled.img`
   width: 100%;
 `;
 
 const Photos = () => {
-  const geBookmarkPhotos = async () => {
-    if (isLoadingBookmarks) return;
-    try{
-      setIsLoadingBookmarks(true)
-      const { data }: any = await _axios.get(`/api/user/get-user-bookmarks/?type=image`);
-      if(data?.data?.length){
-        const bookmarksData = data?.data || []
-        const bookMarkedPost = bookmarksData.map((bookmarkRow: any) => {
-          return bookmarkRow?.post
-        })
-        setBookmarkedPosts(bookMarkedPost)
-      }
-      setIsLoadingBookmarks(false)
-    } catch(err){
-      setIsLoadingBookmarks(false)
-    }
-  }
-
-  useEffect(() => {
-    geBookmarkPhotos();
-  }, []);
-
   const { toggle } = useContext(ThemeContext);
-
-  const [isLoadingBookmarks, setIsLoadingBookmarks] = useState(false);
-  const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
-
+  const {data:bookmarkedPosts, loading:isLoading} = GetUserBookmark(postTypes.image.value)
   const [isOpenFullMode, setIsOpenFullMode] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-  const togglePhoto = (img) => {
+  const togglePhoto = (image:string) => {
     setIsOpenFullMode(!isOpenFullMode);
-    setSelectedPhoto(img);
+    setSelectedPhoto(image);
   }
 
   return (
@@ -52,11 +29,11 @@ const Photos = () => {
       <Submenu title="PHOTOS" username="" routes={[]} noTag md={12} />
 
       <FlexRow fWrap="wrap" direction="row">
-        {bookmarkedPosts.map((image, i) => (
-          <Col key={`${image}_${i}`} style={{width:"33%"}}>
+        {bookmarkedPosts && bookmarkedPosts.map((post, i) => (
+          <Col key={`${post?.id}_${i}`} style={{width:"33%"}}>
             <ImgStyled
-              onClick={() => togglePhoto(image.media)}
-              src={image.media} alt="image"
+              onClick={() => togglePhoto(post?.media)}
+              src={post?.media} alt="image"
               style={{border : !toggle && 'solid 1px #161C24', cursor: "pointer"}}
               width="100%" height="200px"
             />

@@ -19,12 +19,16 @@ import {
 } from '@mui/material';
 
 import Submenu from 'frontend/components/submenu';
-import { useContext } from 'react';
-import { ThemeContext } from '../../../contexts/ThemeContext';
+import { postTypes } from "../../../data";
+import PostItem from "../../Lounge/PostItem";
+import PostItemSkeleton from "../../../components/common/skeletons/PostItemSkeleton";
+import { FlexRow } from "../../../reusable/reusableStyled";
+import { GetUserBookmark } from "../../../hooks/bookmark";
 
 const Other = () => {
   const theme = useTheme();
-  const { toggle } = useContext(ThemeContext);
+  const {data:bookmarkedPosts, loading:isLoading} = GetUserBookmark(postTypes.text.value)
+
   return (
     <Grid container
           sx={{
@@ -33,7 +37,41 @@ const Other = () => {
           }}
     >
       <Submenu title="OTHER" username="" routes={[]} noTag md={12} />
-      <Box
+      <FlexRow gap="5px" fWrap="wrap" style={{ width: "100%"}}>
+        <Box style={{width: "100%"}}>
+          {bookmarkedPosts && bookmarkedPosts.map((post: any) => (
+            <PostItem
+              fetchPosts={()=>{}}
+              canDeletePost={true}
+              key={post?.id}
+              isBookmarked={true}
+              isBookmarksPage={true}
+              description={post?.content}
+              createdAt={post?.created_at}
+              userName={
+                  post?.user
+                  ? post?.user?.display_name ||
+                  post?.user?.first_name ||
+                  post?.user?.custom_username
+                  : ''
+              }
+              custom_username={post?.user ? post?.user?.custom_username : ''}
+              image={post?.media || null}
+              post={post}
+              onDelete={()=>{}}
+            />
+          ))}
+
+          {isLoading && (
+            <>
+              <PostItemSkeleton />
+              <PostItemSkeleton />
+              <PostItemSkeleton />
+            </>
+          )}
+        </Box>
+      </FlexRow>
+      {/*<Box
         style={{
           borderBottom: `1px solid ${theme.palette.grey[700]}`,
           width:"100%"
@@ -107,7 +145,7 @@ const Other = () => {
             <BookmarkIcon />
           </IconButton>
         </Box>
-      </Box>
+      </Box>*/}
     </Grid>
   );
 };

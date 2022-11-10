@@ -112,6 +112,7 @@ export const postTypes = {
   all: { label: 'All', value: 'all' },
   text: { label: 'Text', value: 'text' },
   image: { label: 'Image', value: 'image' },
+  audio: { label: 'Audio', value: 'audio' },
   video: { label: 'Video', value: 'video' }
 };
 
