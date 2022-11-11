@@ -3,11 +3,11 @@ import {Col} from  "react-bootstrap";
 import Submenu from 'frontend/components/submenu';
 import { FlexRow } from 'frontend/reusable/reusableStyled';
 import styled from 'styled-components';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {ThemeContext} from '../../../contexts/ThemeContext'
-import _axios from '../../../api/axios';
 import { GetUserBookmark } from "../../../hooks/bookmark";
 import { postTypes } from "../../../data";
+import MediaList from "../../../components/view-page/MediaList";
 
 const ImgStyled = styled.img`
   width: 100%;
@@ -18,17 +18,32 @@ const Photos = () => {
   const {data:bookmarkedPosts, loading:isLoading} = GetUserBookmark(postTypes.image.value)
   const [isOpenFullMode, setIsOpenFullMode] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
-
+/*
   const togglePhoto = (image:string) => {
     setIsOpenFullMode(!isOpenFullMode);
     setSelectedPhoto(image);
-  }
+  }*/
 
   return (
     <Grid container>
       <Submenu title="PHOTOS" username="" routes={[]} noTag md={12} />
-
-      <FlexRow fWrap="wrap" direction="row">
+      <Stack
+        direction="column"
+        className="center-page-container"
+        id="media-infinite-scroll-container"
+        sx={{ width: '100%' }}
+      >
+        { bookmarkedPosts?.length &&
+            <MediaList
+              mediaList={bookmarkedPosts}
+              totalMedia={bookmarkedPosts?.length}
+              mediaType="image"
+              fetchMoreMedia={()=>{}}
+              loader={isLoading}
+            />
+        }
+      </Stack>
+      {/*<FlexRow fWrap="wrap" direction="row">
         {bookmarkedPosts && bookmarkedPosts.map((post, i) => (
           <Col key={`${post?.id}_${i}`} style={{width:"33%"}}>
             <ImgStyled
@@ -61,7 +76,7 @@ const Photos = () => {
             )}
           </Col>
         ))}
-      </FlexRow>
+      </FlexRow>*/}
     </Grid>
   );
 };
