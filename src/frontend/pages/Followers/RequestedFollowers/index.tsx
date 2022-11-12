@@ -2,14 +2,16 @@ import { Stack, Typography } from '@mui/material';
 import _axios from 'frontend/api/axios';
 import FollowersListItemSkeleton from 'frontend/components/common/skeletons/FollowersListItemSkeleton';
 import FollowerRequestItem from 'frontend/components/followers/FollowerRequestItem';
-import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { GetUserFollowerRequest } from "../../../hooks/user";
 
 const RequestedFollowers = () => {
-  const [requests, setRequests] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const {data:requests, loading:isLoading, refreshData:refetchFollowersData} = GetUserFollowerRequest()
+  //const [requests, setRequests] = useState([]);
 
-  const fetchData = async () => {
+  //const [isLoading, setIsLoading] = useState(true);
+
+  /*const fetchData = async () => {
     setIsLoading(true);
     try {
       const { data } = await _axios.get('/api/connection/get-follow-request-list/');
@@ -26,7 +28,7 @@ const RequestedFollowers = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
+*/
   const confirmRequest = async (fData: any) => {
     const toastId = toast.loading('Confirming...');
     try {
@@ -42,7 +44,8 @@ const RequestedFollowers = () => {
           type: 'success',
           isLoading: false
         });
-        setRequests((prev) => prev.filter((item: any) => item.id !== fData.id));
+        refetchFollowersData()
+        //setRequests((prev) => prev.filter((item: any) => item.id !== fData.id));
       } else {
         toast.update(toastId, {
           render: data.message,
@@ -74,7 +77,8 @@ const RequestedFollowers = () => {
           type: 'success',
           isLoading: false
         });
-        setRequests((prev) => prev.filter((item: any) => item.id !== fData.id));
+        //setRequests((prev) => prev.filter((item: any) => item.id !== fData.id));
+        refetchFollowersData()
       } else {
         toast.update(toastId, {
           render: data.message,
