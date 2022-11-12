@@ -105,9 +105,10 @@ const PostItem = ({
       addCommentForPost(user.id, post.id, commentText)
     );
 
+
     setPost((prevState) => ({
       ...prevState,
-      post_comment: [...prevState.post_comment || [], commentResp]
+      post_comment: [...prevState.post_comment || [], {...commentResp, user}]
     }));
 
     setCommentText('');
@@ -175,7 +176,7 @@ const PostItem = ({
 
   const sendBookmark = async () => {
     if (alreadyBookmark) {
-      toast.warn('You have Alread bookmarked this post');
+      toast.warn('You have Already bookmarked this post');
       return;
     }
 
