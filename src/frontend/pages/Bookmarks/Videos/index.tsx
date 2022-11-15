@@ -31,7 +31,7 @@ const Videos = () => {
         id="media-infinite-scroll-container"
         sx={{ width: '100%' }}
       >
-        { bookmarkedPosts?.length &&
+        {bookmarkedPosts[0] && bookmarkedPosts?.length &&
           <MediaList
             mediaList={bookmarkedPosts}
             totalMedia={bookmarkedPosts?.length}

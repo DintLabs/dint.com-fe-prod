@@ -1,4 +1,5 @@
-import { Grid, Stack, useTheme } from '@mui/material';
+import * as React from "react";
+import { Grid, Stack, TextField, useTheme } from "@mui/material";
 
 import BackBlock from './sections/BackBlock';
 import LinkBlock from './sections/LinkBlock';
@@ -14,6 +15,8 @@ interface ISubmenuProps {
   topDiv?: boolean;
   isLink?: boolean;
   isPlusIco?: boolean;
+  handleOpen: any;
+  handleClose: any;
 }
 
 const Submenu = ({
@@ -25,45 +28,61 @@ const Submenu = ({
   md = 4,
   topDiv = false,
   isLink = false,
-  isPlusIco = false
+  isPlusIco = false,
+  handleOpen,
+  handleClose,
 }: ISubmenuProps) => {
   const theme = useTheme();
 
   return (
-    <Grid
-      item
-      xs={12}
-      md={md}
-      sx={{
-        borderLeft: `1px solid ${theme.palette.grey[700]}`,
-        borderRight: `1px solid ${theme.palette.grey[700]}`,
-        width: '100%'
-      }}
-    >
-      {title && <BackBlock title={title} isPlusIco={isPlusIco} />}
-      {username && (
-        <Stack>
-          <TitleBlock title={username} noTag={noTag} isLink={isLink} />
+    <>
+      <Grid
+        item
+        xs={12}
+        md={md}
+        sx={{
+          borderLeft: `1px solid ${theme.palette.grey[700]}`,
+          borderRight: `1px solid ${theme.palette.grey[700]}`,
+          width: "100%",
+        }}
+      >
+        {title && (
+          <BackBlock
+            title={title}
+            isPlusIco={isPlusIco}
+            handleOpen={handleOpen}
+            handleClose={handleClose}
+          />
+        )}
+        {username && (
+          <Stack>
+            <TitleBlock title={username} noTag={noTag} isLink={isLink} />
 
-          <LinkBlock routes={routes} />
-        </Stack>
-      )}
-
-      {secondBlocks &&
-        secondBlocks.map((item, i) => (
-          <Stack
-            key={`${item.title}_${i}`}
-            sx={{
-              borderTop: `6px solid ${theme.palette.grey[700]}`,
-              width: '100%'
-            }}
-          >
-            <TitleBlock title={item.title} noTag topDiv={topDiv} isLink={isLink} />
-
-            <LinkBlock routes={item.block} />
+            <LinkBlock routes={routes} />
           </Stack>
-        ))}
-    </Grid>
+        )}
+
+        {secondBlocks &&
+          secondBlocks.map((item, i) => (
+            <Stack
+              key={`${item.title}_${i}`}
+              sx={{
+                borderTop: `6px solid ${theme.palette.grey[700]}`,
+                width: "100%",
+              }}
+            >
+              <TitleBlock
+                title={item.title}
+                noTag
+                topDiv={topDiv}
+                isLink={isLink}
+              />
+
+              <LinkBlock routes={item.block} />
+            </Stack>
+          ))}
+      </Grid>
+    </>
   );
 };
 

@@ -31,17 +31,17 @@ const Photos = () => {
         direction="column"
         className="center-page-container"
         id="media-infinite-scroll-container"
-        sx={{ width: '100%' }}
+        sx={{ width: "100%" }}
       >
-        { bookmarkedPosts?.length &&
-            <MediaList
-              mediaList={bookmarkedPosts}
-              totalMedia={bookmarkedPosts?.length}
-              mediaType="image"
-              fetchMoreMedia={()=>{}}
-              loader={isLoading}
-            />
-        }
+        {bookmarkedPosts[0] && bookmarkedPosts.length && (
+          <MediaList
+            mediaList={bookmarkedPosts}
+            totalMedia={bookmarkedPosts?.length}
+            mediaType="image"
+            fetchMoreMedia={() => {}}
+            loader={isLoading}
+          />
+        )}
       </Stack>
       {/*<FlexRow fWrap="wrap" direction="row">
         {bookmarkedPosts && bookmarkedPosts.map((post, i) => (
