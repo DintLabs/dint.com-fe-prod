@@ -9,9 +9,11 @@ import AddIcon from '@mui/icons-material/Add';
 interface BackBlockProps {
   title: string;
   isPlusIco?: boolean;
+  handleOpen: any;
+  handleClose: any;
 }
 
-const BackBlock = ({ title, isPlusIco }: BackBlockProps) => {
+const BackBlock = ({ title, isPlusIco, handleOpen, handleClose }: BackBlockProps) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -36,7 +38,7 @@ const BackBlock = ({ title, isPlusIco }: BackBlockProps) => {
             {title}
           </Typography>
         </FlexRow>
-        {isPlusIco && <AddIcon sx={{ cursor: 'pointer' }} />}
+        {isPlusIco && <AddIcon sx={{ cursor: "pointer" }} onClick={handleOpen} />}
       </FlexRow>
     </Stack>
   );
