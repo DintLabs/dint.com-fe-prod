@@ -6,6 +6,8 @@ import MainLayout from 'frontend/layouts/main';
 import SecondaryMainNavBar from 'frontend/layouts/main/SecondaryMainNavBar';
 import MarketPlaceLayout from 'frontend/layouts/marketPlace';
 import Bookmarks from 'frontend/pages/Bookmarks';
+import UserList from 'frontend/pages/UserList';
+import FollowingList from 'frontend/pages/UserList/FollowingList';
 import CreatePage from 'frontend/pages/Create-Page/CreatePage';
 import Events from 'frontend/pages/Events/Events';
 import Followers from 'frontend/pages/Followers';
@@ -326,6 +328,22 @@ export default function Router() {
           element: (
             <AuthGuard>
               <Bookmarks />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/userlist/*',
+          element: (
+            <AuthGuard>
+              <UserList />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/following-list/*',
+          element: (
+            <AuthGuard>
+              <FollowingList />
             </AuthGuard>
           )
         },

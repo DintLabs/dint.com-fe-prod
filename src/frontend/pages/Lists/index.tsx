@@ -49,6 +49,7 @@ const PopupInnerContant = {
 };
 
 const Lists = () => {
+  const userData = useSelector((state : any ) => state.user);
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,11 +62,12 @@ const Lists = () => {
   };
   const obj: any = {
     name: "",
-    user: 2,
+    user: userData?.userData?.id,
   };
   const [user, setUser] = React.useState<any>(obj);
 
   const [userList, setUserList] = useState([]);
+ const [newList ,setNewList]= useState({});
   console.log("user", user);
 
   const handleChange = ({ target: { value, name } }: any) => {
@@ -78,25 +80,25 @@ const Lists = () => {
       .post(`https://bedev.dint.com/api/user-list/`, user)
       .then((response: any) => {
         console.log("response", response.data);
-        setUserList([...userList, { ...response.data }] as any);
+        setNewList({ ...response.data })
         handleClose()
       })
       .catch((error: any) => {
         console.log(error);
       });
   };
-  const userId = useSelector((state) => state);
+  console.log("userData",userList)
 
-  // React.useEffect(()=>{
-  //  _axios.get(`https://bedev.dint.com/api/user-list/`)
-  //     .then((response) => {
-     
-  //       setUserList([...userList, { ...response.data }]);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // },[])
+  React.useEffect(()=>{
+   _axios.get(`https://bedev.dint.com/api/user-list/`)
+      .then((response: any) => {
+     console.log("response",response);
+        setUserList([...response.data ] as any);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
+  },[newList])
 
   return (
     <>
@@ -137,7 +139,7 @@ const Lists = () => {
               <SortIcon />
             </FlexRow>
           </GridWithBoxConteiner>
-
+          
           <GridWithBoxConteiner>
             <FlexCol>
               <Typography
@@ -277,23 +279,28 @@ const Lists = () => {
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
-
-          <GridWithBoxConteiner>
-            <FlexCol>
-              <Typography
-                className="primary-text-color typo-label"
-                variant="subtitle2"
-              >
-                test
-              </Typography>
-              <Typography
-                className="primary-text-color typo-label"
-                variant="caption"
-              >
-                empty
-              </Typography>
-            </FlexCol>
-          </GridWithBoxConteiner>
+           {userList.map((user: any,ind)=>{
+            return(
+                  <>
+                    <GridWithBoxConteiner key={ind} onClick={() => navigate("/userlist", {state:{name: user.name}})}>
+                      <FlexCol>
+                        <Typography
+                          className="primary-text-color typo-label"
+                          variant="subtitle2"
+                        >
+                          {user.name}
+                        </Typography>
+                        <Typography
+                          className="primary-text-color typo-label"
+                          variant="caption"
+                        >
+                          {user.people}
+                        </Typography>
+                      </FlexCol>
+                    </GridWithBoxConteiner>
+                  </>
+            )
+          })}
           {/* <Routes>
           <Route
             path="/"
