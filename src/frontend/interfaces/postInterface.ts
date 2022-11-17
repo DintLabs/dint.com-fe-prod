@@ -1,4 +1,4 @@
-import { UserDataInterface } from './reduxInterfaces';
+import { UserDataInterface } from "./reduxInterfaces";
 
 export interface PostCommentInterface {
   id: number;
@@ -27,6 +27,18 @@ export interface LikePostInterface {
   post: number;
 }
 
+export interface UnlikePostInterface {
+  id: number;
+  user: UserDataInterface | number;
+  created_at: string | Date;
+  updated_at: string | Date;
+  deleted_at: string | Date | null;
+  is_active: boolean;
+  is_deleted: boolean;
+  can_delete: boolean;
+  post: number;
+}
+
 export interface BookmarkPostInterface {
   id: number;
   user: UserDataInterface | number;
@@ -43,6 +55,7 @@ export interface PostInterface {
   id: number;
   user: UserDataInterface;
   like_post: LikePostInterface[];
+  unlike_post: UnlikePostInterface[];
   post_comment: PostCommentInterface[];
   type: string;
   content: string;
