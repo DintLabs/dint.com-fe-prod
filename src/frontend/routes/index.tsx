@@ -42,6 +42,7 @@ import ThemeConfig from 'frontend/theme';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useRoutes } from 'react-router-dom';
+import Following from "../pages/Following/Following";
 
 // ----------------------------------------------------------------------
 
@@ -160,6 +161,14 @@ export default function Router() {
           element: (
             <AuthGuard>
               <MyEvents />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/lounge/following',
+          element: (
+            <AuthGuard>
+              <Following />
             </AuthGuard>
           )
         },

@@ -1,11 +1,11 @@
-@import './../material/utilities/common.scss';
-@import './../material/messages/messages.scss';
-@import './../material/subscriptions/subscriptions.scss';
-@import './../material/pages/createPage.scss';
-@import './../material/utilities/colors.scss';
-@import './../material/pages/viewPage.scss';
-@import './../material/pages/settings.scss';
-@import './../material/pages//subscribers.scss';
+@import "./../material/utilities/common.scss";
+@import "./../material/messages/messages.scss";
+@import "./../material/subscriptions/subscriptions.scss";
+@import "./../material/pages/createPage.scss";
+@import "./../material/utilities/colors.scss";
+@import "./../material/pages/viewPage.scss";
+@import "./../material/pages/settings.scss";
+@import "./../material/pages//subscribers.scss";
 
 img {
   -webkit-user-select: none;
@@ -37,6 +37,10 @@ img {
       color: white !important;
     }
   }
+}
+
+.body_Content {
+  padding-top: 14px;
 }
 
 .mui-outlinedInput-with-label {
@@ -79,11 +83,11 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
-.white-content{
+.white-content {
   background-color: white !important;
-  color: #161C24;
+  color: #161c24;
 }

@@ -139,7 +139,7 @@ const Lists = () => {
               <SortIcon />
             </FlexRow>
           </GridWithBoxConteiner>
-          
+
           <GridWithBoxConteiner>
             <FlexCol>
               <Typography
@@ -185,7 +185,7 @@ const Lists = () => {
           </GridWithBoxConteiner>
 
           <GridWithBoxConteiner
-            onClick={() => navigate("/lounge/subscriptions")}
+            onClick={() => navigate("/lounge/following")}
           >
             <FlexCol>
               <Typography
