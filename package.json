@@ -4,6 +4,7 @@
   "private": false,
   "proxy": "https://paydev.dint.com",
   "dependencies": {
+    "@babel/eslint-parser": "^7.19.1",
     "@babel/preset-react": "^7.16.7",
     "@chainlink/contracts": "^0.4.0",
     "@emotion/react": "^11.9.3",
