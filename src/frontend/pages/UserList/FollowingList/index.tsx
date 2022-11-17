@@ -1,11 +1,19 @@
 import React from "react";
-import { Avatar, Box, CardHeader, IconButton, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  CardHeader,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { Stack, useTheme } from "@mui/system";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useNavigate, useLocation } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import _axios from "frontend/api/axios";
+import PlaceHolder from "../../../assets/img/web3/images.jpeg";
 
 const listWrapper = {
   display: "flex",
@@ -22,6 +30,20 @@ const listWrapper = {
       p: "7px 20px",
       "& img": { width: "100%", height: "100%" },
     },
+  },
+};
+const backPageTitle = { display: "flex" };
+const ButtonWrapper = {
+  "& button": {
+    backgroundColor: "#000000",
+    color: "#ffffff",
+    border: "1px solid #000",
+    "&:hover": { backgroundColor: "#ffffff", color: "#000000" },
+  },
+  "& button.Mui-disabled": {
+    backgroundColor: "#636363",
+    border: "1px solid #636363",
+    "&:hover": { color: "#919EAB", border: "1px solid #636363" },
   },
 };
 
@@ -67,23 +89,28 @@ const FollowingList = () => {
         alignItems="center"
         className="container-header"
         spacing={2}
-        sx={{ p: { xs: 1, md: 1, xl: 1 } }}
+        sx={{ p: 1, justifyContent: "space-between" }}
       >
-        <IconButton
-          className="primary-text-color"
-          size="small"
-          onClick={() => navigate(-1)}
-        >
-          <AiOutlineArrowLeft className="primary-text-color" />
-        </IconButton>
-        <Typography
-          className="primary-text-color"
-          textTransform="uppercase"
-          variant="subtitle1"
-          sx={{ pt: 0.25, ml: "10px !important" }}
-        >
-          Add User To List {state?.name}
-        </Typography>
+        <Box sx={backPageTitle}>
+          <IconButton
+            className="primary-text-color"
+            size="small"
+            onClick={() => navigate(-1)}
+          >
+            <AiOutlineArrowLeft className="primary-text-color" />
+          </IconButton>
+          <Typography
+            className="primary-text-color"
+            textTransform="uppercase"
+            variant="subtitle1"
+            sx={{ pt: 0.25, ml: "10px !important" }}
+          >
+            Add User To List {state?.name}
+          </Typography>
+        </Box>
+        <Box sx={ButtonWrapper}>
+          <Button disabled={false}>Add</Button>
+        </Box>
       </Stack>
       <Box sx={listWrapper}>
         {allFollowing.map((list: any, ind) => {
@@ -94,7 +121,9 @@ const FollowingList = () => {
                   <Avatar>
                     <Typography
                       component={"img"}
-                      src={list.profile_image}
+                      src={
+                        list.profile_image ? list.profile_image : PlaceHolder
+                      }
                       alt=""
                     />
                   </Avatar>

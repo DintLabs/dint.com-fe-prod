@@ -10,8 +10,7 @@ export default function MainLayout() {
   return (
     <FlexCol h={isIPhone() ? `${window.innerHeight}` : '100vh'}>
       <MainNavbar />
-
-      <div id="page-body">
+      <div id="page-body" >
         <Outlet />
         <MainFooter />
       </div>

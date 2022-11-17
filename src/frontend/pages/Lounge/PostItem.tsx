@@ -180,17 +180,15 @@ const PostItem = ({
 
       setAlreadyLike(false);
 
-      // setPost((prevState) => ({
-      //   ...prevState,
-      //   unlike_post: [...(prevState?.unlike_post || []), unlikeResp],
-      // }));
+      setPost((prevState) => ({
+        ...prevState,
+        unlike_post: [...(prevState?.unlike_post || []), unlikeResp],
+      }));
     } else {
       const likeResp: LikePostInterface = await dispatch(
         addLikeForPost(user.id, post.id)
       );
-
       setAlreadyLike(true);
-
       setPost((prevState) => ({
         ...prevState,
         like_post: [...(prevState?.like_post || []), likeResp],
@@ -331,7 +329,11 @@ const PostItem = ({
               >
                 <FavoriteBorderRoundedIcon />
                 <p className="m-0 small ms-2">
-                  {post?.unlike_post?.length ?? "0"}
+                  {/* {post?.like_post?.length ?? "0"} */}
+                  {+post?.like_post?.length -
+                    (+post?.unlike_post?.length
+                      ? post?.unlike_post?.length
+                      : 0) ?? post?.like_post?.length}
                 </p>
               </IconButton>
             ) : (
@@ -341,7 +343,10 @@ const PostItem = ({
               >
                 <FaHeart color="red" />
                 <p className="m-0 small ms-2">
-                  {post?.like_post?.length ?? "0"}
+                  {+post?.like_post?.length -
+                    (+post?.unlike_post?.length
+                      ? post?.unlike_post?.length
+                      : 0) ?? post?.like_post?.length}
                 </p>
               </IconButton>
             )}
