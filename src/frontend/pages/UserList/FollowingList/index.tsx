@@ -83,19 +83,22 @@ const FollowingList = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [selected, setSelected] = useState([]);
+  const [showButton, setShowButton] = useState(true);
 
   const onSelect = (list: any) => {
-    // if (selected.includes(list.id)) {
-    //   // const data = selected.filter((item) => {
-    //   //   return item !== list.id;
-    //   // });
-
-    //   setSelected(data);
+    if (selected.includes(list.id)) {
+      const data = selected.filter((item) => {
+        return item !== list.id;
+      });
+      setShowButton(true);  
+      setSelected(data);
+      
     
       
-    // } else{
+    } else{
       // {member: "",  user_custom_lists: state.id}
       setSelected([list.id]);
+      setShowButton(false);
       const obj: any = {
         member: list.id,
         user_custom_lists: state.id,  
@@ -103,7 +106,7 @@ const FollowingList = () => {
       setUser(obj);
       
       
-  // }
+  }
   };
 
   const fetchData = async () => {
@@ -144,7 +147,7 @@ const FollowingList = () => {
   const addButtonClick = async () => {
     if (user) {
       await _axios
-        .post(`https://bedev.dint.com/api/add-member-in-list/`, user)
+        .post(`/api/add-member-in-list/`, user)
         .then((response: any) => {
           console.log("response", response.data);
           navigate(-1)
@@ -203,8 +206,6 @@ setUserToAdd(res)
       
       
   }
-console.log("lllllll",  user, addUser.id, userToAdd);
-console.log("slected-----", user);
 
 useEffect(()=>{
   filterData(allFollowing, allAddedUser)
@@ -246,7 +247,7 @@ useEffect(()=>{
           </Typography>
         </Box>
         <Box sx={ButtonWrapper}>
-          <Button disabled={false} onClick={addButtonClick}>
+          <Button disabled={showButton} onClick={addButtonClick}>
             Add
           </Button>
         </Box>

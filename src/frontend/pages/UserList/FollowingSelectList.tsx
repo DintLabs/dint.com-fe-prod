@@ -8,22 +8,31 @@ const pageDetailCard = {
   border: "1px solid #121212",
   borderRadius: "5px",
   overflow: "hidden",
+  "&.UserSelect": {
+    backgroundColor: "#000",
+    border: "1px solid #000",
+    "& > .MuiCardHeader-root": {
+      "& img": { width: "100%", height: "100%" },
+      "& .MuiCardHeader-content > span": { color: "#ffffff" },
+    },
+  },
 
   "& .page-detail-body": { p: "10px 10px" },
 };
 
-const FollowingSelectList = ({ listedUsers }: any) => {
+const FollowingSelectList = ({ listedUsers, selectedUsers }: any) => {
+  console.log("selectuser----", selectedUsers);
   const fullImageContainer = {
     minHeight: "50px",
     backgroundImage: `url(${listedUsers.member_details.profile_image})`,
   };
   console.log("listed USers", listedUsers);
   return (
-    <Box
-      className="page-detail-card"
-      sx={pageDetailCard}
-      // ref={lastBundleRef}
-    >
+    <>
+      {/* // <Box */}
+      {/* //   className={`page-detail-card ${selectedUsers.includes(selectedUsers.id) ? "UserSelect" : ""}`}
+    //   sx={pageDetailCard}
+    //       > */}
       {/* page cover image */}
       <Box
         className="page-cover-picture-container full-image-container"
@@ -38,7 +47,7 @@ const FollowingSelectList = ({ listedUsers }: any) => {
           />
           <Stack direction="column">
             <Typography
-              variant="body2"
+              component={"p"}
               // style={{ color: toggle ? "#FFFFFF" : "#121212" }}
             >
               {listedUsers.member_details.display_name}
@@ -46,7 +55,7 @@ const FollowingSelectList = ({ listedUsers }: any) => {
             <Typography
               variant="caption"
               className="link-text-color cursor-pointer"
-              component="div"
+              component={"p"}
               // onClick={() => {
               //   navigateOnPage(subscription?.page?.page_name);
               // }}
@@ -56,54 +65,9 @@ const FollowingSelectList = ({ listedUsers }: any) => {
             </Typography>
           </Stack>
         </Stack>
-        <SubscribeButton
-          leftTitle="SUBSCRIBED"
-          rightTitle={
-            // subscription?.total_amount
-            //   ? `$ ${subscription?.total_amount}`
-            //   : "FOR FREE"
-            "testing"
-          }
-          disabled
-        />
-        {/* expiry details */}
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography variant="body2" className="secondary-text-color">
-            Expires
-          </Typography>
-          <Typography
-            variant="caption"
-            // style={{ color: toggle ? "#FFFFFF" : "#121212" }}
-          >
-            Oct 9, 2021
-          </Typography>
-        </Stack>
-        {/* view more bundles */}
-        {/* {subscription?.page?.subscription_tier_page?.length > 0 ? (
-          <ViewMoreDivider
-            title="View bundles"
-            handleToggleView={handleToggleView}
-            showLess={showLess}
-          />
-        ) : null}
-        {!showLess ? (
-          <Stack direction="column" spacing={2}>
-            {subscription?.page?.subscription_tier_page?.map((bundle: any) => (
-              <SubscribeButton
-                key={bundle?.id}
-                leftTitle={`${bundle?.validity_in_months} months (${bundle?.discount}% off)`}
-                rightTitle={`$${bundle?.discount_price} total`}
-                disabled
-              />
-            ))}
-          </Stack>
-        ) : null} */}
       </Stack>
-    </Box>
+      {/* </Box> */}
+    </>
   );
 };
 

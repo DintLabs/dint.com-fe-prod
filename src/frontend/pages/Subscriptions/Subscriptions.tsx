@@ -1,15 +1,15 @@
-import { Box, Chip, Divider, IconButton, Typography } from '@mui/material';
-import { Stack, useTheme } from '@mui/system';
-import UserSubscriptionDetails from 'frontend/components/subscriptions/UserSubscriptionDetails';
-import { useEffect, useState } from 'react';
-import { AiOutlineArrowLeft } from 'react-icons/ai';
+import { Box, Chip, Divider, IconButton, Typography } from "@mui/material";
+import { Stack, useTheme } from "@mui/system";
+import UserSubscriptionDetails from "frontend/components/subscriptions/UserSubscriptionDetails";
+import { useEffect, useState } from "react";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
-import { useDispatch, useSelector } from 'react-redux';
-import { getSubscriptionsForUser } from 'frontend/redux/slices/subscriptions';
+import { useDispatch, useSelector } from "react-redux";
+import { getSubscriptionsForUser } from "frontend/redux/slices/subscriptions";
 
-import SubscribedPageCardSkeleton from 'frontend/components/common/skeletons/SubscribedPageCardSkeleton';
-import { AppDispatch, RootState } from 'frontend/redux/store';
-import { useNavigate } from 'react-router-dom';
+import SubscribedPageCardSkeleton from "frontend/components/common/skeletons/SubscribedPageCardSkeleton";
+import { AppDispatch, RootState } from "frontend/redux/store";
+import { useNavigate } from "react-router-dom";
 
 const Subscriptions = () => {
   const theme = useTheme();
@@ -25,11 +25,12 @@ const Subscriptions = () => {
   );
   const userData = useSelector((state: RootState) => state?.user?.userData);
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const [subscriptionsLoader, setSubscriptionsLoader] = useState<boolean>(false);
+  const [subscriptionsLoader, setSubscriptionsLoader] =
+    useState<boolean>(false);
   const [tabConfigObject, setTabConfigObject] = useState<any>([
-    { id: 0, title: 'All', count: 0, data: [] },
-    { id: 1, title: 'Active', count: 0, data: [] },
-    { id: 2, title: 'Expired', count: 0, data: [] }
+    { id: 0, title: "All", count: 0, data: [] },
+    { id: 1, title: "Active", count: 0, data: [] },
+    { id: 2, title: "Expired", count: 0, data: [] },
   ]);
 
   // to fetch the page's subscribers details
@@ -84,7 +85,7 @@ const Subscriptions = () => {
       sx={{
         borderLeft: `1px solid ${theme.palette.grey[700]}`,
         borderRight: `1px solid ${theme.palette.grey[700]}`,
-        position: 'relative'
+        position: "relative",
       }}
     >
       {/* main header */}
@@ -95,7 +96,11 @@ const Subscriptions = () => {
         spacing={2}
         sx={{ p: { xs: 1, md: 1, xl: 1 } }}
       >
-        <IconButton className="primary-text-color" size="small" onClick={() => navigate(-1)}>
+        <IconButton
+          className="primary-text-color"
+          size="small"
+          onClick={() => navigate(-1)}
+        >
           <AiOutlineArrowLeft className="primary-text-color" />
         </IconButton>
         <Typography
@@ -115,7 +120,11 @@ const Subscriptions = () => {
         justifyContent="space-between"
         sx={{ p: { xs: 1.5, md: 1.5, xl: 1.5 } }}
       >
-        <Typography className="secondary-text-color" textTransform="uppercase" variant="body2">
+        <Typography
+          className="secondary-text-color"
+          textTransform="uppercase"
+          variant="body2"
+        >
           {tabConfigObject[selectedTabIndex].title}
         </Typography>
       </Stack>
@@ -132,7 +141,11 @@ const Subscriptions = () => {
             key={tab.id}
             label={`${tab.title} ${tab.count}`}
             clickable
-            className={selectedTabIndex === tab.id ? 'active-chip-color' : ' inactive-chip-color'}
+            className={
+              selectedTabIndex === tab.id
+                ? "active-chip-color"
+                : " inactive-chip-color"
+            }
             onClick={() => {
               handleTabSelection(tab.id);
             }}
@@ -146,7 +159,9 @@ const Subscriptions = () => {
         {subscriptionsLoader ? (
           <SubscribedPageCardSkeleton numberOfCards={5} />
         ) : tabConfigObject[selectedTabIndex].count > 0 ? (
-          <UserSubscriptionDetails subscriptions={tabConfigObject[selectedTabIndex].data} />
+          <UserSubscriptionDetails
+            subscriptions={tabConfigObject[selectedTabIndex].data}
+          />
         ) : (
           <Stack justifyContent="center" alignItems="center" sx={{ pt: 18 }}>
             Nothing found

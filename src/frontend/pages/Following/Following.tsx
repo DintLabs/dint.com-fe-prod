@@ -2,9 +2,9 @@ import React from "react";
 import _axios from "frontend/api/axios";
 import { useEffect, useState, useContext } from "react";
 import {
-  Avatar,
   Box,
-  CardHeader,
+  Chip,
+  Divider,
   Grid,
   IconButton,
   Stack,
@@ -15,11 +15,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { RootState, useDispatch, useSelector } from "frontend/redux/store";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import Sidebar from "../Lounge/Sidebar";
+import FollowingDetails from "./FollowingDetails";
 
 const listWrapper = {
   display: "flex",
   flexWrap: "wrap",
-  justifyContent: "flex-start",
+  justifyContent: "center",
   p: "10px",
   "& .listInnerWrapper": {
     mr: "10px",
@@ -49,6 +50,14 @@ const Following = () => {
   const dispatch = useDispatch();
   const [allFollowing, setAllFollowing] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeUsers, setActibveUsers] = useState<any>([]);
+  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
+  const [tabConfigObject, setTabConfigObject] = useState<any>([
+    { id: 0, title: "All", count: 0, data: [] },
+    { id: 1, title: "Active", count: 0, data: [] },
+    { id: 2, title: "Expired", count: 0, data: [] },
+  ]);
+
   const fetchData = async () => {
     setIsLoading(true);
     try {
@@ -74,7 +83,6 @@ const Following = () => {
   const [showMoreDrawer, setShowMoreDrawer] = useState(false);
 
   const [clicked, setClicked] = useState(false);
-  
 
   const translate = () => {
     setTimeout(() => {
@@ -94,6 +102,42 @@ const Following = () => {
       window.location.assign("https://paydev.dint.com");
     }
   });
+  const filteredActiveUser = allFollowing.filter((allFollowing) => {
+    return allFollowing.is_active === true;
+  });
+  const filteredExpiredUser = allFollowing.filter((allFollowing) => {
+    return allFollowing.is_active === false;
+  });
+  useEffect(() => {
+    setTabConfigObject((prevState: any) => {
+      const oldTabs = prevState;
+      oldTabs[0].count = allFollowing?.length;
+      oldTabs[0].data = allFollowing;
+      return oldTabs;
+    });
+  }, [allFollowing]);
+
+  useEffect(() => {
+    setTabConfigObject((prevState: any) => {
+      const oldTabs = prevState;
+      oldTabs[1].count = filteredActiveUser?.length;
+      oldTabs[1].data = filteredActiveUser;
+      return oldTabs;
+    });
+  }, [filteredActiveUser]);
+  useEffect(() => {
+    setTabConfigObject((prevState: any) => {
+      const oldTabs = prevState;
+      oldTabs[2].count = filteredExpiredUser?.length;
+      oldTabs[2].data = filteredExpiredUser;
+      return oldTabs;
+    });
+  }, [filteredExpiredUser]);
+
+  const handleTabSelection = (index: number) => {
+    setSelectedTabIndex(index);
+  };
+
   return (
     <>
       <Grid container spacing={2}>
@@ -133,32 +177,58 @@ const Following = () => {
                 Following
               </Typography>
             </Stack>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              sx={{ p: { xs: 1.5, md: 1.5, xl: 1.5 } }}
+            >
+              <Typography
+                className="secondary-text-color"
+                textTransform="uppercase"
+                variant="body2"
+              >
+                {tabConfigObject[selectedTabIndex].title}
+              </Typography>
+            </Stack>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              sx={{ px: { xs: 1.5, md: 1.5, xl: 1.5 }, pb: 1 }}
+            >
+              {tabConfigObject.map((tab: any) => (
+                <Chip
+                  key={tab.id}
+                  label={`${tab.title} ${tab.count}`}
+                  clickable
+                  className={
+                    selectedTabIndex === tab.id
+                      ? "active-chip-color"
+                      : " inactive-chip-color"
+                  }
+                  onClick={() => {
+                    handleTabSelection(tab.id);
+                  }}
+                />
+              ))}
+            </Stack>
+            <Divider />
+
             <Box sx={listWrapper}>
-              {allFollowing.map((list: any, ind) => {
-                return (
-                  <Box
-                    // className={`listInnerWrapper ${
-                    //   selected.includes(list.id) ? "listSelect" : ""
-                    // }`}
-                    // key={ind}
-                    // onClick={() => onSelect(list)}
-                  >
-                    <CardHeader
-                      avatar={
-                        <Avatar>
-                          <Typography
-                            component={"img"}
-                            src={list.profile_image}
-                            alt=""
-                          />
-                        </Avatar>
-                      }
-                      title={list.display_name}
-                      subheader={list.custom_username}
-                    />
-                  </Box>
-                );
-              })}
+              {tabConfigObject[selectedTabIndex].count > 0 ? (
+                <FollowingDetails
+                  followings={tabConfigObject[selectedTabIndex].data}
+                />
+              ) : (
+                <Stack
+                  justifyContent="center"
+                  alignItems="center"
+                  sx={{ pt: 18 }}
+                >
+                  Nothing found
+                </Stack>
+              )}
             </Box>
           </Stack>
         </Grid>

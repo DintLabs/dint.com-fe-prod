@@ -1,5 +1,12 @@
 import React from "react";
-import { Avatar, Box, Grid, IconButton, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { Stack, useTheme } from "@mui/system";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -32,13 +39,47 @@ const addIconWrapper = {
   },
 };
 const CardWrapper = { p: "15px" };
+const ButtonWrapper = {
+  "& button": {
+    backgroundColor: "#000000",
+    color: "#ffffff",
+    border: "1px solid #000",
+    "&:hover": { backgroundColor: "#ffffff", color: "#000000" },
+  },
+  "& button.Mui-disabled": {
+    backgroundColor: "#636363",
+    border: "1px solid #636363",
+    "&:hover": { color: "#919EAB", border: "1px solid #636363" },
+  },
+};
+const pageDetailCard = {
+  color: "#121212",
+  border: "1px solid #121212",
+  borderRadius: "5px",
+  overflow: "hidden",
+  cursor: "pointer",
+  "&.UserSelect": {
+    backgroundColor: "#000",
+    border: "1px solid #000",
+    "& p, span": { color: "#ffffff" },
+    "& .disabled-outlined-button-div": { borderColor: "#ffffff" },
+    "& .MuiAvatar-circular": { border: "2px solid #ffffff" },
+  },
 
+  "& .page-detail-body": { p: "10px 10px" },
+};
+const BackBTNWrapper = { display: "flex", alignItems: "center" };
 const UserList = (props: any) => {
   //   const {state} = useParams()
   const { state } = useLocation();
   const [allAddedUser, setAllAddedUser] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [delUser, setDelUser]= useState();
+  const [deletedUser, setDeletedUser] = useState(0);
+  const [showButton, setShowButton] = useState(true);
   console.log("state", state);
   console.log("state id", state.list);
+  let userRemove = 0;
 
   const navigate = useNavigate();
   const fetchData = async () => {
@@ -56,6 +97,41 @@ const UserList = (props: any) => {
     fetchData();
   }, []);
   console.log("add users", allAddedUser);
+
+  const onSelect = (listedUsers: any) => {
+    if (selected.includes(listedUsers.id)) {
+      const data = selected.filter((item) => {
+        return item !== listedUsers.id;
+      });
+      setShowButton(true);
+      setSelected(data);
+    } else {
+      // {member: "",  user_custom_lists: state.id}
+      setSelected([listedUsers.id]);  
+      setDelUser(listedUsers.id);
+      setShowButton(false);
+      const obj: any = {
+        member: listedUsers.id,
+        user_custom_lists: state.id,
+      };
+    }
+  };
+  console.log("selected----", selected);
+  console.log("delete----", delUser);
+  const deleteUser = async () => {
+    if (delUser) {
+      await _axios
+        .delete(`/api/add-member-in-list/${delUser}`, delUser)
+        .then((response: any) => {
+          console.log("response", response.data);
+          fetchData();
+          
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    }
+  };
   return (
     <Stack
       className="subscriptions-page-container"
@@ -70,30 +146,55 @@ const UserList = (props: any) => {
         direction="row"
         alignItems="center"
         className="container-header"
+        justifyContent="space-between"
         spacing={2}
         sx={{ p: { xs: 1, md: 1, xl: 1 } }}
       >
-        <IconButton
-          className="primary-text-color"
-          size="small"
-          onClick={() => navigate(-1)}
-        >
-          <AiOutlineArrowLeft className="primary-text-color" />
-        </IconButton>
-        <Typography
-          className="primary-text-color"
-          textTransform="uppercase"
-          variant="subtitle1"
-          sx={{ pt: 0.25, ml: "10px !important" }}
-        >
-          {state.name}
-        </Typography>
+        <Box sx={BackBTNWrapper}>
+          <IconButton
+            className="primary-text-color"
+            size="small"
+            onClick={() => navigate(-1)}
+          >
+            <AiOutlineArrowLeft className="primary-text-color" />
+          </IconButton>
+          <Typography
+            className="primary-text-color"
+            textTransform="uppercase"
+            variant="subtitle1"
+            sx={{ pt: 0.25, ml: "10px !important" }}
+          >
+            {state.name}
+          </Typography>
+        </Box>
+        <Box sx={ButtonWrapper}>
+          <Button disabled={showButton} onClick={deleteUser}>Remove</Button>
+        </Box>
       </Stack>
       <Box sx={CardWrapper}>
         <Grid container spacing={2}>
           {allAddedUser?.map((listedUsers: any) => (
-            <Grid key={listedUsers?.id} item sm={12} md={6} lg={4}>
-              <FollowingSelectList listedUsers={listedUsers} />
+            <Grid
+              key={listedUsers?.id}
+              item
+              sm={12}
+              md={6}
+              lg={4}
+              onClick={() => {
+                onSelect(listedUsers);
+              }}
+            >
+              <Box
+                className={`page-detail-card ${
+                  selected.includes(listedUsers.id) ? "UserSelect" : ""
+                }`}
+                sx={pageDetailCard}
+              >
+                <FollowingSelectList
+                  listedUsers={listedUsers}
+                  selectedUsers={selected}
+                />
+              </Box>
             </Grid>
           ))}
           <Grid item sm={12} md={6} lg={4}>
