@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import {
   Avatar,
   Grid,
@@ -282,7 +281,7 @@ const Lists = () => {
            {userList.map((user: any,ind)=>{
             return(
                   <>
-                    <GridWithBoxConteiner key={ind} onClick={() => navigate("/userlist", {state:{name: user.name}})}>
+                    <GridWithBoxConteiner key={ind} onClick={() => navigate("/userlist", {state:{name: user.name,list:user.id}})}>
                       <FlexCol>
                         <Typography
                           className="primary-text-color typo-label"
