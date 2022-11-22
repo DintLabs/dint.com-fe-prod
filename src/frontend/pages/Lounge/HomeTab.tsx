@@ -312,6 +312,7 @@ const HomeTab = ({ createPost }: Props) => {
 
         <TabPanel value={value} index={3}>
           {videoPosts.map((item, i) => (
+
             <PostItem
               fetchPosts={fetchPosts}
               canDeletePost={true}
@@ -319,6 +320,7 @@ const HomeTab = ({ createPost }: Props) => {
               description={item?.content}
               createdAt={item?.created_at}
               userName={item?.user?.display_name || item?.user?.custom_username}
+              custom_username={item?.user?.custom_username}
               image={item?.media || null}
               post={item}
               onDelete={postDeleted}
