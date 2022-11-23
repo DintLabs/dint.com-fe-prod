@@ -22,6 +22,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import _axios from "frontend/api/axios";
 import { useSelector } from "frontend/redux/store";
+import DeleteIcon from "@mui/icons-material/Delete";
 const PopupStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -46,9 +47,22 @@ const PopupInnerContant = {
     },
   },
 };
+const DeleteBtnWrapper = {
+  "& svg": {
+    color: "#ff0000",
+    opacity: "0",
+    "&:hover": {
+      color: "#ff0000",
+      "& path": {
+        transition: "all 0.5s ease",
+        d: "path('M 6 19 c 0 1.1 0.9 2 2 2 h 8 c 1.1 0 2 -0.9 2 -2 V 7 H 6 v 12 Z M 19 2 h -3.5 l -1 -1 h -5 l -1 1 H 5 v 2 h 14 V 4 Z')",
+      },
+    },
+  },
+};
 
 const Lists = () => {
-  const userData = useSelector((state : any ) => state.user);
+  const userData = useSelector((state: any) => state.user);
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,42 +77,89 @@ const Lists = () => {
     name: "",
     user: userData?.userData?.id,
   };
+
   const [user, setUser] = React.useState<any>(obj);
 
   const [userList, setUserList] = useState([]);
- const [newList ,setNewList]= useState({});
-  console.log("user", user);
+  const [newList, setNewList] = useState({});
+  const [deletedList, setDeletedList] = useState();
+  const [confineUser, setConfineUser] = useState([]);
+ 
 
   const handleChange = ({ target: { value, name } }: any) => {
     const newUser = { ...user };
     newUser[name] = value;
+    newUser["user"] = userData?.userData?.id;
     setUser({ ...newUser });
   };
+
   const handleSubmit = async () => {
     await _axios
       .post(`https://bedev.dint.com/api/user-list/`, user)
       .then((response: any) => {
         console.log("response", response.data);
-        setNewList({ ...response.data })
-        handleClose()
+        setNewList({ ...response.data });
+        handleClose();
       })
       .catch((error: any) => {
         console.log(error);
       });
   };
-  console.log("userData",userList)
+  
 
-  React.useEffect(()=>{
-   _axios.get(`https://bedev.dint.com/api/user-list/`)
+  const getUserList = async () => {
+    _axios
+      .get(`https://bedev.dint.com/api/user-list/`)
       .then((response: any) => {
-     console.log("response",response);
-        setUserList([...response.data ] as any);
+        console.log("response", response);
+        setUserList([...response.data] as any);
       })
       .catch((error: any) => {
         console.log(error);
       });
-  },[newList])
+  };
 
+  React.useEffect(() => {
+    getUserList();
+  }, [newList]);
+
+  const onSelect = async (user: any) => {
+    console.log("user---", user);
+    if (user.id) {
+      await _axios
+        .delete(`/api/user-list/${user.id}`, user.id)
+        .then((response: any) => {
+          console.log("response", response.data);
+          getUserList();
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    }
+  };
+  const fetchConfineData = async () => {
+    try {
+      const { data } = await _axios.get(`api/confine-user`);
+
+      console.log("users added", data);
+      setConfineUser(data);
+    } catch (err: any) {
+      console.error("err ===>", err.message);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchConfineData();
+  }, [newList]);
+  console.log("ConfineData", confineUser )
+
+  const filteredRestrictedUser = confineUser.filter((confineUser: any) => {
+    return confineUser.user_block_type === "restrict";
+  });
+  const filteredBlockedUser = confineUser.filter((confineUser: any) => {
+    return confineUser.user_block_type === "block";
+  });
+  
   return (
     <>
       <Grid container>
@@ -130,8 +191,7 @@ const Lists = () => {
               <Typography
                 className="primary-text-color"
                 variant="caption"
-                sx={{ fontWeight: "bold", fontSize: "13px" }}
-              >
+                sx={{ fontWeight: "bold", fontSize: "13px" }}>
                 CUSTOM ORDER
               </Typography>
 
@@ -143,14 +203,12 @@ const Lists = () => {
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2"
-              >
+                variant="subtitle2">
                 Close Friends
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption"
-              >
+                variant="caption">
                 1 person • 235 posts
               </Typography>
             </FlexCol>
@@ -165,38 +223,31 @@ const Lists = () => {
             onClick={() => {
               // dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.SUBSCRIPTIONS }));
               navigate("/lounge/subscriptions");
-            }}
-          >
+            }}>
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2"
-              >
+                variant="subtitle2">
                 Subscriptions
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption"
-              >
+                variant="caption">
                 10 person • 4,0K posts
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
 
-          <GridWithBoxConteiner
-            onClick={() => navigate("/lounge/following")}
-          >
+          <GridWithBoxConteiner onClick={() => navigate("/lounge/following")}>
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2"
-              >
+                variant="subtitle2">
                 Following
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption"
-              >
+                variant="caption">
                 10 person • 4,0K posts
               </Typography>
             </FlexCol>
@@ -210,19 +261,16 @@ const Lists = () => {
           <GridWithBoxConteiner
             onClick={() => {
               navigate("/followers");
-            }}
-          >
+            }}>
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2"
-              >
+                variant="subtitle2">
                 Followers
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption"
-              >
+                variant="caption">
                 10 person • 4,0K posts
               </Typography>
             </FlexCol>
@@ -232,73 +280,78 @@ const Lists = () => {
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2"
-              >
+                variant="subtitle2">
                 Bookmarks
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption"
-              >
+                variant="caption">
                 empty
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
 
-          <GridWithBoxConteiner>
+          <GridWithBoxConteiner onClick={() => navigate("/restrictedlist", {state: {restictedUsers: filteredRestrictedUser }} )} >
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2"
-              >
+                variant="subtitle2">
                 Restricted
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption"
-              >
-                empty
+                variant="caption">
+                {filteredRestrictedUser.length} person
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
 
-          <GridWithBoxConteiner>
+          <GridWithBoxConteiner onClick={() => navigate("/blockedlist", {state: {blockedUsers: filteredBlockedUser}})} >
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2"
-              >
+                variant="subtitle2">
                 Blocked
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption"
-              >
-                empty
+                variant="caption">
+                {filteredBlockedUser.length} person
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
-           {userList.map((user: any,ind)=>{
-            return(
-                  <>
-                    <GridWithBoxConteiner key={ind} onClick={() => navigate("/userlist", {state:{name: user.name,list:user.id}})}>
-                      <FlexCol>
-                        <Typography
-                          className="primary-text-color typo-label"
-                          variant="subtitle2"
-                        >
-                          {user.name}
-                        </Typography>
-                        <Typography
-                          className="primary-text-color typo-label"
-                          variant="caption"
-                        >
-                          {user.people}
-                        </Typography>
-                      </FlexCol>
-                    </GridWithBoxConteiner>
-                  </>
-            )
+          {userList.map((user: any, ind) => {
+            return (
+              <>
+                <GridWithBoxConteiner key={ind}>
+                  <FlexCol
+                    className="custom_list"
+                    onClick={() =>
+                      navigate("/userlist", {
+                        state: { name: user.name, list: user.id },
+                      })
+                    }>
+                    <Typography
+                      className="primary-text-color typo-label"
+                      variant="subtitle2">
+                      {user.name}
+                    </Typography>
+                    <Typography
+                      className="primary-text-color typo-label"
+                      variant="caption">
+                      {user.people}
+                    </Typography>
+                  </FlexCol>
+                  <Box
+                    sx={DeleteBtnWrapper}
+                    onClick={() => {
+                      onSelect(user);
+                    }}>
+                    <DeleteIcon />
+                  </Box>
+                </GridWithBoxConteiner>
+              </>
+            );
           })}
           {/* <Routes>
           <Route
@@ -318,8 +371,7 @@ const Lists = () => {
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
-        }}
-      >
+        }}>
         <Fade in={open}>
           <Box sx={PopupStyle}>
             <Box sx={PopupInnerContant}>
