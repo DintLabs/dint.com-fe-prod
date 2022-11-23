@@ -1,6 +1,6 @@
-import { useTheme, Grid, Box } from '@mui/material';
-import React, { FC, useContext } from 'react';
-import { ThemeContext } from '../contexts/ThemeContext';
+import { useTheme, Grid, Box } from "@mui/material";
+import React, { FC, useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 interface GridWithBoxConteinerProps {
   children: React.ReactElement | React.ReactElement[];
@@ -8,7 +8,11 @@ interface GridWithBoxConteinerProps {
   onClick?: () => void;
 }
 
-const GridWithBoxConteiner: FC<GridWithBoxConteinerProps> = ({ children, sx = {}, onClick }) => {
+const GridWithBoxConteiner: FC<GridWithBoxConteinerProps> = ({
+  children,
+  sx = {},
+  onClick,
+}) => {
   const theme = useTheme();
   // @ts-ignore
   const { toggle } = useContext(ThemeContext);
@@ -21,25 +25,28 @@ const GridWithBoxConteiner: FC<GridWithBoxConteinerProps> = ({ children, sx = {}
         borderLeft: `1px solid ${theme.palette.grey[700]}`,
         borderRight: `1px solid ${theme.palette.grey[700]}`,
         borderBottom: `1px solid ${theme.palette.grey[700]}`,
-        width: '100%',
-        ...sx
+        width: "100%",
+        ...sx,
       }}
       onClick={() => onClick && onClick()}
     >
       <Box
         sx={{
-          width: '100%',
-          cursor: 'pointer',
-          borderRadius: 1,
-          '&:hover': {
-            background: toggle ? theme.palette.grey[700] : theme.palette.grey[400],
-            '.labels': {
-              color: `#7635dc !important`
+          width: "100%",
+          cursor: "pointer",
+"& .custom_list": {width: "100%",},
+          "&:hover": {
+            background: toggle
+              ? theme.palette.grey[700]
+              : theme.palette.grey[400],
+            ".labels": {
+              color: `#7635dc !important`,
             },
-            '.typo-label': {
-              color: 'white'
-            }
-          }
+            ".typo-label": {
+              color: "white",
+            },
+            "& svg": { opacity: "1", transition: "all 0.5s ease" },
+          },
         }}
         display="flex"
         pl="16px"

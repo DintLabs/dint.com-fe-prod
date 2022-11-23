@@ -43,6 +43,11 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useRoutes } from 'react-router-dom';
 import Following from "../pages/Following/Following";
+import RestrictedList from 'frontend/pages/RestrictedList';
+import AddUsers from 'frontend/pages/RestrictedList/AddUsers';
+import BlockedList from 'frontend/pages/BlockedList.tsx';
+import AddBlockedUsers from 'frontend/pages/BlockedList.tsx/AddBlockedUsers';
+import CloseFriend from 'frontend/pages/CloseFriend';
 
 // ----------------------------------------------------------------------
 
@@ -341,10 +346,50 @@ export default function Router() {
           )
         },
         {
+          path: '/close-friends/*',
+          element: (
+            <AuthGuard>
+              <CloseFriend />
+            </AuthGuard>
+          )
+        },
+        {
           path: '/userlist/*',
           element: (
             <AuthGuard>
               <UserList />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/restrictedlist/*',
+          element: (
+            <AuthGuard>
+              <RestrictedList />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/blockedlist/*',
+          element: (
+            <AuthGuard>
+              <BlockedList />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/add-restricted-users/*',
+          element: (
+            <AuthGuard>
+              <AddUsers />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/add-blocked-users/*',
+          element: (
+            <AuthGuard>
+              <AddBlockedUsers />
             </AuthGuard>
           )
         },
