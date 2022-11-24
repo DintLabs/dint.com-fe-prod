@@ -48,6 +48,7 @@ import AddUsers from 'frontend/pages/RestrictedList/AddUsers';
 import BlockedList from 'frontend/pages/BlockedList.tsx';
 import AddBlockedUsers from 'frontend/pages/BlockedList.tsx/AddBlockedUsers';
 import CloseFriend from 'frontend/pages/CloseFriend';
+import AddCloseFriend from 'frontend/pages/CloseFriend/AddCloseFriend';
 
 // ----------------------------------------------------------------------
 
@@ -350,6 +351,14 @@ export default function Router() {
           element: (
             <AuthGuard>
               <CloseFriend />
+            </AuthGuard>
+          )
+        },
+        {
+          path: '/add-close-friends/*',
+          element: (
+            <AuthGuard>
+              <AddCloseFriend />
             </AuthGuard>
           )
         },

@@ -103,7 +103,7 @@ const MainNavBar = () => {
   const search = async (value: string) => {
     setIsLoadingSearch(true);
     try {
-      const { data } = await _axios.get(`/api/chat/search_user/?search=${value}`);
+      const { data } = await _axios.get(`/api/search-user/?search=${value}`);
       if (data.code === 200) {
         setSuggestions(data.data);
       }

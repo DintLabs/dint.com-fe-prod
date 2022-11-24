@@ -17,13 +17,12 @@ import _axios from "frontend/api/axios";
 import FollowingSelectList from "./FollowingSelectList";
 
 const addIconWrapper = {
+  minHeight: "112px",
   height: "100%",
   "& span": {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    // width: "150px",
-    // minHeight: "275px",
     height: "100%",
     border: "1px solid #000",
     borderRadius: "5px",
@@ -70,23 +69,18 @@ const pageDetailCard = {
 };
 const BackBTNWrapper = { display: "flex", alignItems: "center" };
 const UserList = (props: any) => {
-  //   const {state} = useParams()
   const { state } = useLocation();
   const [allAddedUser, setAllAddedUser] = useState([]);
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState<any>([]);
   const [delUser, setDelUser]= useState();
-  const [deletedUser, setDeletedUser] = useState(0);
   const [showButton, setShowButton] = useState(true);
-  console.log("state", state);
-  console.log("state id", state.list);
-  let userRemove = 0;
+  
 
   const navigate = useNavigate();
   const fetchData = async () => {
     try {
       const { data } = await _axios.get(`api/user-list/${state.list}`);
 
-      console.log("users added", data);
       setAllAddedUser(data.data);
     } catch (err: any) {
       console.error("err ===>", err.message);
@@ -96,28 +90,25 @@ const UserList = (props: any) => {
   useEffect(() => {
     fetchData();
   }, []);
-  console.log("add users", allAddedUser);
 
   const onSelect = (listedUsers: any) => {
     if (selected.includes(listedUsers.id)) {
-      const data = selected.filter((item) => {
+      const data = selected.filter((item: any) => {
         return item !== listedUsers.id;
       });
       setShowButton(true);
       setSelected(data);
     } else {
-      // {member: "",  user_custom_lists: state.id}
-      setSelected([listedUsers.id]);  
+      setSelected([listedUsers.id]);
       setDelUser(listedUsers.id);
       setShowButton(false);
-      const obj: any = {
+      const obj: any = [{
         member: listedUsers.id,
         user_custom_lists: state.id,
-      };
+      }]
     }
   };
-  console.log("selected----", selected);
-  console.log("delete----", delUser);
+
   const deleteUser = async () => {
     if (delUser) {
       await _axios
@@ -125,13 +116,13 @@ const UserList = (props: any) => {
         .then((response: any) => {
           console.log("response", response.data);
           fetchData();
-          
         })
         .catch((error: any) => {
           console.log(error);
         });
     }
   };
+  
   return (
     <Stack
       className="subscriptions-page-container"
@@ -168,7 +159,9 @@ const UserList = (props: any) => {
           </Typography>
         </Box>
         <Box sx={ButtonWrapper}>
-          <Button disabled={showButton} onClick={deleteUser}>Remove</Button>
+          <Button disabled={showButton} onClick={deleteUser}>
+            Remove
+          </Button>
         </Box>
       </Stack>
       <Box sx={CardWrapper}>
