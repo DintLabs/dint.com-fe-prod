@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from "frontend/redux/store";
 import {
     Avatar,
     Box,
@@ -12,10 +13,8 @@ import {
   import { useNavigate, useLocation } from "react-router-dom";
   import AddIcon from "@mui/icons-material/Add";
   import { useEffect, useState } from "react";
-  import { useSelector } from "frontend/redux/store";
-  
-  import _axios from "frontend/api/axios";
-  import PlaceHolder from "../../../assets/img/web3/images.jpeg";
+  import _axios from "frontend/api/axios"
+
   const listWrapper = {
     display: "flex",
     flexWrap: "wrap",
@@ -60,81 +59,52 @@ import {
     },
   };
 
-  const AddUsers = () => {
-    const { state } = useLocation();
-const navigate = useNavigate(); 
-const [allFollowers, SetAllFollowers] = useState([]);
-const [userToAdd, setUserToAdd] = useState([]);
-const userData = useSelector((state: any) => state.user);
-const [user, setUser] = useState([]);
-const [selected, setSelected] = useState<any>([]);
-const [showButton, setShowButton] = useState(true);
-const allAddedUsers = state.addedUsers;
 
-const onSelect = (list: any) => {
-    if (selected.includes(list.id)) {
-      const data = selected.filter((item: any) => {
-        return item !== list.id;
-      });
-      setShowButton(true);  
-      setSelected(data);
-    } else{
-      setSelected([list.id]);
-      setShowButton(false);
-      const obj: any = {
-        user_block_type: "restrict",
-        main_user: userData?.userData?.id,
-        confine_user: list.id,   
-      };
-      setUser(obj); 
-  }
-  };
- 
-const fetchData = async () => {
-    try {
-      const { data } = await _axios.get("api/connection/get-follower-list/");
-      if (data.code === 200) {
-        SetAllFollowers(data.data);
+const AddCloseFriend = () => {
+    const userData = useSelector((state: any) => state.user);
+    const navigate = useNavigate(); 
+    const [selected, setSelected] = useState<any>([]);
+    console.log("Userdata---", userData);
+const [user, setUser] =useState();
+
+    const [showButton, setShowButton] = useState(true);
+    const onSelect = (list: any) => {
+        if (selected.includes(list.id)) {
+          const data = selected.filter((item: any) => {
+            return item !== list.id;
+          });
+          setShowButton(true);  
+          setSelected(data);
+        } else{
+          // {member: "",  user_custom_lists: state.id}
+          setSelected([list.id]);
+          setShowButton(false);
+          setUser(list.id)
+        //   const obj: any = {
+        //     user_block_type: "restrict",
+        //     main_user: userData?.userData?.id,
+        //     confine_user: list.id,   
+        //   };
+        
+          
       }
-    } catch (err: any) {
-      console.error("err ===>", err.message);
-    }
-  };
+      };
+      console.log("USER---", user);
+    const addButtonClick = async () => {
+        if (user){
+          await _axios
+            .post(`/api/add-member-in-list/`)
+            .then((response: any) => {
+              console.log("response", response.data);
+              navigate(-1)
+            })
+        
+            .catch((error: any) => {
+              console.log(error);
+            });
+        }
+      };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-const addButtonClick = async () => {
-    if (user) {
-      await _axios
-        .post(`/api/confine-user/`, user)
-        .then((response: any) => {
-          console.log("response", response.data);
-          navigate(-1)
-        })
-        .catch((error: any) => {
-          console.log(error);
-        });
-    }
-  };
-
-  const filterData = (allFollowers: any, allAddedUsers: any)=>{
-    let res = [];
-    res = allFollowers.filter((el: any) => {
-      return !allAddedUsers.find((element: any) => {
-         return element.confine_user_details.id === el.id
-         ;
-        });
-      });
-      console.log("res", res);
-setUserToAdd(res)
-      return res; 
-  }
-
-useEffect(()=>{
-  filterData(allFollowers, allAddedUsers)
-},[allFollowers, allAddedUsers])
   return (
     <Stack
     className="subscriptions-page-container"
@@ -176,7 +146,7 @@ useEffect(()=>{
       </Box>
     </Stack>
     <Box sx={listWrapper}>
-      { userToAdd && userToAdd[0] && userToAdd.map((list: any, ind) => {
+      { userData.following && userData.following[0] && userData.following.map((list: any, ind: any) => {
         return (
           <Box
             className={`listInnerWrapper ${
@@ -211,4 +181,5 @@ useEffect(()=>{
   )
 }
 
-export default AddUsers
+
+export default AddCloseFriend

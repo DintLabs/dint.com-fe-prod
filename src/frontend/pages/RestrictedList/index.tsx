@@ -15,7 +15,7 @@ import { useSelector } from "frontend/redux/store";
 import { useEffect, useState } from "react";
 import _axios from "frontend/api/axios";
 import AllRestrictedUser from "./AllRestrictedUser";
-// import FollowingSelectList from "./FollowingSelectList";
+
 
 const addIconWrapper = {
   height: "100%",
@@ -56,7 +56,7 @@ const ButtonWrapper = {
 const pageDetailCard = {
   color: "#121212",
   border: "1px solid #121212",
-  borderRadius: "5px",
+  borderRadius: "50px",
   overflow: "hidden",
   cursor: "pointer",
   "&.UserSelect": {
@@ -70,19 +70,14 @@ const pageDetailCard = {
   "& .page-detail-body": { p: "10px 10px" },
 };
 const BackBTNWrapper = { display: "flex", alignItems: "center" };
+
 const RestrictedList = (props: any) => {
-const userData = useSelector((state: any) => state.user);
+  const userData = useSelector((state: any) => state.user);
   const { state } = useLocation();
-  const [allAddedUser, setAllAddedUser] = useState([]);
-//   const [allRestrictedUser, setAllRestrictedUser] = useState([]);
   const [selected, setSelected] = useState([]);
-  const [delUser, setDelUser]= useState();
-  const [deletedUser, setDeletedUser] = useState(0);
-  const [showButton, setShowButton] = useState(true);
-  let userRemove = 0;
-  const restritedList = state.restictedUsers; 
+  const restritedList = state.restictedUsers;
   const navigate = useNavigate();
-  console.log("list----", state);
+ 
 
   return (
     <Stack
@@ -116,7 +111,7 @@ const userData = useSelector((state: any) => state.user);
             variant="subtitle1"
             sx={{ pt: 0.25, ml: "10px !important" }}
           >
-           Restricted Users
+            Restricted Users
           </Typography>
         </Box>
         {/* <Box sx={ButtonWrapper}>
@@ -126,35 +121,23 @@ const userData = useSelector((state: any) => state.user);
       <Box sx={CardWrapper}>
         <Grid container spacing={2}>
           {restritedList?.map((listedUsers: any) => (
-            <Grid
-              key={listedUsers?.id}
-              item
-              sm={12}
-              md={6}
-              lg={4}
-            //   onClick={() => {
-            //     onSelect(listedUsers);
-            //   }}
-            >
-              <Box
-                // className={`page-detail-card ${
-                //   selected.includes(listedUsers.id) ? "UserSelect" : ""
-                // }`}
-            sx={pageDetailCard}
-              >
-                <AllRestrictedUser  
+            <Grid key={listedUsers?.id} item sm={12} md={6} lg={3}>
+              <Box sx={pageDetailCard}>
+                <AllRestrictedUser
                   listedUsers={listedUsers}
                   selectedUsers={selected}
                 />
               </Box>
             </Grid>
           ))}
-          <Grid item sm={12} md={6} lg={4}>
+          <Grid item sm={12} md={6} lg={3}>
             <Box sx={addIconWrapper}>
               <Typography
                 component={"span"}
                 onClick={() =>
-                  navigate("/add-restricted-users/",  {state: { addedUsers: restritedList}} )
+                  navigate("/add-restricted-users/", {
+                    state: { addedUsers: restritedList },
+                  })
                 }
               >
                 <AddIcon />

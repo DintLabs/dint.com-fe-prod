@@ -48,7 +48,7 @@ const listWrapper = {
 };
 const Following = () => {
   const dispatch = useDispatch();
-  const [allFollowing, setAllFollowing] = useState([]);
+  const [allFollowing, setAllFollowing] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeUsers, setActibveUsers] = useState<any>([]);
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
@@ -102,10 +102,10 @@ const Following = () => {
       window.location.assign("https://paydev.dint.com");
     }
   });
-  const filteredActiveUser = allFollowing.filter((allFollowing) => {
+  const filteredActiveUser = allFollowing.filter((allFollowing: any) => {
     return allFollowing.is_active === true;
   });
-  const filteredExpiredUser = allFollowing.filter((allFollowing) => {
+  const filteredExpiredUser = allFollowing.filter((allFollowing: any) => {
     return allFollowing.is_active === false;
   });
   useEffect(() => {

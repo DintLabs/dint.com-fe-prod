@@ -8,7 +8,6 @@ const FollowingPageCard = ({ following }: any) => {
   const { toggle } = useContext(ThemeContext);
   const navigate = useNavigate();
 
-  console.log("Following", following);
   return (
     <Box
       className="page-detail-card"

@@ -19,10 +19,13 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import _axios from "frontend/api/axios";
-import { useSelector } from "frontend/redux/store";
+import { RootState, AppDispatch } from "frontend/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PlaceHolder from "../../assets/img/web3/images.jpeg";
+import { getSubscriptionsForUser } from "frontend/redux/slices/subscriptions";
 const PopupStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -51,19 +54,38 @@ const DeleteBtnWrapper = {
   "& svg": {
     color: "#ff0000",
     opacity: "0",
+    "& path": {
+      transition: "all 0.5s ease",
+    },
     "&:hover": {
       color: "#ff0000",
       "& path": {
-        transition: "all 0.5s ease",
+        // transition: "all 0.5s ease",
         d: "path('M 6 19 c 0 1.1 0.9 2 2 2 h 8 c 1.1 0 2 -0.9 2 -2 V 7 H 6 v 12 Z M 19 2 h -3.5 l -1 -1 h -5 l -1 1 H 5 v 2 h 14 V 4 Z')",
       },
     },
   },
 };
-
+const FollowingAvatarListWrapper = {
+  display: "flex",
+  alignItems: "center",
+  "& .MuiAvatar-circular": {
+    border: "1px solid #000000",
+  },
+  "& .AvatarWrapper": {
+    ml: "-20px",
+    transition: "all 0.5s ease",
+    "&:first-of-type": { ml: "0" },
+    "&:hover": { transform: "translateX(-10px)" },
+  },
+};
 const Lists = () => {
   const userData = useSelector((state: any) => state.user);
+  const allSubscriptions = useSelector(
+    (state: RootState) => state?.subscriptions?.allSubscriptions?.data
+  );
   const theme = useTheme();
+  
   const navigate = useNavigate();
   const location = useLocation();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
@@ -84,7 +106,19 @@ const Lists = () => {
   const [newList, setNewList] = useState({});
   const [deletedList, setDeletedList] = useState();
   const [confineUser, setConfineUser] = useState([]);
- 
+  const [allFollowing, setAllFollowing] = useState<any>([]);
+  const [closeFriend, setCloseFriend] = useState([]);
+  const [bookmarks, setBookmarks] = useState([]);
+  const dispatch = useDispatch<AppDispatch>();
+
+  console.log("bookmarks",bookmarks)
+
+  useEffect(() => {
+    if (userData?.userData?.id) {
+      dispatch(getSubscriptionsForUser(userData?.userData?.id)).then((res: boolean) => {
+      });
+    }
+  }, [dispatch, userData?.userData?.id]);
 
   const handleChange = ({ target: { value, name } }: any) => {
     const newUser = { ...user };
@@ -106,7 +140,7 @@ const Lists = () => {
       });
   };
   
-
+console.log("All subs----", allSubscriptions)
   const getUserList = async () => {
     _axios
       .get(`https://bedev.dint.com/api/user-list/`)
@@ -152,14 +186,47 @@ const Lists = () => {
     fetchConfineData();
   }, [newList]);
   console.log("ConfineData", confineUser )
+  
+  const fetchFollowingData = async () => {
+    setAllFollowing(userData?.following);
+  };
+  React.useEffect(() => {
+    fetchFollowingData();
+  }, [userData]);
 
-  const filteredRestrictedUser = confineUser.filter((confineUser: any) => {
-    return confineUser.user_block_type === "restrict";
-  });
+  const filteredRestrictedUser = useMemo(()=> confineUser.filter((confineUser: any) => confineUser.user_block_type === "restrict"),[confineUser])
+
   const filteredBlockedUser = confineUser.filter((confineUser: any) => {
     return confineUser.user_block_type === "block";
   });
-  
+  const fetchCloseFriend = async () => {
+    try {
+      const { data } = await _axios.get(`api/add-member-in-list/`);
+
+      console.log("close friend", data);
+      setCloseFriend(data);
+    } catch (err: any) {
+      console.error("err ===>", err.message);
+    }
+  };  
+
+  const fetchUserBoookmarks = async () => {
+    try{
+      const { data }: any = await _axios.get(`/api/user/get-user-bookmarks/`);
+      if(data?.data?.length){
+        console.log("data-----",data.data)
+        // setBookmarkups(bookMarkedPost)
+        setBookmarks(data.data)
+      }
+    } catch(err){
+      console.log("err", err);
+    }
+  }
+
+  useEffect(()=>{
+    fetchUserBoookmarks()
+  },[])
+
   return (
     <>
       <Grid container>
@@ -191,7 +258,8 @@ const Lists = () => {
               <Typography
                 className="primary-text-color"
                 variant="caption"
-                sx={{ fontWeight: "bold", fontSize: "13px" }}>
+                sx={{ fontWeight: "bold", fontSize: "13px" }}
+              >
                 CUSTOM ORDER
               </Typography>
 
@@ -199,17 +267,19 @@ const Lists = () => {
             </FlexRow>
           </GridWithBoxConteiner>
 
-          <GridWithBoxConteiner>
+          {/* <GridWithBoxConteiner  onClick={() => navigate("/close-friends", {state: {allCloseFriend:closeFriend } })}>
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2">
+                variant="subtitle2"
+              >
                 Close Friends
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption">
-                1 person • 235 posts
+                variant="caption"
+              >
+                1 person 
               </Typography>
             </FlexCol>
             <Avatar
@@ -217,23 +287,25 @@ const Lists = () => {
               src="/icons/img/example.jpg"
               sx={{ width: 50, height: 50, cursor: "pointer" }}
             />
-          </GridWithBoxConteiner>
+          </GridWithBoxConteiner> */}
 
           <GridWithBoxConteiner
             onClick={() => {
               // dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.SUBSCRIPTIONS }));
               navigate("/lounge/subscriptions");
-            }}>
+            }}
+          >
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2">
+                variant="subtitle2"
+              >
                 Subscriptions
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
                 variant="caption">
-                10 person • 4,0K posts
+                {allSubscriptions.length} Subscriptions
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
@@ -242,36 +314,53 @@ const Lists = () => {
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2">
+                variant="subtitle2"
+              >
                 Following
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption">
-                10 person • 4,0K posts
+                variant="caption"
+              >
+                {userData?.following?.length} person 
               </Typography>
             </FlexCol>
-            <Avatar
-              onClick={goToProfile}
-              src="/icons/img/example.jpg"
-              sx={{ width: 50, height: 50, cursor: "pointer" }}
-            />
+            <Box sx={FollowingAvatarListWrapper}>
+              {allFollowing?.slice(0, 6).map((following: any, ind: any) => {
+                return (
+                  <Box className="AvatarWrapper" key={ind}>
+                    <Avatar
+                      onClick={goToProfile}
+                      src={
+                        following?.profile_image
+                          ? following?.profile_image
+                          : PlaceHolder
+                      }
+                      sx={{ width: 40, height: 40, cursor: "pointer" }}
+                    />
+                  </Box>
+                );
+              })}
+            </Box>
           </GridWithBoxConteiner>
 
           <GridWithBoxConteiner
             onClick={() => {
               navigate("/followers");
-            }}>
+            }}
+          >
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2">
+                variant="subtitle2"
+              >
                 Followers
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption">
-                10 person • 4,0K posts
+                variant="caption"
+              >
+                {userData?.follower?.length} person 
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
@@ -280,49 +369,68 @@ const Lists = () => {
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2">
+                variant="subtitle2"
+              >
                 Bookmarks
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption">
-                empty
+                variant="caption"
+              >
+                {bookmarks.length || 0 } Post
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
 
-          <GridWithBoxConteiner onClick={() => navigate("/restrictedlist", {state: {restictedUsers: filteredRestrictedUser }} )} >
+          <GridWithBoxConteiner
+            onClick={() =>
+              navigate("/restrictedlist", {
+                state: { restictedUsers: filteredRestrictedUser },
+              })
+            }
+          >
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2">
+                variant="subtitle2"
+              >
                 Restricted
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption">
+                variant="caption"
+              >
                 {filteredRestrictedUser.length} person
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
 
-          <GridWithBoxConteiner onClick={() => navigate("/blockedlist", {state: {blockedUsers: filteredBlockedUser}})} >
+          <GridWithBoxConteiner
+            onClick={() =>
+              navigate("/blockedlist", {
+                state: { blockedUsers: filteredBlockedUser },
+              })
+            }
+          >
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
-                variant="subtitle2">
+                variant="subtitle2"
+              >
                 Blocked
               </Typography>
               <Typography
                 className="primary-text-color typo-label"
-                variant="caption">
+                variant="caption"
+              >
                 {filteredBlockedUser.length} person
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
           {userList.map((user: any, ind) => {
+            console.log("first", user)
             return (
-              <>
+              <> 
                 <GridWithBoxConteiner key={ind}>
                   <FlexCol
                     className="custom_list"
@@ -330,23 +438,27 @@ const Lists = () => {
                       navigate("/userlist", {
                         state: { name: user.name, list: user.id },
                       })
-                    }>
+                    }
+                  >
                     <Typography
                       className="primary-text-color typo-label"
-                      variant="subtitle2">
+                      variant="subtitle2"
+                    >
                       {user.name}
                     </Typography>
                     <Typography
                       className="primary-text-color typo-label"
-                      variant="caption">
-                      {user.people}
+                      variant="caption"
+                    >
+                      {user.people} person
                     </Typography>
                   </FlexCol>
                   <Box
                     sx={DeleteBtnWrapper}
                     onClick={() => {
                       onSelect(user);
-                    }}>
+                    }}
+                  >
                     <DeleteIcon />
                   </Box>
                 </GridWithBoxConteiner>
@@ -371,7 +483,8 @@ const Lists = () => {
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
-        }}>
+        }}
+      >
         <Fade in={open}>
           <Box sx={PopupStyle}>
             <Box sx={PopupInnerContant}>
@@ -389,7 +502,7 @@ const Lists = () => {
                 />
               </Box>
               <Box className="SaveBTN">
-                <Button>Cancel</Button>
+                <Button onClick={handleClose}>Cancel</Button>
                 <Button onClick={handleSubmit}>Save</Button>
               </Box>
             </Box>
