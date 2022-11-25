@@ -104,14 +104,12 @@ const Lists = () => {
 
   const [userList, setUserList] = useState([]);
   const [newList, setNewList] = useState({});
-  const [deletedList, setDeletedList] = useState();
   const [confineUser, setConfineUser] = useState([]);
   const [allFollowing, setAllFollowing] = useState<any>([]);
   const [closeFriend, setCloseFriend] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
   const dispatch = useDispatch<AppDispatch>();
 
-  console.log("bookmarks",bookmarks)
 
   useEffect(() => {
     if (userData?.userData?.id) {
@@ -131,7 +129,6 @@ const Lists = () => {
     await _axios
       .post(`https://bedev.dint.com/api/user-list/`, user)
       .then((response: any) => {
-        console.log("response", response.data);
         setNewList({ ...response.data });
         handleClose();
       })
@@ -140,12 +137,10 @@ const Lists = () => {
       });
   };
   
-console.log("All subs----", allSubscriptions)
   const getUserList = async () => {
     _axios
       .get(`https://bedev.dint.com/api/user-list/`)
       .then((response: any) => {
-        console.log("response", response);
         setUserList([...response.data] as any);
       })
       .catch((error: any) => {
@@ -158,12 +153,10 @@ console.log("All subs----", allSubscriptions)
   }, [newList]);
 
   const onSelect = async (user: any) => {
-    console.log("user---", user);
     if (user.id) {
       await _axios
         .delete(`/api/user-list/${user.id}`, user.id)
         .then((response: any) => {
-          console.log("response", response.data);
           getUserList();
         })
         .catch((error: any) => {
@@ -175,7 +168,6 @@ console.log("All subs----", allSubscriptions)
     try {
       const { data } = await _axios.get(`api/confine-user`);
 
-      console.log("users added", data);
       setConfineUser(data);
     } catch (err: any) {
       console.error("err ===>", err.message);
@@ -185,7 +177,6 @@ console.log("All subs----", allSubscriptions)
   React.useEffect(() => {
     fetchConfineData();
   }, [newList]);
-  console.log("ConfineData", confineUser )
   
   const fetchFollowingData = async () => {
     setAllFollowing(userData?.following);
@@ -196,25 +187,26 @@ console.log("All subs----", allSubscriptions)
 
   const filteredRestrictedUser = useMemo(()=> confineUser.filter((confineUser: any) => confineUser.user_block_type === "restrict"),[confineUser])
 
-  const filteredBlockedUser = confineUser.filter((confineUser: any) => {
-    return confineUser.user_block_type === "block";
-  });
+
+  const filteredBlockedUser = useMemo(()=> confineUser.filter((confineUser: any) => confineUser.user_block_type === "block"),[confineUser])
+  
   const fetchCloseFriend = async () => {
     try {
-      const { data } = await _axios.get(`api/add-member-in-list/`);
+      const { data } = await _axios.get(`api/user/get-close-friends/`);
 
-      console.log("close friend", data);
       setCloseFriend(data);
     } catch (err: any) {
       console.error("err ===>", err.message);
     }
   };  
-
+  useEffect(() =>{
+    fetchCloseFriend();
+  },[]);
+console.log("Close friends", closeFriend);
   const fetchUserBoookmarks = async () => {
     try{
       const { data }: any = await _axios.get(`/api/user/get-user-bookmarks/`);
       if(data?.data?.length){
-        console.log("data-----",data.data)
         // setBookmarkups(bookMarkedPost)
         setBookmarks(data.data)
       }
@@ -226,6 +218,7 @@ console.log("All subs----", allSubscriptions)
   useEffect(()=>{
     fetchUserBoookmarks()
   },[])
+  console.log("NEW USER DATA---", userData);
 
   return (
     <>
@@ -267,7 +260,7 @@ console.log("All subs----", allSubscriptions)
             </FlexRow>
           </GridWithBoxConteiner>
 
-          {/* <GridWithBoxConteiner  onClick={() => navigate("/close-friends", {state: {allCloseFriend:closeFriend } })}>
+          <GridWithBoxConteiner  onClick={() => navigate("/close-friends", {state: {allCloseFriend:closeFriend } })}>
             <FlexCol>
               <Typography
                 className="primary-text-color typo-label"
@@ -287,7 +280,7 @@ console.log("All subs----", allSubscriptions)
               src="/icons/img/example.jpg"
               sx={{ width: 50, height: 50, cursor: "pointer" }}
             />
-          </GridWithBoxConteiner> */}
+          </GridWithBoxConteiner>
 
           <GridWithBoxConteiner
             onClick={() => {
@@ -428,7 +421,6 @@ console.log("All subs----", allSubscriptions)
             </FlexCol>
           </GridWithBoxConteiner>
           {userList.map((user: any, ind) => {
-            console.log("first", user)
             return (
               <> 
                 <GridWithBoxConteiner key={ind}>
