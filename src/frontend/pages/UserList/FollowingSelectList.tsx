@@ -21,12 +21,10 @@ const pageDetailCard = {
 };
 
 const FollowingSelectList = ({ listedUsers, selectedUsers }: any) => {
-  console.log("selectuser----", selectedUsers);
-  const fullImageContainer = {
+const fullImageContainer = {
     minHeight: "50px",
     backgroundImage: `url(${listedUsers.member_details.profile_image})`,
   };
-  console.log("listed USers", listedUsers);
   return (
     <>
       {/* // <Box */}

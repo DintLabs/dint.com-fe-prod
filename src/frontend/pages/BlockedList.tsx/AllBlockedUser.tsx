@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Avatar, Box, Typography } from "@mui/material";
 import { Stack, useTheme } from "@mui/system";
 
@@ -20,7 +20,14 @@ const pageDetailCard = {
   };
 
 const AllBlockedUser = ({listedUsers}: any) => {
+const [allListedUsers, setAllListedUsers] = useState<any>([]);
+  const fetchUsers = () =>{
+    setAllListedUsers(listedUsers);
+  }
     console.log("listed USers", listedUsers);
+    useEffect(() => {
+      fetchUsers();
+    }, []);
   return (
     <>
      <Box

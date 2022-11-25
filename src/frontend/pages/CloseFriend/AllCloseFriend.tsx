@@ -39,7 +39,7 @@ const AllCloseFriend = ({listedUsers}: any) => {
               component={"p"}
             //   style={{ color: toggle ? "#FFFFFF" : "#121212" }}
             >
-              {/* {listedUsers.confine_user_details.display_name} */} sddd
+              {/* {listedUsers.confine_user_details.display_name} */} test
             </Typography>
             <Typography
               variant="caption"
@@ -50,7 +50,7 @@ const AllCloseFriend = ({listedUsers}: any) => {
               // }}
             >
               {/* {`@${getStrippedWord(subscription?.page?.title)}`} */}
-              {/* {`@${listedUsers.confine_user_details.custom_username}`} */}: dddd
+              {/* {`@${listedUsers.confine_user_details.custom_username}`} */}: test
             </Typography>
           </Stack>
         </Stack>

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { FollowerDataInterface, UserDataInterface } from 'frontend/interfaces/reduxInterfaces';
+import { FollowerDataInterface, UserDataInterface, ConfineUserInterface } from 'frontend/interfaces/reduxInterfaces';
 
 import axios from '../../api/axios';
 import { AppDispatch } from '../store';
@@ -9,12 +9,15 @@ type UserState = {
   userData: UserDataInterface | null;
   follower: FollowerDataInterface | null;
   following: FollowerDataInterface | null;
+  confineData: ConfineUserInterface | null;
 };
 
 const initialState: UserState = {
   userData: null,
   follower: null,
-  following: null
+  following: null,
+  confineData: null,
+ 
 };
 
 const slice = createSlice({
@@ -34,6 +37,9 @@ const slice = createSlice({
     },
     setFollowingList: (state, action) => {
       state.following = action.payload;
+    },
+    setConfineUserList: (state, action) => {
+      state.confineData = action.payload;
     }
   }
 });
@@ -84,6 +90,27 @@ export const getFollowingList = () => async (dispatch: AppDispatch) => {
   }
 };
 
+// export const getUserList = () => async (dispatch: AppDispatch) => {
+//   try {
+//     const { data } = await axios.get('api/connection/get-following-list/');
+
+//     if (data.code === 200) {
+//       dispatch(slice.actions.setFollowingList(data.data));
+//     }
+//   } catch (err: any) {
+//     console.error('err ===>', err.message);
+//   }
+// };
+export const getConfineUserList = () => async (dispatch: AppDispatch) => {
+  try {
+    const { data } = await axios.get('api/confine-user/');
+
+      dispatch(slice.actions.setConfineUserList(data));
+   
+  } catch (err: any) {
+    console.error('err ===>', err.message);
+  }
+};
 export const fetchUserDataByUsername =
   (payload: { custom_username: string }) => async (dispatch: AppDispatch) => {
     try {

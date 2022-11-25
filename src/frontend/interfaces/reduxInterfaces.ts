@@ -67,6 +67,8 @@ export interface UserDataInterface {
   is_followed?: boolean;
   is_private?: boolean;
   user_page?: string;
+  is_online?: boolean;
+  last_login?: string;
 
   email?: string | null;
   first_name?: string | null;
@@ -76,6 +78,36 @@ export interface UserDataInterface {
   phone_no?: string | null;
   photoURL?: string | null;
   uid?: string | null;
+}
+export interface ConfineUserInterface {
+  id: number;
+  custom_username: string;
+  profile_image: string;
+  city?: string | null;
+  display_name?: string;
+  bio?: string | null;
+  location?: string | null;
+  website_url?: string | null;
+  amazon_wishlist?: string | null;
+  twitter?: string | null;
+  instagram?: string | null;
+  discord?: string | null;
+  banner_image?: string | null;
+  is_followed?: boolean;
+  is_private?: boolean;
+  user_page?: string;
+
+  email?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  is_active?: boolean;
+  is_deleted?: boolean;
+  phone_no?: string | null;
+  photoURL?: string | null;
+  uid?: string | null;
+
+  user_block_type?: string | null;
+
 }
 
 export interface UserInterface {

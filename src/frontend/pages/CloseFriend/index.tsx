@@ -115,7 +115,7 @@ setCloseFriendList(state.allCloseFriend);
           variant="subtitle1"
           sx={{ pt: 0.25, ml: "10px !important" }}
         >
-         Blocked Users
+         Close Friends
         </Typography>
       </Box>
       {/* <Box sx={ButtonWrapper}>
