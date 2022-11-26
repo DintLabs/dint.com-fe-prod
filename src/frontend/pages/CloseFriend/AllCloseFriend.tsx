@@ -32,14 +32,14 @@ const AllCloseFriend = ({listedUsers}: any) => {
         <Stack direction="row" spacing={1}>
           <Avatar
             className="page-profile-container"
-            // src={listedUsers.member_details.profile_image} 
+            src={listedUsers.profile_image} 
           />
           <Stack direction="column">
             <Typography
               component={"p"}
             //   style={{ color: toggle ? "#FFFFFF" : "#121212" }}
             >
-              {/* {listedUsers.confine_user_details.display_name} */} test
+              {listedUsers.display_name}
             </Typography>
             <Typography
               variant="caption"
@@ -50,7 +50,7 @@ const AllCloseFriend = ({listedUsers}: any) => {
               // }}
             >
               {/* {`@${getStrippedWord(subscription?.page?.title)}`} */}
-              {/* {`@${listedUsers.confine_user_details.custom_username}`} */}: test
+              {`@${listedUsers.custom_username}`}
             </Typography>
           </Stack>
         </Stack>

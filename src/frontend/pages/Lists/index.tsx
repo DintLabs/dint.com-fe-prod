@@ -85,7 +85,7 @@ const Lists = () => {
     (state: RootState) => state?.subscriptions?.allSubscriptions?.data
   );
   const theme = useTheme();
-  
+  const confineUser = userData?.confineData;
   const navigate = useNavigate();
   const location = useLocation();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
@@ -104,9 +104,10 @@ const Lists = () => {
 
   const [userList, setUserList] = useState([]);
   const [newList, setNewList] = useState({});
-  const [confineUser, setConfineUser] = useState([]);
+  // const [confineUser, setConfineUser] = useState([]);
   const [allFollowing, setAllFollowing] = useState<any>([]);
-  const [closeFriend, setCloseFriend] = useState([]);
+  const [closeFriend, setCloseFriend] = useState<any>([]);
+  const [allCloseFriend, setAllCloseFriend] = useState<any>([]);
   const [bookmarks, setBookmarks] = useState([]);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -164,19 +165,19 @@ const Lists = () => {
         });
     }
   };
-  const fetchConfineData = async () => {
-    try {
-      const { data } = await _axios.get(`api/confine-user`);
+  // const fetchConfineData = async () => {
+  //   try {
+  //     const { data } = await _axios.get(`api/confine-user`);
 
-      setConfineUser(data);
-    } catch (err: any) {
-      console.error("err ===>", err.message);
-    }
-  };
+  //     setConfineUser(data);
+  //   } catch (err: any) {
+  //     console.error("err ===>", err.message);
+  //   }
+  // };
 
-  React.useEffect(() => {
-    fetchConfineData();
-  }, [newList]);
+  // React.useEffect(() => {
+  //   fetchConfineData();
+  // }, [newList]);
   
   const fetchFollowingData = async () => {
     setAllFollowing(userData?.following);
@@ -185,16 +186,16 @@ const Lists = () => {
     fetchFollowingData();
   }, [userData]);
 
-  const filteredRestrictedUser = useMemo(()=> confineUser.filter((confineUser: any) => confineUser.user_block_type === "restrict"),[confineUser])
+  const filteredRestrictedUser = useMemo(()=> confineUser?.filter((confineUser: any) => confineUser.user_block_type === "restrict"),[confineUser])
 
 
-  const filteredBlockedUser = useMemo(()=> confineUser.filter((confineUser: any) => confineUser.user_block_type === "block"),[confineUser])
+  const filteredBlockedUser = useMemo(()=> confineUser?.filter((confineUser: any) => confineUser.user_block_type === "block"),[confineUser])
   
   const fetchCloseFriend = async () => {
     try {
       const { data } = await _axios.get(`api/user/get-close-friends/`);
 
-      setCloseFriend(data);
+      setCloseFriend(data.data);
     } catch (err: any) {
       console.error("err ===>", err.message);
     }
@@ -218,7 +219,21 @@ console.log("Close friends", closeFriend);
   useEffect(()=>{
     fetchUserBoookmarks()
   },[])
-  console.log("NEW USER DATA---", userData);
+  const filterCloseFriendData = (allFollowing: any, closeFriend: any) => {
+
+    let res = [];
+    res = allFollowing?.filter((el: any) => {
+      return closeFriend?.find((element: any) => {
+        return element.close_friend === el.id;
+      });
+    });
+    setAllCloseFriend(res);
+    return res;
+  };
+
+  useEffect(() => {
+    filterCloseFriendData(allFollowing, closeFriend);
+  }, [allFollowing, closeFriend]);
 
   return (
     <>
@@ -272,14 +287,26 @@ console.log("Close friends", closeFriend);
                 className="primary-text-color typo-label"
                 variant="caption"
               >
-                1 person 
+                {closeFriend?.length || 0} person 
               </Typography>
             </FlexCol>
-            <Avatar
-              onClick={goToProfile}
-              src="/icons/img/example.jpg"
-              sx={{ width: 50, height: 50, cursor: "pointer" }}
-            />
+            <Box sx={FollowingAvatarListWrapper}>
+              {allCloseFriend?.slice(0, 6).map((following: any, ind: any) => {
+                return (
+                  <Box className="AvatarWrapper" key={ind}>
+                    <Avatar
+                      onClick={goToProfile}
+                      src={
+                        following?.profile_image
+                          ? following?.profile_image
+                          : PlaceHolder
+                      }
+                      sx={{ width: 40, height: 40, cursor: "pointer" }}
+                    />
+                  </Box>
+                );
+              })}
+            </Box>
           </GridWithBoxConteiner>
 
           <GridWithBoxConteiner
@@ -298,7 +325,7 @@ console.log("Close friends", closeFriend);
               <Typography
                 className="primary-text-color typo-label"
                 variant="caption">
-                {allSubscriptions.length} Subscriptions
+                {allSubscriptions?.length} Subscriptions
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
@@ -393,7 +420,7 @@ console.log("Close friends", closeFriend);
                 className="primary-text-color typo-label"
                 variant="caption"
               >
-                {filteredRestrictedUser.length} person
+                {filteredRestrictedUser?.length} person
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
@@ -416,7 +443,7 @@ console.log("Close friends", closeFriend);
                 className="primary-text-color typo-label"
                 variant="caption"
               >
-                {filteredBlockedUser.length} person
+                {filteredBlockedUser?.length} person
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>

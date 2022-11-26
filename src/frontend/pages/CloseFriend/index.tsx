@@ -14,6 +14,7 @@ import { Stack, useTheme } from "@mui/system";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import AddIcon from "@mui/icons-material/Add";
 import AllCloseFriend from './AllCloseFriend';
+import { useSelector } from 'react-redux';
 
 const addIconWrapper = {
   height: "100%",
@@ -72,17 +73,77 @@ const BackBTNWrapper = { display: "flex", alignItems: "center" };
 const CloseFriend = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  
-  const[closeFriendList, setCloseFriendList] = useState<any>([]);
+  const userData = useSelector((state: any) => state.user);
+  const [allFollowing, setAllFollowing] = useState<any>([]);
+  const [allCloseFriend, setAllCloseFriend] = useState<any>([]);
+  const [showButton, setShowButton] = useState(true);
+  const[closeFriend, setCloseFriend] = useState<any>([]);
+  const [selected, setSelected] = useState<any>([]);
+  const [userToDelete, setUserToDelete] = useState<any>([]);
 
-  const fetchCloseFriend = () => {
-setCloseFriendList(state.allCloseFriend);
-  }
   useEffect(() => {
-    fetchCloseFriend();
-  }, [state]);
-  console.log("closef----", closeFriendList);
+    setAllFollowing(userData.following);
 
+  }, [userData.following])
+  console.log("All Follwoing----", allFollowing);
+  const fetchCloseFriend = async () => {
+    try {
+      const { data } = await _axios.get(`api/user/get-close-friends/`);
+
+      setCloseFriend(data.data);
+    } catch (err: any) {
+      console.error("err ===>", err.message);
+    }
+  };  
+  useEffect(() =>{
+    fetchCloseFriend();
+  },[]);
+  console.log("closeFriend-----", closeFriend);
+  const filterData = (allFollowing: any, closeFriend: any) => {
+
+    let res = [];
+    res = allFollowing?.filter((el: any) => {
+      return closeFriend?.find((element: any) => {
+        return element.close_friend === el.id;
+      });
+    });
+    setAllCloseFriend(res);
+    return res;
+  };
+
+  useEffect(() => {
+    filterData(allFollowing, closeFriend);
+  }, [allFollowing, closeFriend]);
+  const onSelect = (listedUsers: any) => {
+    if (selected.includes(listedUsers.id)) {
+      const data = selected.filter((item: any) => {
+        return item !== listedUsers.id;
+      });
+      setShowButton(true);
+      setSelected(data);
+    } else {
+      setSelected([listedUsers.id]);
+      setUserToDelete(listedUsers.id);
+      setShowButton(false);
+
+    }
+  };
+
+  const deleteUser = async () => {
+    if (userToDelete) {
+      await _axios
+        .delete(`/api/user/delete-close-friends/${userToDelete}`, userToDelete)
+        .then((response: any) => {
+          console.log("response", response.data);
+          fetchCloseFriend();
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    }
+  };
+
+console.log("allCloseFriend", allCloseFriend)
   return (
     <Stack
     className="subscriptions-page-container"
@@ -118,28 +179,28 @@ setCloseFriendList(state.allCloseFriend);
          Close Friends
         </Typography>
       </Box>
-      {/* <Box sx={ButtonWrapper}>
+      <Box sx={ButtonWrapper}>
         <Button disabled={showButton} onClick={deleteUser}>Remove</Button>
-      </Box> */}
+      </Box>
     </Stack>
     <Box sx={CardWrapper}>
       <Grid container spacing={2}>
-        {closeFriendList?.map((listedUsers: any) => (
+        {allCloseFriend?.map((listedUsers: any) => (
           <Grid
             key={listedUsers?.id}
             item
             sm={12}
             md={6}
             lg={4}
-            // onClick={() => {
-            //   onSelect(listedUsers);
-            // }}
+            onClick={() => {
+              onSelect(listedUsers);
+            }}
           >
             <Box
-              // className={`page-detail-card ${
-              //   selected.includes(listedUsers.id) ? "UserSelect" : ""
-              // }`}
-              // sx={pageDetailCard}
+              className={`page-detail-card ${
+                selected.includes(listedUsers.id) ? "UserSelect" : ""
+              }`}
+              sx={pageDetailCard}
             >
               <AllCloseFriend
                 listedUsers={listedUsers}
@@ -153,7 +214,7 @@ setCloseFriendList(state.allCloseFriend);
             <Typography
               component={"span"}
               onClick={() =>
-                navigate("/add-close-friends/", {state: { addedUsers: closeFriendList}})
+                navigate("/add-close-friends/", {state: { addedUsers: allCloseFriend}})
               }
             >
               <AddIcon />
