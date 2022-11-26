@@ -80,31 +80,69 @@ const BlockedList = () => {
   const { state } = useLocation();
   const [allAddedUser, setAllAddedUser] = useState([]);
   const [allRestrictedUser, setAllRestrictedUser] = useState([]);
-  const [selected, setSelected] = useState([]);
-  const [delUser, setDelUser] = useState();
-  const [deletedUser, setDeletedUser] = useState(0);
+  const [selected, setSelected] = useState<any>([]);
+  const [unBlockUser, setUnBlockUser] = useState<any>();
+  // const [deletedUser, setDeletedUser] = useState(0);
   const [showButton, setShowButton] = useState(true);
-  const blockedList = state.blockedUsers;
+  // const blockedList = state.blockedUsers;
   const navigate = useNavigate();
-  //   const fetchData = async () => {
-  //     try {
-  //       const { data } = await _axios.get(`api/confine-user`);
+  const [blockedList, setBlockedList] = useState<any>([]);
+  const fetchUsers = () =>{
+    setBlockedList(state.blockedUsers);
+  }
+    useEffect(() => {
+      fetchUsers();
+    }, []);
+    const fetchData = async () => {
+      try {
+        const { data } = await _axios.get(`api/confine-user`);
 
-  //       console.log("users added", data);
-  //       setAllAddedUser(data);
+        console.log("users added", data);
+        setAllAddedUser(data);
 
-  //     } catch (err: any) {
-  //       console.error("err ===>", err.message);
-  //     }
-  //   };
+      } catch (err: any) {
+        console.error("err ===>", err.message);
+      }
+    };
 
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, []);
-  // console.log("setAllConfineUser", allAddedUser);
-  // const filteredBlockedUser = allAddedUser.filter((allAddedUser: any) => {
-  //   return allAddedUser.user_block_type === "block";
-  // });
+    useEffect(() => {
+      fetchData();
+    }, []);
+  console.log("setAllConfineUser", allAddedUser);
+  const filteredBlockedUser = allAddedUser.filter((allAddedUser: any) => {
+    return allAddedUser.user_block_type === "block";
+  });
+
+  const onSelect = (listedUsers: any) => {
+    if (selected.includes(listedUsers.id)) {
+      const data = selected.filter((item: any) => {
+        return item !== listedUsers.id;
+      });
+      setShowButton(true);
+      setSelected(data);
+    } else {
+      setSelected([listedUsers.id]);
+      setUnBlockUser(listedUsers.id);
+      setShowButton(false);
+
+    }
+  };
+  console.log("Selected---", unBlockUser);
+  const unBlock = async () => {
+    if (unBlockUser) {
+      await _axios
+        .delete(`/api/confine-user/${unBlockUser}`, unBlockUser)
+        .then((response: any) => {
+          console.log("response", response.data);
+          fetchData();
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    }
+  };
+
+
   return (
     <Stack
       className="subscriptions-page-container"
@@ -112,8 +150,7 @@ const BlockedList = () => {
         borderLeft: `1px solid #000`,
         borderRight: `1px solid #000`,
         position: "relative",
-      }}
-    >
+      }}>
       {/* main header */}
       <Stack
         direction="row"
@@ -121,34 +158,45 @@ const BlockedList = () => {
         className="container-header"
         justifyContent="space-between"
         spacing={2}
-        sx={{ p: { xs: 1, md: 1, xl: 1 } }}
-      >
+        sx={{ p: { xs: 1, md: 1, xl: 1 } }}>
         <Box sx={BackBTNWrapper}>
           <IconButton
             className="primary-text-color"
             size="small"
-            onClick={() => navigate(-1)}
-          >
+            onClick={() => navigate(-1)}>
             <AiOutlineArrowLeft className="primary-text-color" />
           </IconButton>
           <Typography
             className="primary-text-color"
             textTransform="uppercase"
             variant="subtitle1"
-            sx={{ pt: 0.25, ml: "10px !important" }}
-          >
+            sx={{ pt: 0.25, ml: "10px !important" }}>
             Blocked Users
           </Typography>
         </Box>
-        {/* <Box sx={ButtonWrapper}>
-        <Button disabled={showButton} onClick={deleteUser}>Remove</Button>
-      </Box> */}
+        <Box sx={ButtonWrapper}>
+          <Button disabled={showButton} onClick={unBlock}>
+            Remove
+          </Button>
+        </Box>
       </Stack>
       <Box sx={CardWrapper}>
         <Grid container spacing={2}>
-          {blockedList?.map((listedUsers: any) => (
-            <Grid key={listedUsers?.id} item sm={12} md={6} lg={3}>
-              <Box sx={ListWrapper}>
+          {filteredBlockedUser?.map((listedUsers: any) => (
+            <Grid
+              key={listedUsers?.id}
+              item
+              sm={12}
+              md={6}
+              lg={3}
+              onClick={() => {
+                onSelect(listedUsers);
+              }}>
+              <Box
+                className={`page-detail-card ${
+                  selected.includes(listedUsers.id) ? "UserSelect" : ""
+                }`}
+                sx={pageDetailCard}>
                 <AllBlockedUser
                   listedUsers={listedUsers}
                   selectedUsers={selected}
@@ -164,8 +212,7 @@ const BlockedList = () => {
                   navigate("/add-blocked-users/", {
                     state: { addedUsers: blockedList },
                   })
-                }
-              >
+                }>
                 <AddIcon />
               </Typography>
             </Box>

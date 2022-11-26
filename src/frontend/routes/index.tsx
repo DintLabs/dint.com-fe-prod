@@ -37,6 +37,7 @@ import Settings from 'frontend/pages/Settings';
 import TicketCreate from 'frontend/pages/TicketCreate/TicketCreate';
 import ViewPage from 'frontend/pages/View-Page/ViewPage';
 import { fetchUserData } from 'frontend/redux/slices/user';
+import { getConfineUserList } from 'frontend/redux/slices/user';
 import { AppDispatch } from 'frontend/redux/store';
 import ThemeConfig from 'frontend/theme';
 import { useEffect } from 'react';
@@ -61,6 +62,11 @@ export default function Router() {
   useEffect(() => {
     dispatch(fetchUserData());
   }, [dispatch]);
+  useEffect(() => {
+    dispatch(getConfineUserList());
+  }, []);
+
+
 
   return useRoutes([
     {

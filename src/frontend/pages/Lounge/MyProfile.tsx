@@ -32,6 +32,7 @@ import InstagramIcon from '../../assets/img/web3/instagram.png';
 import TwitterIcon from '../../assets/img/web3/twitter.png';
 import PostItem from './PostItem';
 import { ThemeContext } from '../../contexts/ThemeContext';
+import moment from 'moment';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -349,6 +350,8 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
         Under Contruction
       </Typography>
     );
+    console.log("User Data---", userDetails);
+    console.log("Saved Data---", savedUser);
   return (
     <>
       <Box
@@ -387,7 +390,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
 
             <Stack direction="row" justifyContent="space-between">
               <Box sx={{ position: 'relative', bottom: 15, left: 20, right: 30 }}>
-                <Badge
+              {/* <Badge
                   anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'right'
@@ -399,7 +402,34 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                   invisible={!userDetails}
                 >
                   <Avatar src={userDetails?.profile_image} sx={{ width: 75, height: 75 }} />
-                </Badge>
+                </Badge> */}
+               { userDetails?.is_online === true ? ( <Badge
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right'
+                  }}
+                  color="success"
+                  overlap="circular"
+                  badgeContent=" "
+                  variant="dot"
+                  invisible={!userDetails}
+                >
+                  <Avatar src={userDetails?.profile_image} sx={{ width: 75, height: 75 }} />
+                </Badge>) : ( <Badge
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right'
+                  }}
+                  color="warning"
+                  overlap="circular"
+                  badgeContent=" "
+                  variant="dot"
+                  invisible={!userDetails}
+                >
+                  <Avatar src={userDetails?.profile_image} sx={{ width: 75, height: 75 }} />
+                </Badge>) } 
+    
+              
               </Box>
               <Box>
                 {savedUser?.id !== userDetails?.id ?
@@ -432,9 +462,12 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
               {userDetails && userDetails.display_name}
             </Typography>
             <input type="hidden" id="dummy" />
-            <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-              @{userDetails && userDetails.custom_username} &#8226; Available Now
-            </Typography>
+            { userDetails?.is_online === true ? (<Typography variant="body1" sx={{ color: 'text.secondary' }}>
+              @{userDetails && userDetails.custom_username} &#8226; Available Now 
+            </Typography>):(<Typography variant="body1" sx={{ color: 'text.secondary' }}>
+              @{userDetails && userDetails.custom_username} &#8226; {moment.utc(userDetails?.last_login).local().startOf('seconds').fromNow() || "Days Ago"} 
+            </Typography>) }
+            
           </Box>
           {userDetails?.bio && (
             <Box sx={{ px: 2, pt: 1 }}>

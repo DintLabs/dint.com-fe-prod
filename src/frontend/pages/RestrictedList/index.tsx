@@ -73,12 +73,63 @@ const BackBTNWrapper = { display: "flex", alignItems: "center" };
 
 const RestrictedList = (props: any) => {
   const userData = useSelector((state: any) => state.user);
+  const [showButton, setShowButton] = useState(true);
+  const [unBlockUser, setUnBlockUser] = useState<any>();
+  const [allAddedUser, setAllAddedUser] = useState([]);
   const { state } = useLocation();
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState<any>([]);
   const restritedList = state.restictedUsers;
   const navigate = useNavigate();
  
+ 
+    const fetchData = async () => {
+      try {
+        const { data } = await _axios.get(`api/confine-user`);
 
+        console.log("users added", data);
+        setAllAddedUser(data);
+
+      } catch (err: any) {
+        console.error("err ===>", err.message);
+      }
+    };
+
+    useEffect(() => {
+      fetchData();
+    }, []);
+  console.log("setAllConfineUser", allAddedUser);
+  const filteredUser = allAddedUser.filter((allAddedUser: any) => {
+    return allAddedUser.user_block_type === "restrict";
+  });
+
+  const onSelect = (listedUsers: any) => {
+    if (selected.includes(listedUsers.id)) {
+      const data = selected.filter((item: any) => {
+        return item !== listedUsers.id;
+      });
+      setShowButton(true);
+      setSelected(data);
+    } else {
+      setSelected([listedUsers.id]);
+      setUnBlockUser(listedUsers.id);
+      setShowButton(false);
+
+    }
+  };
+
+  const unBlock = async () => {
+    if (unBlockUser) {
+      await _axios
+        .delete(`/api/confine-user/${unBlockUser}`, unBlockUser)
+        .then((response: any) => {
+          console.log("response", response.data);
+          fetchData();
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    }
+  };
   return (
     <Stack
       className="subscriptions-page-container"
@@ -114,15 +165,19 @@ const RestrictedList = (props: any) => {
             Restricted Users
           </Typography>
         </Box>
-        {/* <Box sx={ButtonWrapper}>
-          <Button disabled={showButton} onClick={deleteUser}>Remove</Button>
-        </Box> */}
+        <Box sx={ButtonWrapper}>
+          <Button disabled={showButton} onClick={unBlock}>Remove</Button>
+        </Box>
       </Stack>
       <Box sx={CardWrapper}>
         <Grid container spacing={2}>
-          {restritedList?.map((listedUsers: any) => (
-            <Grid key={listedUsers?.id} item sm={12} md={6} lg={3}>
-              <Box sx={pageDetailCard}>
+          {filteredUser?.map((listedUsers: any) => (
+            <Grid key={listedUsers?.id} item sm={12} md={6} lg={3} onClick={() => {
+              onSelect(listedUsers);
+            }}>
+              <Box className={`page-detail-card ${
+                  selected.includes(listedUsers.id) ? "UserSelect" : ""
+                }`} sx={pageDetailCard}>
                 <AllRestrictedUser
                   listedUsers={listedUsers}
                   selectedUsers={selected}

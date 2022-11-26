@@ -15,6 +15,8 @@ import {
   import { useSelector } from "frontend/redux/store";
   
   import _axios from "frontend/api/axios";
+import { setUserData } from 'frontend/redux/slices/user';
+import AllFollowers from '../Followers/AllFollowers';
 
   const listWrapper = {
     display: "flex",
@@ -67,7 +69,7 @@ const navigate = useNavigate();
 const [allFollowers, SetAllFollowers] = useState([]);
 const userData = useSelector((state: any) => state.user);
 const [user, setUser] = useState([]);
-const [selected, setSelected] = useState([]);
+const [selected, setSelected] = useState<any>([]);
 const [showButton, setShowButton] = useState(true);
 const { state } = useLocation();
 const allAddedUsers = state.addedUsers;
@@ -75,7 +77,7 @@ const [userToAdd, setUserToAdd] = useState([]);
 
 const onSelect = (list: any) => {
     if (selected.includes(list.id)) {
-      const data = selected.filter((item) => {
+      const data = selected.filter((item: any) => {
         return item !== list.id;
       });
       setShowButton(true);  
@@ -109,6 +111,7 @@ const onSelect = (list: any) => {
     fetchData();
   }, []);
 
+ 
   const addButtonClick = async () => {
     if (user) {
       await _axios
@@ -124,8 +127,8 @@ const onSelect = (list: any) => {
   };
   const filterData = (allFollowers: any, allAddedUsers: any)=>{
     let res = [];
-    res = allFollowers.filter(el => {
-      return !allAddedUsers.find(element => {
+    res = allFollowers?.filter((el: any) => {
+      return !allAddedUsers.find((element: any) => {
          return element.confine_user_details.id === el.id
          ;
         });
