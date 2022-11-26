@@ -60,14 +60,35 @@ import {
   };
 
 
-const AddCloseFriend = () => {
+const AddCloseFriend = ({addedUsers}: any) => {
     const userData = useSelector((state: any) => state.user);
+    const { state } = useLocation();
+    const [allFollowing, setAllFollowing] = useState<any>([]);
     const navigate = useNavigate(); 
     const [selected, setSelected] = useState<any>([]);
     console.log("Userdata---", userData);
-const [user, setUser] =useState();
+    const [user, setUser] =useState();
+    const closeFriend = state.addedUsers;
+    const [allCloseFriend, setAllCloseFriend] = useState<any>([]);
 
     const [showButton, setShowButton] = useState(true);
+
+    useEffect(() => {
+      setAllFollowing(userData.following);
+  
+    }, [userData.following])
+
+    // useEffect(() => {
+    //   const tempArr: any = [];
+    //   selected.forEach((el: any) => {
+    //     tempArr.push({
+    //       main_user: userData?.userData?.id,
+    //       close_friend: el,
+    //     });
+    //   });
+    //   setUser([...tempArr]);
+    // }, [selected]);
+
     const onSelect = (list: any) => {
         if (selected.includes(list.id)) {
           const data = selected.filter((item: any) => {
@@ -77,23 +98,24 @@ const [user, setUser] =useState();
           setSelected(data);
         } else{
           // {member: "",  user_custom_lists: state.id}
-          setSelected([list.id]);
+          setSelected([ list.id]);
           setShowButton(false);
-          setUser(list.id)
-        //   const obj: any = {
-        //     user_block_type: "restrict",
-        //     main_user: userData?.userData?.id,
-        //     confine_user: list.id,   
-        //   };
+          
+          const obj: any = {
+            main_user: userData?.userData?.id,
+            close_friend: list.id   
+          };
+          setUser(obj)
         
           
       }
       };
       console.log("USER---", user);
+      console.log("selected---", selected);
     const addButtonClick = async () => {
         if (user){
           await _axios
-            .post(`/api/add-member-in-list/`)
+            .post(`/api/user/create-close-friends/`, user)
             .then((response: any) => {
               console.log("response", response.data);
               navigate(-1)
@@ -104,7 +126,24 @@ const [user, setUser] =useState();
             });
         }
       };
+      console.log("all--- dat---", allFollowing, closeFriend )
 
+      const filterData = (allFollowing: any, closeFriend: any) => {
+
+        let res = [];
+        res = allFollowing?.filter((el: any) => {
+          return !closeFriend?.find((element: any) => {
+            return element.id === el.id;
+          });
+        });
+        setAllCloseFriend(res);
+        return res;
+      };
+    
+      useEffect(() => {
+        filterData(allFollowing, closeFriend);
+      }, [allFollowing, closeFriend]);
+console.log("Close Fre-----", allCloseFriend);
   return (
     <Stack
     className="subscriptions-page-container"
@@ -136,7 +175,7 @@ const [user, setUser] =useState();
           variant="subtitle1"
           sx={{ pt: 0.25, ml: "10px !important" }}
         >
-          Add User To Restrict
+          Add Close Friends
         </Typography>
       </Box>
       <Box sx={ButtonWrapper}>
@@ -146,7 +185,7 @@ const [user, setUser] =useState();
       </Box>
     </Stack>
     <Box sx={listWrapper}>
-      { userData.following && userData.following[0] && userData.following.map((list: any, ind: any) => {
+      { allCloseFriend && allCloseFriend[0] && allCloseFriend.map((list: any, ind: any) => {
         return (
           <Box
             className={`listInnerWrapper ${

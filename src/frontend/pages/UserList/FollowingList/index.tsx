@@ -73,7 +73,6 @@ const FollowingList = () => {
   const [user, setUser] = useState<any>([]);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const tempArr: any = [];
     selected.forEach((el: any) => {
@@ -81,6 +80,7 @@ const FollowingList = () => {
         user_custom_lists: state.id,
         member: el,
       });
+      setShowButton(false);
     });
     setUser([...tempArr]);
   }, [selected]);
@@ -94,11 +94,11 @@ const FollowingList = () => {
       setSelected(data);
     } else {
       setSelected([...selected, list.id]);
-      setShowButton(false);
-      const newUser = { ...user };
-      newUser["member"] = list.id;
-      newUser["user_custom_lists"] = state.id;
-      setUser({ ...newUser });
+      // setShowButton(false);
+      // const newUser = { ...user };
+      // newUser["member"] = list.id;
+      // newUser["user_custom_lists"] = state.id;
+      // setUser({ ...newUser });
     }
   };
 
