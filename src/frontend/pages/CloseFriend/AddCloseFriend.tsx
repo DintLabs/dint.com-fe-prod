@@ -60,15 +60,23 @@ import {
   };
 
 
-const AddCloseFriend = () => {
+const AddCloseFriend = ({addedUsers}: any) => {
     const userData = useSelector((state: any) => state.user);
+    const { state } = useLocation();
+    const [allFollowing, setAllFollowing] = useState<any>([]);
     const navigate = useNavigate(); 
     const [selected, setSelected] = useState<any>([]);
     console.log("Userdata---", userData);
     const [user, setUser] =useState();
-    
+    const closeFriend = state.addedUsers;
+    const [allCloseFriend, setAllCloseFriend] = useState<any>([]);
 
     const [showButton, setShowButton] = useState(true);
+
+    useEffect(() => {
+      setAllFollowing(userData.following);
+  
+    }, [userData.following])
 
     // useEffect(() => {
     //   const tempArr: any = [];
@@ -95,7 +103,7 @@ const AddCloseFriend = () => {
           
           const obj: any = {
             main_user: userData?.userData?.id,
-            close_friend: list.id,   
+            close_friend: list.id   
           };
           setUser(obj)
         
@@ -107,7 +115,7 @@ const AddCloseFriend = () => {
     const addButtonClick = async () => {
         if (user){
           await _axios
-            .post(`/api/user/create-close-friends/`)
+            .post(`/api/user/create-close-friends/`, user)
             .then((response: any) => {
               console.log("response", response.data);
               navigate(-1)
@@ -118,7 +126,24 @@ const AddCloseFriend = () => {
             });
         }
       };
+      console.log("all--- dat---", allFollowing, closeFriend )
 
+      const filterData = (allFollowing: any, closeFriend: any) => {
+
+        let res = [];
+        res = allFollowing?.filter((el: any) => {
+          return !closeFriend?.find((element: any) => {
+            return element.id === el.id;
+          });
+        });
+        setAllCloseFriend(res);
+        return res;
+      };
+    
+      useEffect(() => {
+        filterData(allFollowing, closeFriend);
+      }, [allFollowing, closeFriend]);
+console.log("Close Fre-----", allCloseFriend);
   return (
     <Stack
     className="subscriptions-page-container"
@@ -160,7 +185,7 @@ const AddCloseFriend = () => {
       </Box>
     </Stack>
     <Box sx={listWrapper}>
-      { userData.following && userData.following[0] && userData.following.map((list: any, ind: any) => {
+      { allCloseFriend && allCloseFriend[0] && allCloseFriend.map((list: any, ind: any) => {
         return (
           <Box
             className={`listInnerWrapper ${

@@ -73,7 +73,6 @@ const FollowingList = () => {
   const [user, setUser] = useState<any>([]);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const tempArr: any = [];
     selected.forEach((el: any) => {
