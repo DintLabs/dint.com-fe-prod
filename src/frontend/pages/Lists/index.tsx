@@ -128,7 +128,7 @@ const Lists = () => {
 
   const handleSubmit = async () => {
     await _axios
-      .post(`https://bedev.dint.com/api/user-list/`, user)
+      .post(`${process.env.REACT_APP_API_URL}/api/user-list/`, user)
       .then((response: any) => {
         setNewList({ ...response.data });
         handleClose();
@@ -140,7 +140,7 @@ const Lists = () => {
   
   const getUserList = async () => {
     _axios
-      .get(`https://bedev.dint.com/api/user-list/`)
+      .get(`${process.env.REACT_APP_API_URL}/api/user-list/`)
       .then((response: any) => {
         setUserList([...response.data] as any);
       })
