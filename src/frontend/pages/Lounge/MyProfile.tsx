@@ -279,6 +279,8 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
     }
   }, [username]);
 
+ 
+
   useEffect(() => {
     let list = [];
     let pagination = null;
@@ -378,7 +380,29 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
     }
     setIsFollowLoading(false);
   };
-
+  const cancelRequest = async () => {
+    setIsFollowLoading(true);
+   try {
+      const {data} = await _axios
+        .delete(`api/connection/delete-follow-request/${userDetails?.id}`);
+        if (data?.code === 200) {
+          await fetchUserDetails(true);
+          toast.warning(
+            `Request Cancelled ${
+              userDetails?.display_name || userDetails?.custom_username
+            }`
+          );
+        } else {
+          toast.error(data?.message || "Unable to process request")
+        }
+      }
+      catch (err: any) {
+        console.error("Cancellation error", err.message);
+        toast.error("Unable to process request");
+      }
+        setIsFollowLoading(false);
+    }
+  
   const handleClose = () => {
     setOpenPopUpTip(false);
   };
@@ -393,8 +417,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
         Under Contruction
       </Typography>
     );
-  console.log("User Data---", userDetails);
-  console.log("Saved Data---", savedUser);
+
   return (
     <>
       <Box
@@ -558,7 +581,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
             <Box sx={{ px: 2, pt: 1 }}>
               <Typography
                 variant="body1"
-                sx={{ color: "text.primary", fontSize: "12px" }}
+                sx={{ color: "text.secondary", fontSize: "12px" }}
               >
                 {userDetails.bio}
               </Typography>
@@ -588,8 +611,21 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                     {isFollowLoading ? `Loading...` : `Follow`}
                   </MUIButton>
                 )}
+                {userDetails?.is_followed === "Request Sent" && (
+                  <MUIButton
+                    onClick={cancelRequest}
+                    variant="contained"
+                    color="primary" 
+                    sx={{ m: 1 }}
+                  >
+                    {isFollowLoading ? `Loading...` : `Cancel Request`} 
+                  </MUIButton>
+                )}
+               
+                
               </>
             )}
+          
           <Box display="flex" gap={1} sx={{ p: 2 }}>
             {!!userDetails?.instagram && (
               <Box
