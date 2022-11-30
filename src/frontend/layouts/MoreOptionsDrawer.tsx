@@ -288,7 +288,7 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
               {(Array.isArray(follower) && follower.length) || 0} Follower
             </FlexRow>{' '}
             •{' '}
-            <FlexRow onClick={() => navigate('/lounge/subscriptions')} cursor="pointer">
+            <FlexRow onClick={() => navigate('/lounge/following')} cursor="pointer">
               {(Array.isArray(following) && following.length) || 0} Following
             </FlexRow>
           </Typography>
