@@ -58,8 +58,7 @@ function TabPanel(props: TabPanelProps) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
+      {...other}>
       {value === index && (
         <Box sx={{ p: 3 }}>
           <Typography component="span">{children}</Typography>
@@ -208,7 +207,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
     if (userDetails?.is_private === false) {
       return true;
     }
-  
+
     return false;
   }, [userDetails]);
 
@@ -278,8 +277,6 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
       setIsLoadingUserDetails(false);
     }
   }, [username]);
-
- 
 
   useEffect(() => {
     let list = [];
@@ -382,27 +379,27 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
   };
   const cancelRequest = async () => {
     setIsFollowLoading(true);
-   try {
-      const {data} = await _axios
-        .delete(`api/connection/delete-follow-request/${userDetails?.id}`);
-        if (data?.code === 200) {
-          await fetchUserDetails(true);
-          toast.warning(
-            `Request Cancelled ${
-              userDetails?.display_name || userDetails?.custom_username
-            }`
-          );
-        } else {
-          toast.error(data?.message || "Unable to process request")
-        }
+    try {
+      const { data } = await _axios.delete(
+        `api/connection/delete-follow-request/${userDetails?.id}`
+      );
+      if (data?.code === 200) {
+        await fetchUserDetails(true);
+        toast.warning(
+          `Request Cancelled ${
+            userDetails?.display_name || userDetails?.custom_username
+          }`
+        );
+      } else {
+        toast.error(data?.message || "Unable to process request");
       }
-      catch (err: any) {
-        console.error("Cancellation error", err.message);
-        toast.error("Unable to process request");
-      }
-        setIsFollowLoading(false);
+    } catch (err: any) {
+      console.error("Cancellation error", err.message);
+      toast.error("Unable to process request");
     }
-  
+    setIsFollowLoading(false);
+  };
+
   const handleClose = () => {
     setOpenPopUpTip(false);
   };
@@ -424,14 +421,12 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
         style={{
           borderLeft: `1px solid ${theme.palette.grey[700]}`,
           borderRight: `1px solid ${theme.palette.grey[700]}`,
-        }}
-      >
+        }}>
         <Box
           style={{
             borderBottom: `8px solid ${theme.palette.grey[700]}`,
           }}
-          sx={{ pb: 2 }}
-        >
+          sx={{ pb: 2 }}>
           <Box sx={{ position: "relative" }}>
             <div
               style={{
@@ -444,8 +439,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
                 backgroundImage: `url(${userDetails?.banner_image || ""})`,
-              }}
-            >
+              }}>
               {username === savedUser?.custom_username && (
                 <MUIButton variant="contained" component="label" sx={{ m: 1 }}>
                   <input
@@ -461,50 +455,50 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
 
             <Stack direction="row" justifyContent="space-between">
               <Box
-                sx={{ position: "relative", bottom: 15, left: 20, right: 30 }}
-              >
-                {/* <Badge
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                  }}
-                  color="success"
-                  overlap="circular"
-                  badgeContent=" "
-                  variant="dot"
-                  invisible={!userDetails}
-                >
-                  <Avatar src={userDetails?.profile_image} sx={{ width: 75, height: 75 }} />
-                </Badge> */}
-                {userDetails?.is_online === true ? (
-                  <Badge
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "right",
-                    }}
-                    color="success"
-                    overlap="circular"
-                    badgeContent=" "
-                    variant="dot"
-                    invisible={!userDetails}
-                  >
-                    <Avatar
-                      src={userDetails?.profile_image}
-                      sx={{ width: 75, height: 75 }}
-                    />
-                  </Badge>
+                sx={{ position: "relative", bottom: 15, left: 20, right: 30 }}>
+                {isEligibleForFetchingPost === true ? (
+                  userDetails?.is_online === true ? (
+                    <Badge
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      color="success"
+                      overlap="circular"
+                      badgeContent=" "
+                      variant="dot"
+                      invisible={!userDetails}>
+                      <Avatar
+                        src={userDetails?.profile_image}
+                        sx={{ width: 75, height: 75 }}
+                      />
+                    </Badge>
+                  ) : (
+                    <Badge
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      color="warning"
+                      overlap="circular"
+                      badgeContent=" "
+                      variant="dot"
+                      invisible={!userDetails}>
+                      <Avatar
+                        src={userDetails?.profile_image}
+                        sx={{ width: 75, height: 75 }}
+                      />
+                    </Badge>
+                  )
                 ) : (
                   <Badge
                     anchorOrigin={{
                       vertical: "bottom",
                       horizontal: "right",
                     }}
-                    color="warning"
                     overlap="circular"
                     badgeContent=" "
-                    variant="dot"
-                    invisible={!userDetails}
-                  >
+                    invisible={!userDetails}>
                     <Avatar
                       src={userDetails?.profile_image}
                       sx={{ width: 75, height: 75 }}
@@ -525,8 +519,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                             userDetails && userDetails.id
                           }`
                         )
-                      }
-                    >
+                      }>
                       <ChatOutlinedIcon sx={{ fontSize: "32px" }} />
                     </IconButton>
                     <IconButton>
@@ -549,8 +542,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
           <Box sx={{ px: 2 }}>
             <Typography
               variant="h3"
-              sx={{ color: toggle ? "text.primary" : "#161C24" }}
-            >
+              sx={{ color: toggle ? "text.primary" : "#161C24" }}>
               {userDetails && userDetails.display_name}
             </Typography>
             <input type="hidden" id="dummy" />
@@ -575,14 +567,12 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                 @{userDetails && userDetails.custom_username} &#8226;
               </Typography>
             )}
-         
           </Box>
           {userDetails?.bio && (
             <Box sx={{ px: 2, pt: 1 }}>
               <Typography
                 variant="body1"
-                sx={{ color: "text.secondary", fontSize: "12px" }}
-              >
+                sx={{ color: "text.secondary", fontSize: "12px" }}>
                 {userDetails.bio}
               </Typography>
             </Box>
@@ -596,8 +586,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                     onClick={unfollow}
                     variant="contained"
                     color="primary"
-                    sx={{ m: 1 }}
-                  >
+                    sx={{ m: 1 }}>
                     {isFollowLoading ? `Loading...` : `Unfollow`}
                   </MUIButton>
                 )}
@@ -606,8 +595,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                     onClick={follow}
                     variant="contained"
                     color="primary"
-                    sx={{ m: 1 }}
-                  >
+                    sx={{ m: 1 }}>
                     {isFollowLoading ? `Loading...` : `Follow`}
                   </MUIButton>
                 )}
@@ -615,17 +603,14 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                   <MUIButton
                     onClick={cancelRequest}
                     variant="contained"
-                    color="primary" 
-                    sx={{ m: 1 }}
-                  >
-                    {isFollowLoading ? `Loading...` : `Cancel Request`} 
+                    color="primary"
+                    sx={{ m: 1 }}>
+                    {isFollowLoading ? `Loading...` : `Cancel Request`}
                   </MUIButton>
                 )}
-               
-                
               </>
             )}
-          
+
           <Box display="flex" gap={1} sx={{ p: 2 }}>
             {!!userDetails?.instagram && (
               <Box
@@ -640,8 +625,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                 sx={{ cursor: "pointer" }}
                 onClick={() =>
                   handleSocialIconClick(userDetails?.instagram || "")
-                }
-              >
+                }>
                 <img src={InstagramIcon} height="20" width="20" alt="img" />
                 <Typography sx={{ color: "white", fontSize: "14px" }}>
                   Instagram
@@ -661,8 +645,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                 sx={{ cursor: "pointer" }}
                 onClick={() =>
                   handleSocialIconClick(userDetails?.twitter || "")
-                }
-              >
+                }>
                 <img
                   src={TwitterIcon}
                   height="20"
@@ -688,8 +671,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                 sx={{ cursor: "pointer" }}
                 onClick={() =>
                   handleSocialIconClick(userDetails?.discord || "")
-                }
-              >
+                }>
                 <img
                   src={DiscordIcon}
                   height="20"
@@ -711,8 +693,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                 value={value}
                 variant="fullWidth"
                 onChange={handleChange}
-                sx={{ borderBottom: `1px solid ${theme.palette.grey[700]}` }}
-              >
+                sx={{ borderBottom: `1px solid ${theme.palette.grey[700]}` }}>
                 <Tab label={`All (${counts?.all_posts ?? 0})`} />
                 <Tab label={`Text (${counts?.text_posts ?? 0})`} />
                 <Tab label={`Photos (${counts?.image_posts ?? 0})`} />
@@ -830,11 +811,9 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
             borderRadius: 10,
             marginTop: 20,
             padding: 20,
-          }}
-        >
+          }}>
           <Typography
-            sx={{ fontSize: "12px", color: "black", textAlign: "center" }}
-          >
+            sx={{ fontSize: "12px", color: "black", textAlign: "center" }}>
             This account is private
           </Typography>
           {!savedUser?.custom_username && (
@@ -845,20 +824,17 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                   color: "white",
                   textAlign: "center",
                   padddingTop: 2,
-                }}
-              >
+                }}>
                 Already follow {userDetails?.custom_username}?{" "}
                 <a
                   href="/"
-                  onClick={() => navigate(`/auth/login?r=/${username}`)}
-                >
+                  onClick={() => navigate(`/auth/login?r=/${username}`)}>
                   Login
                 </a>{" "}
                 to
               </Typography>
               <Typography
-                sx={{ fontSize: "12px", color: "white", textAlign: "center" }}
-              >
+                sx={{ fontSize: "12px", color: "white", textAlign: "center" }}>
                 see their photos and videos.
               </Typography>
             </>
