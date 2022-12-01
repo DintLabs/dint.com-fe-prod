@@ -64,7 +64,7 @@ export interface UserDataInterface {
   instagram?: string | null;
   discord?: string | null;
   banner_image?: string | null;
-  is_followed?: boolean;
+  is_followed?: any;
   is_private?: boolean;
   user_page?: string;
   is_online?: boolean;
@@ -93,7 +93,7 @@ export interface ConfineUserInterface {
   instagram?: string | null;
   discord?: string | null;
   banner_image?: string | null;
-  is_followed?: boolean;
+  is_followed?: any;
   is_private?: boolean;
   user_page?: string;
 
