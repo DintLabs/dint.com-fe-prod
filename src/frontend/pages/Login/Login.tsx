@@ -6,29 +6,35 @@ import {
   sendPasswordResetEmail,
   setPersistence,
   signInWithPopup,
-  signInWithRedirect
-} from 'firebase/auth';
-import axios from 'axios';
-import { authInstance } from 'frontend/contexts/FirebaseInstance';
-import useAuth from 'frontend/hooks/useAuth';
-import { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { Link, Location, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import '../../material/signup.css';
-import { generateFromEmail } from 'frontend/utils';
-import { toast } from 'react-toastify';
-import { createWallet } from 'frontend/redux/actions/createWallet';
-import { dispatch, RootState } from 'frontend/redux/store';
+  signInWithRedirect,
+} from "firebase/auth";
+import axios from "axios";
+import { authInstance } from "frontend/contexts/FirebaseInstance";
+import useAuth from "frontend/hooks/useAuth";
+import { useState } from "react";
+import { Helmet } from "react-helmet";
+import {
+  Link,
+  Location,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import "../../material/signup.css";
+import { generateFromEmail } from "frontend/utils";
+import { toast } from "react-toastify";
+import { createWallet } from "frontend/redux/actions/createWallet";
+import { dispatch, RootState } from "frontend/redux/store";
 
-import useUser from 'frontend/hooks/useUser';
+import useUser from "frontend/hooks/useUser";
 
 const Login = () => {
   const userHook = useUser();
   const { login } = useAuth();
   const location: Location = useLocation();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const auth = getAuth();
   const navigate = useNavigate();
@@ -42,45 +48,48 @@ const Login = () => {
       if (result?.user == null) return;
       const { user } = result;
 
-      const username = generateFromEmail(user.email || '');
+      const username = generateFromEmail(user.email || "");
       const userData = {
         ...user,
         fire_base_auth_key: user?.uid,
-        role: 'simple',
-        biography: 'no biography yet',
-        custom_username: username ?? '',
+        role: "simple",
+        biography: "no biography yet",
+        custom_username: username ?? "",
         profile_image:
           user?.photoURL ??
-          'https://w1.pngwing.com/pngs/386/684/png-transparent-face-icon-user-icon-design-user-profile-share-icon-avatar-black-and-white-silhouette.png',
-        display_name: user?.displayName ?? ''
+          "https://w1.pngwing.com/pngs/386/684/png-transparent-face-icon-user-icon-design-user-profile-share-icon-avatar-black-and-white-silhouette.png",
+        display_name: user?.displayName ?? "",
       };
 
       await axios
         .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
           email: user.email,
-          fire_base_auth_key: user.uid
+          fire_base_auth_key: user.uid,
         })
         .then(async ({ data }: any) => {
           if (data.code !== 400) {
-            localStorage.setItem('apiToken', data.data.token);
+            localStorage.setItem("apiToken", data.data.token);
             // localStorage.setItem('userData', JSON.stringify(data.data));
             userHook.setCurrentUser(data.data);
-            dispatch(createWallet())
-            toast.success('User Login Successful!');
+            dispatch(createWallet());
+            toast.success("User Login Successful!");
             onSuccessLogin();
           } else {
             await axios
-              .post(`${process.env.REACT_APP_API_URL}/api/auth/sign-up/`, userData)
+              .post(
+                `${process.env.REACT_APP_API_URL}/api/auth/sign-up/`,
+                userData
+              )
               .then(async ({ data }) => {
                 if (data.code !== 400) {
-                  localStorage.setItem('apiToken', data.data.token);
+                  localStorage.setItem("apiToken", data.data.token);
                   // localStorage.setItem('userData', JSON.stringify(data.data));
                   userHook.setCurrentUser(data.data);
-                  dispatch(createWallet())
-                  toast.success('User Login Successful!');
+                  dispatch(createWallet());
+                  toast.success("User Login Successful!");
                   onSuccessLogin();
                 } else {
-                  toast.error('User Not Found');
+                  toast.error("User Not Found");
                 }
               });
           }
@@ -93,7 +102,7 @@ const Login = () => {
       alert(error);
     });
 
-  const [error_msg_login, setLoginErr] = useState('');
+  const [error_msg_login, setLoginErr] = useState("");
 
   const loginClicked = async () => {
     try {
@@ -102,16 +111,16 @@ const Login = () => {
       await axios
         .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
           email,
-          fire_base_auth_key: data.user.uid
+          fire_base_auth_key: data.user.uid,
         })
         .then(({ data }: any) => {
           if (data.code === 400) {
-            toast.error('Invalid Credantials');
+            toast.error("Invalid Credantials");
           } else {
-            localStorage.setItem('apiToken', data.data.token);
+            localStorage.setItem("apiToken", data.data.token);
             // localStorage.setItem('userData', JSON.stringify(data.data));
             userHook.setCurrentUser(data.data);
-            dispatch(createWallet())
+            dispatch(createWallet());
             onSuccessLogin();
           }
         })
@@ -119,28 +128,28 @@ const Login = () => {
           console.error(err);
         });
     } catch (error: any) {
-      if (error.code === 'auth/user-not-found') {
+      if (error.code === "auth/user-not-found") {
         console.error(`User is Not Found`);
-        setLoginErr('User Not Found');
-      } else if (error.code === 'auth/wrong-password') {
+        setLoginErr("User Not Found");
+      } else if (error.code === "auth/wrong-password") {
         console.error(`Wrong Password`);
-        setLoginErr('Wrong Password');
+        setLoginErr("Wrong Password");
       } else if (error.message) {
         console.error(error.message);
-        setLoginErr('Something Went Wrong');
+        setLoginErr("Something Went Wrong");
       } else {
-        alert('Email is empty');
+        alert("Email is empty");
         console.error(error);
       }
     }
   };
 
   const forgotPassClicked = () => {
-    if (email !== '') {
+    if (email !== "") {
       const auth = getAuth();
       sendPasswordResetEmail(auth, email)
         .then(() => {
-          alert('Email Sent');
+          alert("Email Sent");
         })
         .catch((error) => {
           const errorMessage = error.message;
@@ -152,12 +161,15 @@ const Login = () => {
   const googleSignin = async () => {
     const provider = new GoogleAuthProvider();
 
-    if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i)) {
-      await setPersistence(authInstance, browserSessionPersistence);
-      signInWithRedirect(auth, provider)
-        .then(() => {})
-        .catch((e) => console.error(e));
-    } else {
+    // if (
+    //   navigator.userAgent.match(/Android/i) ||
+    //   navigator.userAgent.match(/iPhone/i)
+    // ) {
+    //   await setPersistence(authInstance, browserSessionPersistence);
+    //   signInWithRedirect(auth, provider)
+    //     .then(() => {})
+    //     .catch((e) => console.error(e));
+    // } else {
       signInWithPopup(auth, provider)
         .then(async (result) => {
           // This gives you a Google Access Token. You can use it to access the Google API.
@@ -166,42 +178,45 @@ const Login = () => {
           // The signed-in user info.
           const { user } = result;
 
-          const username = generateFromEmail(user.email || '');
+          const username = generateFromEmail(user.email || "");
           const userData = {
             ...user,
             fire_base_auth_key: user?.uid,
-            role: 'simple',
-            biography: 'no biography yet',
-            custom_username: username ?? '',
+            role: "simple",
+            biography: "no biography yet",
+            custom_username: username ?? "",
             profile_image:
               user?.photoURL ??
-              'https://w1.pngwing.com/pngs/386/684/png-transparent-face-icon-user-icon-design-user-profile-share-icon-avatar-black-and-white-silhouette.png',
-            display_name: user?.displayName ?? ''
+              "https://w1.pngwing.com/pngs/386/684/png-transparent-face-icon-user-icon-design-user-profile-share-icon-avatar-black-and-white-silhouette.png",
+            display_name: user?.displayName ?? "",
           };
 
           await axios
             .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
               email: user.email,
-              fire_base_auth_key: user.uid
+              fire_base_auth_key: user.uid,
             })
             .then(async ({ data }: any) => {
               if (data.code !== 400) {
-                localStorage.setItem('apiToken', data.data.token);
+                localStorage.setItem("apiToken", data.data.token);
                 // localStorage.setItem('userData', JSON.stringify(data.data));
                 userHook.setCurrentUser(data.data);
-                dispatch(createWallet())
-                toast.success('User Login Successful!');
+                dispatch(createWallet());
+                toast.success("User Login Successful!");
                 onSuccessLogin();
               } else {
                 await axios
-                  .post(`${process.env.REACT_APP_API_URL}/api/auth/sign-up/`, userData)
+                  .post(
+                    `${process.env.REACT_APP_API_URL}/api/auth/sign-up/`,
+                    userData
+                  )
                   .then(async ({ data }) => {
                     if (data.code !== 400) {
-                      localStorage.setItem('apiToken', data.data.token);
+                      localStorage.setItem("apiToken", data.data.token);
                       // localStorage.setItem('userData', JSON.stringify(data.data));
                       userHook.setCurrentUser(data.data);
 
-                      toast.success('User Login Successful!');
+                      toast.success("User Login Successful!");
                       onSuccessLogin();
                     }
                   });
@@ -216,7 +231,7 @@ const Login = () => {
           const errorMessage = error.message;
           console.error(errorMessage);
         });
-    }
+      // }
   };
 
   // const fbSignin = () => {
@@ -289,11 +304,11 @@ const Login = () => {
 
   const onSuccessLogin = () => {
     if (location?.search) {
-      const route = new URLSearchParams(location.search).get('r');
+      const route = new URLSearchParams(location.search).get("r");
 
       if (route) navigate(route);
-      else navigate('/lounge');
-    } else navigate('/lounge');
+      else navigate("/lounge");
+    } else navigate("/lounge");
   };
 
   return (
@@ -306,12 +321,12 @@ const Login = () => {
       {/* <NavbarHome /> */}
       <br />
       <br />
-      <div className="login_divs" style={{ maxWidth: '350px', margin: '0 auto' }}>
+      <div
+        className="login_divs"
+        style={{ maxWidth: "350px", margin: "0 auto" }}
+      >
         <div className="container">
-          <div className="header">
-          
-            {/* <h1>{props.islogin}</h1> */}
-          </div>
+          <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
 
           <div className="form-control">
             <label htmlFor="email">
@@ -337,8 +352,12 @@ const Login = () => {
                 onChange={(e: any) => setPassword(e.target.value)}
               />
             </label>
-            <button id="forgotpassBtn" type="button" onClick={forgotPassClicked}>
-              <span id="forgotPassText">Forgot Password?</span>{' '}
+            <button
+              id="forgotpassBtn"
+              type="button"
+              onClick={forgotPassClicked}
+            >
+              <span id="forgotPassText">Forgot Password?</span>{" "}
             </button>
           </div>
 
@@ -348,17 +367,23 @@ const Login = () => {
           </button>
 
           <p id="signup_line">
-            Not registered Yet?{' '}
+            Not registered Yet?{" "}
             <Link to={`/auth/signup${location?.search}`}>
               <span id="signup_here"> Sign Up</span>
             </Link>
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <button
               type="button"
               onClick={googleSignin}
               className="authbtnsocial"
-              style={{ backgroundColor: 'red' }}
+              style={{ backgroundColor: "red" }}
             >
               Google
             </button>
