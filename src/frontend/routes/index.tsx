@@ -50,6 +50,7 @@ import BlockedList from 'frontend/pages/BlockedList.tsx';
 import AddBlockedUsers from 'frontend/pages/BlockedList.tsx/AddBlockedUsers';
 import CloseFriend from 'frontend/pages/CloseFriend';
 import AddCloseFriend from 'frontend/pages/CloseFriend/AddCloseFriend';
+import _axios from 'frontend/api/axios';
 
 // ----------------------------------------------------------------------
 
@@ -66,7 +67,23 @@ export default function Router() {
     dispatch(getConfineUserList());
   }, []);
 
+  const online = async () => {
+    const obj = {
+      is_online: true,
+    };
 
+    await _axios
+      .put(`/api/user/update-status/`, obj)
+      .then((response: any) => {
+        console.log("response", response.data);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    online();
+  }, []);
 
   return useRoutes([
     {
