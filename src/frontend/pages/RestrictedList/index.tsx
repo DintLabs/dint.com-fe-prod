@@ -15,7 +15,7 @@ import { useSelector } from "frontend/redux/store";
 import { useEffect, useState } from "react";
 import _axios from "frontend/api/axios";
 import AllRestrictedUser from "./AllRestrictedUser";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const addIconWrapper = {
   height: "100%",
@@ -56,9 +56,9 @@ const ButtonWrapper = {
 const pageDetailCard = {
   color: "#121212",
   border: "1px solid #121212",
-  borderRadius: "50px",
+  borderRadius: "5px",
   overflow: "hidden",
-  cursor: "pointer",
+  // cursor: "pointer",
   "&.UserSelect": {
     backgroundColor: "#000",
     border: "1px solid #000",
@@ -70,11 +70,19 @@ const pageDetailCard = {
   "& .page-detail-body": { p: "10px 10px" },
 };
 const BackBTNWrapper = { display: "flex", alignItems: "center" };
+const DeleteViewBtnWrapper = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  pl: "10px",
+  pr: "10px",
+  pb: "10px",
+
+  "& svg": { cursor: "pointer" }, 
+};
 
 const RestrictedList = (props: any) => {
   const userData = useSelector((state: any) => state.user);
-  const [showButton, setShowButton] = useState(true);
-  const [unBlockUser, setUnBlockUser] = useState<any>();
   const [allAddedUser, setAllAddedUser] = useState([]);
   const { state } = useLocation();
   const [selected, setSelected] = useState<any>([]);
@@ -102,25 +110,12 @@ const RestrictedList = (props: any) => {
     return allAddedUser.user_block_type === "restrict";
   });
 
-  const onSelect = (listedUsers: any) => {
-    if (selected.includes(listedUsers.id)) {
-      const data = selected.filter((item: any) => {
-        return item !== listedUsers.id;
-      });
-      setShowButton(true);
-      setSelected(data);
-    } else {
-      setSelected([listedUsers.id]);
-      setUnBlockUser(listedUsers.id);
-      setShowButton(false);
+ 
 
-    }
-  };
-
-  const unBlock = async () => {
-    if (unBlockUser) {
+  const unBlock = async (listedUsers: any) => {
+    if (listedUsers.id) {
       await _axios
-        .delete(`/api/confine-user/${unBlockUser}`, unBlockUser)
+        .delete(`/api/confine-user/${listedUsers.id}`, listedUsers.id)
         .then((response: any) => {
           console.log("response", response.data);
           fetchData();
@@ -165,16 +160,16 @@ const RestrictedList = (props: any) => {
             Restricted Users
           </Typography>
         </Box>
-        <Box sx={ButtonWrapper}>
-          <Button disabled={showButton} onClick={unBlock}>Remove</Button>
-        </Box>
+       
       </Stack>
       <Box sx={CardWrapper}>
         <Grid container spacing={2}>
           {filteredUser?.map((listedUsers: any) => (
-            <Grid key={listedUsers?.id} item sm={12} md={6} lg={3} onClick={() => {
-              onSelect(listedUsers);
-            }}>
+            <Grid key={listedUsers?.id} item sm={12} md={6} lg={3} 
+            // onClick={() => {
+            //   onSelect(listedUsers);
+            // }}
+            >
               <Box className={`page-detail-card ${
                   selected.includes(listedUsers.id) ? "UserSelect" : ""
                 }`} sx={pageDetailCard}>
@@ -182,6 +177,21 @@ const RestrictedList = (props: any) => {
                   listedUsers={listedUsers}
                   selectedUsers={selected}
                 />
+                 <Box sx={DeleteViewBtnWrapper}>
+                  <Box sx={ButtonWrapper}>
+                    <Button
+                      onClick={() =>
+                        navigate(`/${listedUsers?.confine_user_details.custom_username}`)
+                      }>
+                      View{" "}
+                    </Button>
+                  </Box>
+                  <DeleteIcon
+                    onClick={() => {
+                      unBlock(listedUsers);
+                    }}
+                  />
+                </Box>
               </Box>
             </Grid>
           ))}

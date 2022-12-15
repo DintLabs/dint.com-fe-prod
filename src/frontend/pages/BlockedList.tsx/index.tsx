@@ -15,6 +15,8 @@ import { useSelector } from "frontend/redux/store";
 import { useEffect, useState } from "react";
 import _axios from "frontend/api/axios";
 import AllBlockedUser from "./AllBlockedUser";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 
 const addIconWrapper = {
   height: "100%",
@@ -57,7 +59,7 @@ const pageDetailCard = {
   border: "1px solid #121212",
   borderRadius: "5px",
   overflow: "hidden",
-  cursor: "pointer",
+  // cursor: "pointer",
   "&.UserSelect": {
     backgroundColor: "#000",
     border: "1px solid #000",
@@ -75,16 +77,21 @@ const ListWrapper = {
   p: "10px",
   borderRadius: "50px",
 };
+const DeleteViewBtnWrapper = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  pl: "10px",
+  pr: "10px",
+  pb: "10px",
+
+  "& svg": { cursor: "pointer" }, 
+};
 
 const BlockedList = () => {
   const { state } = useLocation();
   const [allAddedUser, setAllAddedUser] = useState([]);
-  const [allRestrictedUser, setAllRestrictedUser] = useState([]);
   const [selected, setSelected] = useState<any>([]);
-  const [unBlockUser, setUnBlockUser] = useState<any>();
-  // const [deletedUser, setDeletedUser] = useState(0);
-  const [showButton, setShowButton] = useState(true);
-  // const blockedList = state.blockedUsers;
   const navigate = useNavigate();
   const [blockedList, setBlockedList] = useState<any>([]);
   const fetchUsers = () =>{
@@ -108,30 +115,16 @@ const BlockedList = () => {
     useEffect(() => {
       fetchData();
     }, []);
-  console.log("setAllConfineUser", allAddedUser);
-  const filteredBlockedUser = allAddedUser.filter((allAddedUser: any) => {
+
+    const filteredBlockedUser = allAddedUser.filter((allAddedUser: any) => {
     return allAddedUser.user_block_type === "block";
   });
 
-  const onSelect = (listedUsers: any) => {
-    if (selected.includes(listedUsers.id)) {
-      const data = selected.filter((item: any) => {
-        return item !== listedUsers.id;
-      });
-      setShowButton(true);
-      setSelected(data);
-    } else {
-      setSelected([listedUsers.id]);
-      setUnBlockUser(listedUsers.id);
-      setShowButton(false);
-
-    }
-  };
-  console.log("Selected---", unBlockUser);
-  const unBlock = async () => {
-    if (unBlockUser) {
+  
+  const unBlock = async (listedUsers: any) => {
+    if (listedUsers.id) {
       await _axios
-        .delete(`/api/confine-user/${unBlockUser}`, unBlockUser)
+        .delete(`/api/confine-user/${listedUsers.id}`, listedUsers.id)
         .then((response: any) => {
           console.log("response", response.data);
           fetchData();
@@ -174,24 +167,20 @@ const BlockedList = () => {
             Blocked Users
           </Typography>
         </Box>
-        <Box sx={ButtonWrapper}>
-          <Button disabled={showButton} onClick={unBlock}>
-            Remove
-          </Button>
-        </Box>
+      
       </Stack>
       <Box sx={CardWrapper}>
         <Grid container spacing={2}>
           {filteredBlockedUser?.map((listedUsers: any) => (
+            
             <Grid
               key={listedUsers?.id}
               item
               sm={12}
               md={6}
               lg={3}
-              onClick={() => {
-                onSelect(listedUsers);
-              }}>
+           
+              >
               <Box
                 className={`page-detail-card ${
                   selected.includes(listedUsers.id) ? "UserSelect" : ""
@@ -199,8 +188,22 @@ const BlockedList = () => {
                 sx={pageDetailCard}>
                 <AllBlockedUser
                   listedUsers={listedUsers}
-                  selectedUsers={selected}
                 />
+                <Box sx={DeleteViewBtnWrapper}>
+                  <Box sx={ButtonWrapper}>
+                    <Button
+                      onClick={() =>
+                        navigate(`/${listedUsers?.confine_user_details.custom_username}`)
+                      }>
+                      View{" "}
+                    </Button>
+                  </Box>
+                  <DeleteIcon
+                    onClick={() => {
+                      unBlock(listedUsers);
+                    }}
+                  />
+                </Box>
               </Box>
             </Grid>
           ))}

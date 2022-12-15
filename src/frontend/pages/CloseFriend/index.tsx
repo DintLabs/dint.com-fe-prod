@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from "react";
 import _axios from "frontend/api/axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { set } from 'react-hook-form';
+import { set } from "react-hook-form";
 import {
   Avatar,
   Box,
@@ -13,8 +13,9 @@ import {
 import { Stack, useTheme } from "@mui/system";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import AddIcon from "@mui/icons-material/Add";
-import AllCloseFriend from './AllCloseFriend';
-import { useSelector } from 'react-redux';
+import AllCloseFriend from "./AllCloseFriend";
+import { useSelector } from "react-redux";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const addIconWrapper = {
   height: "100%",
@@ -57,7 +58,7 @@ const pageDetailCard = {
   border: "1px solid #121212",
   borderRadius: "5px",
   overflow: "hidden",
-  cursor: "pointer",
+  // cursor: "pointer",
   "&.UserSelect": {
     backgroundColor: "#000",
     border: "1px solid #000",
@@ -69,6 +70,16 @@ const pageDetailCard = {
   "& .page-detail-body": { p: "10px 10px" },
 };
 const BackBTNWrapper = { display: "flex", alignItems: "center" };
+const DeleteViewBtnWrapper = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  pl: "10px",
+  pr: "10px",
+  pb: "10px",
+
+  "& svg": { cursor: "pointer" }, 
+};
 
 const CloseFriend = () => {
   const navigate = useNavigate();
@@ -77,14 +88,13 @@ const CloseFriend = () => {
   const [allFollowing, setAllFollowing] = useState<any>([]);
   const [allCloseFriend, setAllCloseFriend] = useState<any>([]);
   const [showButton, setShowButton] = useState(true);
-  const[closeFriend, setCloseFriend] = useState<any>([]);
+  const [closeFriend, setCloseFriend] = useState<any>([]);
   const [selected, setSelected] = useState<any>([]);
   const [userToDelete, setUserToDelete] = useState<any>([]);
 
   useEffect(() => {
     setAllFollowing(userData.following);
-
-  }, [userData.following])
+  }, [userData.following]);
   console.log("All Follwoing----", allFollowing);
   const fetchCloseFriend = async () => {
     try {
@@ -94,13 +104,12 @@ const CloseFriend = () => {
     } catch (err: any) {
       console.error("err ===>", err.message);
     }
-  };  
-  useEffect(() =>{
+  };
+  useEffect(() => {
     fetchCloseFriend();
-  },[]);
-  console.log("closeFriend-----", closeFriend);
+  }, []);
+  
   const filterData = (allFollowing: any, closeFriend: any) => {
-
     let res = [];
     res = allFollowing?.filter((el: any) => {
       return closeFriend?.find((element: any) => {
@@ -125,14 +134,17 @@ const CloseFriend = () => {
       setSelected([listedUsers.id]);
       setUserToDelete(listedUsers.id);
       setShowButton(false);
-
     }
   };
 
-  const deleteUser = async () => {
-    if (userToDelete) {
+  const deleteUser = async (listedUsers: any) => {
+    
+    if (listedUsers.id) {
       await _axios
-        .delete(`/api/user/delete-close-friends/${userToDelete}`, userToDelete)
+        .delete(
+          `/api/user/delete-close-friends/${listedUsers.id}`,
+          listedUsers.id
+        )
         .then((response: any) => {
           console.log("response", response.data);
           fetchCloseFriend();
@@ -143,88 +155,94 @@ const CloseFriend = () => {
     }
   };
 
-console.log("allCloseFriend", allCloseFriend)
+  
   return (
     <Stack
-    className="subscriptions-page-container"
-    sx={{
-      borderLeft: `1px solid #000`,
-      borderRight: `1px solid #000`,
-      position: "relative",
-    }}
-  >
-    {/* main header */}
-    <Stack
-      direction="row"
-      alignItems="center"
-      className="container-header"
-      justifyContent="space-between"
-      spacing={2}
-      sx={{ p: { xs: 1, md: 1, xl: 1 } }}
-    >
-      <Box sx={BackBTNWrapper}>
-        <IconButton
-          className="primary-text-color"
-          size="small"
-          onClick={() => navigate(-1)}
-        >
-          <AiOutlineArrowLeft className="primary-text-color" />
-        </IconButton>
-        <Typography
-          className="primary-text-color"
-          textTransform="uppercase"
-          variant="subtitle1"
-          sx={{ pt: 0.25, ml: "10px !important" }}
-        >
-         Close Friends
-        </Typography>
-      </Box>
-      <Box sx={ButtonWrapper}>
-        <Button disabled={showButton} onClick={deleteUser}>Remove</Button>
-      </Box>
-    </Stack>
-    <Box sx={CardWrapper}>
-      <Grid container spacing={2}>
-        {allCloseFriend?.map((listedUsers: any) => (
-          <Grid
-            key={listedUsers?.id}
-            item
-            sm={12}
-            md={6}
-            lg={4}
-            onClick={() => {
-              onSelect(listedUsers);
-            }}
-          >
-            <Box
-              className={`page-detail-card ${
-                selected.includes(listedUsers.id) ? "UserSelect" : ""
-              }`}
-              sx={pageDetailCard}
+      className="subscriptions-page-container"
+      sx={{
+        borderLeft: `1px solid #000`,
+        borderRight: `1px solid #000`,
+        position: "relative",
+      }}>
+      {/* main header */}
+      <Stack
+        direction="row"
+        alignItems="center"
+        className="container-header"
+        justifyContent="space-between"
+        spacing={2}
+        sx={{ p: { xs: 1, md: 1, xl: 1 } }}>
+        <Box sx={BackBTNWrapper}>
+          <IconButton
+            className="primary-text-color"
+            size="small"
+            onClick={() => navigate(-1)}>
+            <AiOutlineArrowLeft className="primary-text-color" />
+          </IconButton>
+          <Typography
+            className="primary-text-color"
+            textTransform="uppercase"
+            variant="subtitle1"
+            sx={{ pt: 0.25, ml: "10px !important" }}>
+            Close Friends
+          </Typography>
+        </Box>
+      </Stack>
+      <Box sx={CardWrapper}>
+        <Grid container spacing={2}>
+          {allCloseFriend?.map((listedUsers: any) => (
+            <Grid
+              key={listedUsers?.id}
+              item
+              sm={12}
+              md={6}
+              lg={4}
+              
             >
-              <AllCloseFriend
-                listedUsers={listedUsers}
-                // selectedUsers={selected}
-              />
+              <Box
+                className={`page-detail-card ${
+                  selected.includes(listedUsers.id) ? "UserSelect" : ""
+                }`}
+                sx={pageDetailCard}>
+                <AllCloseFriend
+                  listedUsers={listedUsers}
+                />
+
+                <Box sx={DeleteViewBtnWrapper}>
+                  <Box sx={ButtonWrapper}>
+                    <Button
+                      onClick={() =>
+                        navigate(`/${listedUsers?.custom_username}`)
+                      }>
+                      View{" "}
+                    </Button>
+                  </Box>
+                  <DeleteIcon
+                    onClick={() => {
+                      deleteUser(listedUsers);
+                    }}
+                  />
+                </Box>
+              </Box>
+            </Grid>
+          ))}
+          <Grid item sm={12} md={6} lg={4}>
+            <Box sx={addIconWrapper}>
+              <Typography
+                component={"span"}
+                onClick={() =>
+                  navigate("/add-close-friends/", {
+                    state: { addedUsers: allCloseFriend },
+                  })
+                }>
+                <AddIcon />
+              </Typography>
             </Box>
           </Grid>
-        ))}
-        <Grid item sm={12} md={6} lg={4}>
-          <Box sx={addIconWrapper}>
-            <Typography
-              component={"span"}
-              onClick={() =>
-                navigate("/add-close-friends/", {state: { addedUsers: allCloseFriend}})
-              }
-            >
-              <AddIcon />
-            </Typography>
-          </Box>
         </Grid>
-      </Grid>
-    </Box>
-  </Stack>
-  )
-}
+      </Box>
+    </Stack>
+  );
+};
 
 export default CloseFriend;

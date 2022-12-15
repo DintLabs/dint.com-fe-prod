@@ -122,7 +122,7 @@ const addButtonClick = async () => {
   const filterData = (allFollowers: any, allAddedUsers: any)=>{
     let res = [];
     res = allFollowers.filter((el: any) => {
-      return !allAddedUsers.find((element: any) => {
+      return !allAddedUsers?.find((element: any) => {
          return element.confine_user_details.id === el.id
          ;
         });
@@ -186,7 +186,7 @@ useEffect(()=>{
               onSelect(list);
             }}
             key={ind}
-            // onClick={() => onSelect(list)}
+       
           >
             <CardHeader
               avatar={
