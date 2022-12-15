@@ -15,6 +15,8 @@ import { useSelector } from "frontend/redux/store";
 import { useEffect, useState } from "react";
 import _axios from "frontend/api/axios";
 import FollowingSelectList from "./FollowingSelectList";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 
 const addIconWrapper = {
   minHeight: "112px",
@@ -56,7 +58,7 @@ const pageDetailCard = {
   border: "1px solid #121212",
   borderRadius: "5px",
   overflow: "hidden",
-  cursor: "pointer",
+  // cursor: "pointer",
   "&.UserSelect": {
     backgroundColor: "#000",
     border: "1px solid #000",
@@ -68,12 +70,22 @@ const pageDetailCard = {
   "& .page-detail-body": { p: "10px 10px" },
 };
 const BackBTNWrapper = { display: "flex", alignItems: "center" };
+const DeleteViewBtnWrapper = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  pl: "10px",
+  pr: "10px",
+  pb: "10px",
+
+  "& svg": { cursor: "pointer" }, 
+};
+
 const UserList = (props: any) => {
   const { state } = useLocation();
   const [allAddedUser, setAllAddedUser] = useState([]);
   const [selected, setSelected] = useState<any>([]);
-  const [delUser, setDelUser]= useState();
-  const [showButton, setShowButton] = useState(true);
+
   
 
   const navigate = useNavigate();
@@ -91,28 +103,12 @@ const UserList = (props: any) => {
     fetchData();
   }, []);
 
-  const onSelect = (listedUsers: any) => {
-    if (selected.includes(listedUsers.id)) {
-      const data = selected.filter((item: any) => {
-        return item !== listedUsers.id;
-      });
-      setShowButton(true);
-      setSelected(data);
-    } else {
-      setSelected([listedUsers.id]);
-      setDelUser(listedUsers.id);
-      setShowButton(false);
-      const obj: any = [{
-        member: listedUsers.id,
-        user_custom_lists: state.id,
-      }]
-    }
-  };
 
-  const deleteUser = async () => {
-    if (delUser) {
+
+  const deleteUser = async (listedUsers: any) => {
+    if (listedUsers.id) {
       await _axios
-        .delete(`/api/add-member-in-list/${delUser}`, delUser)
+        .delete(`/api/add-member-in-list/${listedUsers.id}`, listedUsers.id)
         .then((response: any) => {
           console.log("response", response.data);
           fetchData();
@@ -123,6 +119,7 @@ const UserList = (props: any) => {
     }
   };
   
+  console.log("listed----", allAddedUser )
   return (
     <Stack
       className="subscriptions-page-container"
@@ -158,11 +155,7 @@ const UserList = (props: any) => {
             {state.name}
           </Typography>
         </Box>
-        <Box sx={ButtonWrapper}>
-          <Button disabled={showButton} onClick={deleteUser}>
-            Remove
-          </Button>
-        </Box>
+       
       </Stack>
       <Box sx={CardWrapper}>
         <Grid container spacing={2}>
@@ -173,9 +166,6 @@ const UserList = (props: any) => {
               sm={12}
               md={6}
               lg={4}
-              onClick={() => {
-                onSelect(listedUsers);
-              }}
             >
               <Box
                 className={`page-detail-card ${
@@ -187,6 +177,21 @@ const UserList = (props: any) => {
                   listedUsers={listedUsers}
                   selectedUsers={selected}
                 />
+                 <Box sx={DeleteViewBtnWrapper}>
+                  <Box sx={ButtonWrapper}>
+                    <Button
+                      onClick={() =>
+                        navigate(`/${listedUsers?.member_details.custom_username}`)
+                      }>
+                      View{" "}
+                    </Button>
+                  </Box>
+                  <DeleteIcon
+                    onClick={() => {
+                      deleteUser(listedUsers);
+                    }}
+                  />
+                </Box>
               </Box>
             </Grid>
           ))}

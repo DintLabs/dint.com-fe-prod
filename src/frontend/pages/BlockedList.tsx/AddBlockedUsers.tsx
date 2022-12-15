@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
     Avatar,
     Box,
@@ -74,6 +74,7 @@ const [showButton, setShowButton] = useState(true);
 const { state } = useLocation();
 const allAddedUsers = state.addedUsers;
 const [userToAdd, setUserToAdd] = useState([]);
+const [confineUser, setConfineUser] = useState([]);
 
 const onSelect = (list: any) => {
     if (selected.includes(list.id)) {
@@ -110,8 +111,22 @@ const onSelect = (list: any) => {
   useEffect(() => {
     fetchData();
   }, []);
+  const fetchConfineData = async () => {
+    try {
+      const { data } = await _axios.get(`api/confine-user`);
 
- 
+      console.log("users added", data);
+      setConfineUser(data);
+
+    } catch (err: any) {
+      console.error("err ===>", err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchConfineData();
+  }, []);
+  const filteredBlockedUser = useMemo(()=> confineUser?.filter((confineUser: any) => confineUser.user_block_type === "block"),[confineUser])
   const addButtonClick = async () => {
     if (user) {
       await _axios
@@ -125,10 +140,10 @@ const onSelect = (list: any) => {
         });
     }
   };
-  const filterData = (allFollowers: any, allAddedUsers: any)=>{
+  const filterData = (allFollowers: any, filteredBlockedUser: any)=>{
     let res = [];
     res = allFollowers?.filter((el: any) => {
-      return !allAddedUsers.find((element: any) => {
+      return !filteredBlockedUser?.find((element: any) => {
          return element.confine_user_details.id === el.id
          ;
         });
@@ -137,10 +152,12 @@ const onSelect = (list: any) => {
 setUserToAdd(res)
       return res; 
   }
+ 
 
 useEffect(()=>{
-  filterData(allFollowers, allAddedUsers)
-},[allFollowers, allAddedUsers])
+  filterData(allFollowers, filteredBlockedUser)
+},[allFollowers, filteredBlockedUser])
+
   return (
     <Stack
     className="subscriptions-page-container"
@@ -192,7 +209,6 @@ useEffect(()=>{
               onSelect(list);
             }}
             key={ind}
-            // onClick={() => onSelect(list)}
           >
             <CardHeader
               avatar={
