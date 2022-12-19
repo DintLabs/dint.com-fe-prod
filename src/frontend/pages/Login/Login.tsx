@@ -62,7 +62,7 @@ const Login = () => {
       };
 
       await axios
-        .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+        .post(`${process.env.REACT_APP_API_URL}api/auth/login`, {
           email: user.email,
           fire_base_auth_key: user.uid,
         })
@@ -77,7 +77,7 @@ const Login = () => {
           } else {
             await axios
               .post(
-                `${process.env.REACT_APP_API_URL}/api/auth/sign-up/`,
+                `${process.env.REACT_APP_API_URL}api/auth/sign-up/`,
                 userData
               )
               .then(async ({ data }) => {
@@ -109,7 +109,7 @@ const Login = () => {
       await setPersistence(authInstance, browserSessionPersistence);
       const data = await login(email, password);
       await axios
-        .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+        .post(`${process.env.REACT_APP_API_URL}api/auth/login`, {
           email,
           fire_base_auth_key: data.user.uid,
         })
@@ -192,7 +192,7 @@ const Login = () => {
           };
 
           await axios
-            .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+            .post(`${process.env.REACT_APP_API_URL}api/auth/login`, {
               email: user.email,
               fire_base_auth_key: user.uid,
             })
