@@ -160,7 +160,7 @@ const Register = () => {
       };
 
       await axios
-        .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+        .post(`${process.env.REACT_APP_API_URL}api/auth/login`, {
           email: user.email,
           fire_base_auth_key: user.uid
         })
@@ -240,7 +240,7 @@ const Register = () => {
           };
 
           await axios
-            .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+            .post(`${process.env.REACT_APP_API_URL}api/auth/login`, {
               email: user.email,
               fire_base_auth_key: user.uid
             })
