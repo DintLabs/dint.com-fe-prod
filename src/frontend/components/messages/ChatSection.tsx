@@ -1,24 +1,34 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect, memo } from "react";
+import _axios from "frontend/api/axios";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import {
+  Avatar,
+  Divider,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { Box, Stack } from "@mui/system";
+import { BsChatLeftTextFill } from "react-icons/bs";
+import { FiMoreVertical } from "react-icons/fi";
+import { MdSend } from "react-icons/md";
+import { useNavigate, useParams } from "react-router";
+import { AiOutlineLeft } from "react-icons/ai";
 
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import { Avatar, Divider, IconButton, TextField, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
-import { BsChatLeftTextFill } from 'react-icons/bs';
-import { FiMoreVertical } from 'react-icons/fi';
-import { MdSend } from 'react-icons/md';
-import { useNavigate, useParams } from 'react-router';
-import { AiOutlineLeft } from 'react-icons/ai';
+import { FlexRow } from "frontend/reusable/reusableStyled";
+import { sendMessage } from "frontend/redux/slices/messages";
+import { RootState, useDispatch, useSelector } from "frontend/redux/store";
+import MessageList from "./MessageList";
+import TipPopUp from "../tip/TipPopUp";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { fetchAllChatsList } from "../../redux/slices/messages";
 
-import { FlexRow } from 'frontend/reusable/reusableStyled';
-import { sendMessage } from 'frontend/redux/slices/messages';
-import { RootState, useDispatch, useSelector } from 'frontend/redux/store';
-import MessageList from './MessageList';
-import TipPopUp from '../tip/TipPopUp';
-import { ThemeContext } from '../../contexts/ThemeContext';
+let ws: any;
 
 type ChatSectionProps = {
   selectedUser: any;
   loggedInUser: any;
+  setNewMessage: any;
 };
 
 function ChatSection(props: ChatSectionProps) {
@@ -26,24 +36,65 @@ function ChatSection(props: ChatSectionProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toggle } = useContext(ThemeContext);
+  const [chatListLoader, setChatListLoader] = useState(true);
+
 
   const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false);
 
   const { messagesList } = useSelector((state: RootState) => state.messages);
+  const [userChats, setUserChats] = useState<any>([]);
+  const [messageContent, setMessageContent] = useState("");
 
-  const [messageContent, setMessageContent] = useState('');
+  useEffect(() => {
+    ws = new WebSocket(
+      `wss://bedev.dint.com/ws/chat/${props.selectedUser.chat_room}/`
+    );
 
-  const sendMessageHandler = () => {
-    if (messageContent.trim().length > 0 && props.selectedUser.id !== -1 && props.loggedInUser.id) {
-      dispatch(
+    const fetchUserChat = async () => {
+      if (props.selectedUser.id > 0) {
+        try {
+          const { data } = await _axios.get(
+            `api/chat/get-chat-by-user/${props.selectedUser.id}`
+          );
+
+          setUserChats(data.data);
+          setChatListLoader(false);
+        } catch (err: any) {
+          console.error("err ===>", err.message);
+        }
+      }
+    };
+
+    ws.onmessage = function (e: any) {
+      const newdata = JSON.parse(e.data);
+      setUserChats((prev: any) => [newdata.message, ...prev]);
+      props.setNewMessage((prev: any) => [newdata.message, ...prev]);
+    };
+    fetchUserChat();
+
+    return () => {
+      ws.close(); 
+    };
+  }, [props.selectedUser]);
+
+  const sendMessageHandler = async () => {
+    if (
+      messageContent.trim().length > 0 &&
+      props.selectedUser.id !== -1 &&
+      props.loggedInUser.id
+    ) {
+      const res = await dispatch(
         sendMessage({
           reciever: props.selectedUser.id.toString(),
           sender: props.loggedInUser.id.toString(),
-          content: messageContent.trim()
+          content: messageContent.trim(),
         })
       );
+      if (res) {
+        ws.send(JSON.stringify(res));
+      }
     }
-    setMessageContent('');
+    setMessageContent("");
   };
 
   const handleClickOpen = () => {
@@ -53,6 +104,8 @@ function ChatSection(props: ChatSectionProps) {
   const handleClose = () => {
     setOpenPopUpTip(false);
   };
+
+
 
   return (
     <>
@@ -69,36 +122,35 @@ function ChatSection(props: ChatSectionProps) {
           sx={
             window.innerWidth < 900
               ? params.uid
-                ? { width: '100%' }
+                ? { width: "100%" }
                 : { width: 0 }
-              : { width: '60%' }
-          }
-        >
-          {/* Header */}
+              : { width: "60%" }
+          }>
+          {/* {/ Header /} */}
           <Stack
             className="chat-header"
             direction="row"
             spacing={1}
             justifyContent="space-between"
             alignItems="center"
-            sx={{ p: { xs: 0.5, md: 1, xl: 2 } }}
-          >
+            sx={{ p: { xs: 0.5, md: 1, xl: 2 } }}>
             <Stack direction="row" spacing={1} alignItems="center">
               {window.innerWidth < 900 ? (
                 <AiOutlineLeft
                   className="primary-text-color"
                   onClick={() => {
-                    navigate('/lounge/messages');
+                    navigate("/lounge/messages");
                   }}
                 />
               ) : null}
               <Avatar src={props.selectedUser?.profile_image} />
               <Stack direction="column">
                 <Typography className="primary-text-color">
-                  {props.selectedUser?.display_name || props.selectedUser?.custom_username}
+                  {props.selectedUser?.display_name ||
+                    props.selectedUser?.custom_username}
                 </Typography>
                 <Typography variant="caption" className="secondary-text-color">
-                  {/* online */}
+                  {/* {/ online /} */}
                 </Typography>
               </Stack>
             </Stack>
@@ -109,13 +161,22 @@ function ChatSection(props: ChatSectionProps) {
             </Stack>
           </Stack>
           <Divider />
-          {/* Message list */}
+          {/* {/ Message list /} */}
 
-          <MessageList messages={messagesList} loggedInUser={props.loggedInUser} />
+          <MessageList
+            messages={messagesList}
+            loggedInUser={props.loggedInUser}
+            userChats={userChats}
+            chatListLoader={chatListLoader}
+          />
 
-          {/* footer */}
+          {/* {/ footer /} */}
 
-          <Stack direction="row" className="message-input" sx={{ p: { xs: 1, md: 1, xl: 1 } }} style={{backgroundColor: toggle ? '#161C24' : '#dfe3e8'}}>
+          <Stack
+            direction="row"
+            className="message-input"
+            sx={{ p: { xs: 1, md: 1, xl: 1 } }}
+            style={{ backgroundColor: toggle ? "#161C24" : "#dfe3e8" }}>
             <TextField
               value={messageContent}
               fullWidth
@@ -124,25 +185,29 @@ function ChatSection(props: ChatSectionProps) {
               onChange={(e) => {
                 setMessageContent(e.target.value);
               }}
-              onKeyDown={(e) => {
-                if (e.code === 'Enter') {
+              // onKeyDown={(e) => {
+              //   if (e.code === "Enter") {
+              //     sendMessageHandler();
+              //   }
+              // }}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
                   sendMessageHandler();
                 }
               }}
               sx={{
-                '& legend': { display: 'none' },
-                '& fieldset': { top: 0 },
-                '& .MuiInputBase-input': {
-                  color: toggle ? 'white' : '#161C24'
-                }
+                "& legend": { display: "none" },
+                "& fieldset": { top: 0 },
+                "& .MuiInputBase-input": {
+                  color: toggle ? "white" : "#161C24",
+                },
               }}
             />
             <FlexRow
               p="8px 0 8px 8px"
               onClick={() => handleClickOpen()}
               ai="center"
-              cursor="pointer"
-            >
+              cursor="pointer">
               <MonetizationOnIcon />
             </FlexRow>
             <IconButton onClick={sendMessageHandler}>
@@ -157,14 +222,15 @@ function ChatSection(props: ChatSectionProps) {
           justifyContent="center"
           className="chat-section"
           spacing={2}
-          width="60%"
-        >
+          width="60%">
           <BsChatLeftTextFill fontSize={50} />
-          <Typography className="secondary-text-color">Select a user to chat</Typography>
+          <Typography className="secondary-text-color">
+            Select a user to chat
+          </Typography>
         </Stack>
       ) : null}
     </>
   );
 }
 
-export default ChatSection;
+export default memo(ChatSection);
