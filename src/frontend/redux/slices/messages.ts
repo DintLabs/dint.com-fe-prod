@@ -84,7 +84,7 @@ export const sendMessage =
               data: res.data.data
             })
           );
-          return true;
+          return res.data.data;
         }
         return false;
       });
