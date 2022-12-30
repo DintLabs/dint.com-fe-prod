@@ -42,6 +42,10 @@ import TwitterIcon from "../../assets/img/web3/twitter.png";
 import PostItem from "./PostItem";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import moment from "moment";
+import { useDispatch } from "frontend/redux/store";
+import { messagesActions } from 'frontend/redux/slices/messages';
+
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -69,6 +73,8 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const MyProfile = ({ username }: { username: string | null | undefined }) => {
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toggle } = useContext(ThemeContext);
@@ -414,7 +420,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
         Under Contruction
       </Typography>
     );
-
+console.log("userdetails----", userDetails)
   return (
     <>
       <Box
@@ -514,11 +520,14 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
                     </IconButton>
                     <IconButton
                       onClick={() =>
+                       {  
+                          dispatch(messagesActions.addNewUserInChat(userDetails));
                         navigate(
                           `/lounge/messages/user/${
                             userDetails && userDetails.id
                           }`
                         )
+                      }
                       }>
                       <ChatOutlinedIcon sx={{ fontSize: "32px" }} />
                     </IconButton>

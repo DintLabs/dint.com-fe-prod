@@ -20,7 +20,7 @@ function UserListItem(props: UserListItemProps) {
   const { toggle } = useContext(ThemeContext);
 
   let caption =
-    props.newMessage.length > 0 &&
+    props.newMessage?.length > 0 &&
     props.newMessage.find(
       (message: any) => message.chat_room === props.chatRoom
     );
