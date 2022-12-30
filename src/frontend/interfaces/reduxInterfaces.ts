@@ -67,14 +67,13 @@ export interface UserDataInterface {
   is_followed?: any;
   is_private?: boolean;
   user_page?: string;
-  is_online?: boolean;
+  is_online?: false | boolean;
   last_login?: string;
-
   email?: string | null;
   first_name?: string | null;
   last_name?: string | null;
   is_active?: boolean;
-  is_deleted?: boolean;
+  is_deleted?: boolean; 
   phone_no?: string | null;
   photoURL?: string | null;
   uid?: string | null;
