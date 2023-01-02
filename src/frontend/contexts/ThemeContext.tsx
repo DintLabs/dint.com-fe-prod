@@ -1,6 +1,6 @@
 import  React, { useEffect } from  "react";
 
-const  ThemeContext  =  React.createContext(false);
+const  ThemeContext  =  React.createContext<any>(false);
 // Provider
 // @ts-ignore
 const  ThemeProvider  =  ({ children })  =>  {

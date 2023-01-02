@@ -87,13 +87,13 @@ const Register = () => {
             display_name: name || ''
           };
           await axios
-            .post(`${process.env.REACT_APP_API_URL}/api/auth/sign-up/`, userData2)
+            .post(`${process.env.REACT_APP_API_URL}api/auth/sign-up/`, userData2)
 
             .then(({ data }) => {
               localStorage.setItem('apiToken', data.data.token);
               // localStorage.setItem('userData', JSON.stringify(data.data));
               userHook.setCurrentUser(data.data);
-              dispatch(createWallet())
+              // dispatch(createWallet())
 
               toast.success('User registration done!');
               onSuccessSignup();
@@ -174,7 +174,7 @@ const Register = () => {
             onSuccessSignup();
           } else {
             await axios
-              .post(`${process.env.REACT_APP_API_URL}/api/auth/sign-up/`, userData)
+              .post(`${process.env.REACT_APP_API_URL}api/auth/sign-up/`, userData)
               .then(async ({ data }) => {
                 if (data.code !== 400) {
                   localStorage.setItem('apiToken', data.data.token);
@@ -254,7 +254,7 @@ const Register = () => {
                 onSuccessSignup();
               } else {
                 await axios
-                  .post(`${process.env.REACT_APP_API_URL}/api/auth/sign-up/`, userData)
+                  .post(`${process.env.REACT_APP_API_URL}api/auth/sign-up/`, userData)
                   .then(async ({ data }) => {
                     if (data.code !== 400) {
                       localStorage.setItem('apiToken', data.data.token);

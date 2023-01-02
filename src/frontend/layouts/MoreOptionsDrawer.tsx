@@ -47,6 +47,7 @@ import { useContext, useEffect, useState } from 'react';
 import { setWalletSliceChanges } from 'frontend/redux/actions/createWallet';
 import { getCreditCards } from '../redux/actions/StripeAction';
 import {ThemeContext} from '../contexts/ThemeContext';
+import _axios from 'frontend/api/axios';
 
 const languages = [
   {
@@ -164,6 +165,18 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
   const { toggle, toggleFunction } = useContext(ThemeContext);
 
   const onLogout = async () => {
+    const obj = {
+      is_online: false,
+    };
+
+    await _axios
+      .put(`/api/user/update-status/`, obj)
+      .then((response: any) => {
+        console.log("response", response.data);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
     try {
       await logout();
       navigate('/');

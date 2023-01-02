@@ -7,13 +7,27 @@ import { CgProfile } from 'react-icons/cg';
 import { authInstance } from 'frontend/contexts/FirebaseInstance';
 import mainlogo from '../material/white.png';
 import MetamaskLogin from './MetamaskLogin';
+import _axios from 'frontend/api/axios';
 
 const Navigation = () => {
   const navigate = useNavigate();
 
   const [islogin] = useState(false);
 
-  const logout = () => {
+  const logout = async () => {
+
+    const obj = {
+      is_online: false,
+    };
+
+    await _axios
+      .put(`/api/user/update-status/`, obj)
+      .then((response: any) => {
+        console.log("response", response.data);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
     authInstance
       .signOut()
       .then(() => {
