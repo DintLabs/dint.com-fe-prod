@@ -71,7 +71,7 @@ const Login = () => {
             localStorage.setItem("apiToken", data.data.token);
             // localStorage.setItem('userData', JSON.stringify(data.data));
             userHook.setCurrentUser(data.data);
-            dispatch(createWallet());
+            // dispatch(createWallet());
             toast.success("User Login Successful!");
             onSuccessLogin();
           } else {
@@ -85,7 +85,7 @@ const Login = () => {
                   localStorage.setItem("apiToken", data.data.token);
                   // localStorage.setItem('userData', JSON.stringify(data.data));
                   userHook.setCurrentUser(data.data);
-                  dispatch(createWallet());
+                  // dispatch(createWallet());
                   toast.success("User Login Successful!");
                   onSuccessLogin();
                 } else {
@@ -120,7 +120,7 @@ const Login = () => {
             localStorage.setItem("apiToken", data.data.token);
             // localStorage.setItem('userData', JSON.stringify(data.data));
             userHook.setCurrentUser(data.data);
-            dispatch(createWallet());
+            // dispatch(createWallet());
             onSuccessLogin();
           }
         })
@@ -201,13 +201,13 @@ const Login = () => {
                 localStorage.setItem("apiToken", data.data.token);
                 // localStorage.setItem('userData', JSON.stringify(data.data));
                 userHook.setCurrentUser(data.data);
-                dispatch(createWallet());
+                // dispatch(createWallet());
                 toast.success("User Login Successful!");
                 onSuccessLogin();
               } else {
                 await axios
                   .post(
-                    `${process.env.REACT_APP_API_URL}/api/auth/sign-up/`,
+                    `${process.env.REACT_APP_API_URL}api/auth/sign-up/`,
                     userData
                   )
                   .then(async ({ data }) => {

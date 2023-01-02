@@ -62,6 +62,18 @@ const MainNavBar = () => {
   const isEventsPage = pathname === "/events";
 
   const onLogout = async () => {
+    const obj = {
+      is_online: false,
+    };
+
+    await _axios
+      .put(`/api/user/update-status/`, obj)
+      .then((response: any) => {
+        console.log("response", response.data);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
     try {
       await logout();
       setIsAuthenticated(false);
