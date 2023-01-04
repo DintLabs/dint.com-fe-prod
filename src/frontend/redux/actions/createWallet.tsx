@@ -10,6 +10,7 @@ type walletState = {
   phrase: string;
   privateKey: string;
   address: string;
+  balance: string
 };
 
 const initialState: walletState = {
@@ -18,6 +19,7 @@ const initialState: walletState = {
   phrase: '',
   privateKey: '',
   address: '',
+  balance: '',
 };
 
 const slice = createSlice({
@@ -37,6 +39,9 @@ const slice = createSlice({
       return { ...state, ...action.payload };
     },
     setAddress(state, action) {
+      return { ...state, ...action.payload };
+    },
+    setBalance(state, action) {
       return { ...state, ...action.payload };
     }
   }
@@ -95,12 +100,16 @@ export const getKeys = () => async (dispatch: AppDispatch) => {
   try {
     const token = localStorage.getItem('apiToken');
     if (token) {
-      await axios.get('api/user/get-wallet-by-token/').then(async (res: any) => {
-        const { keys } = res.data.data.web3_wallet;
-        dispatch(slice.actions.setWalletPhrase({ phrase: keys.phraseKey }));
-        dispatch(slice.actions.setWalletPrivateKey({ privateKey: keys.privateKey }));
-        dispatch(slice.actions.setAddress({ address: keys.address }));
+      await axios.get('api/user/wallet').then(async (res: any) => {
+      if (res.data.code===200){
+        console.log("keys----",  res.data.data[0].wallet_address)
+        // dispatch(slice.actions.setWalletPhrase({ phrase: keys.phraseKey }));
+        // dispatch(slice.actions.setWalletPrivateKey({ privateKey: keys.privateKey }));
+        dispatch(slice.actions.setAddress({ address: res.data.data[0].wallet_address }));
+        dispatch(slice.actions.setBalance({ balance: res.data.data[0].wallet_balance }));
+      }
       });
+    
     }
   } catch (error) {
     console.error(error);
@@ -118,4 +127,4 @@ const generatePassword = () => {
 }
 
 export default slice.reducer;
-export const { setWalletSliceChanges, setWalletPhrase, setWalletPrivateKey, setAddress } = slice.actions;
+export const { setWalletSliceChanges, setWalletPhrase, setWalletPrivateKey, setAddress, setBalance } = slice.actions;
