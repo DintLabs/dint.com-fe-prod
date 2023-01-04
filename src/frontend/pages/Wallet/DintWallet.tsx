@@ -52,9 +52,9 @@ const DintWallet = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [maticPrice, setMaticPrice] = useState<any>('');
   const openAnchorEl = Boolean(anchorEl);
-  const { address } = useSelector((rootState: RootState) => rootState.wallet);
+  const { address, balance } = useSelector((rootState: RootState) => rootState.wallet);
   const { maticWallet } = useSelector((rootState: RootState) => rootState.maticBalance);
-  const { name, symbol, balance } = useSelector((rootState: RootState) => rootState.dintBalance);
+  const { name, symbol } = useSelector((rootState: RootState) => rootState.dintBalance);
   useEffect(() => {
     getToken();
   }, [1]);
