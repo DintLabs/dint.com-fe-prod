@@ -262,6 +262,7 @@ const PageProfile = (props: PageProfileProps) => {
             )
           ) : (
             <PrivateCard padding={14} />
+            
           )}
         </TabPanel>
         <TabPanel value={selectedTabIndex} index={1}>

@@ -65,6 +65,7 @@ const ViewPage = () => {
       setIsCreatorSet(true);
     } else {
       setIsCreator(false);
+      setIsCreatorSet(true);
     }
   }, [loggedInUser, pageData]);
 
