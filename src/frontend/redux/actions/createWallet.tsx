@@ -102,7 +102,6 @@ export const getKeys = () => async (dispatch: AppDispatch) => {
     if (token) {
       await axios.get('api/user/wallet').then(async (res: any) => {
       if (res.data.code===200){
-        console.log("keys----",  res.data.data.wallet_address)
         // dispatch(slice.actions.setWalletPhrase({ phrase: keys.phraseKey }));
         // dispatch(slice.actions.setWalletPrivateKey({ privateKey: keys.privateKey }));
         dispatch(slice.actions.setAddress({ address: res.data.data.wallet_address }));
