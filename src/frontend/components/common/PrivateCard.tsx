@@ -11,10 +11,7 @@ const PrivateCard = (props: PrivateCardProps) => {
   return (
     <Stack justifyContent="center" alignItems="center" p={props?.padding}>
       <LockIcon fontSize="large" />
-      <Typography>
-      Please Login To Access Page Content        
-</Typography>
-
+      <Typography>Please Subscribe To Access Page Content</Typography>
     </Stack>
   );
 };
