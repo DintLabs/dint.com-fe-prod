@@ -3,7 +3,7 @@ import { Stack } from "@mui/system";
 import React, { useRef, useState, useLayoutEffect, useContext } from "react";
 
 import { useNavigate } from "react-router";
-import { getStrippedWord } from "frontend/utils";
+import { getStrippedWord, getTimeInMMMDDyyyyFomat } from "frontend/utils";
 import coverPhoto from "../../material/images/create-page-cover-photo.png";
 import SubscribeButton from "../view-page/SubscribeButton";
 import ViewMoreDivider from "../common/ViewMoreDivider";
@@ -46,8 +46,7 @@ const SubscribedPageCard = ({ subscription }: SubscribedPageCardProps) => {
     <Box
       className="page-detail-card"
       style={{ color: toggle ? "#121212" : "#FFFFFF" }}
-      ref={lastBundleRef}
-    >
+      ref={lastBundleRef}>
       {/* page cover image */}
       <Box
         className="page-cover-picture-container full-image-container"
@@ -67,8 +66,7 @@ const SubscribedPageCard = ({ subscription }: SubscribedPageCardProps) => {
           <Stack direction="column">
             <Typography
               variant="body2"
-              style={{ color: toggle ? "#FFFFFF" : "#121212" }}
-            >
+              style={{ color: toggle ? "#FFFFFF" : "#121212" }}>
               {subscription?.page?.title}
             </Typography>
             <Typography
@@ -77,8 +75,7 @@ const SubscribedPageCard = ({ subscription }: SubscribedPageCardProps) => {
               component="div"
               onClick={() => {
                 navigateOnPage(subscription?.page?.page_name);
-              }}
-            >
+              }}>
               {`@${getStrippedWord(subscription?.page?.title)}`}
             </Typography>
           </Stack>
@@ -116,16 +113,14 @@ const SubscribedPageCard = ({ subscription }: SubscribedPageCardProps) => {
         <Stack
           direction="row"
           justifyContent="space-between"
-          alignItems="center"
-        >
+          alignItems="center">
           <Typography variant="body2" className="secondary-text-color">
             Expires
           </Typography>
           <Typography
             variant="caption"
-            style={{ color: toggle ? "#FFFFFF" : "#121212" }}
-          >
-            Oct 9, 2021
+            style={{ color: toggle ? "#FFFFFF" : "#121212" }}>
+            {getTimeInMMMDDyyyyFomat(subscription?.expiration_date)}
           </Typography>
         </Stack>
         {/* view more bundles */}
