@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from 'react';
-import { Box, TextField, Stack, useTheme, FormControl, useMediaQuery } from '@mui/material';
+import { Box, TextField, Stack, useTheme, FormControl, useMediaQuery, Typography } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import * as axios from 'axios';
 import { RootState, useDispatch, useSelector } from 'frontend/redux/store';
@@ -13,16 +13,21 @@ export default function BuyToken() {
   const { handleSubmit, formState, watch, control, setValue } = useForm();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
   const { selectedMenu } = useSelector((rootState: RootState) => rootState.newHome);
+  const userData = useSelector((state: RootState) => state?.user?.userData);
   const { address } = useSelector((rootState: RootState) => rootState.wallet);
   const { toggle } = useContext(ThemeContext);
-
+console.log("userData", userData);
   const onSubmit = async (data: any) => {
     try {
       setInProgress(true)
-      await axios.default(`${process.env.REACT_APP_API_LINK}/api/checkout?email=${data.email}&amount=${data.amount}&walletAddr=${data.walletAddr}`).then((res) => {
-        const { data } = res;
-        window.open(data.session.url)
-      })
+      await axios
+        .default(
+          `${process.env.REACT_APP_API_LINK}/api/checkout?email=${userData?.email}&amount=${data.amount}&walletAddr=${address}`
+        )
+        .then((res) => {
+          const { data } = res;
+          window.open(data.session.url);
+        });
       setInProgress(false)
     } catch(err) {
       setInProgress(false)
@@ -31,22 +36,43 @@ export default function BuyToken() {
   }
   return (
     <Box
-        id="postsListScrollableDiv"
-        style={HOME_SIDE_MENU.HOME === selectedMenu ? {} : {
-          borderLeft: `1px solid ${theme.palette.grey[700]}`,
-          borderRight: `1px solid ${theme.palette.grey[700]}`,
-          padding: 10
-        }}
-      >
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <main style={{ width: HOME_SIDE_MENU.HOME === selectedMenu ? '80%' : '50%' }}>
-        <h1 style={{ color: toggle ? 'white' : '#161C24', textAlign: 'center' }}>
-          Buy Dint Token
-        </h1>
-        { address }
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack gap={2} mt={2} ml={isLargeScreen ? 3 : 0}>
-            <FormControl fullWidth>
+      id="postsListScrollableDiv"
+      style={
+        HOME_SIDE_MENU.HOME === selectedMenu
+          ? {}
+          : {
+              borderLeft: `1px solid ${theme.palette.grey[700]}`,
+              borderRight: `1px solid ${theme.palette.grey[700]}`,
+              padding: 10,
+            }
+      }>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+        <main
+          style={{
+            width: HOME_SIDE_MENU.HOME === selectedMenu ? "80%" : "50%",
+          }}>
+          <h1
+            style={{
+              color: toggle ? "white" : "#161C24",
+              textAlign: "center",
+            }}>
+            Buy Dint Token
+          </h1>
+          <Typography
+            className="primary-text-color"
+            variant="h4"
+            sx={{ textAlign: "center" }}>
+            Wallet Address: {address}
+          </Typography>
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack gap={2} mt={2} ml={isLargeScreen ? 3 : 0}>
+              {/* <FormControl fullWidth>
               <Controller
                 control={control}
                 name="walletAddr"
@@ -117,54 +143,60 @@ export default function BuyToken() {
                   />
                 )}
               />
-            </FormControl>
-            <FormControl fullWidth>
-              <Controller
-                control={control}
-                name="amount"
-                rules={{
-                  required: true,
-                  maxLength: 100
+            </FormControl> */}
+              <FormControl fullWidth>
+                <Controller
+                  control={control}
+                  name="amount"
+                  rules={{
+                    required: true,
+                    maxLength: 100,
+                  }}
+                  render={({ field: { onChange, value = "", ref } }: any) => (
+                    <TextField
+                      error={
+                        formState.errors?.amount?.type === "required" ||
+                        formState.errors?.amount?.type === "maxLength"
+                      }
+                      inputRef={ref}
+                      value={value}
+                      label="Amount"
+                      variant="filled"
+                      onChange={(e: any) => onChange(e.target.value)}
+                      sx={{
+                        flex: 1,
+                        "& .MuiFormHelperText-root": {
+                          color: theme.palette.grey[600],
+                          textAlign: "right",
+                        },
+                        "& .MuiFilledInput-input": {
+                          color: toggle ? "white" : "#161C24",
+                        },
+                        "& .MuiInputBase-root": {
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.09)"
+                            : "#DFE3E8",
+                        },
+                      }}
+                    />
+                  )}
+                />
+              </FormControl>
+              <button
+                className="btn btn-primary"
+                style={{
+                  background: "#7635dc",
+                  marginBottom: 100,
+                  outline: "unset",
+                  borderWidth: 0,
                 }}
-                render={({ field: { onChange, value = '', ref } }: any) => (
-                  <TextField
-                    error={
-                      formState.errors?.amount?.type === 'required' ||
-                      formState.errors?.amount?.type === 'maxLength'
-                    }
-                    inputRef={ref}
-                    value={value}
-                    label="Amount"
-                    variant="filled"
-                    onChange={(e: any) => onChange(e.target.value)}
-                    sx={{
-                      flex: 1,
-                      '& .MuiFormHelperText-root': {
-                        color: theme.palette.grey[600],
-                        textAlign: 'right'
-                      },
-                      '& .MuiFilledInput-input': {
-                        color: toggle ? 'white' : '#161C24',
-                      },
-                      '& .MuiInputBase-root': {
-                        backgroundColor: toggle ? 'rgba(255, 255, 255, 0.09)' : '#DFE3E8'
-                      },
-                    }}
-                  />
-                )}
-              />
-            </FormControl>
-            <button
-              className="btn btn-primary"
-              style={{ background: '#7635dc', marginBottom: 100, outline: 'unset', borderWidth: 0 }}
-              type="submit"
-            >
-              Start payment
-            </button>
-          </Stack>
-        </form>
-      </main>
-    </div>
+                type="submit">
+                Start payment
+              </button>
+            </Stack>
+          </form>
+        </main>
+      </div>
     </Box>
-  )
+  );
 }
