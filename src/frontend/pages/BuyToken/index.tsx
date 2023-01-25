@@ -29,7 +29,7 @@ export default function BuyToken() {
       };
       if (sendDetail) {
         await _axios
-          .post(`https://node.dint.com/api/checkout`, sendDetail)
+          .post(`${process.env.REACT_APP_API_LINK}/api/checkout`, sendDetail)
           .then((res: any) => {
             const { data } = res;
             window.open(data.session.url);
