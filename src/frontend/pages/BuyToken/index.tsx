@@ -5,6 +5,8 @@ import * as axios from 'axios';
 import { RootState, useDispatch, useSelector } from 'frontend/redux/store';
 import { HOME_SIDE_MENU } from 'frontend/redux/slices/newHome';
 import { ThemeContext } from '../../contexts/ThemeContext';
+import _axios from "frontend/api/axios";
+
 
 export default function BuyToken() {
   const theme = useTheme();
@@ -16,19 +18,24 @@ export default function BuyToken() {
   const userData = useSelector((state: RootState) => state?.user?.userData);
   const { address } = useSelector((rootState: RootState) => rootState.wallet);
   const { toggle } = useContext(ThemeContext);
-console.log("userData", userData);
+
   const onSubmit = async (data: any) => {
     try {
       setInProgress(true)
-      await axios
-        .default(
-          `${process.env.REACT_APP_API_LINK}/api/checkout?email=${userData?.email}&amount=${data.amount}&walletAddr=${address}`
-        )
-        .then((res) => {
-          const { data } = res;
-          window.open(data.session.url);
-        });
-      setInProgress(false)
+      const sendDetail = {
+        walletAddr: address,
+        amount: data.amount,
+        email: userData?.email,
+      };
+      if (sendDetail) {
+        await _axios
+          .post(`https://node.dint.com/api/checkout`, sendDetail)
+          .then((res: any) => {
+            const { data } = res;
+            window.open(data.session.url);
+          });
+        setInProgress(false);
+      }
     } catch(err) {
       setInProgress(false)
       console.log({ err })
