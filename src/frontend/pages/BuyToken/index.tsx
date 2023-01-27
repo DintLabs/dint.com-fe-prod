@@ -74,7 +74,7 @@ export default function BuyToken() {
             className="primary-text-color"
             variant="h4"
             sx={{ textAlign: "center" }}>
-            Wallet Address: {address}
+          
           </Typography>
 
           <form onSubmit={handleSubmit(onSubmit)}>
