@@ -25,9 +25,11 @@ import {
 import { UserDataInterface } from "frontend/interfaces/reduxInterfaces";
 import { FlexRow } from "frontend/reusable/reusableStyled";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { useSelector } from "frontend/redux/store";
+import { useSelector, RootState } from "frontend/redux/store";
 import { ethers } from "ethers";
 import { Box } from "@mui/material";
+import LowBalanceModal from "../common/LowBalanceModal";
+
 interface TipPopUpProps {
   user: UserDataInterface | null;
   openPopUpTip: boolean;
@@ -47,11 +49,15 @@ const TipPopUp: FC<TipPopUpProps> = ({
   const navigate = useNavigate();
   const { toggle } = useContext(ThemeContext);
   const userData = useSelector((state: any) => state.user.userData);
+  const { address, balance } = useSelector(
+    (rootState: RootState) => rootState.wallet
+  );
 
   const { control } = useForm();
   const [amount, setAmount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [dintTxn, setDintTxn] = useState<any>();
+  const [lowBalance, setLowBalance] = useState(false);
   const goToProfile = () => {
     navigate(`/${user && user.custom_username}`);
   };
@@ -71,39 +77,58 @@ const TipPopUp: FC<TipPopUpProps> = ({
         reciever_id: user?.id,
         amount: amount,
       };
+      if(amount < balance){
+        setLoading(false);
+        console.log("more----", amount, balance);
+        const sendDetail = {
+          sender_id: userData?.id,
+          reciever_id: user?.id,
+          amount: amount,
+        };
+        if (sendDetail) {
+          await _axios
+            .post(`api/user/send-dint/`, sendDetail)
+            .then((response: any) => {
+              setDintTxn(response.data);
+              if (response.data.code == 201) {
+                setLoading(false);
+                toast.update(toastId, {
+                  render: "Dint Sent Successfully",
+                  type: "success",
+                  isLoading: false,
+                });
+              } else {
+                setLoading(false);
+                toast.update(toastId, {
+                  render: "Something went wrong!",
+                  type: "error",
+                  isLoading: false,
+                });
+              }
+            })
 
-      if (sendDetail) {
-        await _axios
-          .post(`api/user/send-dint/`, sendDetail)
-          .then((response: any) => {
-            setDintTxn(response.data);
-            if (response.data.code == 201) {
+            .catch((error: any) => {
               setLoading(false);
-              toast.update(toastId, {
-                render: "Dint Sent Successfully",
-                type: "success",
-                isLoading: false,
-              });
-            } else {
-              setLoading(false);
+              console.log("err", error);
               toast.update(toastId, {
                 render: "Something went wrong!",
                 type: "error",
                 isLoading: false,
               });
-            }
-          })
-
-          .catch((error: any) => {
-            setLoading(false);
-            console.log("err", error);
-            toast.update(toastId, {
-              render: "Something went wrong!",
-              type: "error",
-              isLoading: false,
             });
+        }
+      }else{
+          toast.update(toastId, {
+            render:`Insufficient Balance!`,
+            type: "error",
+            isLoading: false,
           });
+        setLoading(false);
+        setLowBalance(true);
       }
+
+
+      
     } else {
       toast.update(toastId, {
         render: "Amount Should not be 0",
@@ -114,6 +139,10 @@ const TipPopUp: FC<TipPopUpProps> = ({
     }
     setTimeout(() => toast.dismiss(), 2000);
   };
+
+  const handleConfirmation = () =>{
+    setLowBalance(false);
+  }
 
   return (
     <Dialog
@@ -334,6 +363,7 @@ const TipPopUp: FC<TipPopUpProps> = ({
           ""
         )}
       </Box>
+      <LowBalanceModal isOpen={lowBalance} handleClose={() => handleConfirmation()} />
     </Dialog>
   );
 };
