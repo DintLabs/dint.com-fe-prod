@@ -16,6 +16,7 @@ import _axios from "frontend/api/axios";
 import { toast } from "react-toastify";
 import AuthGuard from "frontend/guards/AuthGuard";
 import { useNavigate } from "react-router-dom";
+import LowBalanceModal from "../common/LowBalanceModal";
 
 type SubscriptionModalProps = {
   pageData: any;
@@ -30,8 +31,11 @@ type SubscriptionModalProps = {
 const SubscriptionModal = (props: SubscriptionModalProps) => {
   const dispatch: AppDispatch = useDispatch();
   const userData = useSelector((state: RootState) => state?.user?.userData);
-  const navigate = useNavigate();
+  const { address, balance } = useSelector(
+    (rootState: RootState) => rootState.wallet
+  );
 
+  const navigate = useNavigate();
 
   const [subscriptionButtonDetails, setSubscriptionButtonDetails] =
     useState<any>(null);
@@ -45,6 +49,8 @@ const SubscriptionModal = (props: SubscriptionModalProps) => {
   >(null);
   const [subsTxn, setSubsTxn] = useState<any>();
   const [subsAmount, setSubsAmount] = useState<any>();
+  const [lowBalance, setLowBalance] = useState(false);
+  
 
   const findSelectedBundle = (id: any) => {
     return props?.pageData?.subscription_tier_page?.find(
@@ -108,7 +114,6 @@ const SubscriptionModal = (props: SubscriptionModalProps) => {
     }
   }, [props?.pageData?.subscription_tier_page, props?.subscription]);
 
-
   const handleSubscribe = async () => {
     console.log({
       ...props?.subscription,
@@ -137,8 +142,8 @@ const SubscriptionModal = (props: SubscriptionModalProps) => {
       } else {
         subscribeWithTxn(amount);
       }
-    }else{
-     navigate(`/auth/login`);
+    } else {
+      navigate(`/auth/login`);
     }
   };
 
@@ -165,58 +170,69 @@ const SubscriptionModal = (props: SubscriptionModalProps) => {
   };
 
   const subscribeWithTxn = async (amount: any) => {
-    setSubscribeLoader(true);
     const toastId = toast.loading("Subscribing...");
-    const sendDetail = {
-      sender_id: userData?.id,
-      reciever_id: props?.pageData?.user?.id,
-      amount: amount,
-    };
+    if (amount < balance) {
+      setSubscribeLoader(true);
 
-    if (sendDetail) {
-      await _axios
-        .post(`api/user/send-dint/`, sendDetail)
-        .then((response: any) => {
-          setSubsTxn(response.data);
-          if (response.data.code == 201) {
-            toast.update(toastId, {
-              render: "Subscribed!",
-              type: "success",
-              isLoading: false,
-            });
-            dispatch(
-              subscribeToPage({
-                ...props?.subscription,
-                page: props?.pageData?.id,
-                user: userData?.id,
-              })
-            ).then((res: boolean) => {
-              if (res) {
-                setSubscribeLoader(false);
-                dispatch(fetchViewPageData(props?.pageData?.id));
-              } else {
-                setSubscribeLoader(false);
-              }
-              handleModalClose();
-            });
-          } else {
+      const sendDetail = {
+        sender_id: userData?.id,
+        reciever_id: props?.pageData?.user?.id,
+        amount: amount,
+      };
+
+      if (sendDetail) {
+        await _axios
+          .post(`api/user/send-dint/`, sendDetail)
+          .then((response: any) => {
+            setSubsTxn(response.data);
+            if (response.data.code == 201) {
+              toast.update(toastId, {
+                render: "Subscribed!",
+                type: "success",
+                isLoading: false,
+              });
+              dispatch(
+                subscribeToPage({
+                  ...props?.subscription,
+                  page: props?.pageData?.id,
+                  user: userData?.id,
+                })
+              ).then((res: boolean) => {
+                if (res) {
+                  setSubscribeLoader(false);
+                  dispatch(fetchViewPageData(props?.pageData?.id));
+                } else {
+                  setSubscribeLoader(false);
+                }
+                handleModalClose();
+              });
+            } else {
+              setSubscribeLoader(false);
+              toast.update(toastId, {
+                render: "Something went wrong!",
+                type: "error",
+                isLoading: false,
+              });
+            }
+          })
+          .catch((error: any) => {
             setSubscribeLoader(false);
+            console.log(error);
             toast.update(toastId, {
               render: "Something went wrong!",
               type: "error",
               isLoading: false,
             });
-          }
-        })
-        .catch((error: any) => {
-          setSubscribeLoader(false);
-          console.log(error);
-          toast.update(toastId, {
-            render: "Something went wrong!",
-            type: "error",
-            isLoading: false,
           });
-        });
+      }
+    } else {
+      toast.update(toastId, {
+        render: `Insufficient Balance!`,
+        type: "error",
+        isLoading: false,
+      });
+      setSubscribeLoader(false);
+      setLowBalance(true);
     }
     setTimeout(() => toast.dismiss(), 2000);
   };
@@ -235,93 +251,104 @@ const SubscriptionModal = (props: SubscriptionModalProps) => {
     setSubscriptionButtonDetails(null);
     setSelectedSubscripitionBundle(null);
   };
+  const handleConfirmation = () => {
+    setLowBalance(false);
+  };
   return (
-    <Modal
-      open={props.open}
-      onClose={handleModalClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description">
-      <Stack className="subscription-modal" direction="column" spacing={1}>
-        <Stack
-          className="subscription-modal-body"
-          direction="column"
-          spacing={1}>
-          <Box
-            className="cover-picture-container full-image-container"
-            sx={{
-              backgroundImage: `url(${
-                props?.pageData?.cover_picture || coverPhoto
-              })`,
-            }}
-          />
-          {/* body section */}
+    <>
+      <Modal
+        open={props.open}
+        onClose={handleModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Stack className="subscription-modal" direction="column" spacing={1}>
           <Stack
+            className="subscription-modal-body"
             direction="column"
-            spacing={1}
-            className="subscription-detail-container">
-            <Stack direction="row" spacing={1}>
-              <Avatar
-                className="page-profile-container"
-                src={props?.pageData?.profile_picture}
-              />
-              <Stack direction="column">
-                <Typography className="primary-text-color" variant="body2">
-                  {props?.pageData?.title}
-                </Typography>
-                <Typography className="secondary-text-color" variant="caption">
-                  {/* @page */}
-                </Typography>
-              </Stack>
-            </Stack>
-            <BenefitisList />
-            <SubscribeButton
-              leftTitle={subscriptionButtonDetails?.leftTitle}
-              rightTitle={subscriptionButtonDetails?.rightTitle}
-              handleClick={handleSubscribe}
-              loading={subscribeLoader}
+            spacing={1}>
+            <Box
+              className="cover-picture-container full-image-container"
+              sx={{
+                backgroundImage: `url(${
+                  props?.pageData?.cover_picture || coverPhoto
+                })`,
+              }}
             />
-          </Stack>
-          {/* view bundles section */}
-          {bundles?.length > 0 ? (
-            <ViewMoreDivider
-              title="View bundles"
-              showLess={showLess}
-              handleToggleView={handleToggleView}
-            />
-          ) : null}
-          {/* list of bundles */}
-          {!showLess ? (
-            <Stack direction="column" spacing={2} p={1}>
-              {bundles?.map((bundle: any) => (
-                <SubscribeButton
-                  key={bundle?.id}
-                  leftTitle={`${bundle?.validity_in_months} months (${bundle?.discount}% off)`}
-                  rightTitle={`$${bundle?.discount_price} total`}
-                  handleClick={() => {
-                    handleSubscribeBundle(+bundle?.id);
-                  }}
-                  loading={
-                    bundleSubscribeLoader &&
-                    selectedSubscriptionBundle === +bundle?.id
-                  }
+            {/* body section */}
+            <Stack
+              direction="column"
+              spacing={1}
+              className="subscription-detail-container">
+              <Stack direction="row" spacing={1}>
+                <Avatar
+                  className="page-profile-container"
+                  src={props?.pageData?.profile_picture}
                 />
-              ))}
+                <Stack direction="column">
+                  <Typography className="primary-text-color" variant="body2">
+                    {props?.pageData?.title}
+                  </Typography>
+                  <Typography
+                    className="secondary-text-color"
+                    variant="caption">
+                    {/* @page */}
+                  </Typography>
+                </Stack>
+              </Stack>
+              <BenefitisList />
+              <SubscribeButton
+                leftTitle={subscriptionButtonDetails?.leftTitle}
+                rightTitle={subscriptionButtonDetails?.rightTitle}
+                handleClick={handleSubscribe}
+                loading={subscribeLoader}
+              />
             </Stack>
-          ) : null}
-        </Stack>
+            {/* view bundles section */}
+            {bundles?.length > 0 ? (
+              <ViewMoreDivider
+                title="View bundles"
+                showLess={showLess}
+                handleToggleView={handleToggleView}
+              />
+            ) : null}
+            {/* list of bundles */}
+            {!showLess ? (
+              <Stack direction="column" spacing={2} p={1}>
+                {bundles?.map((bundle: any) => (
+                  <SubscribeButton
+                    key={bundle?.id}
+                    leftTitle={`${bundle?.validity_in_months} months (${bundle?.discount}% off)`}
+                    rightTitle={`$${bundle?.discount_price} total`}
+                    handleClick={() => {
+                      handleSubscribeBundle(+bundle?.id);
+                    }}
+                    loading={
+                      bundleSubscribeLoader &&
+                      selectedSubscriptionBundle === +bundle?.id
+                    }
+                  />
+                ))}
+              </Stack>
+            ) : null}
+          </Stack>
 
-        {/* footer */}
-        <Stack direction="row" justifyContent="flex-end" px={1} pb={1}>
-          <Button
-            variant="outlined"
-            size="small"
-            disabled={subscribeLoader}
-            onClick={handleModalClose}>
-            Close
-          </Button>
+          {/* footer */}
+          <Stack direction="row" justifyContent="flex-end" px={1} pb={1}>
+            <Button
+              variant="outlined"
+              size="small"
+              disabled={subscribeLoader}
+              onClick={handleModalClose}>
+              Close
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
-    </Modal>
+      </Modal>
+      <LowBalanceModal
+        isOpen={lowBalance}
+        handleClose={() => handleConfirmation()}
+      />
+    </>
   );
 };
 

@@ -10,7 +10,7 @@ type walletState = {
   phrase: string;
   privateKey: string;
   address: string;
-  balance: string
+  balance: any
 };
 
 const initialState: walletState = {
