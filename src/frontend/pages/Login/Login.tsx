@@ -315,8 +315,9 @@ const Login = () => {
     <>
       {/* <MainNavbar /> */}
       <Helmet>
-        <title>Login</title>
-        <meta name="description" content="Login to Dint" />
+        <title>Dint - Revolutionary Social Media with Referral-Based Monetization powered by Smart Contracts</title>
+        <meta name="description" content="Join Dint, a revolutionary new social media platform with a referral-based monetization structure powered by smart contracts. Earn commissions by referring friends and from the activity of users you refer. Create content and earn money through tips and subscriptions. With Dint, you're in control of your earnings.
+" />
       </Helmet>
       {/* <NavbarHome /> */}
       <br />
