@@ -9,38 +9,38 @@ const CookieNotice = () => {
     <div className="container mt-5 pt-5">
       <h1 className="text-center h1 mb-5" style={{color: toggle ? 'white' : '#161c24'}}>Cookie Notice</h1>
       <p style={{color: toggle ? 'white' : '#161c24'}}>
-        Effective: Feb 2023
+        Effective: Jan 2023
         <br />
         <br />
-        Introduction
-At Dint, we are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our social media platform, website, and mobile application (collectively, the "Service"). By using the Service, you agree to the terms of this Privacy Policy.
-Information We Collect
-When you use the Service, we may collect the following information about you:
-Personal Information: We may collect personal information such as your name, email address, and phone number when you create an account on the Service or contact us for support.
-Profile Information: We may collect information about your profile, such as your username, profile picture, and bio, when you create an account on the Service.
-Activity Information: We may collect information about your activity on the Service, such as the content you post, the people you follow, and the messages you send.
-Device Information: We may collect information about the device you use to access the Service, such as the device's make and model, operating system, and IP address.
-Use of Information
-We may use the information we collect from you to:
-Provide and improve the Service: We may use your information to provide and improve the features and functionality of the Service.
-Communicate with you: We may use your information to communicate with you about your account, the Service, and other matters.
-Personalize your experience: We may use your information to personalize your experience on the Service, such as by showing you content that is relevant to your interests.
-Perform research and analysis: We may use your information to perform research and analysis to improve the Service.
-Comply with legal obligations: We may use your information to comply with any legal obligations we have, such as responding to a subpoena or court order.
-Disclosure of Information
-We may disclose your information to:
-Service providers: We may share your information with service providers who perform services on our behalf, such as hosting the Service or providing customer support.
-Legal authorities: We may disclose your information to legal authorities if we believe it is necessary to comply with a legal obligation, or to protect the rights, property, or safety of Dint, our users, or others.
-Business partners: We may share your information with business partners for joint marketing or other purposes.
-Other users: Your profile information, activity information, and device information may be visible to other users of the Service.
-Data Retention
-We will retain your information for as long as your account is active or as needed to provide you with the Service. We will also retain your information as necessary to comply with our legal obligations, resolve disputes, and enforce our agreements.
-Security
-We take reasonable measures to protect your information from unauthorized access, use, or disclosure. However, no method of transmission over the internet or method of electronic storage is 100% secure, so we cannot guarantee its absolute security.
-Changes to this Privacy Policy
-We may update this Privacy Policy from time to time. If we make changes, we will notify you by revising the date at the top of this policy and, in some cases, we may provide you with additional notice (such as adding a statement to our homepage or sending you an email notification). We encourage you to review this Privacy Policy regularly to stay informed about our collection, use, and disclosure of your information.
+Cookie Notice for Dint  <br />  <br />
+Dint ("we", "us", or "our") uses cookies and similar technologies on our website and mobile application (collectively, the "Platform") to provide you with a better, more personalized experience. This Cookie Notice explains what cookies are, how we use them on our Platform, and how you can manage your cookie preferences.  
+<br />  <br />
+
+<b>What are cookies? </b><br />
+Cookies are small text files that are placed on your device by a website or mobile application when you visit it. They are widely used to make websites and mobile applications work, or work more efficiently, as well as to provide information to the owners of the site or app. Cookies can be either "persistent" cookies or "session" cookies. A persistent cookie remains on your device after you close your browser or mobile application, while a session cookie is deleted as soon as you close your browser or mobile application.
+<br />  <br />
+
+<b>How do we use cookies on our Platform?</b>
+<br />  
+We use cookies on our Platform for various purposes, including:
+&bull; Authentication: We use cookies to authenticate you when you log in to our Platform and to keep you logged in as you navigate the Platform.
+&bull; Preferences: We use cookies to remember your preferences and settings, such as your language and time zone.
+&bull; Security: We use cookies to enhance the security of our Platform, such as by detecting and preventing fraud.
+&bull; Analytics: We use cookies to understand how our Platform is being used and to improve it.
+<br />  <br />
+
+<b>How can you manage your cookie preferences?</b>
+<br /> 
+Most web browsers and mobile devices allow you to block or delete cookies. You can typically do this by adjusting the settings in your browser or mobile device. However, please note that if you block or delete cookies, some features of our Platform may not work as intended.
+Changes to this Cookie Notice
+<br /><br />
+
+We may update this Cookie Notice from time to time to reflect changes to our cookie practices. We will notify you of any changes by posting the updated Cookie Notice on our Platform.
+<br />  <br />
+
 Contact Us
-If you have any questions or concerns about this Privacy Policy or our collection,</p>
+If you have any questions about this Cookie Notice, please contact us at info@dint.com.
+</p>
     </div>
   );
 };
