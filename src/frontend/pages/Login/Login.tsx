@@ -317,7 +317,7 @@ const Login = () => {
       <Helmet>
         <title>Dint - Social Media with Referral Monetization powered by Smart Contracts</title>
         <meta name="description" content="
-      Join Dint, a revolutionary new social media platform with referral-based monetization powered by smart contracts. Earn money by referring friends & their activity. Create content & earn through tips & subscriptions. With Dint, you're in control of your earnings.
+Dint is a new social media platform with referral-based monetization, smart contracts, and content earning opportunities. Earn money by referring friends and their activity. Create content and earn through tips and subscriptions. With Dint, you're in control of your earnings.
 " />
       </Helmet>
       {/* <NavbarHome /> */}
