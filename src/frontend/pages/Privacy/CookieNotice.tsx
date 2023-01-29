@@ -9,120 +9,38 @@ const CookieNotice = () => {
     <div className="container mt-5 pt-5">
       <h1 className="text-center h1 mb-5" style={{color: toggle ? 'white' : '#161c24'}}>Cookie Notice</h1>
       <p style={{color: toggle ? 'white' : '#161c24'}}>
-        Effective: Aug 2022
+        Effective: Feb 2023
         <br />
         <br />
-        Dint Club Inc (collectively, “Dint Club,” “we,” “us,” “our”) respect your privacy and are
-        committed to protecting the personal data we hold about you. By using our website located at
-        www.dint.com (the “Services”) with your browser set to accept cookies, you consent to our
-        use of cookies and other technologies to provide the Services to you as described in this
-        notice and in our Privacy Notice. For more information about what cookies and pixel tags
-        are, what they do, and how you can opt out of, manage, or delete them, please review this
-        Cookie Notice.
-        <br />
-        <br />
-        WHAT ARE COOKIES?
-        <br />
-        <br />
-        “Cookies” are small strings of text or computer code stored locally on your device that
-        allow us, ad networks, and our third-party service providers, to identify your browser
-        and/or device as you browse the Internet. Cookies can be placed, read, and/or written to by
-        our Services, or other websites or services that recognize a particular cookie, which allows
-        the website to “remember” or “recognize” a particular browser or device and, in some cases,
-        store information about that browser or device.
-        <br />
-        <br />
-        Certain types of cookies or cookie-like functionality may be placed or activated through
-        browser add-ons, including, but not limited to, Adobe Flash. While these cookies are stored
-        differently, their functionality and purpose is generally similar to other cookies.
-        <br />
-        <br />
-        For more information about cookies, please see www.allaboutcookies.org.
-        <br />
-        <br />
-        HOW LONG ARE COOKIES STORED ON MY SYSTEM?
-        <br />
-        <br />
-        Session Cookies. “Session cookies” are stored for the duration of a browser session; when
-        you close the browser, the cookie is deleted. Persistent Cookies. “Persistent cookies” are
-        stored for a preset amount of time (often between 90 days and two years, depending on the
-        application) and are typically not deleted when a browser session is closed.
-        <br />
-        <br />
-        Your choices may affect whether we use session or persistent cookies for a particular
-        application. For example, if you select “Remember Me,” your two-step verification status is
-        stored on a persistent cookie for 30 days to remember the device that you signed in from.
-        <br />
-        <br />
-        WHAT COOKIES DO WE USE, AND WHY?
-        <br />
-        <br />
-        Necessary Cookies. Some cookies are necessary to allow you to browse the Services and access
-        certain pages. Necessary cookies are required for the Services (or certain functionality on
-        the Services) to work properly, and we do not use these cookies to collect personal data
-        about you.
-        <br />
-        <br />
-        Cookie Name More Information auth_id authenticate user ID auth_uid_43 hash to remember
-        two-factor authentication Disabling or removing these cookies may prevent the Services, or
-        certain functionality on the Services, from working correctly or at all.
-        <br />
-        <br />
-        Performance Cookies. We use performance cookies to collect information about how our users
-        use and interact with the Services, such as what pages are visited most often, how the
-        Services are used and function, or how users navigate the Services. We use this information
-        to improve the Services and their content. These cookies only collect aggregate information
-        about the use of the Services, and thus do not collect information that can be used to
-        identify you personally. Examples include:
-        <br />
-        <br />
-        Cookie Name More Information sess session cookie; contains a unique identifier for your
-        device csrf csrf token fp browser fingerprint ref_src source of referral ID ref referral
-        user ID Disabling or removing these cookies generally does not interfere with the
-        functionality or performance of the Services.
-        <br />
-        <br />
-        Functionality Cookies. We use functionality cookies to remember information that you have
-        provided or choices you have made on the Services, such as saving your logged-in status or
-        site preferences. This allows us to provide a more personalized and convenient browsing
-        experience.
-        <br />
-        <br />
-        Disabling or removing these cookies may make browsing the Services less convenient or may
-        prevent certain functionality from working correctly.
-        <br />
-        <br />
-        Third-Party Functionality. We do not have access to or control over cookies or other
-        features that third party sites may use, and the information practices of those third party
-        websites are not covered by our Privacy Notice or this Cookie Notice. For more information
-        about how Stripe and Securion collect and use information about your activities, please
-        review their applicable terms of service and privacy policies.
-        <br />
-        <br />
-        HOW DO I CONTROL OR MAKE CHOICES ABOUT COOKIES AND TRACKING TECHNOLOGIES?
-        <br />
-        <br />
-        Managing Cookies. Most browsers automatically accept cookies by default, but you can adjust
-        your device and/or browser settings to delete and/or block some or all cookies, or provide
-        notifications when you receive a new cookie. Consult the “Help,” “Tools,” or “Preferences”
-        menus on your browser, or the documentation for your device, for more information about how
-        to do this. Please note, however, that blocking or deleting certain cookies may negatively
-        affect your user experience.
-        <br />
-        <br />
-        Additionally, you can generally disable or delete cookies placed and used by browser
-        add-ons, such as Adobe Flash cookies, by changing the add-on settings or visiting the
-        website of its provider. Information and controls that allow you to manage Adobe Flash
-        cookies may be found on this page:
-        <br />
-        <br />
-        https://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager.html
-        <br />
-        <br />
-        Note that if you disable Adobe Flash cookies or similar technologies, you may not have
-        access to certain features and services (such as consistent volume settings for videos) that
-        make your online experience more efficient and/or enjoyable.
-      </p>
+        Introduction
+At Dint, we are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our social media platform, website, and mobile application (collectively, the "Service"). By using the Service, you agree to the terms of this Privacy Policy.
+Information We Collect
+When you use the Service, we may collect the following information about you:
+Personal Information: We may collect personal information such as your name, email address, and phone number when you create an account on the Service or contact us for support.
+Profile Information: We may collect information about your profile, such as your username, profile picture, and bio, when you create an account on the Service.
+Activity Information: We may collect information about your activity on the Service, such as the content you post, the people you follow, and the messages you send.
+Device Information: We may collect information about the device you use to access the Service, such as the device's make and model, operating system, and IP address.
+Use of Information
+We may use the information we collect from you to:
+Provide and improve the Service: We may use your information to provide and improve the features and functionality of the Service.
+Communicate with you: We may use your information to communicate with you about your account, the Service, and other matters.
+Personalize your experience: We may use your information to personalize your experience on the Service, such as by showing you content that is relevant to your interests.
+Perform research and analysis: We may use your information to perform research and analysis to improve the Service.
+Comply with legal obligations: We may use your information to comply with any legal obligations we have, such as responding to a subpoena or court order.
+Disclosure of Information
+We may disclose your information to:
+Service providers: We may share your information with service providers who perform services on our behalf, such as hosting the Service or providing customer support.
+Legal authorities: We may disclose your information to legal authorities if we believe it is necessary to comply with a legal obligation, or to protect the rights, property, or safety of Dint, our users, or others.
+Business partners: We may share your information with business partners for joint marketing or other purposes.
+Other users: Your profile information, activity information, and device information may be visible to other users of the Service.
+Data Retention
+We will retain your information for as long as your account is active or as needed to provide you with the Service. We will also retain your information as necessary to comply with our legal obligations, resolve disputes, and enforce our agreements.
+Security
+We take reasonable measures to protect your information from unauthorized access, use, or disclosure. However, no method of transmission over the internet or method of electronic storage is 100% secure, so we cannot guarantee its absolute security.
+Changes to this Privacy Policy
+We may update this Privacy Policy from time to time. If we make changes, we will notify you by revising the date at the top of this policy and, in some cases, we may provide you with additional notice (such as adding a statement to our homepage or sending you an email notification). We encourage you to review this Privacy Policy regularly to stay informed about our collection, use, and disclosure of your information.
+Contact Us
+If you have any questions or concerns about this Privacy Policy or our collection,</p>
     </div>
   );
 };
