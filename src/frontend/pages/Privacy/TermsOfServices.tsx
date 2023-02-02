@@ -23,7 +23,7 @@ a. we refer to our website as <b>"Dint"</b>, including when accessed via the URL
 b. references to <b>"we", "our", "us"</b> are references to Dint, the operator of Dint;<br />
 c. <b>"Content"</b> means any material uploaded to Dint by any User, including any photos, videos, audio (for example music and other sounds), livestream material, data, text (such as comments and hashtags), metadata, images, interactive features, emojis, GIFs, memes, and any other material whatsoever;<br />
 d. <b>"User"</b> means a User who has set up their Dint account to post Content on Dint to be viewed by other other Users;<br />
-e. "Referring User" means a User who participates in the Dint Referral Program;<br />
+e. <b>"Referring User"</b> means a User who participates in the Dint Referral Program;<br />
 f. <b>"Subscription"</b> means a User's subscription to a User's subscription page (whether paid or unpaid, and whether for one month or as part of a bundle comprising a subscription for more than one month);
 < br/>< br/>
 3. <b>Who we are and how to contact us:</b> <br />
