@@ -170,68 +170,68 @@ const Login = () => {
     //     .then(() => {})
     //     .catch((e) => console.error(e));
     // } else {
-      signInWithPopup(auth, provider)
-        .then(async (result) => {
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          // const credential = GoogleAuthProvider.credentialFromResult(result);
-          // const token = credential.accessToken;
-          // The signed-in user info.
-          const { user } = result;
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+        // The signed-in user info.
+        const { user } = result;
 
-          const username = generateFromEmail(user.email || "");
-          const userData = {
-            ...user,
-            fire_base_auth_key: user?.uid,
-            role: "simple",
-            biography: "no biography yet",
-            custom_username: username ?? "",
-            profile_image:
-              user?.photoURL ??
-              "https://w1.pngwing.com/pngs/386/684/png-transparent-face-icon-user-icon-design-user-profile-share-icon-avatar-black-and-white-silhouette.png",
-            display_name: user?.displayName ?? "",
-          };
+        const username = generateFromEmail(user.email || "");
+        const userData = {
+          ...user,
+          fire_base_auth_key: user?.uid,
+          role: "simple",
+          biography: "no biography yet",
+          custom_username: username ?? "",
+          profile_image:
+            user?.photoURL ??
+            "https://w1.pngwing.com/pngs/386/684/png-transparent-face-icon-user-icon-design-user-profile-share-icon-avatar-black-and-white-silhouette.png",
+          display_name: user?.displayName ?? "",
+        };
 
-          await axios
-            .post(`${process.env.REACT_APP_API_URL}api/auth/login`, {
-              email: user.email,
-              fire_base_auth_key: user.uid,
-            })
-            .then(async ({ data }: any) => {
-              if (data.code !== 400) {
-                localStorage.setItem("apiToken", data.data.token);
-                // localStorage.setItem('userData', JSON.stringify(data.data));
-                userHook.setCurrentUser(data.data);
-                // dispatch(createWallet());
-                toast.success("User Login Successful!");
-                onSuccessLogin();
-              } else {
-                await axios
-                  .post(
-                    `${process.env.REACT_APP_API_URL}api/auth/sign-up/`,
-                    userData
-                  )
-                  .then(async ({ data }) => {
-                    if (data.code !== 400) {
-                      localStorage.setItem("apiToken", data.data.token);
-                      // localStorage.setItem('userData', JSON.stringify(data.data));
-                      userHook.setCurrentUser(data.data);
+        await axios
+          .post(`${process.env.REACT_APP_API_URL}api/auth/login`, {
+            email: user.email,
+            fire_base_auth_key: user.uid,
+          })
+          .then(async ({ data }: any) => {
+            if (data.code !== 400) {
+              localStorage.setItem("apiToken", data.data.token);
+              // localStorage.setItem('userData', JSON.stringify(data.data));
+              userHook.setCurrentUser(data.data);
+              // dispatch(createWallet());
+              toast.success("User Login Successful!");
+              onSuccessLogin();
+            } else {
+              await axios
+                .post(
+                  `${process.env.REACT_APP_API_URL}api/auth/sign-up/`,
+                  userData
+                )
+                .then(async ({ data }) => {
+                  if (data.code !== 400) {
+                    localStorage.setItem("apiToken", data.data.token);
+                    // localStorage.setItem('userData', JSON.stringify(data.data));
+                    userHook.setCurrentUser(data.data);
 
-                      toast.success("User Login Successful!");
-                      onSuccessLogin();
-                    }
-                  });
-              }
-            })
-            .catch((err: any) => {
-              console.error(err);
-            });
-        })
-        .catch((error) => {
-          // Handle Errors here.
-          const errorMessage = error.message;
-          console.error(errorMessage);
-        });
-      // }
+                    toast.success("User Login Successful!");
+                    onSuccessLogin();
+                  }
+                });
+            }
+          })
+          .catch((err: any) => {
+            console.error(err);
+          });
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorMessage = error.message;
+        console.error(errorMessage);
+      });
+    // }
   };
 
   // const fbSignin = () => {
@@ -315,86 +315,186 @@ const Login = () => {
     <>
       {/* <MainNavbar /> */}
       <Helmet>
-        <title>Dint - Social Media with Referral Monetization powered by Smart Contracts</title>
-        <meta name="description" content="
-Dint is a new social media platform with referral-based monetization, smart contracts, and content earning opportunities. Earn money by referring friends and their activity. Create content and earn through tips and subscriptions. With Dint, you're in control of your earnings.
-" />
+        <title>Login</title>
+        <meta name="description" content="Login to Dint" />
       </Helmet>
       {/* <NavbarHome /> */}
-      <br />
-      <br />
-      <div
-        className="login_divs"
-        style={{ maxWidth: "350px", margin: "0 auto" }}
-      >
-        <div className="container">
-          <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
-
-          <div className="form-control">
-            <label htmlFor="email">
-              Email
-              <input
-                id="email"
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e: any) => setEmail(e.target.value)}
-              />
-            </label>
+      <div className="main-container">
+        <div className="left-container">
+          <img  className="bg-left-img" src={require("../../assets/img/web3/bg_login.png")} alt="responsive image"/>
+          
+          <p className="left-head position-absolute">Dint</p>
+          <div className="bg-left-content d-flex justify-content-center">
+            <div className="left-text">
+              <p >Sign up to start earning</p>
+              </div>
           </div>
-
-          <div className="form-control">
-            <label htmlFor="password">
-              Password
-              <input
-                id="password"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e: any) => setPassword(e.target.value)}
-              />
-            </label>
-            <button
-              id="forgotpassBtn"
-              type="button"
-              onClick={forgotPassClicked}
-            >
-              <span id="forgotPassText">Forgot Password?</span>{" "}
-            </button>
-          </div>
-
-          <p id="error_signup">{error_msg_login}</p>
-          <button id="signup_btn" type="button" onClick={loginClicked}>
-            Log In
-          </button>
-
-          <p id="signup_line">
-            Not registered Yet?{" "}
-            <Link to={`/auth/signup${location?.search}`}>
-              <span id="signup_here"> Sign Up</span>
-            </Link>
-          </p>
+        </div>
+        <div className="right-container" style={{display:"flex" ,    flexDirection :"column"}}>
           <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            className="login_divs"
+            // style={{ maxWidth: "340px", margin: "0 auto" }}
+            style={{ maxWidth: "600px", margin: "0 auto" , width:"100%" }}
           >
-            <button
-              type="button"
-              onClick={googleSignin}
-              className="authbtnsocial"
-              style={{ backgroundColor: "red" }}
-            >
-              Google
-            </button>
+            <div className="container ">
+          <img className="right-logo"  src={require("../../assets/img/web3/image 1.png")} alt="logo" />
+              <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
+
+              <div className="form-control">
+                <label htmlFor="email">
+                  Email/User name
+                 
+                </label>
+                <input
+                    id="email"
+                    type="email"
+                    placeholder="Enter Email Or User name"
+                    value={email}
+                    onChange={(e: any) => setEmail(e.target.value)}
+                  />
+              </div>
+
+              <div className="form-control">
+                <label htmlFor="password">
+                  Password
+                 
+                </label>
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Enter Correct Password"
+                    value={password}
+                    onChange={(e: any) => setPassword(e.target.value)}
+                  />
+              </div>
+              <div className="d-flex justify-content-between px-4">
+                  <div className="form-check remember-me">
+                    <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
+                    <label className="form-check-label mx-2"  htmlFor="exampleCheck1">Remember me</label>
+                  </div>           
+                  <button
+                  id="forgotpassBtn"
+                  type="button"
+                  onClick={forgotPassClicked}
+                  >
+                    <span id="forgotPassText">Forgot Password?</span>{" "}
+                  </button>
+                </div>
+
+              <p id="error_signup">{error_msg_login}</p>
+              <button id="signup_btn" type="button" onClick={loginClicked}>
+                Log In
+              </button>
+
+              <p style={{color:'#353535'}} id="signup_line">
+                Don't Have An Account?{" "}
+                <Link style={{textDecoration : 'none'}} to={`/auth/signup${location?.search}`}>
+                  <span id="signup_here"> Sign Up</span>
+                </Link>
+              </p>
+
+              <div className="d-flex justify-content-between align-items-center horizontal">
+                <div className="line"></div>
+                <p className="m-3">Or</p>
+                <div className="line"></div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection:"column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={googleSignin}
+                  className="socialbtn "
+                >
+                <img src={require("../../assets/img/web3/googlelogo.png")} className="mx-2" alt="" style={{height:'20px'}} />  Login with Google
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
       <Outlet />
     </>
   );
 };
 
 export default Login;
+
+// <br />
+// <br />
+// <div
+//   className="login_divs"
+//   style={{ maxWidth: "350px", margin: "0 auto" }}
+// >
+//   <div className="container">
+//     <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
+
+//     <div className="form-control">
+//       <label htmlFor="email">
+//         Email
+//         <input
+//           id="email"
+//           type="email"
+//           placeholder="Email"
+//           value={email}
+//           onChange={(e: any) => setEmail(e.target.value)}
+//         />
+//       </label>
+//     </div>
+
+//     <div className="form-control">
+//       <label htmlFor="password">
+//         Password
+//         <input
+//           id="password"
+//           type="password"
+//           placeholder="Password"
+//           value={password}
+//           onChange={(e: any) => setPassword(e.target.value)}
+//         />
+//       </label>
+//       <button
+//         id="forgotpassBtn"
+//         type="button"
+//         onClick={forgotPassClicked}
+//       >
+//         <span id="forgotPassText">Forgot Password?</span>{" "}
+//       </button>
+//     </div>
+
+//     <p id="error_signup">{error_msg_login}</p>
+//     <button id="signup_btn" type="button" onClick={loginClicked}>
+//       Log In
+//     </button>
+
+//     <p id="signup_line">
+//       Not registered Yet?{" "}
+//       <Link to={`/auth/signup${location?.search}`}>
+//         <span id="signup_here"> Sign Up</span>
+//       </Link>
+//     </p>
+//     <div
+//       style={{
+//         display: "flex",
+//         justifyContent: "center",
+//         alignItems: "center",
+//       }}
+//     >
+//       <button
+//         type="button"
+//         onClick={googleSignin}
+//         className="authbtnsocial"
+//         style={{ backgroundColor: "red" }}
+//       >
+//         Google
+//       </button>
+//     </div>
+//   </div>
+// </div>

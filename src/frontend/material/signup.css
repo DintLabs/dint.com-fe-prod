@@ -2,46 +2,66 @@
   padding: 30px 40px;
 }
 #signup_here {
-  color: rgba(25, 25, 236, 0.596);
+  /* color: rgba(25, 25, 236, 0.596); */
+  font-weight: bold;
+  color: black;
   text-decoration: none;
 }
 
 #signup_here:hover {
-  color: blue;
+  /* color: blue; */
+  color: #005DC5;
   text-decoration: none;
 }
 
 #forgotPassText {
-  color: rgba(25, 25, 236, 0.596);
+  /* color: rgba(25, 25, 236, 0.596); */
 }
 #forgotPassText:hover {
-  color: blue;
+  /* color: blue; */
+  color: #005DC5;
   text-decoration: none;
 }
 
 #forgotpassBtn {
-  margin-top: 10px;
+  /* margin-top: 10px; */
   border: none;
   background-color: transparent;
 }
+.remember-me {
+    border: none;
+    background-color: transparent;
+}
+
+.remember-me label:hover {
+  color: #005DC5;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* #signup_line {
+  margin-top: 10px;
+} */
 
 #signup_line {
-  margin-top: 10px;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .login_divs .form-control {
   margin-bottom: 10px;
   /* padding-bottom: 20px; */
   position: relative;
+  border: 0px;
 }
 
 .login_divs .form-control label {
   display: inline-block;
   margin-bottom: 5px;
   width: 100%;
-}
+} 
 
-.login_divs .form-control input {
+/* .login_divs .form-control input {
   border: 2px solid #f0f0f0;
   border-radius: 4px;
   display: block;
@@ -49,6 +69,17 @@
   font-size: 14px;
   padding: 10px;
   width: 100%;
+} */
+
+.login_divs .form-control input {
+  border: 2px solid #f0f0f0;
+  border-radius: 40px;
+  display: block;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 20px;
+  width: 100%;
+  margin: 10px 0px 0px 0px;
 }
 
 .login_divs .form-control input:focus {
@@ -94,9 +125,12 @@
 }
 
 #signup_btn {
-  background-color: #8e44ad;
-  border: 2px solid #8e44ad;
-  border-radius: 4px;
+  /* background-color: #8e44ad; */
+  /* border: 2px solid #8e44ad; */
+  /* border-radius: 4px; */
+  background-color: #005DC5;
+  border: 2px solid #005DC5;
+  border-radius: 40px;
   color: #fff;
   display: block;
   font-family: inherit;
@@ -122,4 +156,137 @@
   border-radius: 15px;
   border: 0;
   color: white;
+}
+
+.main-container{
+  position: relative;
+  height: 1000px;
+}
+
+.left-container {
+    width: 50%;
+    position: sticky;
+    position: -webkit-sticky;
+    height: 100vh;
+    top: 0px;
+    display: flex;
+}
+
+.bg-left-img{
+  position: relative;
+  height: 100vh;
+  width: 100%;
+}
+
+.left-head{
+  /* position: absolute; */
+  top: 60px;
+  left: 60px;
+  font-family: 'Cerebri Sans';
+  font-style: normal;
+  font-weight: 900;
+  font-size: 42px;
+  line-height: 53px;
+  color: #fff;
+}
+
+.bg-left-content{
+  /* background: rgba(255, 255, 255, 0.4); */
+  width: 100%; 
+  margin: 0 auto;
+  /* margin-top: 200px; */
+  height: 50%;
+  /* left: 5%; */
+  /* top: 20%; */
+  /* backdrop-filter: blur(10px); */
+  position: absolute;
+  bottom: 10%;
+}
+
+.left-text{
+  background: rgba(255, 255, 255, 0.4);
+  /* margin-top: 40px; */
+  width: 80%;
+  font-family: 'Cerebri Sans';
+  font-style: normal;
+  font-weight: 900;
+  font-size: 42px;
+  line-height: 53px;
+  color: #FFFFFF;
+}
+.left-text p{
+  top: 5%;
+  padding: 0 17%;
+  position: absolute;
+}
+
+.right-container{
+  width: 50%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+}
+
+.right-logo{
+  /* width: 5%; */
+  /* margin-top: 60px; */
+  /* margin-left: 60px; */
+  margin: 50px 0px 30px 1px;
+}
+
+.line{
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  height: 1px;
+
+}
+
+.socialbtn{
+  width: 100%;
+  border-radius: 40px;
+  padding: 10px;
+  background:  #fff;
+  margin-top: 15px;
+}
+.signup-div{
+  margin-left: 12px;
+}
+
+.horizontal{
+  width: 100%;
+}
+
+.text-blue{
+  color: #005DC5;
+}
+@media only screen and (max-width: 480px){
+  .left-container{
+    display: none;
+  }
+  .right-container{
+    width: 100%;
+    height: 100%;
+  }
+  .right-logo {
+    width: 20%;
+  }
+  .form-control label{
+    margin: 10px 0px 10px 3px ;
+  }
+  #signup_btn{
+    margin-top: 10px;
+  }
+  #signup_line{
+    font-size: 16px;
+  }
+  .horizontal{
+    margin: 15px 20px;
+  }
+  .login_divs {
+    margin : 40px auto !important;
+  }
+  .signup-div{
+    margin-top: 10%;
+  }
 }

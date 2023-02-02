@@ -51,6 +51,7 @@ import AddBlockedUsers from 'frontend/pages/BlockedList.tsx/AddBlockedUsers';
 import CloseFriend from 'frontend/pages/CloseFriend';
 import AddCloseFriend from 'frontend/pages/CloseFriend/AddCloseFriend';
 import _axios from 'frontend/api/axios';
+import SecondaryFooter from 'frontend/layouts/main/SecondaryFooter';
 
 // ----------------------------------------------------------------------
 
@@ -90,34 +91,59 @@ export default function Router() {
       path: 'auth',
       element: <MainLayout />,
       children: [
-        {
-          path: 'login',
-          element: (
+        // {
+        //   path: 'login',
+        //   element: (
+        //     <GuestGuard>
+        //       <Login />
+        //     </GuestGuard>
+        //   )
+        // },
+        // {
+        //   path: 'signup',
+        //   element: (
+        //     <GuestGuard>
+        //       <Register />
+        //     </GuestGuard>
+        //   )
+        // }
+      ]
+    },
+    {
+      path: 'auth/login',
+      element : (
+        <GuestGuard>
+          <Login />
+          <SecondaryFooter/>
+        </GuestGuard>
+      )
+    },
+    {
+      path: 'auth/signup',
+      element : (
+        <GuestGuard>
+          <Register />
+          <SecondaryFooter/>
+        </GuestGuard>
+      )
+    },
+    { path: '/', element:  (
             <GuestGuard>
               <Login />
+              <SecondaryFooter/>
             </GuestGuard>
-          )
-        },
-        {
-          path: 'signup',
-          element: (
-            <GuestGuard>
-              <Register />
-            </GuestGuard>
-          )
-        }
-      ]
+          ) 
     },
     {
       path: '/',
       element: <MainLayout />,
       children: [
         { path: '/home', element: <Home /> },
-        { path: '/', element:  (
-            <GuestGuard>
-              <Login />
-              </GuestGuard>
-          ) },
+        // { path: '/', element:  (
+        //     <GuestGuard>
+        //       <Login />
+        //       </GuestGuard>
+        //   ) },
         {
           path: '/events',
           element: (
