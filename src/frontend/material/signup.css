@@ -49,8 +49,6 @@
 }
 
 .login_divs .form-control {
-  margin-bottom: 10px;
-  /* padding-bottom: 20px; */
   position: relative;
   border: 0px;
 }
@@ -76,7 +74,6 @@
   border-radius: 40px;
   display: block;
   font-family: inherit;
-  font-size: 14px;
   padding: 10px 20px;
   width: 100%;
   margin: 10px 0px 0px 0px;
@@ -125,19 +122,17 @@
 }
 
 #signup_btn {
-  /* background-color: #8e44ad; */
-  /* border: 2px solid #8e44ad; */
-  /* border-radius: 4px; */
+  font-weight: 700;
   background-color: #005DC5;
   border: 2px solid #005DC5;
   border-radius: 40px;
   color: #fff;
   display: block;
   font-family: inherit;
-  font-size: 16px;
   padding: 10px;
   margin-top: 20px;
   width: 100%;
+  box-shadow: 0px 15px 20px rgb(0 93 197 / 20%);
 }
 
 #error_signup {
@@ -147,7 +142,11 @@
 .login_divs {
   min-height: 60vh;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
+  max-width: 600px; 
+  margin: "0 auto" ; 
+  width:100% ; 
+  font-family: 'Roboto';
 }
 
 .authbtnsocial {
@@ -161,6 +160,7 @@
 .main-container{
   position: relative;
   height: 1000px;
+  min-height: 100vh;
 }
 
 .left-container {
@@ -180,12 +180,12 @@
 
 .left-head{
   /* position: absolute; */
-  top: 60px;
-  left: 60px;
-  font-family: 'Cerebri Sans';
+  top: 5%;
+  left: 5%;
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 900;
-  font-size: 42px;
+  font-size: 3vw;
   line-height: 53px;
   color: #fff;
 }
@@ -207,7 +207,7 @@
   background: rgba(255, 255, 255, 0.4);
   /* margin-top: 40px; */
   width: 80%;
-  font-family: 'Cerebri Sans';
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 900;
   font-size: 42px;
@@ -216,8 +216,10 @@
 }
 .left-text p{
   top: 5%;
-  padding: 0 17%;
+  left:17%;
   position: absolute;
+  font-family: 'Roboto';
+  font-size: 2vw;
 }
 
 .right-container{
@@ -226,13 +228,12 @@
   right: 0;
   top: 0;
   display: flex;
+  justify-content: center;
 }
 
 .right-logo{
-  /* width: 5%; */
-  /* margin-top: 60px; */
-  /* margin-left: 60px; */
-  margin: 50px 0px 30px 1px;
+  height: 6%;
+  margin: 0% 0px 30px 1.5%;
 }
 
 .line{
@@ -243,14 +244,25 @@
 }
 
 .socialbtn{
+  color: #fff;
   width: 100%;
   border-radius: 40px;
   padding: 10px;
   background:  #fff;
   margin-top: 15px;
+  background: #4085F0;
+  border: 0;
+  font-weight: 700;
+}
+.google-logo { 
+  height: 30px !important;
+  background: #fff;
+  padding: 3px;
+  width: 30px;
+  border-radius: 50%;
 }
 .signup-div{
-  margin-left: 12px;
+  margin:0px 15px;
 }
 
 .horizontal{
@@ -269,10 +281,10 @@
     height: 100%;
   }
   .right-logo {
-    width: 20%;
+    margin-left: 5%;
   }
   .form-control label{
-    margin: 10px 0px 10px 3px ;
+    margin-left: 3px ;
   }
   #signup_btn{
     margin-top: 10px;
@@ -288,5 +300,22 @@
   }
   .signup-div{
     margin-top: 10%;
+  }
+}
+
+@media (min-width : 2860px) and (max-width:5120px){
+  .login_divs {
+    max-width: 1260px;
+    font-size: 0.8vw;
+  }
+  .login_divs .form-control{
+    font-size: 0.8vw;
+  }
+  .login_divs .form-control {
+    margin-bottom: 40px;
+  }
+  .socialbtn img{ 
+    width: 1vw;
+    height: 1vw !important;
   }
 }

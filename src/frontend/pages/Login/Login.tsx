@@ -330,13 +330,14 @@ const Login = () => {
               </div>
           </div>
         </div>
-        <div className="right-container" style={{display:"flex" ,    flexDirection :"column"}}>
+        <div className="right-container" 
+        >
           <div
             className="login_divs"
             // style={{ maxWidth: "340px", margin: "0 auto" }}
-            style={{ maxWidth: "600px", margin: "0 auto" , width:"100%" }}
+            // style={{ maxWidth: "600px", margin: "0 auto" , width:"100%" }}
           >
-            <div className="container ">
+              <div className="container " style={{paddingTop: '5vh' , minHeight:"100vh"}}>
           <img className="right-logo"  src={require("../../assets/img/web3/image 1.png")} alt="logo" />
               <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
 
@@ -382,6 +383,7 @@ const Login = () => {
                 </div>
 
               <p id="error_signup">{error_msg_login}</p>
+              <div className="signup-div">
               <button id="signup_btn" type="button" onClick={loginClicked}>
                 Log In
               </button>
@@ -412,8 +414,9 @@ const Login = () => {
                   onClick={googleSignin}
                   className="socialbtn "
                 >
-                <img src={require("../../assets/img/web3/googlelogo.png")} className="mx-2" alt="" style={{height:'20px'}} />  Login with Google
+                <img src={require("../../assets/img/web3/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px'}} />  Login with Google
                 </button>
+              </div>
               </div>
             </div>
           </div>

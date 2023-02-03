@@ -312,12 +312,12 @@ const Register = () => {
             </div>
           </div>
         </div>
-        <div className="right-container d-flex justify-content-center align-items-center">
+        <div className="right-container d-flex align-items-center">
           <div
             className="login_divs"
-            style={{ maxWidth: "600px", margin: "0 auto" }}
+            // style={{ maxWidth: "600px", margin: "0 auto" }}
           >
-            <div className="container px-1">
+            <div className="container px-1" style={{paddingTop:'5vh' , minHeight:"100vh"}}>
             <img
             className="right-logo"
             src={require("../../assets/img/web3/image 1.png")}
@@ -395,7 +395,7 @@ const Register = () => {
             </label>
               </div> */}
 
-              <p id="error_signup">{error_msg}</p>
+              <p id="error_signup" style={{padding : "1% 2.5%"}}>{error_msg}</p>
               <div className="signup-div">
                 <div className="form-check mt-3 mb-4">
                   <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
@@ -441,7 +441,7 @@ const Register = () => {
                     >
                       <img
                         src={require("../../assets/img/web3/googlelogo.png")}
-                        className="mx-2"
+                        className="mx-2 google-logo"
                         alt=""
                         style={{ height: "20px" }}
                       />{" "}

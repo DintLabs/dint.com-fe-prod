@@ -8,56 +8,56 @@ const SecondaryFooter = () => {
   return (
     <>
     <footer>
-        <div className="row main-footer">
-            <div className="col-lg-3 col-md-4 col-xs-12 col-sm-4 my-1 footer-column">
+        <div className="bottom-line"></div>
+        <div className="row main-footer m-auto">
+            {/* <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12 left-footer" > */}
+            <div className="col left-footer">
                 <p>@2023 Dint</p>
                 <p>Contact</p>
-                <div className="f-line"></div>
-                <div className="btn-group">
-                    <button className="btn  btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        English
-                    </button>
-                    <div className="dropdown-menu">
-                        <p className="dropdown-item" >Spanish</p>
-                        <p className="dropdown-item" >French</p>
+                <div className="d-flex">
+                    <img className="social-logos" src={require("../../assets/img/web3/twitter.png")}/>
+                    <img className="social-logos" src={require("../../assets/img/web3/instagramlogo.png")}/>
+                </div>
+            </div>
+            {/* <div className="col-lg-6 col-md-6 col-xs-12 col-sm-12 right-footer"> */}
+                <div className="col right-footer">
+                <div className="row  footer-rows-mobile">
+                    <div className="col-xs-6">
+                        <p>Help</p>
+                        <p>Store</p>
+                        <Link to={`/cookies${location?.search}`}>
+                        <p>Cookie Notice</p>
+                        </Link>
+                        <p>Terms & Conditions </p>
+                        <p>About</p>
+                    </div>
+                    <div className="col-xs-6">
+                        <Link to={"/terms"}><p>Terms of Service</p></Link>
+                        <p>DMCA</p>
+                        <p>Blog</p>
+                        <Link to={"/privacy"}><p>Privacy</p></Link>
+                        <p>USC 2257</p>
                     </div>
                 </div>
-                <p>Share</p>
-                <div className="bottom-line"></div>
-            </div>
-            <div className="col-lg-2 col-md-4 col-sm-4 col-xs-12 my-1 footer-column">
-                <p>Help</p>
-                <p>Store</p>
-                <Link to={`/cookies${location?.search}`}>
-                <p>Cookie Notice</p>
-                </Link>
-                <p>Dint Safety & Transperancy Center</p>
-                <div className="bottom-line"></div>
-
-            </div>
-            <div className="col-lg-2 col-md-4 col-sm-4  col-xs-12 my-1 footer-column">
-                <p>About</p>
-                <Link to={"/terms"}>
-                <p>Terms of Service</p>
-                </Link>
-                <p>DMCA</p>
-                <p>Statement</p>
-                <div className="bottom-line"></div>
-            </div>
-            <div className="col-lg-2 col-md-6 col-sm-6 col-xs-12  my-1 footer-column">
-                <p>Blog</p>
-                <Link to={"/privacy"}>
-                <p>Privacy</p>
-                </Link>
-                <p>USC 2257</p>
-                <p>Acceptable Use Policy</p>
-                <div className="bottom-line"></div>
-
-            </div>
-            <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12  my-1 footer-column ">
-                <p>Branding</p>
-                <p>Complaints Policy</p>
-                <p>Standard Contract</p>
+                <div className="row footer-rows-desktop ">
+                    <div className="col-1"></div>
+                    <div className=" col my-1 footer-column">
+                        <p>Help</p>
+                        <p>Store</p>
+                        <Link to={`/cookies${location?.search}`}><p>Cookie Notice</p></Link>
+                        <p>Terms & Conditions </p>
+                    </div>
+                    <div className="col my-1 footer-column">
+                        <p>About</p>
+                        <Link to={"/terms"}><p>Terms of Service</p></Link>
+                        <p>DMCA</p>
+                    </div>
+                    <div className="col footer-column">
+                        <p>Blog</p>
+                        <Link to={"/privacy"}><p>Privacy</p></Link>
+                        <p>USC 2257</p>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
