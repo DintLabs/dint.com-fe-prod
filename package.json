@@ -6,6 +6,8 @@
   "dependencies": {
     "@babel/eslint-parser": "^7.19.1",
     "@babel/preset-react": "^7.16.7",
+    "@capacitor/android": "^4.6.2",
+    "@capacitor/ios": "^4.6.2",
     "@chainlink/contracts": "^0.4.0",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
@@ -99,6 +101,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
+    "@capacitor/cli": "^4.6.2",
     "@types/jquery": "^3.5.14",
     "@types/lodash": "^4.14.182",
     "@types/react-helmet": "^6.1.5",

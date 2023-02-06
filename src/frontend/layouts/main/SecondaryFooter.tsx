@@ -13,7 +13,7 @@ const SecondaryFooter = () => {
             {/* <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12 left-footer" > */}
             <div className="col left-footer">
                 <p>@2023 Dint</p>
-                <p>Contact</p>
+              
                 <div className="d-flex">
                     <img className="social-logos" src={require("../../assets/img/web3/twitter.png")}/>
                     <img className="social-logos" src={require("../../assets/img/web3/instagramlogo.png")}/>
@@ -32,30 +32,26 @@ const SecondaryFooter = () => {
                         <p>About</p>
                     </div>
                     <div className="col-xs-6">
-                        <Link to={"/terms"}><p>Terms of Service</p></Link>
-                        <p>DMCA</p>
-                        <p>Blog</p>
-                        <Link to={"/privacy"}><p>Privacy</p></Link>
-                        <p>USC 2257</p>
+                      
+                       
                     </div>
                 </div>
                 <div className="row footer-rows-desktop ">
                     <div className="col-1"></div>
                     <div className=" col my-1 footer-column">
-                        <p>Help</p>
-                        <p>Store</p>
-                        <Link to={`/cookies${location?.search}`}><p>Cookie Notice</p></Link>
-                        <p>Terms & Conditions </p>
+                     
+                       
+                      
+                        
                     </div>
                     <div className="col my-1 footer-column">
-                        <p>About</p>
-                        <Link to={"/terms"}><p>Terms of Service</p></Link>
-                        <p>DMCA</p>
+                    <p>Help</p>
+                    <Link to={"/terms"}><p>Terms of Service</p></Link>
                     </div>
                     <div className="col footer-column">
-                        <p>Blog</p>
+                   
                         <Link to={"/privacy"}><p>Privacy</p></Link>
-                        <p>USC 2257</p>
+                        <Link to={`/cookies${location?.search}`}><p>Cookie Notice</p></Link>
                     </div>
                 </div>
             </div>

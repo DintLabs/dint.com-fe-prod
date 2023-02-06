@@ -445,7 +445,7 @@ const Register = () => {
                         alt=""
                         style={{ height: "20px" }}
                       />{" "}
-                      Signup with Google
+                      Sign Up with Google
                     </button>
                   </div>
                 </div>

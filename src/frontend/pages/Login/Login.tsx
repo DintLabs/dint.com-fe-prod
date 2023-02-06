@@ -414,7 +414,7 @@ const Login = () => {
                   onClick={googleSignin}
                   className="socialbtn "
                 >
-                <img src={require("../../assets/img/web3/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px'}} />  Login with Google
+                <img src={require("../../assets/img/web3/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px'}} />  Log In with Google
                 </button>
               </div>
               </div>
