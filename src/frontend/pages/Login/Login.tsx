@@ -35,6 +35,7 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordType , setPasswordType] = useState("password");
 
   const auth = getAuth();
   const navigate = useNavigate();
@@ -311,6 +312,10 @@ const Login = () => {
     } else navigate("/lounge");
   };
 
+  const togglePassword= () =>{
+    {passwordType =='password' ? setPasswordType('text') : setPasswordType('password')}
+  }
+
   return (
     <>
       {/* <MainNavbar /> */}
@@ -319,7 +324,7 @@ const Login = () => {
         <meta name="description" content="Login to Dint" />
       </Helmet>
       {/* <NavbarHome /> */}
-      <div className="main-container">
+      <div className="main-container-login">
         <div className="left-container">
           <img  className="bg-left-img" src={require("../../assets/img/web3/bg_login.png")} alt="responsive image"/>
           
@@ -338,7 +343,7 @@ const Login = () => {
             // style={{ maxWidth: "600px", margin: "0 auto" , width:"100%" }}
           >
               <div className="container " style={{paddingTop: '5vh' , minHeight:"100vh"}}>
-          <img className="right-logo"  src={require("../../assets/img/web3/image 1.png")} alt="logo" />
+          <img className="right-logo"  style={{margin: "0px 0px 15% 1.5%"}} src={require("../../assets/img/web3/image 1.png")} alt="logo" />
               <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
 
               <div className="form-control">
@@ -362,11 +367,13 @@ const Login = () => {
                 </label>
                 <input
                     id="password"
-                    type="password"
+                    type={passwordType}
                     placeholder="Password"
                     value={password}
                     onChange={(e: any) => setPassword(e.target.value)}
                   />
+                  {passwordType == 'text' ?  <i className="bi bi-eye" style={{top:"60%"}} onClick={togglePassword}></i> : <i style={{top:"60%"}} onClick={togglePassword} className="bi bi-eye-slash"></i> }
+                  
               </div>
               <div className="d-flex justify-content-between px-4">
                   <div className="form-check remember-me">

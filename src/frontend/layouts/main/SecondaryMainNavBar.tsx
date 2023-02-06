@@ -1,18 +1,34 @@
 // import { createStyles, makeStyles } from '@material-ui/styles';
 import { Box } from "@mui/material";
 import { isIPhone } from "frontend/utils";
+import { useContext } from "react";
 import { Container } from "react-bootstrap";
 import { Outlet, useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import MainFooter from "./MainFooter";
 import MainNavbar from "./MainNavBar";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import SecondaryFooter from "./SecondaryFooter";
 
 export default function SecondaryMainNavBar() {
   const { pathname } = useLocation();
   const { toggle } = useContext(ThemeContext);
 
-  const shouldHideFooter = !pathname.includes("/lounge");
+  // If the curent route is either  '/lounge', or  '/terms', or '/cookies', hide the main footer. 
+  const getConditionsToNotShowMainFooter = () => {
+    if (
+      pathname.includes("/lounge") ||
+      pathname.includes("/terms") ||
+      pathname.includes("/cookies")
+    )
+      return false;
+
+    return true;
+  };
+
+  // If the curent route is either '/terms', or '/cookies'. Show secondary footer instead of main footer.
+  const shouldShowSecondaryFooter =
+    pathname.includes("/terms") || pathname.includes("/cookies");
+
   return (
     <div
       style={{
@@ -35,7 +51,8 @@ export default function SecondaryMainNavBar() {
           <Container>
             <Outlet />
           </Container>
-          {shouldHideFooter && <MainFooter />}
+          {getConditionsToNotShowMainFooter() && <MainFooter />}
+          {shouldShowSecondaryFooter && <SecondaryFooter />}
         </Box>
       </div>
     </div>

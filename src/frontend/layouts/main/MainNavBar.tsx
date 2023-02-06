@@ -159,16 +159,16 @@ const MainNavBar = () => {
       <header
         id="header"
         className="fixed-top d-flex align-items-center "
-        style={{ height: "80px" }}
+        style={{ height: "60px" }}
       >
         <div
           className="container-fluid container-xl d-flex align-items-center justify-content-between"
-          style={{ gap: 10, height: "100%" }}
+          style={{ gap: 10, height: "100%", marginBottom: '22px' }}
         >
-          <div className="logo" style={{ flex: 1, height: "100%" }}>
+          <div className="logo" style={{ flex: 1, height: "80%" }}>
             <Link to={isAuthenticated ? "/lounge" : "/"}>
               <h1>
-                <img src={mainlogo} alt="logo" id="logo_homepage" />{" "}
+                <img src={mainlogo} alt="logo" id="logo_homepage" style={{maxHeight: '30px'}} />{" "}
               </h1>
             </Link>
             {isEventsPage && (

@@ -21,6 +21,7 @@ a{
     height: 20px;
     width: 20px;
     margin: 5px;
+    cursor: pointer;
 }
 
 .right-footer{
@@ -94,3 +95,10 @@ a{
     }
 }
 
+a.header__link {
+    color: #005DC5 !important;
+}
+
+li.terms_page_listitem::marker {
+    color: #005DC5 !important;
+}

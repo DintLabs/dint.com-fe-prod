@@ -93,10 +93,10 @@
 }
 
 .login_divs .form-control i {
-  visibility: hidden;
   position: absolute;
-  top: 40px;
-  right: 10px;
+  top: 54%;
+  right: 2%;
+  width: 7%;
 }
 
 .login_divs .form-control.success i.fa-check-circle {
@@ -157,7 +157,13 @@
   color: white;
 }
 
-.main-container{
+.main-container-login{
+  position: relative;
+  height: 700px;
+  min-height: 100vh;
+}
+
+.main-container-signup{
   position: relative;
   height: 1000px;
   min-height: 100vh;
@@ -195,7 +201,7 @@
   width: 100%; 
   margin: 0 auto;
   /* margin-top: 200px; */
-  height: 50%;
+  height: 65%;
   /* left: 5%; */
   /* top: 20%; */
   /* backdrop-filter: blur(10px); */
@@ -272,6 +278,13 @@
 .text-blue{
   color: #005DC5;
 }
+
+@media (min-width:480px)and (max-width : 768px){
+  .login_divs .form-control i {
+    right: 10%;
+  }
+}
+
 @media only screen and (max-width: 480px){
   .left-container{
     display: none;
@@ -293,13 +306,22 @@
     font-size: 16px;
   }
   .horizontal{
-    margin: 15px 20px;
+    margin: 15px 0px;
   }
   .login_divs {
     margin : 40px auto !important;
   }
   .signup-div{
     margin-top: 10%;
+  }
+  .login_divs .form-control i {
+    right: 5%;
+  }
+  .main-container-login{
+    min-height: 85vh;
+  }
+  .main-container-signup{
+    height: 930px;
   }
 }
 

@@ -37,6 +37,8 @@ const Register = () => {
   const [confirmEmail, setConfirmEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordType , setPasswordType] = useState("password");
+
 
   const [error_msg, setSignErr] = useState("");
 
@@ -292,13 +294,17 @@ const Register = () => {
     }
   };
 
+  const togglePassword= () =>{
+    {passwordType =='password' ? setPasswordType('text') : setPasswordType('password')}
+  }
+
   return (
     <>
       <Helmet>
         <title>Sign Up</title>
         <meta name="description" content="Sign Up to Dint" />
       </Helmet>
-      <div className="main-container">
+      <div className="main-container-signup">
         <div className="left-container">
           <img
             className="bg-left-img"
@@ -376,11 +382,13 @@ const Register = () => {
                 <label htmlFor="username">
                   Password
                 <input
-                    type="password"
+                    type={passwordType}
                     placeholder="Enter Your Password"
                     value={password}
                     onChange={(e: any) => setPassword(e.target.value)}
                   />
+                {passwordType == 'text' ?  <i className="bi bi-eye" onClick={togglePassword}></i> : <i onClick={togglePassword} className="bi bi-eye-slash"></i> }
+
                 </label>
               </div>
               {/* <div className="form-control">

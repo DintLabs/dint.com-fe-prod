@@ -1,57 +1,55 @@
-import VideoCardsMobileView from 'frontend/components/view-page/VideoCardsMobileView';
-import AuthGuard from 'frontend/guards/AuthGuard';
-import GuestGuard from 'frontend/guards/GuestGuard';
-import LoungeLayout from 'frontend/layouts/lounge';
-import MainLayout from 'frontend/layouts/main';
-import SecondaryMainNavBar from 'frontend/layouts/main/SecondaryMainNavBar';
-import MarketPlaceLayout from 'frontend/layouts/marketPlace';
-import Bookmarks from 'frontend/pages/Bookmarks';
-import UserList from 'frontend/pages/UserList';
-import FollowingList from 'frontend/pages/UserList/FollowingList';
-import CreatePage from 'frontend/pages/Create-Page/CreatePage';
-import Events from 'frontend/pages/Events/Events';
-import Followers from 'frontend/pages/Followers';
-import Home from 'frontend/pages/Home/Home';
-import BankContainer from 'frontend/pages/Your-Bank';
-import PaymentCard from 'frontend/pages/Your-Bank/BankingSteps/PaymentCard';
+import VideoCardsMobileView from "frontend/components/view-page/VideoCardsMobileView";
+import AuthGuard from "frontend/guards/AuthGuard";
+import GuestGuard from "frontend/guards/GuestGuard";
+import LoungeLayout from "frontend/layouts/lounge";
+import MainLayout from "frontend/layouts/main";
+import SecondaryMainNavBar from "frontend/layouts/main/SecondaryMainNavBar";
+import MarketPlaceLayout from "frontend/layouts/marketPlace";
+import Bookmarks from "frontend/pages/Bookmarks";
+import CreatePage from "frontend/pages/Create-Page/CreatePage";
+import Events from "frontend/pages/Events/Events";
+import Followers from "frontend/pages/Followers";
+import Home from "frontend/pages/Home/Home";
+import UserList from "frontend/pages/UserList";
+import FollowingList from "frontend/pages/UserList/FollowingList";
+import BankContainer from "frontend/pages/Your-Bank";
+import PaymentCard from "frontend/pages/Your-Bank/BankingSteps/PaymentCard";
 // import Home from 'frontend/pages/Home/Home';
-import Lists from 'frontend/pages/Lists';
-import Login from 'frontend/pages/Login/Login';
-import NewHome from 'frontend/pages/Lounge/Lounge';
-import MarketPlace from 'frontend/pages/MarketPlace/MarketPlace';
-import MarketPlaceCreate from 'frontend/pages/MarketPlace/MarketPlaceCreate/MarketPlaceCreate';
-import MyPurchases from 'frontend/pages/MarketPlace/MyPurchases/MyPurchases';
-import MyEvents from 'frontend/pages/my-events';
-import NotFound from 'frontend/pages/NotFound';
-import AddCard from 'frontend/pages/payment/AddCard';
-import CookieNotice from 'frontend/pages/Privacy/CookieNotice';
-import PrivacyPolicy from 'frontend/pages/Privacy/PrivacyPolicy';
-import TermsOfServices from 'frontend/pages/Privacy/TermsOfServices';
-import Profile from 'frontend/pages/Profile/Profile';
-import BuyToken from 'frontend/pages/BuyToken';
-import PublicEvents from 'frontend/pages/PublicEvents/PublicEvents';
-import Referrals from 'frontend/pages/Referrals';
-import Register from 'frontend/pages/Register/Register';
-import Search from 'frontend/pages/search';
-import Settings from 'frontend/pages/Settings';
-import TicketCreate from 'frontend/pages/TicketCreate/TicketCreate';
-import ViewPage from 'frontend/pages/View-Page/ViewPage';
-import { fetchUserData } from 'frontend/redux/slices/user';
-import { getConfineUserList } from 'frontend/redux/slices/user';
-import { AppDispatch } from 'frontend/redux/store';
-import ThemeConfig from 'frontend/theme';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate, useRoutes } from 'react-router-dom';
+import _axios from "frontend/api/axios";
+import SecondaryFooter from "frontend/layouts/main/SecondaryFooter";
+import BlockedList from "frontend/pages/BlockedList.tsx";
+import AddBlockedUsers from "frontend/pages/BlockedList.tsx/AddBlockedUsers";
+import CloseFriend from "frontend/pages/CloseFriend";
+import AddCloseFriend from "frontend/pages/CloseFriend/AddCloseFriend";
+import Lists from "frontend/pages/Lists";
+import Login from "frontend/pages/Login/Login";
+import NewHome from "frontend/pages/Lounge/Lounge";
+import MarketPlace from "frontend/pages/MarketPlace/MarketPlace";
+import MarketPlaceCreate from "frontend/pages/MarketPlace/MarketPlaceCreate/MarketPlaceCreate";
+import MyPurchases from "frontend/pages/MarketPlace/MyPurchases/MyPurchases";
+import NotFound from "frontend/pages/NotFound";
+import CookieNotice from "frontend/pages/Privacy/CookieNotice";
+import PrivacyPolicy from "frontend/pages/Privacy/PrivacyPolicy";
+import TermsOfServices from "frontend/pages/Privacy/TermsOfServices";
+import Profile from "frontend/pages/Profile/Profile";
+import PublicEvents from "frontend/pages/PublicEvents/PublicEvents";
+import Referrals from "frontend/pages/Referrals";
+import Register from "frontend/pages/Register/Register";
+import RestrictedList from "frontend/pages/RestrictedList";
+import AddUsers from "frontend/pages/RestrictedList/AddUsers";
+import Settings from "frontend/pages/Settings";
+import TicketCreate from "frontend/pages/TicketCreate/TicketCreate";
+import ViewPage from "frontend/pages/View-Page/ViewPage";
+import MyEvents from "frontend/pages/my-events";
+import AddCard from "frontend/pages/payment/AddCard";
+import Search from "frontend/pages/search";
+import { fetchUserData, getConfineUserList } from "frontend/redux/slices/user";
+import { AppDispatch } from "frontend/redux/store";
+import ThemeConfig from "frontend/theme";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useRoutes } from "react-router-dom";
 import Following from "../pages/Following/Following";
-import RestrictedList from 'frontend/pages/RestrictedList';
-import AddUsers from 'frontend/pages/RestrictedList/AddUsers';
-import BlockedList from 'frontend/pages/BlockedList.tsx';
-import AddBlockedUsers from 'frontend/pages/BlockedList.tsx/AddBlockedUsers';
-import CloseFriend from 'frontend/pages/CloseFriend';
-import AddCloseFriend from 'frontend/pages/CloseFriend/AddCloseFriend';
-import _axios from 'frontend/api/axios';
-import SecondaryFooter from 'frontend/layouts/main/SecondaryFooter';
 
 // ----------------------------------------------------------------------
 
@@ -88,7 +86,7 @@ export default function Router() {
 
   return useRoutes([
     {
-      path: 'auth',
+      path: "auth",
       element: <MainLayout />,
       children: [
         // {
@@ -107,72 +105,77 @@ export default function Router() {
         //     </GuestGuard>
         //   )
         // }
-      ]
+      ],
     },
     {
-      path: 'auth/login',
-      element : (
+      path: "auth/login",
+      element: (
         <GuestGuard>
           <Login />
-          <SecondaryFooter/>
+          <SecondaryFooter />
         </GuestGuard>
-      )
+      ),
     },
     {
-      path: 'auth/signup',
-      element : (
+      path: "auth/signup",
+      element: (
         <GuestGuard>
           <Register />
-          <SecondaryFooter/>
+          <SecondaryFooter />
         </GuestGuard>
-      )
-    },
-    { path: '/', element:  (
-            <GuestGuard>
-              <Login />
-              <SecondaryFooter/>
-            </GuestGuard>
-          ) 
+      ),
     },
     {
-      path: '/',
+      path: "/",
+      element: (
+        <GuestGuard>
+          <Login />
+          <SecondaryFooter />
+        </GuestGuard>
+      ),
+    },
+    {
+      path: "/",
       element: <MainLayout />,
       children: [
-        { path: '/home', element: <Home /> },
-        // { path: '/', element:  (
+        { path: "/home", element: <Home /> },
+        // {
+        //   path: "/",
+        //   element: (
         //     <GuestGuard>
         //       <Login />
-        //       </GuestGuard>
-        //   ) },
+        //     </GuestGuard>
+        //   ),
+        // },
         {
-          path: '/events',
+          path: "/events",
           element: (
             <AuthGuard>
               <Events />
             </AuthGuard>
-          )
+          ),
         },
-        { path: '/public/events', element: <PublicEvents /> },
+        { path: "/public/events", element: <PublicEvents /> },
         {
-          path: '/ticketcreate',
+          path: "/ticketcreate",
           element: (
             <AuthGuard>
               <TicketCreate />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/profile',
+          path: "/profile",
           element: (
             <AuthGuard>
               <Profile />
             </AuthGuard>
-          )
-        }
-      ]
+          ),
+        },
+      ],
     },
     {
-      path: '/',
+      path: "/",
       element: (
         <ThemeConfig>
           <SecondaryMainNavBar />
@@ -180,159 +183,159 @@ export default function Router() {
       ),
       children: [
         {
-          path: 'ig',
-          element: <VideoCardsMobileView />
+          path: "ig",
+          element: <VideoCardsMobileView />,
         },
         {
-          path: '/404',
-          element: <NotFound />
+          path: "/404",
+          element: <NotFound />,
         },
         {
-          path: '/buy-dint-token',
+          path: "/buy-dint-token",
           element: (
             <AuthGuard>
               <NewHome />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/dint-wallet',
+          path: "/dint-wallet",
           element: (
             <AuthGuard>
               <NewHome />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/lounge',
+          path: "/lounge",
           element: (
             <AuthGuard>
               <NewHome />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/lounge/events',
+          path: "/lounge/events",
           element: (
             <AuthGuard>
               <MyEvents />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/lounge/following',
+          path: "/lounge/following",
           element: (
             <AuthGuard>
               <Following />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/privacy',
-          element: <PrivacyPolicy />
+          path: "/privacy",
+          element: <PrivacyPolicy />,
         },
         {
-          path: '/cookies',
-          element: <CookieNotice />
+          path: "/cookies",
+          element: <CookieNotice />,
         },
         {
-          path: '/terms',
-          element: <TermsOfServices />
+          path: "/terms",
+          element: <TermsOfServices />,
         },
         {
-          path: '/lounge/:page',
+          path: "/lounge/:page",
           element: (
             <AuthGuard>
               <NewHome />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/lounge/:page/:username',
+          path: "/lounge/:page/:username",
           element: (
             <AuthGuard>
               <NewHome />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/lounge/messages/user/:uid',
+          path: "/lounge/messages/user/:uid",
           element: (
             <AuthGuard>
               <NewHome />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/lounge/messages/newMessage',
+          path: "/lounge/messages/newMessage",
           element: (
             <AuthGuard>
               <NewHome />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/page/creation',
+          path: "/page/creation",
           element: (
             <AuthGuard>
               <CreatePage />
             </AuthGuard>
-          )
+          ),
         },
 
         {
-          path: ':username/subscribers',
+          path: ":username/subscribers",
           element: (
             <AuthGuard>
               <ViewPage />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: ':username/settings',
+          path: ":username/settings",
           element: (
             <AuthGuard>
               <ViewPage />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/en/fiat/withdraw/:currency',
+          path: "/en/fiat/withdraw/:currency",
           element: (
             <AuthGuard>
               <NewHome />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/processWithdraw',
+          path: "/processWithdraw",
           element: (
             <AuthGuard>
               <NewHome />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/:username',
-          element: <NewHome />
+          path: "/:username",
+          element: <NewHome />,
         },
         {
-          path: '/*',
-          element: <NotFound />
-        }
-      ]
+          path: "/*",
+          element: <NotFound />,
+        },
+      ],
     },
     {
-      path: '/marketplace',
+      path: "/marketplace",
       element: <MarketPlaceLayout />,
       children: [
-        { path: '/marketplace/', element: <MarketPlace /> },
-        { path: '/marketplace/create', element: <MarketPlaceCreate /> },
-        { path: '/marketplace/my-purchases', element: <MyPurchases /> }
-      ]
+        { path: "/marketplace/", element: <MarketPlace /> },
+        { path: "/marketplace/create", element: <MarketPlaceCreate /> },
+        { path: "/marketplace/my-purchases", element: <MyPurchases /> },
+      ],
     },
     {
-      path: '/',
+      path: "/",
       element: (
         <ThemeConfig>
           <LoungeLayout />
@@ -340,137 +343,137 @@ export default function Router() {
       ),
       children: [
         {
-          path: '/followers/*',
+          path: "/followers/*",
           element: (
             <AuthGuard>
               <Followers />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/payment/add',
+          path: "/payment/add",
           element: (
             <AuthGuard>
               <AddCard />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/settings/*',
+          path: "/settings/*",
           element: (
             <AuthGuard>
               <Settings />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/cards',
+          path: "/cards",
           element: (
             <AuthGuard>
               <PaymentCard />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/referrals/*',
+          path: "/referrals/*",
           element: (
             <AuthGuard>
               <Referrals />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/your-bank',
+          path: "/your-bank",
           element: (
             <AuthGuard>
               <BankContainer />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/bookmarks/*',
+          path: "/bookmarks/*",
           element: (
             <AuthGuard>
               <Bookmarks />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/close-friends/*',
+          path: "/close-friends/*",
           element: (
             <AuthGuard>
               <CloseFriend />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/add-close-friends/*',
+          path: "/add-close-friends/*",
           element: (
             <AuthGuard>
               <AddCloseFriend />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/userlist/*',
+          path: "/userlist/*",
           element: (
             <AuthGuard>
               <UserList />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/restrictedlist/*',
+          path: "/restrictedlist/*",
           element: (
             <AuthGuard>
               <RestrictedList />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/blockedlist/*',
+          path: "/blockedlist/*",
           element: (
             <AuthGuard>
               <BlockedList />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/add-restricted-users/*',
+          path: "/add-restricted-users/*",
           element: (
             <AuthGuard>
               <AddUsers />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/add-blocked-users/*',
+          path: "/add-blocked-users/*",
           element: (
             <AuthGuard>
               <AddBlockedUsers />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/following-list/*',
+          path: "/following-list/*",
           element: (
             <AuthGuard>
               <FollowingList />
             </AuthGuard>
-          )
+          ),
         },
         {
-          path: '/lists/*',
+          path: "/lists/*",
           element: (
             <AuthGuard>
               <Lists />
             </AuthGuard>
-          )
-        }
-      ]
+          ),
+        },
+      ],
     },
     {
-      path: '/',
+      path: "/",
       element: (
         <ThemeConfig>
           <LoungeLayout isSearchPage={true} />
@@ -478,14 +481,14 @@ export default function Router() {
       ),
       children: [
         {
-          path: '/search',
+          path: "/search",
           element: (
             <AuthGuard>
               <Search />
             </AuthGuard>
-          )
-        }
-      ]
-    }
+          ),
+        },
+      ],
+    },
   ]);
 }

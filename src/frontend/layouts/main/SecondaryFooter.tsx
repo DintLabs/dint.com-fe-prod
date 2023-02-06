@@ -15,8 +15,8 @@ const SecondaryFooter = () => {
                 <p>@2023 Dint</p>
               
                 <div className="d-flex">
-                    <img className="social-logos" src={require("../../assets/img/web3/twitter.png")}/>
-                    <img className="social-logos" src={require("../../assets/img/web3/instagramlogo.png")}/>
+                    <a target="_blank" href="https://twitter.com/dint"><img className="social-logos" src={require("../../assets/img/web3/twitter.png")}/></a>
+                    <a target="_blank" href="http://instagram.com/dint"><img className="social-logos" src={require("../../assets/img/web3/instagramlogo.png")}/></a>
                 </div>
             </div>
             {/* <div className="col-lg-6 col-md-6 col-xs-12 col-sm-12 right-footer"> */}
