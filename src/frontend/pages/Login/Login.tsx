@@ -343,13 +343,13 @@ const Login = () => {
 
               <div className="form-control">
                 <label htmlFor="email">
-                  Email/User name
+                  Email
                  
                 </label>
                 <input
                     id="email"
                     type="email"
-                    placeholder="Enter Email Or User name"
+                    placeholder="Email"
                     value={email}
                     onChange={(e: any) => setEmail(e.target.value)}
                   />
@@ -363,7 +363,7 @@ const Login = () => {
                 <input
                     id="password"
                     type="password"
-                    placeholder="Enter Correct Password"
+                    placeholder="Password"
                     value={password}
                     onChange={(e: any) => setPassword(e.target.value)}
                   />
@@ -387,20 +387,26 @@ const Login = () => {
               <button id="signup_btn" type="button" onClick={loginClicked}>
                 Log In
               </button>
-
-              <p style={{color:'#353535'}} id="signup_line">
-                Don't Have An Account?{" "}
-                <Link style={{textDecoration : 'none'}} to={`/auth/signup${location?.search}`}>
-                  <span id="signup_here"> Sign Up</span>
-                </Link>
-              </p>
-
-              <div className="d-flex justify-content-between align-items-center horizontal">
+              <button
+                  type="button"
+                  onClick={googleSignin}
+                  className="socialbtn "
+                >
+                <img src={require("../../assets/img/web3/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px'}} />  Log In with Google
+                </button>
+                <div className="d-flex justify-content-between align-items-center horizontal">
                 <div className="line"></div>
                 <p className="m-3">Or</p>
                 <div className="line"></div>
               </div>
 
+              <p style={{color:'#353535'}} id="signup_line">
+                <Link style={{textDecoration : 'none'}} to={`/auth/signup${location?.search}`}>
+                  <span id="signup_here"> Sign Up for Dint</span>
+                </Link>
+              </p>
+
+          
               <div
                 style={{
                   display: "flex",
@@ -409,13 +415,7 @@ const Login = () => {
                   alignItems: "center",
                 }}
               >
-                <button
-                  type="button"
-                  onClick={googleSignin}
-                  className="socialbtn "
-                >
-                <img src={require("../../assets/img/web3/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px'}} />  Log In with Google
-                </button>
+               
               </div>
               </div>
             </div>

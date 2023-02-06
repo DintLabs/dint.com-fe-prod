@@ -405,36 +405,8 @@ const Register = () => {
                 <button id="signup_btn" type="button" onClick={signup_sub}>
                   Sign Up
                 </button>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: '20px'
-                  }}
-                >
-                  <p id="login_line">
-                    Already have an account?{" "}
-                    <Link to={`/auth/login${location?.search}`}>
-                      <span id="signup_here"> Log in</span>
-                    </Link>
-                  </p>
 
-                <div className="d-flex justify-content-between align-items-center horizontal">
-                  <div className="line"></div>
-                  <p className="m-3">Or</p>
-                  <div className="line"></div>
-                </div>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <button
+                <button
                       type="button"
                       onClick={googleSignUp}
                       className="socialbtn"
@@ -445,8 +417,41 @@ const Register = () => {
                         alt=""
                         style={{ height: "20px" }}
                       />{" "}
-                      Sign Up with Google
+                      Log In with Google
                     </button>
+                    
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: '20px'
+                  }}
+                >
+                
+
+                <div className="d-flex justify-content-between align-items-center horizontal">
+                  <div className="line"></div>
+                  <p className="m-3">Or</p>
+                  <div className="line"></div>
+                </div>
+
+                <p id="login_line">
+                  
+                    <Link to={`/auth/login${location?.search}`}>
+                      <span id="signup_here"> Log In </span>
+                    </Link>
+                  </p>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                 
                   </div>
                 </div>
               </div>
