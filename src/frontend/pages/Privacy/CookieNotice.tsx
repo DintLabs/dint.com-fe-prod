@@ -6,8 +6,30 @@ const CookieNotice = () => {
   const { toggle } = useContext(ThemeContext);
 
   return (
-    <div className="container mt-5 pt-5">
-      <h1 className="text-center h1 mb-5" style={{color: toggle ? 'white' : '#161c24'}}>COOKIE NOTICE</h1>
+    <>
+    <div
+      className="container"
+      style={{
+        position: "sticky",
+        top: "60px",
+        left: 0,
+        zIndex: 2,
+        width: "100vw",
+      }}
+    >
+      <h1
+        // className="text-center mb-5"
+        style={{
+          color: toggle ? "white" : "#161c24",
+          padding: "20px 0",
+          backgroundColor: "white",
+        }}
+      >
+        COOKIE NOTICE
+      </h1>
+    </div>
+    <div className="container pt-5">
+      {/* <h1 className="text-center h1 mb-5" style={{color: toggle ? 'white' : '#161c24'}}>COOKIE NOTICE</h1> */}
       <p style={{color: toggle ? 'white' : '#161c24'}}>
 <b>Effective: Feb 2023</b> 
  <br />
@@ -53,18 +75,9 @@ Disabling or deleting these cookies may make using the Services less convenient 
 You can also usually disable or delete cookies placed and used by browser add-ons, such as Adobe Flash cookies, by changing the add-on settings or visiting the provider's website. Information on how to manage Adobe Flash cookies can be found on this page: https://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager.html
 <br /><br />
 Please note that disabling Adobe Flash cookies or similar technologies may limit your access to certain features and services, such as consistent volume settings for videos, which enhance your online experience.
-
-
-
-
-
-
-
-
-
-
 </p>
     </div>
+    </>
   );
 };
 

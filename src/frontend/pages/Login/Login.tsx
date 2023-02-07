@@ -27,6 +27,7 @@ import { createWallet } from "frontend/redux/actions/createWallet";
 import { dispatch, RootState } from "frontend/redux/store";
 
 import useUser from "frontend/hooks/useUser";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const userHook = useUser();
@@ -39,6 +40,7 @@ const Login = () => {
 
   const auth = getAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();  
 
   getRedirectResult(auth)
     .then(async (result) => {
@@ -73,8 +75,15 @@ const Login = () => {
             // localStorage.setItem('userData', JSON.stringify(data.data));
             userHook.setCurrentUser(data.data);
             // dispatch(createWallet());
-            toast.success("User Login Successful!");
-            onSuccessLogin();
+            
+            if(data.message === "User don't have referral code"){
+              navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
+            }
+            else{
+              toast.success("User Login Successful!");
+              onSuccessLogin();
+            }
+            // onSuccessLogin();
           } else {
             await axios
               .post(
@@ -87,8 +96,14 @@ const Login = () => {
                   // localStorage.setItem('userData', JSON.stringify(data.data));
                   userHook.setCurrentUser(data.data);
                   // dispatch(createWallet());
-                  toast.success("User Login Successful!");
-                  onSuccessLogin();
+                  if(data.message === "User don't have referral code"){
+                    navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
+                  }
+                  else{
+                    toast.success("User Login Successful!");
+                    onSuccessLogin();
+                  }
+                  // onSuccessLogin();
                 } else {
                   toast.error("User Not Found");
                 }
@@ -122,7 +137,13 @@ const Login = () => {
             // localStorage.setItem('userData', JSON.stringify(data.data));
             userHook.setCurrentUser(data.data);
             // dispatch(createWallet());
-            onSuccessLogin();
+            if(data.message === "User don't have referral code"){
+              navigate('/auth/refer' , {state : {for : 'login' , email :data.data.email}})
+            }
+            else{
+              toast.success("User Login Successfully")
+              onSuccessLogin();
+            }
           }
         })
         .catch((err: any) => {
@@ -203,8 +224,14 @@ const Login = () => {
               // localStorage.setItem('userData', JSON.stringify(data.data));
               userHook.setCurrentUser(data.data);
               // dispatch(createWallet());
-              toast.success("User Login Successful!");
-              onSuccessLogin();
+              if(data.message === "User don't have referral code"){
+                navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
+              }
+              else{
+                toast.success("User Login Successful!");
+                onSuccessLogin();
+              }
+              // onSuccessLogin();
             } else {
               await axios
                 .post(
@@ -217,8 +244,15 @@ const Login = () => {
                     // localStorage.setItem('userData', JSON.stringify(data.data));
                     userHook.setCurrentUser(data.data);
 
-                    toast.success("User Login Successful!");
-                    onSuccessLogin();
+                    
+                    if(data.message === "User don't have referral code"){
+                      navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
+                    }
+                    else{
+                      toast.success("User Login Successful!");
+                      onSuccessLogin();
+                    }
+                    // onSuccessLogin();
                   }
                 });
             }
@@ -389,7 +423,7 @@ const Login = () => {
                   </button>
                 </div>
 
-              <p id="error_signup">{error_msg_login}</p>
+              <p id="error_signup" style={{marginLeft :"3%"}}>{error_msg_login}</p>
               <div className="signup-div">
               <button id="signup_btn" type="button" onClick={loginClicked}>
                 Log In
@@ -408,9 +442,10 @@ const Login = () => {
               </div>
 
               <p style={{color:'#353535'}} id="signup_line">
-                <Link style={{textDecoration : 'none'}} to={`/auth/signup${location?.search}`}>
-                  <span id="signup_here"> Sign Up for Dint</span>
-                </Link>
+                {/* <Link style={{textDecoration : 'none'}} to={`/auth/signup${location?.search}`}> */}
+                {/* <Link style={{textDecoration : 'none'}} to={`/auth/refer${location?.search}`}> */}
+                  <span onClick={()=>navigate(`/auth/refer${location?.search}` , {state : {for :"signup"}})} id="signup_here"> Sign Up for Dint</span>
+                {/* </Link> */}
               </p>
 
           

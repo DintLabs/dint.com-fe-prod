@@ -50,6 +50,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useRoutes } from "react-router-dom";
 import Following from "../pages/Following/Following";
+import RegistrationRefer from "frontend/pages/RegistrationRefer/RegistrationRefer";
 
 // ----------------------------------------------------------------------
 
@@ -110,28 +111,39 @@ export default function Router() {
     {
       path: "auth/login",
       element: (
-        <GuestGuard>
+        <>
           <Login />
           <SecondaryFooter />
-        </GuestGuard>
+        </>
       ),
+    },
+    {
+      path : "auth/refer",
+      element : (
+        <>
+        <RegistrationRefer />
+        <SecondaryFooter />
+        </>
+      )
     },
     {
       path: "auth/signup",
       element: (
-        <GuestGuard>
+        // <GuestGuard>
+        <>
           <Register />
           <SecondaryFooter />
-        </GuestGuard>
+        </>
+        // </GuestGuard>
       ),
     },
     {
       path: "/",
       element: (
-        <GuestGuard>
+        <>
           <Login />
           <SecondaryFooter />
-        </GuestGuard>
+        </>
       ),
     },
     {

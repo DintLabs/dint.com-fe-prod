@@ -18,7 +18,8 @@ export default function SecondaryMainNavBar() {
     if (
       pathname.includes("/lounge") ||
       pathname.includes("/terms") ||
-      pathname.includes("/cookies")
+      pathname.includes("/cookies") ||
+      pathname.includes("/privacy")
     )
       return false;
 
@@ -27,7 +28,7 @@ export default function SecondaryMainNavBar() {
 
   // If the curent route is either '/terms', or '/cookies'. Show secondary footer instead of main footer.
   const shouldShowSecondaryFooter =
-    pathname.includes("/terms") || pathname.includes("/cookies");
+    pathname.includes("/terms") || pathname.includes("/cookies") || pathname.includes("/privacy");
 
   return (
     <div

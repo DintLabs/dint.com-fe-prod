@@ -1,7 +1,7 @@
 import useAuth from "frontend/hooks/useAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../../material/signup.css";
 import { generateFromEmail } from "frontend/utils";
 import { authInstance } from "frontend/contexts/FirebaseInstance";
@@ -41,10 +41,20 @@ const Register = () => {
 
 
   const [error_msg, setSignErr] = useState("");
+  let referCode:string;
+  const { state } =  useLocation();
+  useEffect(()=>{
+    if(state && state.referCode){
+      referCode = state.referCode 
+    }else{
+      navigate('/auth/refer' , {state :{for:"signup"}})
+    }
+  },[])
 
   // Initialize Firebase
 
   const auth = getAuth();
+  
 
   const signup_sub = async () => {
     if (!name) {
@@ -81,6 +91,7 @@ const Register = () => {
 
           const userData2 = {
             ...user,
+            referrred_by : referCode ,
             fire_base_auth_key: user?.uid,
             role: "simple",
             biography: "no biography yet",

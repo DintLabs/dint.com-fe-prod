@@ -28,12 +28,12 @@ const SecondaryFooter = () => {
                         <Link to={`/cookies${location?.search}`}>
                         <p>Cookie Notice</p>
                         </Link>
-                        <p>Terms & Conditions </p>
-                        <p>About</p>
+                        
                     </div>
                     <div className="col-xs-6">
-                      
-                       
+                        <p>Terms & Conditions </p>
+                        <p>About</p>
+                        <p></p>
                     </div>
                 </div>
                 <div className="row footer-rows-desktop ">

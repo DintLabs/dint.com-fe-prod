@@ -6,8 +6,31 @@ const PrivacyPolicy = () => {
   const { toggle } = useContext(ThemeContext);
 
   return (
-    <div className="container mt-5 pt-5">
-      <h1 className="text-center h1 mb-5" style={{color: toggle ? 'white' : '#161c24'}}>PRIVACY POLICY</h1>
+    <>
+    <div
+      className="container"
+      style={{
+        position: "sticky",
+        top: "60px",
+        left: 0,
+        zIndex: 2,
+        width: "100vw",
+      }}
+    >
+      <h1
+        // className="text-center mb-5"
+        style={{
+          color: toggle ? "white" : "#161c24",
+          padding: "20px 0",
+          backgroundColor: "white",
+        }}
+      >
+        PRIVACY POLICY
+      </h1>
+    </div>
+    
+    <div className="container pt-5">
+      {/* <h1 className="text-center h1 mb-5" style={{color: toggle ? 'white' : '#161c24'}}>PRIVACY POLICY</h1> */}
       <p style={{color: toggle ? 'white' : '#161c24'}}>
         Last Modified: Feb 2023
         <br />
@@ -216,6 +239,7 @@ If you have any questions or concerns regarding this Privacy Notice and our hand
 
       </p>
     </div>
+    </>
   );
 };
 

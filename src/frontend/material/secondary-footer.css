@@ -56,7 +56,7 @@ a{
    }
    .footer-rows-mobile .col-xs-6{
     width: 50%;
-    margin: auto;
+    /* margin: auto; */
    }
    .footer-rows-desktop{
     display: none  !important;
@@ -79,7 +79,7 @@ a{
        }
        .footer-rows-mobile .col-xs-6{
         width: 50%;
-        margin: auto;
+        /* margin: auto; */
        }
        .footer-rows-desktop{
         display: none  !important;

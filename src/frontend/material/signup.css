@@ -165,8 +165,14 @@
 
 .main-container-signup{
   position: relative;
-  height: 1000px;
+  height: 900px;
   min-height: 100vh;
+}
+
+.main-container-refer{
+  position: relative;
+  height: 400px;
+  min-height: 81vh;
 }
 
 .left-container {
@@ -236,6 +242,27 @@
   display: flex;
   justify-content: center;
 }
+.right-container-refer{
+    align-items :center ;
+    height:100% ;
+}
+
+.right-container-refer .login_divs{
+  margin:10% auto 0% auto ;
+  justify-content:center;
+  min-height: 45vh;
+  display: flex;
+  /* align-items: center; */
+  max-width: 600px; 
+  margin: "0 auto" ; 
+  width:100% ; 
+  font-family: 'Roboto';
+}
+
+.right-container-refer .right-logo{
+  height: 10%;
+  position:absolute;
+}
 
 .right-logo{
   height: 6%;
@@ -285,7 +312,7 @@
   }
 }
 
-@media only screen and (max-width: 480px){
+@media only screen and (max-width: 624px){
   .left-container{
     display: none;
   }
