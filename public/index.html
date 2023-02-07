@@ -42,6 +42,11 @@
       rel="stylesheet"
     />
 
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
     <title>Dint Club</title>
 
     <meta property="og:title" content="Dint Club" />
@@ -55,37 +60,47 @@
     <meta name="twitter:card" content="summary" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-179587200-1"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-179587200-1"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
-      gtag('js', new Date());
+      gtag("js", new Date());
 
-      gtag('config', 'UA-179587200-1');
+      gtag("config", "UA-179587200-1");
     </script>
   </head>
   <body>
     <noscript>Dint Club App</noscript>
     <!-- <div style="visibility:hidden"> -->
-      <div style="visibility:hidden;display: none;">
+    <div style="visibility: hidden; display: none">
       <div id="google_translate_element"></div>
     </div>
     <div id="root"></div>
   </body>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script
+    type="text/javascript"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+  ></script>
   <script type="text/javascript">
-
     function googleTranslateElementInit() {
       var interval = setInterval(function () {
-        if ($("#google_translate_element").length > 0){
+        if ($("#google_translate_element").length > 0) {
           $.when(
-            new google.translate.TranslateElement({
-              pageLanguage: 'en',
-              autoDisplay: false,
-              layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
-            }, 'google_translate_element')).done(function () {
+            new google.translate.TranslateElement(
+              {
+                pageLanguage: "en",
+                autoDisplay: false,
+                layout:
+                  google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+              },
+              "google_translate_element"
+            )
+          ).done(function () {
             clearInterval(interval);
           });
         }
@@ -93,21 +108,26 @@
     }
 
     var interval = setInterval(function () {
-       $("#event_nav").css("margin-top", (($(".goog-te-banner-frame").length > 0) ? "0px" : "40px"));
+      $("#event_nav").css(
+        "margin-top",
+        $(".goog-te-banner-frame").length > 0 ? "0px" : "40px"
+      );
     }, 100);
 
     //function translateContent() {
-      // setTimeout(function () {
-      //   if (localStorage.getItem('
-      //   selectedLanguage') !== null && localStorage.getItem('selectedLanguage') !== 'en') {
-      //     var selectedLanguage = '';
-      //       var select = $('.goog-te-combo');
-      //       select.val('')
-      //       select.dispatchEvent(new Event('change'));
-      //   }
-      // }, 200);
+    // setTimeout(function () {
+    //   if (localStorage.getItem('
+    //   selectedLanguage') !== null && localStorage.getItem('selectedLanguage') !== 'en') {
+    //     var selectedLanguage = '';
+    //       var select = $('.goog-te-combo');
+    //       select.val('')
+    //       select.dispatchEvent(new Event('change'));
+    //   }
+    // }, 200);
     //}
   </script>
-  <script type="text/javascript"
-          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script
+    type="text/javascript"
+    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+  ></script>
 </html>
