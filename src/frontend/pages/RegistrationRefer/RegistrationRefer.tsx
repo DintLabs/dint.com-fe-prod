@@ -92,7 +92,7 @@ const RegistrationRefer = () =>{
         <div className="right-container-refer" >
           <div className="login_divs" >
           <img className="right-logo"  src={require("../../assets/img/web3/image 1.png")} alt="logo" />
-              <div className="container " style={{paddingTop: '5vh' , margin:'auto' }}>
+              <div className="container">
               <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
               <div className="form-control">
                 <label htmlFor="email"> Referal Code </label>

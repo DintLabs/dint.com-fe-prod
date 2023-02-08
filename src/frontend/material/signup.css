@@ -57,6 +57,7 @@
   display: inline-block;
   margin-bottom: 5px;
   width: 100%;
+  text-align: left;
 } 
 
 /* .login_divs .form-control input {
@@ -139,7 +140,7 @@
   color: red;
 }
 
-.login_divs {
+.right-container .login_divs {
   min-height: 60vh;
   display: flex;
   /* align-items: center; */
@@ -171,8 +172,8 @@
 
 .main-container-refer{
   position: relative;
-  height: 400px;
-  min-height: 81vh;
+  height: 100%;
+  min-height: 100vh;
 }
 
 .left-container {
@@ -243,25 +244,24 @@
   justify-content: center;
 }
 .right-container-refer{
-    align-items :center ;
-    height:100% ;
-}
-
-.right-container-refer .login_divs{
-  margin:10% auto 0% auto ;
-  justify-content:center;
-  min-height: 45vh;
   display: flex;
-  /* align-items: center; */
-  max-width: 600px; 
-  margin: "0 auto" ; 
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+.right-container-refer .login_divs{
+  min-height: 45vh;
+  display: block;
+  max-width: 600px;  
   width:100% ; 
   font-family: 'Roboto';
+  text-align: center;
 }
 
 .right-container-refer .right-logo{
   height: 10%;
-  position:absolute;
 }
 
 .right-logo{
