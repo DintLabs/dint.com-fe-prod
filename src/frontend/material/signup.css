@@ -3,6 +3,7 @@
 }
 #signup_here {
   /* color: rgba(25, 25, 236, 0.596); */
+  cursor: pointer;
   font-weight: bold;
   color: black;
   text-decoration: none;
@@ -261,10 +262,12 @@
 }
 
 .right-container-refer .right-logo{
+  cursor: pointer;
   height: 10%;
 }
 
 .right-logo{
+  cursor: pointer;
   height: 6%;
   margin: 0% 0px 30px 1.5%;
 }

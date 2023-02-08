@@ -15,9 +15,7 @@ const RegistrationRefer = () =>{
     const location = useLocation();
     const regex = /^[A-z0-9]/ ;
     const {state} = location;
-    useEffect(()=>{
-      console.log(state);
-      
+    useEffect(()=>{ 
       if(state && state.for === 'login'){
         setbtnVal('Login for Dint')
       }else{
@@ -91,7 +89,7 @@ const RegistrationRefer = () =>{
       <div className="main-container-refer">
         <div className="right-container-refer" >
           <div className="login_divs" >
-          <img className="right-logo"  src={require("../../assets/img/web3/image 1.png")} alt="logo" />
+          <img className="right-logo" onClick={()=>navigate(-1)}  src={require("../../assets/img/web3/image 1.png")} alt="logo" />
               <div className="container">
               <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
               <div className="form-control">
