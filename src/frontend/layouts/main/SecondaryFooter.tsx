@@ -24,15 +24,15 @@ const SecondaryFooter = () => {
                 <div className="row  footer-rows-mobile">
                     <div className="col-xs-6">
                         <p>Help</p>
-                        <p>Store</p>
+    
                         <Link to={`/cookies${location?.search}`}>
                         <p>Cookie Notice</p>
                         </Link>
                         
                     </div>
                     <div className="col-xs-6">
-                        <p>Terms & Conditions </p>
-                        <p>About</p>
+                    <Link to={"/terms"}><p>Terms of Service</p></Link>
+                    <Link to={"/privacy"}><p>Privacy</p></Link>
                         <p></p>
                     </div>
                 </div>
