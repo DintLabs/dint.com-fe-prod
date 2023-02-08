@@ -5,9 +5,12 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <title>Dint - Social Media with Referral Monetization powered by Smart Contracts</title>
     <meta
       name="description"
-      content="Dint Club: Revolutionizing Creator and Fan Connections Through NFTs and Membership Tokens"
+      content="
+      Dint is a new social media platform with referral-based monetization, smart contracts, and content earning opportunities. Earn money by referring friends and their activity. Create content and earn through tips and subscriptions. With Dint, you're in control of your earnings.
+      "
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link
@@ -38,16 +41,11 @@
     <!-- <link href="https://dint.com/assets/css/style.css" rel="stylesheet">
     <link href="https://dint.com/assets/css/custom-style.css" rel="stylesheet"> -->
     <link
-      href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,600,600i,700,700i|Satisfy|Comic+Neue:300,300i,400,400i,700,700i|Open Sans|Roboto"
+      href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,600,600i,700,700i|Satisfy|Comic+Neue:300,300i,400,400i,700,700i"
       rel="stylesheet"
     />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
-      rel="stylesheet"
-    />
 
-    <title>Dint Club</title>
 
     <meta property="og:title" content="Dint Club" />
     <meta property="og:description" content="Dint Club Society" />
@@ -60,47 +58,36 @@
     <meta name="twitter:card" content="summary" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-179587200-1"
-    ></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-179587200-1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
-      gtag("js", new Date());
+      gtag('js', new Date());
 
-      gtag("config", "UA-179587200-1");
+      gtag('config', 'UA-179587200-1');
     </script>
   </head>
   <body>
     <noscript>Dint Club App</noscript>
-    <!-- <div style="visibility:hidden"> -->
-    <div style="visibility: hidden; display: none">
+    <div style="visibility:hidden">
       <div id="google_translate_element"></div>
     </div>
     <div id="root"></div>
   </body>
-  <script
-    type="text/javascript"
-    src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-  ></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script type="text/javascript">
+
     function googleTranslateElementInit() {
       var interval = setInterval(function () {
-        if ($("#google_translate_element").length > 0) {
+        if ($("#google_translate_element").length > 0){
           $.when(
-            new google.translate.TranslateElement(
-              {
-                pageLanguage: "en",
-                autoDisplay: false,
-                layout:
-                  google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-              },
-              "google_translate_element"
-            )
-          ).done(function () {
+            new google.translate.TranslateElement({
+              pageLanguage: 'en',
+              autoDisplay: false,
+              layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+            }, 'google_translate_element')).done(function () {
             clearInterval(interval);
           });
         }
@@ -108,26 +95,21 @@
     }
 
     var interval = setInterval(function () {
-      $("#event_nav").css(
-        "margin-top",
-        $(".goog-te-banner-frame").length > 0 ? "0px" : "40px"
-      );
+       $("#event_nav").css("margin-top", (($(".goog-te-banner-frame").length > 0) ? "0px" : "40px"));
     }, 100);
 
     //function translateContent() {
-    // setTimeout(function () {
-    //   if (localStorage.getItem('
-    //   selectedLanguage') !== null && localStorage.getItem('selectedLanguage') !== 'en') {
-    //     var selectedLanguage = '';
-    //       var select = $('.goog-te-combo');
-    //       select.val('')
-    //       select.dispatchEvent(new Event('change'));
-    //   }
-    // }, 200);
+      // setTimeout(function () {
+      //   if (localStorage.getItem('
+      //   selectedLanguage') !== null && localStorage.getItem('selectedLanguage') !== 'en') {
+      //     var selectedLanguage = '';
+      //       var select = $('.goog-te-combo');
+      //       select.val('')
+      //       select.dispatchEvent(new Event('change'));
+      //   }
+      // }, 200);
     //}
   </script>
-  <script
-    type="text/javascript"
-    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-  ></script>
+  <script type="text/javascript"
+          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </html>
