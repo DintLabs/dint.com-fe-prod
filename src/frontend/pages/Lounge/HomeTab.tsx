@@ -1,17 +1,19 @@
-import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Avatar, Box, Grid, ListItemAvatar, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import _axios from 'frontend/api/axios';
 import PostItemSkeleton from 'frontend/components/common/skeletons/PostItemSkeleton';
 import { useLounge } from 'frontend/contexts/LoungeContext';
 import { postTypes } from 'frontend/data';
 import { PaginationPostsInerface } from 'frontend/interfaces/contextInterface';
 import { PostInterface } from 'frontend/interfaces/postInterface';
-import { ReactNode, SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import { ReactNode, SyntheticEvent, useCallback, useContext, useEffect, useState } from 'react';
 import BuyToken from 'frontend/pages/BuyToken';
+import storyImage from 'frontend/assets/img/web3/story.png'
 
 
 import AddPost from './AddPost';
 import './navbarTab.css';
 import PostItem from './PostItem';
+import { ThemeContext } from 'frontend/contexts/ThemeContext';
 
 interface Props {
   createPost: Function;
@@ -55,6 +57,8 @@ const HomeTab = ({ createPost }: Props) => {
 
   const [value, setValue] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const savedUser = JSON.parse(localStorage.getItem('userData') ?? '{}');
+  const { toggle } = useContext(ThemeContext);
 
   const {
     counts,
@@ -78,7 +82,7 @@ const HomeTab = ({ createPost }: Props) => {
   } = useLounge();
 
   const postDeleted = (postId: number) => {
-    setPosts( posts.filter((prev) => prev.id !== postId) );
+    setPosts(posts.filter((prev) => prev.id !== postId));
     setTextPosts(textPosts.filter((prev) => prev.id !== postId));
     setPhotoPosts(photoPosts.filter((prev) => prev.id !== postId));
     setVideoPosts(videoPosts.filter((prev) => prev.id !== postId));
@@ -209,133 +213,230 @@ const HomeTab = ({ createPost }: Props) => {
   }, [value]);
 
   return (
-    <>
-      <Box
-        id="postsListScrollableDiv"
-        style={{
-          borderLeft: `1px solid ${theme.palette.grey[700]}`,
-          borderRight: `1px solid ${theme.palette.grey[700]}`
-        }}
-      >
-        <AddPost createPost={createPost} widthScreen={0} />
+    <Box
+      id="postsListScrollableDiv"
+      style={{
+        // borderLeft: `1px solid ${theme.palette.grey[700]}`,
+        // borderRight: `1px solid ${theme.palette.grey[700]}`
+      }}
+    >
+      {/* <AddPost createPost={createPost} widthScreen={0} /> */}
+      <Box sx={{
+        display: 'flex',
+        width: '100%',
+        margin: '10px 0',
+        padding: '10px 0'
+      }}>
+        <Box sx={{ width: '60%' }}>
+          <Box sx={{ overflow: 'hidden' }}>
+            <ListItemAvatar
+              style={{ cursor: "pointer", display: 'flex', gap: '10px' }}
+            >
+              {Array.from({ length: 8 }, (_, i) =>
+                <div key={i} style={{ textAlign: 'center', width: 'fit-content' }}>
+                  <Avatar src={storyImage} sx={{ width: 80, height: 80 }} />
+                  <Typography variant='h5' sx={{ fontWeight: '600', marginTop: '10px', color: toggle ? 'text.primary' : '#161C24' }}>
+                    Karry Wee
+                  </Typography>
+                </div>
+              )}
+            </ListItemAvatar>
+          </Box>
+          <Box>
+            <Tabs
+              value={value}
+              variant="fullWidth"
+              onChange={handleChange}
+              sx={{ borderBottom: `1px solid ${theme.palette.grey[700]}` }}
+            >
+              <Tab label={`All  (${counts?.all_posts ?? 0})`} />
+              <Tab label={`Text (${counts?.text_posts ?? 0})`} />
+              <Tab label={`Photos  (${counts?.image_posts ?? 0})`} />
+              <Tab label={`Videos  (${counts?.video_posts ?? 0})`} />
+            </Tabs>
+          </Box>
 
-        <Box>
-          <Tabs
-            value={value}
-            variant="fullWidth"
-            onChange={handleChange}
-            sx={{ borderBottom: `1px solid ${theme.palette.grey[700]}` }}
-          >
-            <Tab label={`All  (${counts?.all_posts ?? 0})`} />
-            <Tab label={`Text (${counts?.text_posts ?? 0})`} />
-            <Tab label={`Photos  (${counts?.image_posts ?? 0})`} />
-            <Tab label={`Videos  (${counts?.video_posts ?? 0})`} />
-          </Tabs>
-        </Box>
-
-        <TabPanel value={value} index={0}>
-          {posts.map((item) => (
-            <PostItem
-              fetchPosts={fetchPosts}
-              canDeletePost={true}
-              key={item?.id}
-              description={item?.content}
-              createdAt={item?.created_at}
-              userName={
-                item?.user
-                  ? item?.user?.display_name ||
+          <TabPanel value={value} index={0}>
+            {posts.map((item) => (
+              <PostItem
+                fetchPosts={fetchPosts}
+                canDeletePost={true}
+                key={item?.id}
+                description={item?.content}
+                createdAt={item?.created_at}
+                userName={
+                  item?.user
+                    ? item?.user?.display_name ||
                     item?.user?.first_name ||
                     item?.user?.custom_username
-                  : ''
-              }
-              custom_username={item?.user ? item?.user?.custom_username : ''}
-              image={item?.media || null}
-              post={item}
-              onDelete={postDeleted}
-            />
-          ))}
+                    : ''
+                }
+                custom_username={item?.user ? item?.user?.custom_username : ''}
+                image={item?.media || null}
+                post={item}
+                onDelete={postDeleted}
+              />
+            ))}
 
-          {isLoading && (
-            <>
-              <PostItemSkeleton />
-              <PostItemSkeleton />
-              <PostItemSkeleton />
-            </>
-          )}
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          {textPosts.map((item, i) => (
-            <PostItem
-              fetchPosts={fetchPosts}
-              canDeletePost={true}
-              key={`textPosts_${i}`}
-              description={item?.content}
-              createdAt={item?.created_at}
-              userName={item?.user?.display_name || item?.user?.custom_username}
-              custom_username={item?.user?.custom_username}
-              image={item?.media || null}
-              post={item}
-              onDelete={postDeleted}
-            />
-          ))}
-          {isLoading && (
-            <>
-              <PostItemSkeleton />
-              <PostItemSkeleton />
-              <PostItemSkeleton />
-            </>
-          )}
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          {photoPosts.map((item, i) => (
-            <PostItem
-              fetchPosts={fetchPosts}
-              canDeletePost={true}
-              key={`photoPosts_${i}`}
-              description={item?.content}
-              createdAt={item?.created_at}
-              userName={item?.user?.display_name || item?.user?.custom_username}
-              custom_username={item?.user?.custom_username}
-              image={item?.media || null}
-              post={item}
-              onDelete={postDeleted}
-            />
-          ))}
-          {isLoading && (
-            <>
-              <PostItemSkeleton />
-              <PostItemSkeleton />
-              <PostItemSkeleton />
-            </>
-          )}
-        </TabPanel>
+            {isLoading && (
+              <>
+                <PostItemSkeleton />
+                <PostItemSkeleton />
+                <PostItemSkeleton />
+              </>
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            {textPosts.map((item, i) => (
+              <PostItem
+                fetchPosts={fetchPosts}
+                canDeletePost={true}
+                key={`textPosts_${i}`}
+                description={item?.content}
+                createdAt={item?.created_at}
+                userName={item?.user?.display_name || item?.user?.custom_username}
+                custom_username={item?.user?.custom_username}
+                image={item?.media || null}
+                post={item}
+                onDelete={postDeleted}
+              />
+            ))}
+            {isLoading && (
+              <>
+                <PostItemSkeleton />
+                <PostItemSkeleton />
+                <PostItemSkeleton />
+              </>
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            {photoPosts.map((item, i) => (
+              <PostItem
+                fetchPosts={fetchPosts}
+                canDeletePost={true}
+                key={`photoPosts_${i}`}
+                description={item?.content}
+                createdAt={item?.created_at}
+                userName={item?.user?.display_name || item?.user?.custom_username}
+                custom_username={item?.user?.custom_username}
+                image={item?.media || null}
+                post={item}
+                onDelete={postDeleted}
+              />
+            ))}
+            {isLoading && (
+              <>
+                <PostItemSkeleton />
+                <PostItemSkeleton />
+                <PostItemSkeleton />
+              </>
+            )}
+          </TabPanel>
 
-        <TabPanel value={value} index={3}>
-          {videoPosts.map((item, i) => (
+          <TabPanel value={value} index={3}>
+            {videoPosts.map((item, i) => (
 
-            <PostItem
-              fetchPosts={fetchPosts}
-              canDeletePost={true}
-              key={`videoPosts_${i}`}
-              description={item?.content}
-              createdAt={item?.created_at}
-              userName={item?.user?.display_name || item?.user?.custom_username}
-              custom_username={item?.user?.custom_username}
-              image={item?.media || null}
-              post={item}
-              onDelete={postDeleted}
-            />
-          ))}
-          {isLoading && (
-            <>
-              <PostItemSkeleton />
-              <PostItemSkeleton />
-              <PostItemSkeleton />
-            </>
-          )}
-        </TabPanel>
+              <PostItem
+                fetchPosts={fetchPosts}
+                canDeletePost={true}
+                key={`videoPosts_${i}`}
+                description={item?.content}
+                createdAt={item?.created_at}
+                userName={item?.user?.display_name || item?.user?.custom_username}
+                custom_username={item?.user?.custom_username}
+                image={item?.media || null}
+                post={item}
+                onDelete={postDeleted}
+              />
+            ))}
+            {isLoading && (
+              <>
+                <PostItemSkeleton />
+                <PostItemSkeleton />
+                <PostItemSkeleton />
+              </>
+            )}
+          </TabPanel>
+        </Box>
+        <Box sx={{
+          marginLeft: '5rem',
+          width: '30%'
+        }}>
+          <Box sx={{
+            display: 'flex',
+            width: '100%',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+
+            <Avatar src={savedUser?.profile_image} sx={{ width: 50, height: 50 }} />
+            <div>
+              <Typography variant="h4" sx={{ color: toggle ? 'text.primary' : '#161C24' }}>
+                {savedUser.display_name}
+              </Typography>
+              <Typography variant="h5" sx={{ color: 'text.secondary' }} >
+                @{savedUser.custom_username}
+              </Typography>
+            </div>
+          </Box>
+          <Box sx={{
+            marginTop: '2rem',
+            marginLeft: '10px',
+          }}>
+            <Typography variant="h4" sx={{ color: toggle ? 'text.primary' : '#161C24' }} mb={4}>
+              Suggestions
+            </Typography>
+
+
+            {Array.from({ length: 5 }, (_, i) =>
+              <Box key={i} sx={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                gap: '12px',
+                marginTop: '12px'
+              }}>
+
+                <Avatar src={savedUser?.profile_image} sx={{ width: 35, height: 35 }} />
+                <div>
+                  <Typography variant="h5" sx={{ color: toggle ? 'text.primary' : '#161C24' }}>
+                    Lucas Williams
+                  </Typography>
+                  <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                    @username
+                  </Typography>
+                </div>
+              </Box>
+            )}
+            <Grid direction='row' gap={2} sx={{ display: 'flex', marginTop: '30px' }}>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                Terms of Service
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                Privacy Policy
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                Cookie Policy
+              </Typography>
+            </Grid>
+            <Grid direction='row' gap={2} sx={{ display: 'flex', marginTop: '20px', }}>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                Help
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                Ads Info
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                More...
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                © 2021 , Inc.
+              </Typography>
+            </Grid>
+          </Box>
+        </Box>
       </Box>
-    </>
+    </Box>
   );
 };
 

@@ -38,7 +38,7 @@ export default function SecondaryMainNavBar() {
         height: isIPhone() ? window.innerHeight : "100vh",
       }}
     >
-      <MainNavbar />
+      {!pathname.includes("/lounge") && <MainNavbar />}
 
       <div id="page-body" style={{ minHeight: "calc(100vh - 80px)" }}>
         <Box
@@ -49,7 +49,7 @@ export default function SecondaryMainNavBar() {
           }}
           className={toggle ? "" : "white-content"}
         >
-          <Container>
+          <Container style={{ margin: 0, padding: '0', minWidth:'100%', width:'100%' }}>
             <Outlet />
           </Container>
           {getConditionsToNotShowMainFooter() && <MainFooter />}

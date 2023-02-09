@@ -243,7 +243,9 @@ const PostItem = ({
     <>
       <Box
         style={{
-          borderBottom: `1px solid ${theme.palette.grey[700]}`,
+          border: `1px solid ${theme.palette.grey[400]}`,
+          borderRadius: '10px',
+          marginBottom: '30px'
         }}
       >
         <List>
