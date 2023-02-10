@@ -47,10 +47,10 @@ export default function LoungeLayout({ isSearchPage = false }) {
         height: isIPhone() ? window.innerHeight : '100vh'
       }}
     >
-      <div>
+      {/* <div>
         <MainNavBar />
-      </div>
-      <div id="page-body" className="body_Content" style={{ minHeight: '100vh' }}>
+      </div> */}
+      <div id="page-body" className="" style={{ minHeight: '100vh' }}>
         <Box
           sx={{
             width: '100%',
@@ -59,7 +59,7 @@ export default function LoungeLayout({ isSearchPage = false }) {
           }}
           className={ toggle ? '' : 'white-content' }
         >
-          <Container>
+          <Container style={{ margin: 'auto', padding: '0', minWidth:'100%', width:'100%' }}>
             <Helmet>
               <title>Lounge</title>
               <meta

@@ -237,7 +237,7 @@ console.log("Close friends", closeFriend);
 
   return (
     <>
-      <Grid container>
+      <Grid container md={8}>
         <>
           {isLargeScreen ? (
             <Submenu

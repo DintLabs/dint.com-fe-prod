@@ -38,7 +38,7 @@ export default function SecondaryMainNavBar() {
         height: isIPhone() ? window.innerHeight : "100vh",
       }}
     >
-      {!pathname.includes("/lounge") && <MainNavbar />}
+      {/* {!pathname.includes("/lounge") && <MainNavbar />} */}
 
       <div id="page-body" style={{ minHeight: "calc(100vh - 80px)" }}>
         <Box

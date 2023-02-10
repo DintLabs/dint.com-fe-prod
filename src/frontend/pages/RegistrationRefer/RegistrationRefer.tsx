@@ -39,12 +39,14 @@ const RegistrationRefer = () =>{
                 setErrMsg('There might be some error ! Please try again later')
               }
               else{
+                toast.success('Success ! Redirecting to signup page')
                 navigate(`/auth/signup${location?.search}` , {state : {referCode}})
               }
             })
           }else if (state.for === 'login'){
             await _axios.post(`api/user/validate_referral_code/`, data)
             .then(async (response: any) => {
+              toast.warning('Please wait ! While we validate the reference code')
               if(response.data.code !== 200 ){
                 setErrMsg('Invalid referral code!')
               }else if(response.status !== 200){
