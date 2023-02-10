@@ -19,7 +19,8 @@ import {
   Collapse,
   Menu,
   MenuItem,
-  Paper } from '@mui/material';
+  Paper, 
+  Divider} from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import * as axios from 'axios';
 import { dispatch, RootState, useDispatch, useSelector, AppDispatch } from 'frontend/redux/store';
@@ -38,7 +39,11 @@ import QrScanDialog from './QrScanDialog';
 import SendDialog from './SendDialog';
 import POLYGON_ICON from '../../assets/img/web3/matic-token.png';
 import DINT_POLYGON_ICON from '../../assets/img/web3/dint-polygon-logo.png';
+import DINT_LOGO from '../../assets/img/web3/logo.png';
+import DOLLAR_ICON from '../../assets/img/web3/dollar.png';
+import PLUS_ICON from '../../assets/img/web3/plus_icon.png';
 import { ThemeContext } from '../../contexts/ThemeContext';
+import { margin } from '@mui/system';
 
 
 const DintWallet = () => {
@@ -55,6 +60,8 @@ const DintWallet = () => {
   const { address, balance } = useSelector((rootState: RootState) => rootState.wallet);
   const { maticWallet } = useSelector((rootState: RootState) => rootState.maticBalance);
   const { name, symbol } = useSelector((rootState: RootState) => rootState.dintBalance);
+  const [displayAssets , setdisplayAssets] = useState(true);
+  const mobileView = useMediaQuery('(max-width:899px)');
   useEffect(() => {
     getToken();
   }, [1]);
@@ -113,58 +120,109 @@ const DintWallet = () => {
   const { toggle } = useContext(ThemeContext);
 
   return (
+    <>
+    <Grid sx={{my:5}} >
+      <span style={{padding:"0% 10%" , color:"#6E747A"}}>My Wallet</span>
+      <Divider sx={{margin:'0%  5%'}} />
+    </Grid>
     <Box
         id="postsListScrollableDiv"
-        style={{
-          borderLeft: `1px solid ${theme.palette.grey[700]}`,
-          borderRight: `1px solid ${theme.palette.grey[700]}`,
-          padding: 20
-        }}
+        style={isLargeScreen ? {
+          border: `1px solid #CCCCCC`,
+          padding: '4%' ,
+          width:'45%',
+          borderRadius:"10px",
+          margin:'3% auto' , 
+          justifyContent:'flex-end'
+        } : {
+        margin:'auto'}}
       >
+        <Box sx={isLargeScreen ? {display:"flex" , flexDirection:"column"} :{display:"flex" , flexDirection:"column-reverse"} }>
         <h1 className='notranslate' style={{ color: toggle ? 'white' : '#161C24', textAlign: 'center' }}>
-          Dint Wallet
+                ${balance}
         </h1>
+        <p className='notranslate'  style={{ color: toggle ? 'white' : '#666666', textAlign: 'center' }}>Current Wallet Balance</p>
+        </Box>
+      
+          <Box sx={{ display: 'flex',marginTop:"3%", justifyContent: 'center', alignItems: 'center' } }>
+            {mobileView ?
+            <Box sx={{display:"flex" , flexDirection:"column" , alignItems:'center'}}>
+              <Avatar onClick={onWithdrawal} sx={{height:"12vh" , width:"12vh" }} alt="Withdraw" src={PLUS_ICON} />
+              <span>Buy</span>
+            </Box>
+            :<Button className='btn-text-buy' sx={{ mr: 2 ,borderRadius:"30px", background:"#EFEFEF;" , color:'black', padding:"2% 0%" ,width:"25%"}} style={toggle ? {color : "white"} : {color:'black'}} onClick={() => {navigate(`/buy-dint-token`)} }>BUY</Button>}
+            {mobileView ? 
+            <Box sx={{display:"flex" , flexDirection:"column" , alignItems:'center'}}>
+              <Avatar onClick={onWithdrawal} sx={{height:"12vh" , width:"12vh" }} alt="Withdraw" src={DOLLAR_ICON} />
+              <span>Withdraw</span>
+            </Box>
+             :
+              <Button className='btn-text-withdraw' sx={{background:'#2A3547' ,color:"white", borderRadius:"30px" ,padding:"2% 0%" , width:"25%"}}  onClick={onWithdrawal}>WITHDRAW</Button>
+            }
+              </Box>
+       
+    </Box>
 
-        <Card sx={{
-          p: 2,
-          mt: 2 ,
+    <Box sx={useMediaQuery("(min-width:899px)")? {
+          border: `1px solid #CCCCCC`,
+          borderRadius:"10px",
+          margin:'3% auto',
+          width: "45%" 
+        } : { marginTop:'10%' }}>
+        <Grid  sx={ mobileView ? 
+        {display:"flex",cursor:'pointer' , width:"100%" , padding:"0% 20%" , textAlign:"center" } 
+        : {display:"flex",cursor:'pointer' , width:"100%" , textAlign:"center" ,borderBottom:"1px solid #CCCCCC"}}>
+          <Box 
+            onClick={()=>setdisplayAssets(true)}
+            sx={mobileView ?{padding:'3%' , borderTopLeftRadius:'30px',borderBottomLeftRadius:"30px" ,color:'#fff' ,backgroundColor:displayAssets ?  '#3B3F58' : '#212436' , borderRight:'1px solid #CCCCCC' ,width:'50%' } :{padding:'2%' ,color:displayAssets ?  '#fff' : '' ,backgroundColor:displayAssets ?  '#3B3F58' : '#F5F9FF' , borderRight:'1px solid #CCCCCC' ,width:'50%' }}>
+            <Typography sx={{fontWeight:"bold"}}>Assets</Typography>
+          </Box>
+          <Box onClick={()=>setdisplayAssets(false)} sx={mobileView ? {width:"50%", borderTopRightRadius:'30px',borderBottomRightRadius:"30px"  , padding:'3%',color:'#fff',backgroundColor:!displayAssets ?  '#3B3F58' : '#212436;'}:{width:"50%" , padding:'2%',color:!displayAssets ?  '#fff' : '' ,backgroundColor:!displayAssets ?  '#3B3F58' : '#F5F9FF'}}>
+            <Typography sx={{fontWeight:"bold"}}> Activities </Typography>
+           </Box>
+        </Grid>
+      {displayAssets ? <Card sx={{
           '& .MuiPaper-elevation': {
             backgroundColor: toggle ? '#212B36' : 'white'
           }
         }}
         style={{
+          padding:"10px",
           backgroundColor: toggle ? '#212B36' : 'white'
         }}
         >
-          <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-            <Grid item sx={{ display: 'flex' }}>
+          {/* <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+            {/* <Grid item sx={{ display: 'flex' }}>
               <Typography variant="body1" color={ toggle ? 'white' : '#161C24'}>
                 Accounts
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
                 1 asset
               </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="body2" color={ toggle ? 'white' : '#161C24'} className="notranslate">
+            </Grid> */}
+            {/* <Grid item> */}
+              {/* <Typography variant="body2" color={ toggle ? 'white' : '#161C24'} className="notranslate">
                 ${balance}
-              </Typography>
-            </Grid>
-          </Grid>
+              </Typography> */}
+            {/* </Grid>
+          </Grid> 
+             */}
           <TableContainer component={Paper}>
-            <Table sx={{ minWidth: isLargeScreen ? 650 : 'auto' }} aria-label="simple table">
+            <Table aria-label="simple table">
               <TableHead>
                 <TableRow sx={{
                   fontSize: "12px",
                   "& th": {
                     fontSize: "12px",
                     color: 'text.secondary'
-                  }
+                  },
+                  borderBottom:"#D2D2D2"
+
                 }}>
                   <TableCell>Name</TableCell>
-                  <TableCell align="center" style={{ display: isLargeScreen ? '' : 'none' }}>Price</TableCell>
-                  <TableCell align="center" style={{ display: isLargeScreen ? '' : 'none' }}>Volume</TableCell>
-                  <TableCell align="center" style={{ display: isLargeScreen ? '' : 'none' }}>Amount</TableCell>
+                  <TableCell align="center" >Price</TableCell>
+                  <TableCell align="center" >Volume</TableCell>
+                  <TableCell align="center" >Amount</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -173,39 +231,29 @@ const DintWallet = () => {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   onClick={() => !isLargeScreen && setOpen(!open)}
                 >
-                  <TableCell component="th" scope="row" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <TableCell component="th" scope="row" sx={{border:"0", display: 'flex', alignItems: 'center'  }}>
                     <div style={{ display: 'flex', alignItems: 'center', color: toggle ? 'white' : '#161C24'}}>
-                      <Avatar alt="Remy Sharp" src={DINT_POLYGON_ICON} />
-                      <div className="mx-4">
-                        <span className="notranslate">dint (Dint)</span>
-                        <Typography style={{ display: isLargeScreen ? '' : 'none' }} variant="caption" display="block" color="text.secondary">
+                      <Avatar alt="Remy Sharp" src={DINT_LOGO} />
+                      <div className="mx-4" style={{display:"flex" , flexDirection:"column"}}>
+                        <span style={{fontWeight:"700"}}>Dint</span>
+                        <span style={{color:"#A0A0A0" , fontWeight:"500"}}>DINT</span>
+                        {/* <Typography style={{ display: isLargeScreen ? '' : 'none' }} variant="caption" display="block" color="text.secondary">
                           <Box component='div' onClick={(e) => setOpen(!open)}>Click to expand <KeyboardArrowDownIcon sx={{ fontSize: "16px" }}  /></Box>
-                        </Typography>
+                        </Typography> */}
                       </div>
                     </div>
-                    <div className='notranslate' style={{ display: isLargeScreen ? 'none' : '' }}>$1</div>
                   </TableCell>
-                  <TableCell align="center" style={{ display: isLargeScreen ? '' : 'none' , color: toggle ? 'white' : '#161C24'}}>
-                    <div className="mx-4 notranslate">
-                    $1
-                      {/* <Typography variant="caption" display="block" className="success-text-color">
-                        -$1.44
-                      </Typography> */}
-                    </div>
+                  <TableCell align="center" style={{ border:"0", color: toggle ? 'white' : '#161C24'}}>
+                    <span style={{fontWeight:"bold"}}>$1.00 </span>
                   </TableCell>
-                  <TableCell align="center" style={{ display: isLargeScreen ? '' : 'none', color: toggle ? 'white' : '#161C24' }}>
-                    <div className="mx-4 notranslate">
-                    ${balance}
-                      {/* <Typography variant="caption" display="block" className="success-text-color">
-                        +$0.01
-                      </Typography> */}
-                    </div>
+                  <TableCell align="center" style={{ border:"0", color: toggle ? 'white' : '#161C24' }}>
+                    <span style={{fontWeight:"bold"}}>${balance}</span>
                   </TableCell>
-                  <TableCell align="center" style={{ display: isLargeScreen ? '' : 'none',  color: toggle ? 'white' : '#161C24' }}>     {balance}</TableCell>
+                  <TableCell align="center" style={{border:"0",   color: toggle ? 'white' : '#161C24' , fontWeight:"bold" }}>     {balance}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                  <Collapse in={open} timeout="auto" unmountOnExit>
+                  <TableCell style={{ border:"0",paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                  {/* <Collapse in={open} timeout="auto" unmountOnExit>
                     <Box component='div' sx={isLargeScreen ? { display: 'flex', flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' } : {}}>
                       <Box sx={{ margin: 1, textAlign: 'center' }}>
                       <Button variant="outlined" sx={{ mr: 2}} onClick={() => {navigate(`/buy-dint-token`)} }>BUY</Button>
@@ -213,7 +261,7 @@ const DintWallet = () => {
                       </Box>
                       <Typography className="text-center py-2" onClick={() => setOpen(!open)} variant="caption" display="block" color="text.secondary">
                         Click to collapse <KeyboardArrowUpIcon sx={{ fontSize: "14px" }}  />
-                      </Typography>
+                      </Typography> 
                       <Box sx={{textAlign: 'center' }}>
                         <Button
                           id="basic-button"
@@ -251,17 +299,32 @@ const DintWallet = () => {
                         </Menu>
                       </Box>
                     </Box>
-                  </Collapse>
+                  </Collapse> */}
                 </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
         </Card>
-
+      
+        :<Card sx={{
+          '& .MuiPaper-elevation': {
+            backgroundColor: toggle ? '#212B36' : 'white'
+          },
+          padding:"10px",
+          backgroundColor: toggle ? '#212B36' : 'white'
+        }}
+        >
+          
+            <div><p style={{color:"black"}}>Coming Soon...</p></div>
+          
+        </Card>}
+      
         <QrScanDialog isQrScan={isQrScan} handleClose={handleClose} />
         <SendDialog  isSend={isSend} handleClose={handleClose} />
     </Box>
+
+    </>
   );
 };
 

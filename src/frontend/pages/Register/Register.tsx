@@ -39,13 +39,13 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordType , setPasswordType] = useState("password");
 
-
+  const [referCode , setReferCode] = useState();
   const [error_msg, setSignErr] = useState("");
-  let referCode:string;
-  const { state } =  useLocation();
+
+  const data =  useLocation();
   useEffect(()=>{
-    if(state && state.referCode){
-      referCode = state.referCode 
+    if(data.state && data.state.referCode){
+      setReferCode(data.state.referCode) 
     }else{
       navigate('/auth/refer' , {state :{for:"signup"}})
     }
@@ -91,7 +91,7 @@ const Register = () => {
 
           const userData2 = {
             ...user,
-            referrred_by : referCode ,
+            referred_by : referCode ,
             fire_base_auth_key: user?.uid,
             role: "simple",
             biography: "no biography yet",

@@ -113,7 +113,7 @@ export default function Router() {
       element: (
         <>
           <Login />
-          <SecondaryFooter />
+          {/* <SecondaryFooter /> */}
         </>
       ),
     },
@@ -122,7 +122,7 @@ export default function Router() {
       element : (
         <>
         <RegistrationRefer />
-        <SecondaryFooter />
+        {/* <SecondaryFooter /> */}
         </>
       )
     },
@@ -132,7 +132,7 @@ export default function Router() {
         // <GuestGuard>
         <>
           <Register />
-          <SecondaryFooter />
+          {/* <SecondaryFooter /> */}
         </>
         // </GuestGuard>
       ),
@@ -142,7 +142,7 @@ export default function Router() {
       element: (
         <>
           <Login />
-          <SecondaryFooter />
+          {/* <SecondaryFooter /> */}
         </>
       ),
     },

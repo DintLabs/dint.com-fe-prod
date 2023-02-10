@@ -19,7 +19,8 @@ export default function SecondaryMainNavBar() {
       pathname.includes("/lounge") ||
       pathname.includes("/terms") ||
       pathname.includes("/cookies") ||
-      pathname.includes("/privacy")
+      pathname.includes("/privacy") || 
+      pathname.includes("/dint-wallet")
     )
       return false;
 
@@ -28,7 +29,7 @@ export default function SecondaryMainNavBar() {
 
   // If the curent route is either '/terms', or '/cookies'. Show secondary footer instead of main footer.
   const shouldShowSecondaryFooter =
-    pathname.includes("/terms") || pathname.includes("/cookies") || pathname.includes("/privacy");
+      pathname.includes("/terms") || pathname.includes("/cookies") || pathname.includes("/privacy") || pathname.includes("/dint-wallet");
 
   return (
     <div
@@ -52,8 +53,8 @@ export default function SecondaryMainNavBar() {
           <Container style={{ margin: 0, padding: '0', minWidth:'100%', width:'100%' }}>
             <Outlet />
           </Container>
-          {getConditionsToNotShowMainFooter() && <MainFooter />}
-          {shouldShowSecondaryFooter && <SecondaryFooter />}
+          {/* {getConditionsToNotShowMainFooter() && <MainFooter />} */}
+          {/* {shouldShowSecondaryFooter && <SecondaryFooter />} */}
         </Box>
       </div>
     </div>
