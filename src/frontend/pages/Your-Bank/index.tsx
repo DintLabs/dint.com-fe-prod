@@ -65,7 +65,7 @@ const BankContainer = () => {
   const handleKYC = async (image: string) => {
     setLoading(true)
     try {
-      const { data } = await _axios.post('/api/user/verify_indentity/', {
+      const { data } = await _axios.post('api/user/verify_identity/', {
         // document: image,
         face_image: image
       });
