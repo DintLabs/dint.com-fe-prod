@@ -122,8 +122,8 @@ const DintWallet = () => {
   return (
     <>
     <Grid sx={{my:5}} >
-      <span style={{padding:"0% 10%" , color:"#6E747A"}}>My Wallet</span>
-      <Divider sx={{margin:'0%  5%'}} />
+      <span style={{padding:"0% 5%" , color:"#6E747A"}}>My Wallet</span>
+      <Divider sx={{margin:'0%  5% 0% 0%'}} />
     </Grid>
     <Box
         id="postsListScrollableDiv"
@@ -132,7 +132,7 @@ const DintWallet = () => {
           padding: '4%' ,
           width:'45%',
           borderRadius:"10px",
-          margin:'3% auto' , 
+          margin:'3% 0%' , 
           justifyContent:'flex-end'
         } : {
         margin:'auto'}}
@@ -146,13 +146,13 @@ const DintWallet = () => {
       
           <Box sx={{ display: 'flex',marginTop:"3%", justifyContent: 'center', alignItems: 'center' } }>
             {mobileView ?
-            <Box sx={{display:"flex" , flexDirection:"column" , alignItems:'center'}}>
-              <Avatar onClick={onWithdrawal} sx={{height:"12vh" , width:"12vh" }} alt="Withdraw" src={PLUS_ICON} />
+            <Box sx={{display:"flex" , flexDirection:"column" , alignItems:'center' , color : toggle ? "white" : "black" }}>
+              <Avatar onClick={onWithdrawal} sx={{height:"12vh" , width:"14vh" }} alt="Withdraw" src={PLUS_ICON} />
               <span>Buy</span>
             </Box>
-            :<Button className='btn-text-buy' sx={{ mr: 2 ,borderRadius:"30px", background:"#EFEFEF;" , color:'black', padding:"2% 0%" ,width:"25%"}} style={toggle ? {color : "white"} : {color:'black'}} onClick={() => {navigate(`/buy-dint-token`)} }>BUY</Button>}
+            :<Button className='btn-text-buy' sx={{ mr: 2 ,borderRadius:"30px", background:"#EFEFEF;" , color:'black', padding:"2% 0%" ,width:"25%"}} style={toggle ? {color : "Black"} : {color:'black'}} onClick={() => {navigate(`/buy-dint-token`)} }>BUY</Button>}
             {mobileView ? 
-            <Box sx={{display:"flex" , flexDirection:"column" , alignItems:'center'}}>
+            <Box sx={{display:"flex" , flexDirection:"column" , alignItems:'center' , color : toggle ? "white" : "black" }}>
               <Avatar onClick={onWithdrawal} sx={{height:"12vh" , width:"12vh" }} alt="Withdraw" src={DOLLAR_ICON} />
               <span>Withdraw</span>
             </Box>
@@ -166,7 +166,7 @@ const DintWallet = () => {
     <Box sx={useMediaQuery("(min-width:899px)")? {
           border: `1px solid #CCCCCC`,
           borderRadius:"10px",
-          margin:'3% auto',
+          margin:'3% 0%',
           width: "45%" 
         } : { marginTop:'10%' }}>
         <Grid  sx={ mobileView ? 
@@ -174,10 +174,10 @@ const DintWallet = () => {
         : {display:"flex",cursor:'pointer' , width:"100%" , textAlign:"center" ,borderBottom:"1px solid #CCCCCC"}}>
           <Box 
             onClick={()=>setdisplayAssets(true)}
-            sx={mobileView ?{padding:'3%' , borderTopLeftRadius:'30px',borderBottomLeftRadius:"30px" ,color:'#fff' ,backgroundColor:displayAssets ?  '#3B3F58' : '#212436' , borderRight:'1px solid #CCCCCC' ,width:'50%' } :{padding:'2%' ,color:displayAssets ?  '#fff' : '' ,backgroundColor:displayAssets ?  '#3B3F58' : '#F5F9FF' , borderRight:'1px solid #CCCCCC' ,width:'50%' }}>
+            sx={mobileView ?{padding:'3%' , borderTopLeftRadius:'30px',borderBottomLeftRadius:"30px" ,color:'#fff' ,backgroundColor:displayAssets ?  '#3B3F58' : '#212436' , borderRight:'1px solid #CCCCCC' ,width:'50%' } :{padding:'2%' ,color:displayAssets ?  '#fff' : '',borderTopLeftRadius:'10px' ,backgroundColor:displayAssets ?  '#3B3F58' : '#F5F9FF' , borderRight:'1px solid #CCCCCC' ,width:'50%' }}>
             <Typography sx={{fontWeight:"bold"}}>Assets</Typography>
           </Box>
-          <Box onClick={()=>setdisplayAssets(false)} sx={mobileView ? {width:"50%", borderTopRightRadius:'30px',borderBottomRightRadius:"30px"  , padding:'3%',color:'#fff',backgroundColor:!displayAssets ?  '#3B3F58' : '#212436;'}:{width:"50%" , padding:'2%',color:!displayAssets ?  '#fff' : '' ,backgroundColor:!displayAssets ?  '#3B3F58' : '#F5F9FF'}}>
+          <Box onClick={()=>setdisplayAssets(false)} sx={mobileView ? {width:"50%", borderTopRightRadius:'30px',borderBottomRightRadius:"30px"  , padding:'3%',color:'#fff',backgroundColor:!displayAssets ?  '#3B3F58' : '#212436;'}:{width:"50%" ,borderTopRightRadius:"10px", padding:'2%',color:!displayAssets ?  '#fff' : '' ,backgroundColor:!displayAssets ?  '#3B3F58' : '#F5F9FF'}}>
             <Typography sx={{fontWeight:"bold"}}> Activities </Typography>
            </Box>
         </Grid>

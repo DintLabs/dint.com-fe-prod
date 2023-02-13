@@ -88,61 +88,67 @@ export default function Router() {
   return useRoutes([
     {
       path: "auth",
-      element: <MainLayout />,
+      // element: <MainLayout />,
       children: [
-        // {
-        //   path: 'login',
-        //   element: (
-        //     <GuestGuard>
-        //       <Login />
-        //     </GuestGuard>
-        //   )
-        // },
-        // {
-        //   path: 'signup',
-        //   element: (
-        //     <GuestGuard>
-        //       <Register />
-        //     </GuestGuard>
-        //   )
-        // }
+        {
+          path: 'login',
+          element: (
+            <GuestGuard>
+              <Login />
+              <SecondaryFooter />
+            </GuestGuard>
+          )
+        },
+        {
+          path: 'signup',
+          element: (
+            <GuestGuard>
+              <Register />
+              <SecondaryFooter />
+            </GuestGuard>
+          )
+        }
       ],
     },
-    {
-      path: "auth/login",
-      element: (
-        <>
-          <Login />
-          {/* <SecondaryFooter /> */}
-        </>
-      ),
-    },
+    // {
+    //   path: "auth/login",
+    //   element: (
+    //     <>
+    //       <Login />
+    //       {/* <SecondaryFooter /> */}
+    //     </>
+    //   ),
+    // },
     {
       path : "auth/refer",
       element : (
         <>
-        <RegistrationRefer />
-        {/* <SecondaryFooter /> */}
+        <GuestGuard>
+          <RegistrationRefer />
+          {/* <SecondaryFooter /> */}
+        </GuestGuard>
         </>
       )
     },
-    {
-      path: "auth/signup",
-      element: (
-        // <GuestGuard>
-        <>
-          <Register />
-          {/* <SecondaryFooter /> */}
-        </>
-        // </GuestGuard>
-      ),
-    },
+    // {
+    //   path: "auth/signup",
+    //   element: (
+    //     // <GuestGuard>
+    //     <>
+    //       <Register />
+    //       {/* <SecondaryFooter /> */}
+    //     </>
+    //     // </GuestGuard>
+    //   ),
+    // },
     {
       path: "/",
       element: (
         <>
-          <Login />
-          {/* <SecondaryFooter /> */}
+          <GuestGuard>
+            <Login />
+            <SecondaryFooter />
+          </GuestGuard>
         </>
       ),
     },
