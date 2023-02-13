@@ -28,6 +28,7 @@ import { dispatch, RootState } from "frontend/redux/store";
 
 import useUser from "frontend/hooks/useUser";
 import { useDispatch } from "react-redux";
+import _axios from "frontend/api/axios";
 
 const Login = () => {
   const userHook = useUser();
@@ -129,7 +130,7 @@ const Login = () => {
           email,
           fire_base_auth_key: data.user.uid,
         })
-        .then(({ data }: any) => {
+        .then(async({ data }: any) => {
           if (data.code === 400) {
             toast.error("Invalid Credantials");
           } else {
@@ -137,13 +138,26 @@ const Login = () => {
             // localStorage.setItem('userData', JSON.stringify(data.data));
             userHook.setCurrentUser(data.data);
             // dispatch(createWallet());
-            if(data.message === "User don't have referral code"){
-              navigate('/auth/refer' , {state : {for : 'login' , email :data.data.email}})
-            }
-            else{
-              toast.success("User Login Successfully")
-              onSuccessLogin();
-            }
+            await _axios.get('https://bedev.dint.com/api/user/referral_code/')
+            .then((res:any)=>{
+              if(res.data.code === 200){
+                toast.success("User Login Successfully")
+                onSuccessLogin();
+              }else{
+                navigate('/auth/refer' , {state : {for : 'login' , email :data.data.email}})
+              }
+            })
+            .catch((err:any)=> {
+              console.log(err);
+              toast.error("there might be some error please try again later")
+            })
+            // if(data.message === "User don't have referral code"){
+            //   navigate('/auth/refer' , {state : {for : 'login' , email :data.data.email}})
+            // }
+            // else{
+            //   toast.success("User Login Successfully")
+            //   onSuccessLogin();
+            // }
           }
         })
         .catch((err: any) => {
@@ -224,13 +238,26 @@ const Login = () => {
               // localStorage.setItem('userData', JSON.stringify(data.data));
               userHook.setCurrentUser(data.data);
               // dispatch(createWallet());
-              if(data.message === "User don't have referral code"){
-                navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
-              }
-              else{
-                toast.success("User Login Successful!");
+              await _axios.get('https://bedev.dint.com/api/user/referral_code/')
+            .then((res:any)=>{
+              if(res.data.code === 200){
+                toast.success("User Login Successfully")
                 onSuccessLogin();
+              }else{
+                navigate('/auth/refer' , {state : {for : 'login' , email :data.data.email}})
               }
+            })
+            .catch((err:any)=> {
+              console.log(err);
+              toast.error("there might be some error please try again later")
+            })
+              // if(data.message === "User don't have referral code"){
+              //   navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
+              // }
+              // else{
+              //   toast.success("User Login Successful!");
+              //   onSuccessLogin();
+              // }
               // onSuccessLogin();
             } else {
               await axios
@@ -244,14 +271,27 @@ const Login = () => {
                     // localStorage.setItem('userData', JSON.stringify(data.data));
                     userHook.setCurrentUser(data.data);
 
+                    await _axios.get('https://bedev.dint.com/api/user/referral_code/')
+                      .then((res:any)=>{
+                        if(res.data.code === 200){
+                          toast.success("User Login Successfully")
+                          onSuccessLogin();
+                        }else{
+                          navigate('/auth/refer' , {state : {for : 'login' , email :data.data.email}})
+                        }
+                      })
+                      .catch((err:any)=> {
+                        console.log(err);
+                        toast.error("there might be some error please try again later")
+                      })
                     
-                    if(data.message === "User don't have referral code"){
-                      navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
-                    }
-                    else{
-                      toast.success("User Login Successful!");
-                      onSuccessLogin();
-                    }
+                    // if(data.message === "User don't have referral code"){
+                    //   navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
+                    // }
+                    // else{
+                    //   toast.success("User Login Successful!");
+                    //   onSuccessLogin();
+                    // }
                     // onSuccessLogin();
                   }
                 });

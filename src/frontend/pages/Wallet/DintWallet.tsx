@@ -130,10 +130,10 @@ const DintWallet = () => {
         style={isLargeScreen ? {
           border: `1px solid #CCCCCC`,
           padding: '4%' ,
-          width:'45%',
+          width:'95%',
           borderRadius:"10px",
           margin:'3% 0%' , 
-          justifyContent:'flex-end'
+          // justifyContent:'flex-end'
         } : {
         margin:'auto'}}
       >
@@ -150,14 +150,14 @@ const DintWallet = () => {
               <Avatar onClick={onWithdrawal} sx={{height:"12vh" , width:"14vh" }} alt="Withdraw" src={PLUS_ICON} />
               <span>Buy</span>
             </Box>
-            :<Button className='btn-text-buy' sx={{ mr: 2 ,borderRadius:"30px", background:"#EFEFEF;" , color:'black', padding:"2% 0%" ,width:"25%"}} style={toggle ? {color : "Black"} : {color:'black'}} onClick={() => {navigate(`/buy-dint-token`)} }>BUY</Button>}
+            :<Button className='btn-text-buy' sx={{ mr: 2 ,borderRadius:"30px", background:"#EFEFEF;" , color:'black', padding:"1% 0%" ,width:"20%"}} style={toggle ? {color : "Black"} : {color:'black'}} onClick={() => {navigate(`/buy-dint-token`)} }>BUY</Button>}
             {mobileView ? 
             <Box sx={{display:"flex" , flexDirection:"column" , alignItems:'center' , color : toggle ? "white" : "black" }}>
               <Avatar onClick={onWithdrawal} sx={{height:"12vh" , width:"12vh" }} alt="Withdraw" src={DOLLAR_ICON} />
               <span>Withdraw</span>
             </Box>
              :
-              <Button className='btn-text-withdraw' sx={{background:'#2A3547' ,color:"white", borderRadius:"30px" ,padding:"2% 0%" , width:"25%"}}  onClick={onWithdrawal}>WITHDRAW</Button>
+              <Button className='btn-text-withdraw' sx={{background:'#2A3547' ,color:"white", borderRadius:"30px" ,padding:"1% 0%" , width:"20%"}}  onClick={onWithdrawal}>WITHDRAW</Button>
             }
               </Box>
        
@@ -167,7 +167,7 @@ const DintWallet = () => {
           border: `1px solid #CCCCCC`,
           borderRadius:"10px",
           margin:'3% 0%',
-          width: "45%" 
+          width: "95%" 
         } : { marginTop:'10%' }}>
         <Grid  sx={ mobileView ? 
         {display:"flex",cursor:'pointer' , width:"100%" , padding:"0% 20%" , textAlign:"center" } 
@@ -213,7 +213,7 @@ const DintWallet = () => {
                 <TableRow sx={{
                   fontSize: "12px",
                   "& th": {
-                    fontSize: "12px",
+                    fontSize: "15px",
                     color: 'text.secondary'
                   },
                   borderBottom:"#D2D2D2"
