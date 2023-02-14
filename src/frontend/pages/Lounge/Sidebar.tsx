@@ -21,7 +21,7 @@ import { getCreditCards } from '../../redux/actions/StripeAction';
 import { ThemeContext } from '../../contexts/ThemeContext'
 import blackLogo from "../../material/black.png";
 import whiteLogo from "../../material/white.png";
-import logo from '../../assets/img/web3/logo.png'
+import logo from '../../assets/img/logos/logo.png'
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {

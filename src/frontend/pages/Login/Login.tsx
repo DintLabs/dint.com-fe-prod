@@ -138,7 +138,7 @@ const Login = () => {
             // localStorage.setItem('userData', JSON.stringify(data.data));
             userHook.setCurrentUser(data.data);
             // dispatch(createWallet());
-            await _axios.get('https://bedev.dint.com/api/user/referral_code/')
+            await _axios.get('api/user/referral_code/')
             .then((res:any)=>{
               if(res.data.code === 200){
                 toast.success("User Login Successfully")
@@ -148,7 +148,6 @@ const Login = () => {
               }
             })
             .catch((err:any)=> {
-              console.log(err);
               toast.error("there might be some error please try again later")
             })
             // if(data.message === "User don't have referral code"){
@@ -238,8 +237,9 @@ const Login = () => {
               // localStorage.setItem('userData', JSON.stringify(data.data));
               userHook.setCurrentUser(data.data);
               // dispatch(createWallet());
-              await _axios.get('https://bedev.dint.com/api/user/referral_code/')
-            .then((res:any)=>{
+              await _axios.get('api/user/referral_code/')
+            .then((res:any)=>{   
+              console.log("google login", res)           
               if(res.data.code === 200){
                 toast.success("User Login Successfully")
                 onSuccessLogin();
@@ -271,17 +271,16 @@ const Login = () => {
                     // localStorage.setItem('userData', JSON.stringify(data.data));
                     userHook.setCurrentUser(data.data);
 
-                    await _axios.get('https://bedev.dint.com/api/user/referral_code/')
+                    await _axios.get('api/user/referral_code/')
                       .then((res:any)=>{
                         if(res.data.code === 200){
                           toast.success("User Login Successfully")
                           onSuccessLogin();
                         }else{
-                          navigate('/auth/refer' , {state : {for : 'login' , email :data.data.email}})
+                        navigate('/auth/refer' , {state : {for : 'login' , email :data.data.email}})
                         }
                       })
                       .catch((err:any)=> {
-                        console.log(err);
                         toast.error("there might be some error please try again later")
                       })
                     
@@ -400,7 +399,7 @@ const Login = () => {
       {/* <NavbarHome /> */}
       <div className="main-container-login">
         <div className="left-container">
-          <img  className="bg-left-img" src={require("../../assets/img/web3/bg_login.png")} alt="responsive image"/>
+          <img  className="bg-left-img" src={require("../../assets/img/bg/bg_login.png")} alt="responsive image"/>
           
           <p className="left-head position-absolute">Dint</p>
           <div className="bg-left-content d-flex justify-content-center">
@@ -417,7 +416,7 @@ const Login = () => {
             // style={{ maxWidth: "600px", margin: "0 auto" , width:"100%" }}
           >
               <div className="container " style={{paddingTop: '5vh' , minHeight:"100vh"}}>
-          <img className="right-logo"  style={{margin: "0px 0px 15% 1.5%"}} src={require("../../assets/img/web3/image 1.png")} alt="logo" />
+          <img className="right-logo"  style={{margin: "0px 0px 15% 1.5%"}} src={require("../../assets/img/logos/logo-01.png")} alt="logo" />
               <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
 
               <div className="form-control">
@@ -473,7 +472,7 @@ const Login = () => {
                   onClick={googleSignin}
                   className="socialbtn "
                 >
-                <img src={require("../../assets/img/web3/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px'}} />  Log In with Google
+                <img src={require("../../assets/img/socialmedia/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px'}} />  Log In with Google
                 </button>
                 <div className="d-flex justify-content-between align-items-center horizontal">
                 <div className="line"></div>

@@ -36,9 +36,9 @@ import React, {
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import TipPopUp from "frontend/components/tip/TipPopUp";
-import DiscordIcon from "../../assets/img/web3/discord.png";
-import InstagramIcon from "../../assets/img/web3/instagram.png";
-import TwitterIcon from "../../assets/img/web3/twitter.png";
+import DiscordIcon from "../../assets/img/socialmedia/discord.png";
+import InstagramIcon from "../../assets/img/socialmedia/instagram.png";
+import TwitterIcon from "../../assets/img/socialmedia/twitter.png";
 import PostItem from "./PostItem";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import moment from "moment";

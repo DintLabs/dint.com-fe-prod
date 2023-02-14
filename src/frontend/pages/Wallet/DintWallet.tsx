@@ -39,9 +39,9 @@ import QrScanDialog from './QrScanDialog';
 import SendDialog from './SendDialog';
 import POLYGON_ICON from '../../assets/img/web3/matic-token.png';
 import DINT_POLYGON_ICON from '../../assets/img/web3/dint-polygon-logo.png';
-import DINT_LOGO from '../../assets/img/web3/logo.png';
-import DOLLAR_ICON from '../../assets/img/web3/dollar.png';
-import PLUS_ICON from '../../assets/img/web3/plus_icon.png';
+import DINT_LOGO from '../../assets/img/web3/dint-token.png';
+import DOLLAR_ICON from '../../assets/img/icons/withdraw_icon.png';
+import PLUS_ICON from '../../assets/img/icons/buy_icon.png';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import { margin } from '@mui/system';
 

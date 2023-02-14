@@ -19,7 +19,7 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import _axios from "frontend/api/axios";
 import PaymentCard from "../Your-Bank/BankingSteps/PaymentCard";
 import { getCreditCards } from "frontend/redux/actions/StripeAction";
-import discover from "../../assets/img/web3/card_discover.png";
+import discover from "../../assets/img/cc/card_discover.png";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 interface TabPanelProps {

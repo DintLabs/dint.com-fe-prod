@@ -14,6 +14,7 @@ const RegistrationRefer = () =>{
     const navigate = useNavigate();
     const location = useLocation();
     const regex = /^[A-z0-9]/ ;
+    const [validReferCode , setValidReferCode] = useState(false)
     const {state} = location;
     useEffect(()=>{ 
       if(state && state.for === 'login'){
@@ -23,59 +24,49 @@ const RegistrationRefer = () =>{
       }
     },[])
 
-    
+    const addReferralCode = async() =>{
+      const addRefCodeData = {
+        email : state.email ,
+        referral_code : referCode
+      } 
+      await _axios.post(`api/user/add_referral_code/`,addRefCodeData).then((res:any)=>{ 
+        if(res.data.code === 200){
+          navigate(`/lounge${location?.search}`)
+          toast.success("User Login successfully")
+        }
+      }).catch((err:any)=>{
+          console.log(err);
+          toast.error('There might be some error ! Please try again later')
+      })
+    }
+
+    const validateReferralCode = async()=>{
+      const data = { "referred_code" : referCode }
+      await _axios.post(`api/user/validate_referral_code/`, data)
+      .then(async(response: any) => {
+        if(response.data.code !== 200 ){
+          setErrMsg('Invalid referral code!')
+        }else if(response.status !== 200){
+          toast.error('There might be some error ! Please try again later')
+        }
+        else{
+          if(state && state.for === 'login'){
+              await addReferralCode()
+          }else{
+            navigate(`/auth/signup${location?.search}` , {state : {referCode}})
+          }
+          setValidReferCode(true)
+        }
+      }).catch((err : any) =>{
+        console.log(err)
+        toast.error('There might be some error ! Please try again later')
+      })
+    }
 
     const signupClicked = async() =>{
         const validation = regex.test(referCode);
-        const data = { "referred_code" : referCode }
         if(validation){
-          if(state.for === 'signup'){
-            await _axios.post(`api/user/validate_referral_code/`, data)
-            .then((response: any) => {
-              if(response.data.code !== 200 ){
-                setErrMsg('Invalid referral code!')
-              }else if(response.status !== 200){
-                toast.error('There might be some error ! Please try again later')
-                setErrMsg('There might be some error ! Please try again later')
-              }
-              else{
-                toast.success('Success ! Redirecting to signup page')
-                navigate(`/auth/signup${location?.search}` , {state : {referCode}})
-              }
-            })
-          }else if (state.for === 'login'){
-            await _axios.post(`api/user/validate_referral_code/`, data)
-            .then(async (response: any) => {
-              toast.warning('Please wait ! While we validate the reference code')
-              if(response.data.code !== 200 ){
-                setErrMsg('Invalid referral code!')
-              }else if(response.status !== 200){
-                setErrMsg('There might be some error ! Please try again later')
-              }
-              else{
-                const addRefCodeData = {
-                  email : state.email ,
-	                referral_code : referCode
-                } 
-                
-                await _axios.post(`api/user/add_referral_code/`,addRefCodeData).then((res:any)=>{ 
-                  if(res.data.code === 200){
-                    console.log(res);
-                    
-                    navigate(`/lounge${location?.search}`)
-                    toast.success("User Login successfully")
-                  }
-                }).catch((err:any)=>{
-                    console.log(err);
-                    toast.error('There might be some error ! Please try again later')
-                    setErrMsg('There might be some error ! Please try again later')
-                })
-              }
-            })
-          }else {
-            toast.error('There might be some error ! Please try again later')
-            setErrMsg('There might be some error ! Please try again later')
-          }
+          await validateReferralCode()
         }else{
           setErrMsg('Please Enter code!')
         }
@@ -91,7 +82,7 @@ const RegistrationRefer = () =>{
       <div className="main-container-refer">
         <div className="right-container-refer" >
           <div className="login_divs" >
-          <img className="right-logo" onClick={()=>navigate(-1)}  src={require("../../assets/img/web3/image 1.png")} alt="logo" />
+          <img className="right-logo" onClick={()=>navigate('/')}  src={require("../../assets/img/logos/logo-01.png")} alt="logo" />
               <div className="container" style={{paddingTop: "30px"}}>
               <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
               <div className="form-control">

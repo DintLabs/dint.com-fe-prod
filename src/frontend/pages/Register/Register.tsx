@@ -319,7 +319,7 @@ const Register = () => {
         <div className="left-container">
           <img
             className="bg-left-img"
-            src={require("../../assets/img/web3/bg_login.png")}
+            src={require("../../assets/img/bg/bg_login.png")}
             alt="responsive image"
           />
           <p className="left-head position-absolute">Dint</p>
@@ -337,7 +337,7 @@ const Register = () => {
             <div className="container px-1" style={{paddingTop:'5vh' , minHeight:"100vh"}}>
             <img
             className="right-logo"
-            src={require("../../assets/img/web3/image 1.png")}
+            src={require("../../assets/img/logos/logo-01.png")}
             alt="logo"
               />
               <div className="header"></div>
@@ -431,12 +431,12 @@ const Register = () => {
                       className="socialbtn"
                     >
                       <img
-                        src={require("../../assets/img/web3/googlelogo.png")}
+                        src={require("../../assets/img/socialmedia/googlelogo.png")}
                         className="mx-2 google-logo"
                         alt=""
                         style={{ height: "20px" }}
                       />{" "}
-                      Log In with Google
+                      SignUp with Google
                     </button>
                     
                 <div
