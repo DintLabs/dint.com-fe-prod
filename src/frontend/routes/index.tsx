@@ -250,15 +250,30 @@ export default function Router() {
         },
         {
           path: "/privacy",
-          element: <PrivacyPolicy />,
+          element: (
+            <>
+              <PrivacyPolicy />
+              <SecondaryFooter />
+            </>
+          ),
         },
         {
           path: "/cookies",
-          element: <CookieNotice />,
+          element: (
+          <>
+            <CookieNotice />
+            <SecondaryFooter />
+          </>
+          )
         },
         {
           path: "/terms",
-          element: <TermsOfServices />,
+          element:(
+          <>
+            <TermsOfServices />
+            <SecondaryFooter/>
+          </>
+          )
         },
         {
           path: "/lounge/:page",

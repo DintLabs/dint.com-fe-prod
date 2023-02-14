@@ -223,15 +223,14 @@ const Sidebar = () => {
           {/* <ListItemText primary={<Typography variant="subtitle1">Wallet</Typography>} /> */}
         </ListItem>
         <ListItem
-
           sx={{
             cursor: 'pointer',
             paddingBottom: '20px',
-            color: toggle ? 'text.primary' : 'text.secondary'
+            color: HOME_SIDE_MENU.ADD_POST === selectedMenu ? toggle ? 'text.primary' : '#161C24' : 'text.secondary'
           }}
           onClick={() => {
-            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.TOKEN }));
-            navigate(`/dint-wallet`);
+            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.ADD_POST }));
+            navigate(`/lounge/${HOME_SIDE_MENU.ADD_POST}`);
           }}
         >
           <ListItemAvatar>

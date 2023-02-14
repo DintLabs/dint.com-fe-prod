@@ -183,7 +183,7 @@ const NewHome = () => {
         />
       </Helmet>
       <Box style={{ margin: 0 }}>
-        <Grid container >
+        <Grid container sx={{flexWrap:'nowrap'}}>
           <Grid item xs={0} md={1} sx={{ display: !isMobileScreen ? '' : 'none' }}>
             {userData && !!userData.id && <Sidebar />}
           </Grid>
