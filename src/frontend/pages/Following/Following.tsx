@@ -140,11 +140,11 @@ const Following = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item md={3}>
+      <Grid container>
+        <Grid item md={1}>
           <Sidebar />
         </Grid>
-        <Grid item md={9}>
+        <Grid item md={10} sm={10} xs={10}>
           <Stack
             className="subscriptions-page-container"
             sx={{

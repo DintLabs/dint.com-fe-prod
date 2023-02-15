@@ -51,6 +51,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useRoutes } from "react-router-dom";
 import Following from "../pages/Following/Following";
 import RegistrationRefer from "frontend/pages/RegistrationRefer/RegistrationRefer";
+import HelpSupport from "frontend/pages/Privacy/HelpSupport";
 
 // ----------------------------------------------------------------------
 
@@ -249,31 +250,20 @@ export default function Router() {
           ),
         },
         {
+          path: "/help",
+          element: <HelpSupport />,
+        },
+        {
           path: "/privacy",
-          element: (
-            <>
-              <PrivacyPolicy />
-              <SecondaryFooter />
-            </>
-          ),
+          element: <PrivacyPolicy />
         },
         {
           path: "/cookies",
-          element: (
-          <>
-            <CookieNotice />
-            <SecondaryFooter />
-          </>
-          )
+          element: <CookieNotice />
         },
         {
           path: "/terms",
-          element:(
-          <>
-            <TermsOfServices />
-            <SecondaryFooter/>
-          </>
-          )
+          element:<TermsOfServices />
         },
         {
           path: "/lounge/:page",

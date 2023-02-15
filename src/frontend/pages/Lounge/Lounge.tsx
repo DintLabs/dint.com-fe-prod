@@ -129,6 +129,7 @@ const NewHome = () => {
         setTimeout(() => {
           toast.dismiss();
         }, 3000);
+        navigate('/lounge')
       } catch (err: any) {
         toast.error(err.toString());
       }

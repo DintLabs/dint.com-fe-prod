@@ -14,6 +14,7 @@ import AddPost from './AddPost';
 import './navbarTab.css';
 import PostItem from './PostItem';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
+import { useNavigate } from 'react-router';
 
 interface Props {
   createPost: Function;
@@ -54,6 +55,7 @@ function TabPanel(props: TabPanelProps) {
 
 const HomeTab = ({ createPost }: Props) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [value, setValue] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -409,28 +411,32 @@ const HomeTab = ({ createPost }: Props) => {
               </Box>
             )}
             <Grid direction='row' gap={2} sx={{ display: 'flex', marginTop: '30px' }}>
-              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
-                Terms of Service
-              </Typography>
-              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
-                Privacy Policy
-              </Typography>
-              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
-                Cookie Policy
-              </Typography>
+              <div onClick={() => navigate('/terms')}>
+                <Typography variant="h6" sx={{ color: 'text.secondary', cursor: 'pointer' }} >
+                  Terms of Service
+                </Typography>
+              </div>
+              <div onClick={() => navigate('/privacy')}>
+                <Typography variant="h6" sx={{ color: 'text.secondary', cursor: 'pointer' }} >
+                  Privacy Policy
+                </Typography>
+              </div>
+              <div onClick={() => navigate('/cookies')}>
+                <Typography variant="h6" sx={{ color: 'text.secondary', cursor: 'pointer' }} >
+                  Cookie Policy
+                </Typography>
+              </div>
             </Grid>
             <Grid direction='row' gap={2} sx={{ display: 'flex', marginTop: '20px', }}>
+              <div onClick={() => navigate('/help')}>
+                <Typography variant="h6" sx={{ color: 'text.secondary', cursor: 'pointer' }}>
+                  Help
+                </Typography>
+              </div>
+             
+           
               <Typography variant="h6" sx={{ color: 'text.secondary' }} >
-                Help
-              </Typography>
-              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
-                Ads Info
-              </Typography>
-              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
-                More...
-              </Typography>
-              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
-                © 2021 , Inc.
+                © 2023, Dint.
               </Typography>
             </Grid>
           </Box>

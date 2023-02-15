@@ -70,12 +70,12 @@ export default function LoungeLayout({ isSearchPage = false }) {
             <Box>
               <Grid container>
                 {isSearchPage ? (
-                  <Grid item xs={0} md={3} />
+                  <Grid item xs={0} md={1} />
                 ) : (
                   <Grid
                     item
                     xs={0}
-                    md={3}
+                    md={1}
                     sx={{ display: widthScreen >= 900 ? "" : "none" }}
                   >
                     {user && !!user.id && !isMobile() && <Sidebar />}

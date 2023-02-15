@@ -426,6 +426,7 @@ onClick={() => navigate('/dint-wallet')}
             sx={itemSelectionStyle}
             disablePadding
             // onClick={onLogout}
+            onClick={() => navigate('/help')}
           >
             <ListItemButton>
               <ListItemIcon>

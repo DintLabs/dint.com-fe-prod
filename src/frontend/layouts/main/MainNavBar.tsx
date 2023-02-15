@@ -177,7 +177,7 @@ const MainNavBar = () => {
               </>
             )}
           </div>
-          {isAuthenticated && isLargeScreen && (
+          {isAuthenticated && isLargeScreen && !pathname.includes("/help") && (
             <Autocomplete
               // freeSolo
               forcePopupIcon={false}
