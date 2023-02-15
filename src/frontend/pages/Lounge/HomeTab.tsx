@@ -514,6 +514,8 @@ const HomeTab = ({ createPost }: Props) => {
                 Help
               </Typography>
               </div>
+            
+         
               <Typography
                 variant="h6"
                 sx={{
@@ -521,25 +523,7 @@ const HomeTab = ({ createPost }: Props) => {
                   color: toggle ? "text.primary" : "#536471",
                 }}
               >
-                Ads Info
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "400",
-                  color: toggle ? "text.primary" : "#536471",
-                }}
-              >
-                More...
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "400",
-                  color: toggle ? "text.primary" : "#536471",
-                }}
-              >
-                © 2021 , Inc.
+               Dint © 2023 
               </Typography>
             </Grid>
           </Box>
