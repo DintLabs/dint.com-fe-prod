@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
       <h1
         // className="text-center mb-5"
         style={{
-          color: toggle ? "white" : "#161c24",
+          color: toggle ? "white" : "black",
           padding: "20px 0",
           backgroundColor: toggle ? "#161c24" : "white",
         }}

@@ -10,8 +10,8 @@ const SecondaryFooter = () => {
 
     return (
         <>
-            <footer>
-                <div className="bottom-line"></div>
+            <footer style={{background :toggle ? "#353535" : "" , color:toggle ? "#fff" : "#353535"}}>
+                <div className="bottom-line" style={{border: toggle ? '1px solid rgba(255, 255, 255, 0.2)' :'1px solid #EAE8ED'}}></div>
                 <div className="row main-footer m-auto">
                     {/* <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12 left-footer" > */}
                     <div className="col left-footer">
@@ -26,18 +26,18 @@ const SecondaryFooter = () => {
                     <div className="col right-footer">
                         <div className="row  footer-rows-mobile">
                             <div className="col-xs-6">
-                                <Link to={`/help`}>
-                                    <p className={colorStyle}>Help</p>
+                                <Link style={{color:toggle ? "#fff" : "#353535"}} to={`/help`}>
+                                    <p >Help</p>
                                 </Link>
-                                <p className={colorStyle}>Store</p>
-                                <Link to={`/cookies${location?.search}`}>
-                                    <p className={colorStyle}>Cookie Notice</p>
+                                <p style={{color:toggle ? "#fff" : "#353535"}}>Store</p>
+                                <Link style={{color:toggle ? "#fff" : "#353535"}} to={`/cookies${location?.search}`}>
+                                    <p>Cookie Notice</p>
                                 </Link>
 
                             </div>
-                            <div className="col-xs-6">
-                                <p className={colorStyle}>Terms & Conditions </p>
-                                <p className={colorStyle}>About</p>
+                            <div style={{color:toggle ? "#fff" : "#353535"}} className="col-xs-6">
+                                <p>Terms & Conditions </p>
+                                <p>About</p>
                                 <p></p>
                             </div>
                         </div>
@@ -50,15 +50,15 @@ const SecondaryFooter = () => {
 
                             </div>
                             <div className="col my-1 footer-column">
-                                <Link to={`/help`}>
-                                    <p className={colorStyle}>Help</p>
+                                <Link style={{color:toggle ? "#fff" : "#353535"}} to={`/help`}>
+                                    <p >Help</p>
                                 </Link>
-                                <Link to={"/terms"}><p className={colorStyle}>Terms of Service</p></Link>
+                                <Link style={{color:toggle ? "#fff" : "#353535"}} to={"/terms"}><p>Terms of Service</p></Link>
                             </div>
                             <div className="col footer-column">
 
-                                <Link to={"/privacy"}><p className={colorStyle}>Privacy</p></Link>
-                                <Link to={`/cookies${location?.search}`}><p className={colorStyle}>Cookie Notice</p></Link>
+                                <Link style={{color:toggle ? "#fff" : "#353535"}} to={"/privacy"}><p>Privacy</p></Link>
+                                <Link style={{color:toggle ? "#fff" : "#353535"}} to={`/cookies${location?.search}`}><p>Cookie Notice</p></Link>
                             </div>
                         </div>
                     </div>

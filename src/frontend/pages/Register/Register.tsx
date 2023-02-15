@@ -1,5 +1,5 @@
 import useAuth from "frontend/hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../../material/signup.css";
@@ -23,6 +23,7 @@ import { createWallet } from "frontend/redux/actions/createWallet";
 import useUser from "frontend/hooks/useUser";
 
 import { globalWindow } from "../../components/App";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const Register = () => {
   const userHook = useUser();
@@ -43,6 +44,8 @@ const Register = () => {
   const [error_msg, setSignErr] = useState("");
 
   const data =  useLocation();
+  const { toggle } = useContext(ThemeContext);
+
   useEffect(()=>{
     if(data.state && data.state.referCode){
       setReferCode(data.state.referCode) 
@@ -329,12 +332,12 @@ const Register = () => {
             </div>
           </div>
         </div>
-        <div className="right-container d-flex align-items-center">
+        <div className="right-container d-flex align-items-center" style={{background : toggle ? '#353535' : ''}}>
           <div
             className="login_divs"
             // style={{ maxWidth: "600px", margin: "0 auto" }}
           >
-            <div className="container px-1" style={{paddingTop:'5vh' , minHeight:"100vh" , textAlign:"center"}}>
+            <div className="container px-1" style={{paddingTop:'5vh' , minHeight:"100vh" , textAlign:"center" ,color:toggle ? "#fff" : ''}}>
             <img
             className="right-logo"
             style={{margin: "0px 0px 0% 1.5%"}}
@@ -342,10 +345,11 @@ const Register = () => {
             alt="logo"
               />
               <div className="header"></div>
-              <div className="form-control">
+              <div className="form-control" style={{ background : toggle ? "#353535" : '' , color:toggle ? "#fff" : '' }}>
                 <label htmlFor="username">
                   Full Name
                   <input
+                    style = {{ background: toggle ? "#353535" : ''  , color:toggle ? "white" : '' , border: toggle ? '2px solid rgba(255, 255, 255, 0.4)' :'2px solid #f0f0f0'}}
                     type="text"
                     placeholder="Enter Your Full Name"
                     value={name}
@@ -355,10 +359,11 @@ const Register = () => {
                   />
                   </label>
               </div>
-              <div className="form-control">
+              <div className="form-control" style={{ background : toggle ? "#353535" : '' , color:toggle ? "#fff" : '' }}>
                 <label htmlFor="username">
                   Username
                   <input
+                    style = {{ background: toggle ? "#353535" : ''  , color:toggle ? "white" : '' , border: toggle ? '2px solid rgba(255, 255, 255, 0.4)' :'2px solid #f0f0f0'}}
                     type="text"
                     placeholder="Enter Your Username"
                     value={username}
@@ -368,10 +373,11 @@ const Register = () => {
                   />
                 </label>
               </div>
-              <div className="form-control">
+              <div className="form-control" style={{ background : toggle ? "#353535" : '' , color:toggle ? "#fff" : '' }}>
                 <label htmlFor="username">
                   Email
                 <input
+                    style = {{ background: toggle ? "#353535" : ''  , color:toggle ? "white" : '' , border: toggle ? '2px solid rgba(255, 255, 255, 0.4)' :'2px solid #f0f0f0'}}
                     type="text"
                     placeholder="Enter Your Email Address"
                     value={email}
@@ -390,10 +396,11 @@ const Register = () => {
                 />
               </label>
             </div> */}
-              <div className="form-control">
+              <div className="form-control" style={{ background : toggle ? "#353535" : '' , color:toggle ? "#fff" : '' }}>
                 <label htmlFor="username">
                   Password
                 <input
+                    style = {{ background: toggle ? "#353535" : ''  , color:toggle ? "white" : '' , border: toggle ? '2px solid rgba(255, 255, 255, 0.4)' :'2px solid #f0f0f0'}}
                     type={passwordType}
                     placeholder="Enter Your Password"
                     value={password}
@@ -426,9 +433,9 @@ const Register = () => {
                   Sign Up
                 </button>
                 <div className="signup_text_div">
-                <p style={{color:'#353535'}}>Already Have An Account?</p>
-                <p id="login_line">
-                  <Link to={`/auth/login${location?.search}`}>
+                <p style={{ color:toggle ? "#fff":"#353535" , opacity:toggle ?"0.6" : '1'}} >Already Have An Account?</p>
+                <p style={{color:toggle ? "#fff" : '#353535'}} id="login_line">
+                  <Link style={{color:toggle ? "#fff" : "#353535"}} to={`/auth/login${location?.search}`}>
                     <span id="signup_here"> Log In </span>
                   </Link>
                 </p>
@@ -446,9 +453,9 @@ const Register = () => {
                 
 
                 <div className="d-flex justify-content-between align-items-center horizontal">
-                  <div className="line"></div>
+                  <div className="line" style={{border:toggle ? '1px solid rgba(255, 255, 255, 0.4)' :'1px solid rgba(0, 0, 0, 0.08)'}}></div>
                   <p className="m-3">Or</p>
-                  <div className="line"></div>
+                  <div className="line" style={{border:toggle ? '1px solid rgba(255, 255, 255, 0.4)' :'1px solid rgba(0, 0, 0, 0.08)'}}></div>
                 </div>
                 
 
@@ -456,6 +463,7 @@ const Register = () => {
                       type="button"
                       onClick={googleSignUp}
                       className="socialbtn"
+                      style={toggle ? { background : '#353535' , color:"#fff" } : { background : '#fff' , color:"#000"  }}
                     >
                       <img
                         src={require("../../assets/img/socialmedia/googlelogo.png")}

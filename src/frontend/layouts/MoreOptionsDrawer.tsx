@@ -218,7 +218,7 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
       }}
     >
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
+        expandIcon={<ExpandMoreIcon sx={{color:toggle? "white" : "black"}} />}
         aria-controls="panel1a-content"
         id="panel1a-header"
         sx={{ padding: '0' }}
@@ -244,7 +244,7 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
               <FormControlLabel
                 key={`${oneLang.value}_${i}`}
                 value={oneLang.value}
-                control={<Radio />}
+                control={<Radio sx={{color:toggle ? "white" : "black"}}/>}
                 label={oneLang.title}
                 translate="no"
               />
@@ -464,10 +464,13 @@ onClick={() => navigate('/dint-wallet')}
                   color: "white",
                 },
               },
-              "&:hover": {
-                color: "white",
-                ".MuiButtonBase-root": {
-                  background: "#d3d8de",
+              '.MuiButtonBase-root':{
+                background : toggle ? '#161c24' : "white" 
+              },
+              '&:hover': {
+                color: 'white',
+                '.MuiButtonBase-root': {
+                  background: '#919EAB'
                 },
                 "& .MuiListItemIcon-root": {
                   color: "white",

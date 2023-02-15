@@ -1,11 +1,11 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import "../../material/signup.css" ;
 import { Helmet } from "react-helmet";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 // import axios from "axios";
 import _axios from "frontend/api/axios";
 import { toast } from "react-toastify";
-
+import { ThemeContext } from "frontend/contexts/ThemeContext";
 
 const RegistrationRefer = () =>{
     const [referCode , setReferCode] = useState('');
@@ -16,6 +16,8 @@ const RegistrationRefer = () =>{
     const regex = /^[A-z0-9]/ ;
     const [validReferCode , setValidReferCode] = useState(false)
     const {state} = location;
+    const { toggle } = useContext(ThemeContext);
+
     useEffect(()=>{ 
       if(state && state.for === 'login'){
         setbtnVal('Login for Dint')
@@ -79,15 +81,16 @@ const RegistrationRefer = () =>{
         <meta name="description" content="Reference for registration" />
       </Helmet>
       {/* <NavbarHome /> */}
-      <div className="main-container-refer">
+      <div className="main-container-refer" style={{background : toggle ? '#353535' : ''}}>
         <div className="right-container-refer" >
           <div className="login_divs" >
           <img className="right-logo" onClick={()=>navigate('/')}  src={require("../../assets/img/logos/logo-01.png")} alt="logo" />
               <div className="container" style={{paddingTop: "30px"}}>
               <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
-              <div className="form-control">
+              <div className="form-control" style={{ background : toggle ? "#353535" : '' , color:toggle ? "#fff" : '' }}>
                 <label htmlFor="email"> Referal Code </label>
                 <input
+                    style = {{ background: toggle ? "#353535" : ''  , color:toggle ? "white" : '' ,   border: toggle ? '2px solid rgba(255, 255, 255, 0.4)' :'2px solid #f0f0f0'}}
                     id="referalCode"
                     type="text"
                     placeholder="Enter referal code"

@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import { authInstance } from "frontend/contexts/FirebaseInstance";
 import useAuth from "frontend/hooks/useAuth";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import {
   Link,
@@ -29,6 +29,7 @@ import { dispatch, RootState } from "frontend/redux/store";
 import useUser from "frontend/hooks/useUser";
 import { useDispatch } from "react-redux";
 import _axios from "frontend/api/axios";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const Login = () => {
   const userHook = useUser();
@@ -42,6 +43,7 @@ const Login = () => {
   const auth = getAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();  
+  const { toggle } = useContext(ThemeContext);
 
   getRedirectResult(auth)
     .then(async (result) => {
@@ -408,23 +410,24 @@ const Login = () => {
               </div>
           </div>
         </div>
-        <div className="right-container" 
+        <div className="right-container" style={{background : toggle ? '#353535' : ''}}
         >
           <div
             className="login_divs"
             // style={{ maxWidth: "340px", margin: "0 auto" }}
             // style={{ maxWidth: "600px", margin: "0 auto" , width:"100%" }}
           >
-              <div className="container " style={{paddingTop: '5vh' , minHeight:"100vh" , textAlign:"center"}}>
+              <div className="container " style={{paddingTop: '5vh' , minHeight:"100vh" , textAlign:"center" , color:toggle ? "#fff" : ''}} >
           <img className="right-logo"  style={{margin: "0px 0px 15% 1.5%"}} src={require("../../assets/img/logos/logo-01.png")} alt="logo" />
               <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
 
-              <div className="form-control">
+              <div className="form-control" style={{ background : toggle ? "#353535" : '' , color:toggle ? "#fff" : '' }}>
                 <label htmlFor="email">
                   Email
                  
                 </label>
                 <input
+                    style = {{ background: toggle ? "#353535" : ''  , color:toggle ? "white" : '' ,   border: toggle ? '2px solid rgba(255, 255, 255, 0.4)' :'2px solid #f0f0f0'}}
                     id="email"
                     type="email"
                     placeholder="Email"
@@ -433,12 +436,13 @@ const Login = () => {
                   />
               </div>
 
-              <div className="form-control">
+              <div className="form-control" style={{ background : toggle ? "#353535" : '' , color:toggle ? "#fff" : ''  }}>
                 <label htmlFor="password">
                   Password
                  
                 </label>
                 <input
+                    style = {{ background: toggle ? "#353535" : ''  , color:toggle ? "white" : '' , border: toggle ? '2px solid rgba(255, 255, 255, 0.4)' :'2px solid #f0f0f0'}}
                     id="password"
                     type={passwordType}
                     placeholder="Password"
@@ -458,7 +462,7 @@ const Login = () => {
                   type="button"
                   onClick={forgotPassClicked}
                   >
-                    <span id="forgotPassText">Forgot Password?</span>{" "}
+                    <span style={{color :toggle ? "#fff" :''}} id="forgotPassText">Forgot Password?</span>{" "}
                   </button>
                 </div>
 
@@ -468,15 +472,15 @@ const Login = () => {
                 Log In
               </button>
               <div className="signup_text_div">
-                <p style={{ color:"#353535"}}>Don't Have An Account?</p>
-                <p style={{color:'#353535'}} id="signup_line">
+                <p style={{ color:toggle ? "#fff":"#353535" , opacity:toggle ?"0.6" : '1'}}>Don't Have An Account?</p>
+                <p style={{color:toggle ? "#fff" : '#353535'}} id="signup_line">
                   <span onClick={()=>navigate(`/auth/refer${location?.search}` , {state : {for :"signup"}})} id="signup_here"> Sign Up </span>
                 </p>
               </div>
                 <div className="d-flex justify-content-between align-items-center horizontal">
-                <div className="line"></div>
+                <div className="line" style={{border:toggle ? '1px solid rgba(255, 255, 255, 0.4)' :'1px solid rgba(0, 0, 0, 0.08)'}}></div>
                 <p className="m-3">Or</p>
-                <div className="line"></div>
+                <div className="line" style={{border:toggle ? '1px solid rgba(255, 255, 255, 0.4)' :'1px solid rgba(0, 0, 0, 0.08)'}}></div>
               </div>
 
              
@@ -484,8 +488,9 @@ const Login = () => {
                   type="button"
                   onClick={googleSignin}
                   className="socialbtn "
+                  style={toggle ? { background : '#353535' , color:"#fff" } : { background : '#fff' , color:"#000"  }}
                 >
-                <img src={require("../../assets/img/socialmedia/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px'}} />  Log In with Google
+                <img src={require("../../assets/img/socialmedia/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px' , background : toggle ? '' : "#fff"}} />  Log In with Google
                 </button>
           
               <div

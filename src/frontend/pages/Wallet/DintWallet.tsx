@@ -116,6 +116,9 @@ const DintWallet = () => {
   const onWithdrawal = () => {
     navigate('/en/fiat/withdraw/EUR');
   }
+  const onBuyToken = () => {
+    navigate('/buy-dint-token');
+  }
 
   const { toggle } = useContext(ThemeContext);
 
@@ -147,7 +150,7 @@ const DintWallet = () => {
           <Box sx={{ display: 'flex',marginTop:"3%", justifyContent: 'center', alignItems: 'center' } }>
             {mobileView ?
             <Box sx={{display:"flex" , flexDirection:"column" , alignItems:'center' , color : toggle ? "white" : "black" }}>
-              <Avatar onClick={onWithdrawal} sx={{height:"12vh" , width:"14vh" }} alt="Withdraw" src={PLUS_ICON} />
+              <Avatar onClick={onBuyToken} sx={{height:"12vh" , width:"14vh" }} alt="Withdraw" src={PLUS_ICON} />
               <span>Buy</span>
             </Box>
             :<Button className='btn-text-buy' sx={{ mr: 2 ,borderRadius:"30px", background:"#EFEFEF;" , color:'black', padding:"1% 0%" ,width:"20%"}} style={toggle ? {color : "Black"} : {color:'black'}} onClick={() => {navigate(`/buy-dint-token`)} }>BUY</Button>}
