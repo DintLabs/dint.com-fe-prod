@@ -21,7 +21,7 @@ const TermsOfServices = () => {
           style={{
             color: toggle ? "white" : "#161c24",
             padding: "20px 0",
-            backgroundColor: "white",
+            backgroundColor: toggle ? "#161c24" : "white",
           }}
         >
           TERMS OF SERVICE

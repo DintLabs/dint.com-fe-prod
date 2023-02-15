@@ -4,10 +4,13 @@ import MessageRoundedIcon from "@mui/icons-material/MessageRounded";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import Favourite from "../../assets/img/web3/comment.svg";
+import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 
 import {
   Avatar,
   Box,
+  colors,
   IconButton,
   List,
   ListItem,
@@ -22,7 +25,7 @@ import {
 import { toast } from "react-toastify";
 
 import { MdDelete, MdSend } from "react-icons/md";
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import TipPopUp from "frontend/components/tip/TipPopUp";
@@ -33,6 +36,7 @@ import {
   BookmarkPostInterface,
   UnlikePostInterface,
 } from "frontend/interfaces/postInterface";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "frontend/redux/store";
@@ -46,7 +50,7 @@ import {
   unlikeForPost,
 } from "frontend/redux/actions/postActions";
 import { ThemeContext } from "../../contexts/ThemeContext";
-
+import Picker from "@emoji-mart/react";
 const PostItem = ({
   userName,
   custom_username,
@@ -78,6 +82,9 @@ const PostItem = ({
   const [post, setPost] = React.useState(PropPost);
   const [canHeDeletePost, setCanHeDeletePost] = React.useState(false);
   const [openPopUpTip, setOpenPopUpTip] = React.useState<boolean>(false);
+  const [showAllComments, setShowAllComments] = React.useState<boolean>(false);
+  const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
+  const [emoji, setEmoji] = React.useState("");
 
   const images = ["jpg", "gif", "png", "svg", "webp", "ico", "jpeg"];
   const videos = ["MP4", "mp4", "MOV", "mov", "3gp", "ogg", "quicktime"];
@@ -96,9 +103,9 @@ const PostItem = ({
 
   const user = useSelector((state: RootState) => state.user.userData);
   const { toggle } = useContext(ThemeContext);
-
+  let inputRef = useRef<HTMLInputElement>(null);
   React.useEffect(() => {
-    setComments(post.post_comment);
+    setComments(post.post_comment.slice(0).reverse());
   }, [post]);
 
   const sendComment = async () => {
@@ -122,6 +129,7 @@ const PostItem = ({
     }));
 
     setCommentText("");
+    setShowEmoji(false);
   };
 
   React.useEffect(() => {
@@ -239,13 +247,50 @@ const PostItem = ({
     setOpenPopUpTip(false);
   };
 
+  const handleEmojiPickup = (emoji: any) => {
+    if (inputRef) {
+      const cursorPosition = inputRef.current?.selectionStart || 0;
+      const text =
+        commentText.slice(0, cursorPosition) +
+         commentText.slice(cursorPosition)+emoji.native;
+      setEmoji(emoji);
+      setCommentText(text);
+    }
+  };
+
+  const displayComment = (item: any, i: any) => {
+    return (
+      <div
+        className=""
+        style={{ background: "transparent" }}
+        key={`comments_${item?.created_at}_${i}`}
+      >
+        <div className="d-flex flex-column">
+          <div className="user d-flex flex-row justify-content-between w-100 align-items-center">
+            <span
+              className="like-comm mb-0"
+              style={{ color: toggle ? "white" : "#161C24" }}
+            >
+              {item?.comment}
+            </span>
+            <IconButton sx={{ padding: 0, color: toggle ? "#fff" : "#000" }}>
+              <FavoriteBorderRoundedIcon fontSize="small" />
+            </IconButton>
+          </div>
+
+          <div className="view-comm">{moment(item?.created_at).fromNow()}</div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <Box
         style={{
           border: `1px solid ${theme.palette.grey[400]}`,
-          borderRadius: '10px',
-          marginBottom: '30px'
+          borderRadius: "10px",
+          marginBottom: "30px",
         }}
       >
         <List>
@@ -279,7 +324,12 @@ const PostItem = ({
                 </Typography>
               }
             />
-            <Stack direction="row" alignItems="center" gap={1}>
+            <Stack
+              direction="column"
+              alignItems="flex-end"
+              justifyContent="center"
+              gap={1}
+            >
               <Typography
                 component="span"
                 variant="caption"
@@ -294,18 +344,13 @@ const PostItem = ({
             </Stack>
           </ListItem>
         </List>
-        <Box sx={{ p: 2 }}>
-          <Typography
-            component="span"
-            variant="body2"
-            sx={{ color: toggle ? "text.primary" : "#161C24" }}
-          >
-            {description}
-          </Typography>
-        </Box>
         {image && images.includes(extension) && (
           <Box sx={{ textAlign: "center" }}>
-            <img src={image} alt="post" style={{ width: "100%" }} />
+            <img
+              src={image}
+              alt="post"
+              style={{ borderRadius: "18px", width: "100%" }}
+            />
           </Box>
         )}
 
@@ -323,35 +368,33 @@ const PostItem = ({
           sx={{ p: 2 }}
           className="d-flex align-items-center justify-content-between"
         >
-          <Stack direction="row">
-            {!alreadyLike ? (
+          <Stack width="100%" direction="row" justifyContent="space-between">
+            <Box sx={{ display: "flex" }}>
+              <IconButton
+                // onClick={() => setShowComments(!showComments)}
+                onClick={() => setShowAllComments(!showAllComments)}
+                className="d-flex align-items-center justify-content-center"
+              >
+                <MessageRoundedIcon />
+              </IconButton>
               <IconButton
                 className="d-flex align-items-center justify-content-center"
                 onClick={handleLike}
               >
-                <FavoriteBorderRoundedIcon />
-                <p className="m-0 small ms-2">
-                  {/* {post?.like_post?.length ?? "0"} */}
-                  {+post?.like_post?.length -
-                    (+post?.unlike_post?.length
-                      ? post?.unlike_post?.length
-                      : 0) ?? post?.like_post?.length}
-                </p>
+                {!alreadyLike ? (
+                  <FavoriteBorderRoundedIcon />
+                ) : (
+                  <FaHeart color="red" />
+                )}
               </IconButton>
-            ) : (
               <IconButton
-                className="d-flex align-items-center justify-content-center"
-                onClick={handleLike}
+                onClick={() => setOpenPopUpTip(true)}
+                sx={{ fontSize: "12px" }}
               >
-                <FaHeart color="red" />
-                <p className="m-0 small ms-2">
-                  {+post?.like_post?.length -
-                    (+post?.unlike_post?.length
-                      ? post?.unlike_post?.length
-                      : 0) ?? post?.like_post?.length}
-                </p>
+                <MonetizationOnIcon />
+                SEND TIP
               </IconButton>
-            )}
+            </Box>
             {!alreadyBookmark ? (
               <IconButton
                 className="d-flex align-items-center justify-content-center"
@@ -369,22 +412,6 @@ const PostItem = ({
                 {/* <p className="m-0 small ms-2">0</p> */}
               </IconButton>
             )}
-            <IconButton
-              onClick={() => setShowComments(!showComments)}
-              className="d-flex align-items-center justify-content-center"
-            >
-              <MessageRoundedIcon />
-              <p className="m-0 small ms-2">
-                {post?.post_comment?.length ?? "0"}
-              </p>
-            </IconButton>
-            <IconButton
-              onClick={() => setOpenPopUpTip(true)}
-              sx={{ fontSize: "12px" }}
-            >
-              <MonetizationOnIcon />
-              SEND TIP
-            </IconButton>
           </Stack>
           {canDeletePost && canHeDeletePost ? (
             <IconButton onClick={deletePost}>
@@ -392,57 +419,106 @@ const PostItem = ({
             </IconButton>
           ) : null}
         </Box>
+        <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
+          <p className="like-comm">
+            {/* {post?.like_post?.length ?? "0"} */}
+            {+post?.like_post?.length -
+              (+post?.unlike_post?.length ? post?.unlike_post?.length : 0) ??
+              post?.like_post?.length}{" "}
+            Likes
+          </p>
+        </Box>
+        <Box sx={{ px: 2 }}>
+          <Typography
+            component="span"
+            className="like-comm"
+            variant="body2"
+            sx={{ color: toggle ? "#fff" : "#000" }}
+          >
+            {description}
+          </Typography>
+        </Box>
 
-        {showComments && (
-          <Box sx={{ p: 3 }}>
-            <h4 style={{ color: toggle ? "white" : "#161C24" }}>
-              Comments ({comments?.length ?? 0})
-            </h4>
-            {comments?.map((item, i) => {
-              return (
-                <div
-                  className=" my-3"
-                  style={{ background: "transparent" }}
-                  key={`comments_${item?.created_at}_${i}`}
-                >
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div className="user d-flex flex-row align-items-center">
-                      <ListItemAvatar>
-                        {typeof item?.user !== "number" && (
-                          <Avatar src={item?.user?.profile_image} />
-                        )}
-                      </ListItemAvatar>
-
-                      <span>
-                        <small style={{ color: toggle ? "white" : "#161C24" }}>
-                          {item?.comment}
-                        </small>
-                      </span>
-                    </div>
-
-                    <small className="text-muted">
-                      {moment(item?.created_at).fromNow()}
-                    </small>
-                  </div>
-                </div>
-              );
-            })}
-
-            <div className="d-flex align-items-center justify-content-center flex-row mt-3">
-              <input
-                style={{}}
-                className="form-control w-100"
-                placeholder="Enter Comment"
-                type="text"
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-              />
-              <IconButton onClick={sendComment}>
-                <MdSend />
-              </IconButton>
+        <Box sx={{ px: 2 }}>
+          {comments?.length > 0 ? (
+            <div
+              className="view-comm"
+              style={{ cursor: "pointer" }}
+              onClick={() => setShowAllComments(!showAllComments)}
+            >
+              {
+                !showAllComments
+                  ? `View all ${post?.post_comment?.length} Comments`
+                  : // <h6 style={{ color: toggle ? "white" : "#161C24" }}>
+                    `Comments (${comments?.length})`
+                // </h6>
+              }
             </div>
-          </Box>
-        )}
+          ) : null}
+          <div className="custom-wrapper">
+            {showAllComments
+              ? comments?.map((item, i) => {
+                  return displayComment(item, i);
+                })
+              : comments?.slice(0, 1).map((item, i) => {
+                  return displayComment(item, i);
+                })}
+          </div>
+
+          <div
+            className="mt-3 border-color pt-2"
+            style={{ color: toggle ? "#fff" : "#000" }}
+          >
+            <IconButton
+              className="d-flex align-items-center justify-content-center"
+              sx={{ color: toggle ? "#fff" : "#000" }}
+              onClick={()=> setShowEmoji(!showEmoji)}
+            >
+              <SentimentSatisfiedOutlinedIcon />
+            </IconButton>
+           <div className="emoji-wrapper">
+            {showEmoji &&
+        <Picker 
+            onEmojiSelect={(e: any)=>handleEmojiPickup(e)}  
+            emoji="point_up"
+              title="Pick your emoji"
+              theme={toggle ? "dark" : "light"}
+            style={{
+              position: "absolute",
+              top: "50px",
+              left: 0,
+              zIndex: 9999
+                  }} />}
+              </div>
+            <input
+              style={{
+                border: "none",
+                outline: "none",
+                boxShadow: "none",
+                borderRadius: 0,
+                background: "transparent",
+                color: toggle ? "#fff" : "#000",
+              }}
+              className="form-control w-100"
+              placeholder="Add a Comment"
+              type="text"
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+             
+            />
+            <IconButton
+              sx={{
+                fontWeight: 500,
+                fontSize: 15,
+                color: toggle ? "#fff" : "#000000",
+              }}
+              onClick={sendComment}
+            >
+              Post
+              {/* <MdSend /> */}
+            </IconButton>
+          </div>
+        </Box>
       </Box>
 
       <TipPopUp

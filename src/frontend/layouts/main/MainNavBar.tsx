@@ -163,9 +163,9 @@ const MainNavBar = () => {
       >
         <div
           className="container-fluid container-xl d-flex align-items-center justify-content-between"
-          style={{ gap: 10, height: "100%", marginBottom: '22px' }}
+          style={{ gap: 10, height: "100%" }}
         >
-          <div className="logo" style={{ flex: 1, height: "80%" }}>
+          <div className="logo" style={{ flex: 1}}>
             <Link to={isAuthenticated ? "/lounge" : "/"}>
               <h1>
                 <img src={mainlogo} alt="logo" id="logo_homepage" style={{maxHeight: '30px'}} />{" "}
@@ -177,7 +177,7 @@ const MainNavBar = () => {
               </>
             )}
           </div>
-          {isAuthenticated && isLargeScreen && !pathname.includes("/help") && (
+          {/* {isAuthenticated && isLargeScreen && (
             <Autocomplete
               // freeSolo
               forcePopupIcon={false}
@@ -261,7 +261,7 @@ const MainNavBar = () => {
                 flex: 1,
               }}
             />
-          )}
+          )} */}
           <nav style={{ flex: 1, justifyContent: "flex-end" }}>
             <ul
               style={{

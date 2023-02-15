@@ -113,33 +113,33 @@ const languages = [
 ];
 
 const itemSelectionStyle = {
-  '& selected': {
-    color: 'white',
-    '& .MuiListItemIcon-root': {
-      color: 'white'
-    }
-  },
-  '& selected:hover': {
-    color: 'white',
-    '& .MuiListItemIcon-root': {
-      color: 'white'
-    }
-  },
-  '&:hover': {
-    color: 'white',
-    '& .MuiListItemIcon-root': {
-      color: 'white'
+  "& selected": {
+    color: "white",
+    "& .MuiListItemIcon-root": {
+      color: "white",
     },
-    '& p': {
-      color: 'white'
-    }
-  }
+  },
+  "& selected:hover": {
+    color: "white",
+    "& .MuiListItemIcon-root": {
+      color: "white",
+    },
+  },
+  "&:hover": {
+    color: "white",
+    "& .MuiListItemIcon-root": {
+      color: "white",
+    },
+    "& p": {
+      color: "white",
+    },
+  },
 };
 
 const BoxStyled = styled(Box)`
   width: 250px;
   background: #161c24;
-  height: 100%;
+  height: auto;
 
   @media (max-height: 731px) {
     height: auto;
@@ -380,23 +380,23 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
           </ListItem>
 
           <ListItem
-             sx={itemSelectionStyle}
-             disablePadding
-             onClick={() => navigate(`/buy-dint-token`)}
-           >
+            sx={itemSelectionStyle}
+            disablePadding
+            onClick={() => navigate(`/buy-dint-token`)}
+          >
             <ListItemButton>
               <ListItemIcon>
-              <CurrencyExchangeIcon />
+                <CurrencyExchangeIcon />
               </ListItemIcon>
               <ListItemText primary="Buy Token" secondary="(to play)" />
             </ListItemButton>
           </ListItem>
 
           <ListItem
-               sx={itemSelectionStyle}
-               disablePadding
+            sx={itemSelectionStyle}
+            disablePadding
                onClick={() => navigate('/your-bank')}
-             >
+          >
             <ListItemButton>
               <ListItemIcon>
                 <AccountBalance />
@@ -406,12 +406,10 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
           </ListItem>
 
           <ListItem
-
-          
-sx={itemSelectionStyle}
-disablePadding
+            sx={itemSelectionStyle}
+            disablePadding
 onClick={() => navigate('/dint-wallet')}
->
+          >
             <ListItemButton>
               <ListItemIcon>
                 <AccountBalanceWalletIcon />
@@ -425,7 +423,6 @@ onClick={() => navigate('/dint-wallet')}
           <ListItem
             sx={itemSelectionStyle}
             disablePadding
-            // onClick={onLogout}
             onClick={() => navigate('/help')}
           >
             <ListItemButton>
@@ -452,33 +449,33 @@ onClick={() => navigate('/dint-wallet')}
           <ListItem
             sx={{
               // ...itemSelectionStyle,
-              '& .MuiTypography-root' : {
-                color: toggle ? 'white' : '#161C24'
+              "& .MuiTypography-root": {
+                color: toggle ? "white" : "#161C24",
               },
-              '& selected': {
-                color: 'white',
-                '& .MuiListItemIcon-root': {
-                  color: 'white'
-                }
-              },
-              '& selected:hover': {
-                color: 'white',
-                '& .MuiListItemIcon-root': {
-                  color: 'white'
-                }
-              },
-              '&:hover': {
-                color: 'white',
-                '.MuiButtonBase-root': {
-                  background: '#d3d8de'
+              "& selected": {
+                color: "white",
+                "& .MuiListItemIcon-root": {
+                  color: "white",
                 },
-                '& .MuiListItemIcon-root': {
-                  color: 'white'
+              },
+              "& selected:hover": {
+                color: "white",
+                "& .MuiListItemIcon-root": {
+                  color: "white",
                 },
-                '& p': {
-                  color: 'white'
-                }
-              }
+              },
+              "&:hover": {
+                color: "white",
+                ".MuiButtonBase-root": {
+                  background: "#d3d8de",
+                },
+                "& .MuiListItemIcon-root": {
+                  color: "white",
+                },
+                "& p": {
+                  color: "white",
+                },
+              },
             }}
             disablePadding
             // onClick={onLogout}

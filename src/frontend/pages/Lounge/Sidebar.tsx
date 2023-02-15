@@ -33,7 +33,7 @@ const Sidebar = () => {
 
   const [showMoreDrawer, setShowMoreDrawer] = useState(false);
 
-
+  
   const [clicked, setClicked] = useState(false);
 
   const translate = () => {
@@ -59,10 +59,14 @@ const Sidebar = () => {
     <>
       <MoreOptionsDrawer open={showMoreDrawer} onClose={() => setShowMoreDrawer(false)} />
       <List sx={{
-        borderRight: `1px solid ${theme.palette.grey[400]}`,
-        width: '60px',
-        height: '100vh'
-      }}>
+          borderRight: `1px solid ${theme.palette.grey[400]}`,
+          width: '60px',
+          height: '100vh',
+          overflowX: "hidden",
+          overflowY: "auto",
+          position: "fixed",
+        }}
+      >
         <ListItem>
           <Link to="/lounge">
             <h1>
@@ -94,10 +98,10 @@ const Sidebar = () => {
             cursor: 'pointer',
             paddingBottom: '20px'
           }}
-        // onClick={() => {
-        //   dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.HOME }));
-        //   navigate(`/lounge/${HOME_SIDE_MENU.HOME}`);
-        // }}
+          // onClick={() => {
+          //   dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.HOME }));
+          //   navigate(`/lounge/${HOME_SIDE_MENU.HOME}`);
+          // }}
         >
           <ListItemAvatar>
             <SearchOutlinedIcon />
@@ -114,7 +118,7 @@ const Sidebar = () => {
           onClick={() => {
             dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.LISTS }));
             navigate(`/lists`);
-
+            
           }}
         >
           <ListItemAvatar>
@@ -129,11 +133,11 @@ const Sidebar = () => {
             color: toggle ? 'text.primary' : 'text.secondary'
           }}
 
-        // onClick={() => {
-        //   dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.LISTS }));
-        //   navigate(`/lists`);
+          // onClick={() => {
+          //   dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.LISTS }));
+          //   navigate(`/lists`);
 
-        // }}
+          // }}
         >
           <ListItemAvatar>
             <NotificationsNoneOutlinedIcon />
@@ -204,9 +208,9 @@ const Sidebar = () => {
           <ListItemText primary={<Typography variant="subtitle1">Followers</Typography>} />
         </ListItem> */}
 
-
+        
         <ListItem
-
+          
           sx={{
             cursor: 'pointer',
             paddingBottom: '20px',
@@ -223,6 +227,7 @@ const Sidebar = () => {
           {/* <ListItemText primary={<Typography variant="subtitle1">Wallet</Typography>} /> */}
         </ListItem>
         <ListItem
+          
           sx={{
             cursor: 'pointer',
             paddingBottom: '20px',

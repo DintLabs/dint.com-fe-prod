@@ -12,50 +12,49 @@ import React, { useContext } from 'react';
 import { Button } from '@mui/material';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
 
-const Accordion = styled((props) => (
-    <MuiAccordion children={''} disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
-    '&:not(:last-child)': {
-        borderBottom: 0,
-    },
-    '&:before': {
-        display: 'none',
-    },
-    '& .MuiAccordion-root': {
-        border: 'none'
-    },
-    '& .MuiSvgIcon-root': {
-        fill: '#6C3EEC'
-    }
-}));
-
-const AccordionSummary = styled((props) => (
-    <MuiAccordionSummary
-        expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
-        {...props}
-    />
-))(({ theme }) => ({
-    backgroundColor: '#fff',
-    borderBottom: `1px solid #CCCCCC`,
-    color: '#161C24',
-    // flexDirection: 'row-reverse',
-    '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-        transform: 'rotate(180deg)',
-    },
-    '& .MuiAccordionSummary-content': {
-        marginLeft: theme.spacing(1),
-    },
-}));
-
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-    padding: theme.spacing(2),
-    background: '#fff',
-    color: '#161C24'
-}));
-
 const HelpSupport = () => {
     const { toggle } = useContext(ThemeContext);
     const [expanded, setExpanded] = React.useState<string | false>('');
+
+    const Accordion = styled((props) => (
+        <MuiAccordion children={''} disableGutters elevation={0} square {...props} />
+    ))(({ theme }) => ({
+        '&:not(:last-child)': {
+            borderBottom: `1px solid #CCCCCC`,
+        },
+        '&:before': {
+            display: 'none',
+        },
+        '& .MuiAccordion-root': {
+            border: 'none'
+        },
+        '& .MuiSvgIcon-root': {
+            fill: toggle ? '#fff' : '#161c24'
+        }
+    }));
+
+    const AccordionSummary = styled((props) => (
+        <MuiAccordionSummary
+            expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+            {...props}
+        />
+    ))(({ theme }) => ({
+        backgroundColor: toggle ? "#161c24" : "white",
+        color: toggle ? "white" : "#161c24",
+        // flexDirection: 'row-reverse',
+        '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+            transform: 'rotate(180deg)',
+        },
+        '& .MuiAccordionSummary-content': {
+            marginLeft: theme.spacing(1),
+        },
+    }));
+
+    const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+        padding: theme.spacing(2),
+        background: toggle ? "#161c24" : "white",
+        color: toggle ? "white" : "#161c24"
+    }));
 
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
@@ -78,7 +77,7 @@ const HelpSupport = () => {
                     style={{
                         color: toggle ? "white" : "#161c24",
                         padding: "20px 0",
-                        backgroundColor: "white"
+                        backgroundColor: toggle ? "#161c24" : "white",
                     }}
                 >
                     HELP / SUPPORT
@@ -86,14 +85,14 @@ const HelpSupport = () => {
             </div>
             <div className="container pt-5 mb-5"
             >
-                <Typography variant="h3" sx={{ color: '#161C24' }} mb={2}>
+                <Typography variant="h3" sx={{ color: toggle ? "white" : "#161c24" }} mb={2}>
                     How Can we help?
                 </Typography>
-                <p>
+                <p style={{ color: toggle ? "white" : "#161c24" }}>
                     Ask questions. Browser articles. Find answers. We're here to help with any issue or problem you're experiencing.
                 </p>
                 <Grid sx={{ my: 5 }} >
-                    <Typography variant="h3" sx={{ color: '#161C24' }} mb={2}>
+                    <Typography variant="h3" sx={{ color: toggle ? "white" : "#161c24" }} mb={2}>
                         Popular help topics
                     </Typography>
                     <Divider />
@@ -203,13 +202,15 @@ const HelpSupport = () => {
                     </Accordion>
 
                 </Grid>
-                <Typography variant="h3" sx={{ color: '#161C24' }} mb={2}>
+                <Typography variant="h3" sx={{ color: toggle ? "white" : "#161c24" }} mb={2}>
                     Contact us
                 </Typography>
-                <p>
+                <p style={{ color: toggle ? "white" : "#161c24" }}>
                     You can find additional resources in our Help Center. If you have a specific inquiry, contact us here.
                 </p>
-                <Button variant="outlined" onClick={() => { }}>Start a chat</Button>
+                <Button variant="outlined" sx={{ "&:hover": { background: "transparent", borderColor: "transparent" } }}
+                    style={{ border: toggle ? "1px solid white" : "1px solid #161c24", color: toggle ? "white" : "#161c24" }}
+                    onClick={() => { }}>Start a chat</Button>
             </div>
         </>
     )

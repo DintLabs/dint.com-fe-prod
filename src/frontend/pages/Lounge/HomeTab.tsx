@@ -7,7 +7,7 @@ import { PaginationPostsInerface } from 'frontend/interfaces/contextInterface';
 import { PostInterface } from 'frontend/interfaces/postInterface';
 import { ReactNode, SyntheticEvent, useCallback, useContext, useEffect, useState } from 'react';
 import BuyToken from 'frontend/pages/BuyToken';
-import storyImage from 'frontend/assets/img/web3/story.png'
+import storyImage from 'frontend/assets/img/web3/story-1.png'
 
 
 import AddPost from './AddPost';
@@ -15,6 +15,7 @@ import './navbarTab.css';
 import PostItem from './PostItem';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
 import { useNavigate } from 'react-router';
+import MobileTopHeader from "./MobileTopHeader";
 
 interface Props {
   createPost: Function;
@@ -45,7 +46,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box>
           <Typography component="span">{children}</Typography>
         </Box>
       )}
@@ -218,46 +219,97 @@ const HomeTab = ({ createPost }: Props) => {
     <Box
       id="postsListScrollableDiv"
       style={{
-        // borderLeft: `1px solid ${theme.palette.grey[700]}`,
-        // borderRight: `1px solid ${theme.palette.grey[700]}`
+          // borderLeft: `1px solid ${theme.palette.grey[700]}`,
+          // borderRight: `1px solid ${theme.palette.grey[700]}`
       }}
     >
       {/* <AddPost createPost={createPost} widthScreen={0} /> */}
-      <Box sx={{
-        display: 'flex',
-        width: '100%',
-        margin: '10px 0',
-        padding: '10px 0'
-      }}>
-        <Box sx={{ width: '60%' }}>
-          <Box sx={{ overflow: 'hidden' }}>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          // margin: "10px 0",
+          // padding: "10px 0",
+        }}
+      >
+        <MobileTopHeader />
+        <Box
+          sx={{ width: { xs: "100%", md: "60%" } }}
+          className="custom-padding"
+        >
+          <Box
+            sx={{
+              padding: { xs: "8px 24px", md: "0" },
+              overflow: "auto",
+              scrollBehavior: "smooth",
+            }}
+          >
             <ListItemAvatar
-              style={{ cursor: "pointer", display: 'flex', gap: '10px' }}
+              style={{ cursor: "pointer", display: "flex", gap: "35px" }}
             >
-              {Array.from({ length: 8 }, (_, i) =>
-                <div key={i} style={{ textAlign: 'center', width: 'fit-content' }}>
-                  <Avatar src={storyImage} sx={{ width: 80, height: 80 }} />
-                  <Typography variant='h5' sx={{ fontWeight: '600', marginTop: '10px', color: toggle ? 'text.primary' : '#161C24' }}>
+              {Array.from({ length: 8 }, (_, i) => (
+                <div
+                  key={i}
+                  style={{ textAlign: "center", width: "fit-content" }}
+                  className="user-story"
+                >
+                  <Avatar
+                    className="story-avatar"
+                    src={storyImage}
+                    sx={{
+                      width: 92,
+                      height: 92,
+                      borderWidth: "3px",
+                      borderStyle: "solid",
+                      borderColor: toggle ? "#4AA081" : "#4AA081",
+                    }}
+                  />
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      fontWeight: "600",
+                      marginTop: "10px",
+                      color: toggle ? "text.primary" : "#161C24",
+                    }}
+                  >
                     Karry Wee
                   </Typography>
                 </div>
-              )}
+              ))}
             </ListItemAvatar>
           </Box>
-          <Box>
+          <Box className="custom-tab-wrapper">
             <Tabs
               value={value}
               variant="fullWidth"
               onChange={handleChange}
-              sx={{ borderBottom: `1px solid ${theme.palette.grey[700]}` }}
+              sx={{
+                borderBottom: `0 solid ${theme.palette.grey[700]}`,
+                display: "inline-flex",
+              }}
+              className="custom-tabs-root"
             >
-              <Tab label={`All  (${counts?.all_posts ?? 0})`} />
-              <Tab label={`Text (${counts?.text_posts ?? 0})`} />
-              <Tab label={`Photos  (${counts?.image_posts ?? 0})`} />
-              <Tab label={`Videos  (${counts?.video_posts ?? 0})`} />
+              <Tab
+                className={`${
+                  toggle && value === 0 && "active-tab"
+                } custom-tab-list`}
+                label={`All  (${counts?.all_posts ?? 0})`}
+              />
+              <Tab
+                className="custom-tab-list"
+                label={`Text (${counts?.text_posts ?? 0})`}
+              />
+              <Tab
+                className="custom-tab-list"
+                label={`Photos  (${counts?.image_posts ?? 0})`}
+              />
+              <Tab
+                className="custom-tab-list"
+                label={`Videos  (${counts?.video_posts ?? 0})`}
+              />
             </Tabs>
           </Box>
-
+          
           <TabPanel value={value} index={0}>
             {posts.map((item) => (
               <PostItem
@@ -269,8 +321,8 @@ const HomeTab = ({ createPost }: Props) => {
                 userName={
                   item?.user
                     ? item?.user?.display_name ||
-                    item?.user?.first_name ||
-                    item?.user?.custom_username
+                      item?.user?.first_name ||
+                      item?.user?.custom_username
                     : ''
                 }
                 custom_username={item?.user ? item?.user?.custom_username : ''}
@@ -337,7 +389,7 @@ const HomeTab = ({ createPost }: Props) => {
 
           <TabPanel value={value} index={3}>
             {videoPosts.map((item, i) => (
-
+              
               <PostItem
                 fetchPosts={fetchPosts}
                 canDeletePost={true}
@@ -361,14 +413,17 @@ const HomeTab = ({ createPost }: Props) => {
           </TabPanel>
         </Box>
         <Box sx={{
-          marginLeft: '5rem',
-          width: '30%'
-        }}>
+            display: { xs: "none", md: "block" },
+            marginLeft: '5rem',
+            marginTop: "26px",
+            width: '30%',
+          }}
+        >
           <Box sx={{
-            display: 'flex',
-            width: '100%',
-            alignItems: 'center',
-            gap: '12px'
+              display: 'flex',
+              width: '100%',
+              alignItems: 'center',
+              gap: '12px'
           }}>
 
             <Avatar src={savedUser?.profile_image} sx={{ width: 50, height: 50 }} />
@@ -382,61 +437,109 @@ const HomeTab = ({ createPost }: Props) => {
             </div>
           </Box>
           <Box sx={{
-            marginTop: '2rem',
-            marginLeft: '10px',
-          }}>
-            <Typography variant="h4" sx={{ color: toggle ? 'text.primary' : '#161C24' }} mb={4}>
+              marginTop: '2rem',
+              marginLeft: '10px',
+            }}
+          >
+            <Typography variant="h4" sx={{ color: toggle ? 'text.primary' : '#161C24' }}
+            >
               Suggestions
             </Typography>
 
-
-            {Array.from({ length: 5 }, (_, i) =>
+            {Array.from({ length: 5 }, (_, i) => (
               <Box key={i} sx={{
-                display: 'flex',
-                width: '100%',
-                alignItems: 'center',
-                gap: '12px',
-                marginTop: '12px'
-              }}>
-
-                <Avatar src={savedUser?.profile_image} sx={{ width: 35, height: 35 }} />
+                  display: 'flex',
+                  width: '100%',
+                  alignItems: 'center',
+                  gap: '12px',
+                  marginTop: '20px',
+                }}>
+                <Avatar
+                  src={savedUser?.profile_image}
+                  sx={{ width: 35, height: 35 }}
+                />
                 <div>
-                  <Typography variant="h5" sx={{ color: toggle ? 'text.primary' : '#161C24' }}>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      fontSize: "17px",
+                      color: toggle ? "text.primary" : "#161C24",
+                    }}
+                  >
                     Lucas Williams
                   </Typography>
-                  <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "400", color: "#666666" }}
+                  >
                     @username
                   </Typography>
                 </div>
               </Box>
-            )}
-            <Grid direction='row' gap={2} sx={{ display: 'flex', marginTop: '30px' }}>
-              <div onClick={() => navigate('/terms')}>
-                <Typography variant="h6" sx={{ color: 'text.secondary', cursor: 'pointer' }} >
-                  Terms of Service
-                </Typography>
-              </div>
-              <div onClick={() => navigate('/privacy')}>
-                <Typography variant="h6" sx={{ color: 'text.secondary', cursor: 'pointer' }} >
-                  Privacy Policy
-                </Typography>
+            ))}
+            <Grid
+              direction="row"
+              gap={2}
+              sx={{ display: "flex", marginTop: "30px" }}
+            >
+                <div onClick={() => navigate('/terms')}>
+              <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer'  }}>
+                Terms of Service
+              </Typography>
+                </div>
+                <div onClick={() => navigate('/privacy')}>
+              <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer'  }}>
+                Privacy Policy
+              </Typography>
               </div>
               <div onClick={() => navigate('/cookies')}>
-                <Typography variant="h6" sx={{ color: 'text.secondary', cursor: 'pointer' }} >
-                  Cookie Policy
-                </Typography>
+              <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer'  }}>
+                Cookie Policy
+              </Typography>
               </div>
             </Grid>
-            <Grid direction='row' gap={2} sx={{ display: 'flex', marginTop: '20px', }}>
-              <div onClick={() => navigate('/help')}>
-                <Typography variant="h6" sx={{ color: 'text.secondary', cursor: 'pointer' }}>
-                  Help
-                </Typography>
+            <Grid
+              direction="row"
+              gap={2}
+              sx={{ display: "flex", marginTop: "30px" }}
+            >
+                  <div onClick={() => navigate('/help')}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "400",
+                  color: toggle ? "text.primary" : "#536471",cursor: 'pointer' 
+                }}
+              >
+                Help
+              </Typography>
               </div>
-             
-           
-              <Typography variant="h6" sx={{ color: 'text.secondary' }} >
-                © 2023, Dint.
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "400",
+                  color: toggle ? "text.primary" : "#536471",
+                }}
+              >
+                Ads Info
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "400",
+                  color: toggle ? "text.primary" : "#536471",
+                }}
+              >
+                More...
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "400",
+                  color: toggle ? "text.primary" : "#536471",
+                }}
+              >
+                © 2021 , Inc.
               </Typography>
             </Grid>
           </Box>

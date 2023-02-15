@@ -8,6 +8,7 @@ import { uploadMedia } from 'frontend/services/mediaService';
 import { toast } from 'react-toastify';
 import { postTypes } from 'frontend/data';
 import { ThemeContext } from '../../contexts/ThemeContext';
+import { useNavigate } from 'react-router';
 
 interface Props {
   widthScreen: number;
@@ -16,6 +17,7 @@ interface Props {
 
 const AddPost = ({ widthScreen, createPost }: Props) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [file, setFile] = useState<any>({});
   const [content, setContent] = React.useState('');
@@ -30,6 +32,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
     if (!loading) {
       setLoading(true);
       const toastId = toast.loading('Uploading File...');
+      navigate('/lounge')
 
       const user = JSON.parse(localStorage.getItem('userData') ?? '{}');
       if (!user.id) {
@@ -118,13 +121,17 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
 
   return (
     <>
-      <Box
-        sx={{ height: widthScreen >= 900 ? '90vh' : 'full', overflowY: 'scroll' }}
+      <Box className='custom-modal'
+        sx={{ height: widthScreen >= 900 ? '90vh' : 'full', overflowY: 'scroll', maxWidth: '720px', margin: '0 auto' }}
       >
-        <Box sx={{ borderRadius: 3 }} className={`shadow p-3 m-3 ${toggle ? 'bg-dark' : 'compose-background'}`}>
+        <Box sx={{ borderRadius: 3 }} className={`shadow compose-background p-3 m-3 ${toggle ? 'bg-dark' : 'bg-white'}`}>
+          <Box className='d-flex justify-content-center align-items-center'>
+              <h4>Create New Post</h4>
+          </Box>
+          <div style={{ borderBottom: '1px solid grey' }} className="w-100" />
           <Input
             multiline
-            rows={4}
+            rows={1}
             disableUnderline={true}
             fullWidth
             value={content}
@@ -133,26 +140,27 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
             style={{color: toggle ? 'white' : '#161C24'}}
           />
           {image && (
-            <div className="position-relative" style={{ width: 300 }}>
-              <img src={image} style={{ width: 300 }} className="mb-3" alt="imag" />
+            <div className="position-relative" style={{ width: '100%', flex: 1, height: '100%' }}>
+              <img src={image} style={{ maxWidth: '100%', height: 'auto' }} className="mb-3" alt="imag" />
             </div>
           )}
           {video && (
             <div
               className="post_video"
-              style={{ minWidth: 100, width: 300, height: 'auto !important' }}
+              style={{ minWidth: '100%', width: '100%', height: 'auto !important', flex: 1   }}
             >
               {/* we haven't track */}
               {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-              <video width="300px" controls>
+              <video width="100%" height="100%" controls>
                 <source src={video} id="video_here" />
                 Your browser does not support HTML5 video.
               </video>
             </div>
           )}
-          <div style={{ borderBottom: '1px solid grey' }} className="w-100" />
-          <Stack className="d-flex justify-content-between align-items-center flex-row mt-2">
-            <Stack className="d-flex align-items-center justify-content-center flex-row">
+          
+          <Stack className="d-flex flex-column justify-content-between h-100 flex-1 align-items-center flex-row center-pos">
+            {video.length > 0 || image.length > 0 ? null :
+              <Stack className="d-flex align-items-center justify-content-center w-100 upload-img flex-row">
               <IconButton aria-label="upload picture" component="label">
                 <input
                   hidden
@@ -167,8 +175,9 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
                 <MoreHorizIcon />
               </IconButton>
             </Stack>
-
-            <div>
+            }
+         </Stack>
+            <div className='d-flex justify-content-between align-items-end mt-2 w-100'>
               {video.length > 0 || image.length > 0 || content.length > 0 ? (
                 <>
                   <Button
@@ -180,7 +189,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
                     }}
                     variant="contained"
                     color="secondary"
-                    className="ms-3"
+                  
                   >
                     Reset Post
                   </Button>
@@ -190,7 +199,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
                 </>
               ) : null}
             </div>
-          </Stack>
+          
         </Box>
       </Box>
     </>

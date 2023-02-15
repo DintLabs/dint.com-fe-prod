@@ -415,7 +415,7 @@ const Login = () => {
             // style={{ maxWidth: "340px", margin: "0 auto" }}
             // style={{ maxWidth: "600px", margin: "0 auto" , width:"100%" }}
           >
-              <div className="container " style={{paddingTop: '5vh' , minHeight:"100vh"}}>
+              <div className="container " style={{paddingTop: '5vh' , minHeight:"100vh" , textAlign:"center"}}>
           <img className="right-logo"  style={{margin: "0px 0px 15% 1.5%"}} src={require("../../assets/img/logos/logo-01.png")} alt="logo" />
               <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
 
@@ -467,6 +467,19 @@ const Login = () => {
               <button id="signup_btn" type="button" onClick={loginClicked}>
                 Log In
               </button>
+              <div className="signup_text_div">
+                <p style={{ color:"#353535"}}>Don't Have An Account?</p>
+                <p style={{color:'#353535'}} id="signup_line">
+                  <span onClick={()=>navigate(`/auth/refer${location?.search}` , {state : {for :"signup"}})} id="signup_here"> Sign Up </span>
+                </p>
+              </div>
+                <div className="d-flex justify-content-between align-items-center horizontal">
+                <div className="line"></div>
+                <p className="m-3">Or</p>
+                <div className="line"></div>
+              </div>
+
+             
               <button
                   type="button"
                   onClick={googleSignin}
@@ -474,19 +487,6 @@ const Login = () => {
                 >
                 <img src={require("../../assets/img/socialmedia/googlelogo.png")} className="mx-2 google-logo" alt="" style={{height:'20px'}} />  Log In with Google
                 </button>
-                <div className="d-flex justify-content-between align-items-center horizontal">
-                <div className="line"></div>
-                <p className="m-3">Or</p>
-                <div className="line"></div>
-              </div>
-
-              <p style={{color:'#353535'}} id="signup_line">
-                {/* <Link style={{textDecoration : 'none'}} to={`/auth/signup${location?.search}`}> */}
-                {/* <Link style={{textDecoration : 'none'}} to={`/auth/refer${location?.search}`}> */}
-                  <span onClick={()=>navigate(`/auth/refer${location?.search}` , {state : {for :"signup"}})} id="signup_here"> Sign Up for Dint</span>
-                {/* </Link> */}
-              </p>
-
           
               <div
                 style={{

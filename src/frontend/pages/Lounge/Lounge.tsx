@@ -27,6 +27,7 @@ import Messages from '../Messages/Messages';
 import DintWallet from '../Wallet/DintWallet';
 import Withdrawal from '../Wallet/Withdrawal';
 import ProcessWithdrawal from '../Wallet/ProcessWithdrawal';
+import { Modal } from '@mui/material';
 
 const NewHome = () => {
   const userData = useSelector((state: RootState) => state?.user?.userData);
@@ -35,6 +36,7 @@ const NewHome = () => {
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
   const [isLounge, setIsLounge] = useState<boolean>(false);
   const [isViewPage, setIsViewPage] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const isPrimaryLoader = useSelector((state: RootState) => state.common.isLoading);
 
@@ -129,13 +131,18 @@ const NewHome = () => {
         setTimeout(() => {
           toast.dismiss();
         }, 3000);
-        navigate('/lounge')
+        
       } catch (err: any) {
         toast.error(err.toString());
       }
     },
     [addNewPostToContext]
   );
+
+  const handleClose = () => {
+    setOpenModal(false)
+    navigate('/lounge')
+  }
 
   const renderComponent = useMemo(() => {
     if (
@@ -156,7 +163,14 @@ const NewHome = () => {
     if (location.pathname.includes(HOME_SIDE_MENU.WITHDRAWAL)) return <Withdrawal />;
     if (location.pathname.includes(HOME_SIDE_MENU.PROCESSWITHDRAWAL)) return <ProcessWithdrawal />;
     if (location.pathname.includes(HOME_SIDE_MENU.ADD_POST))
-      return <AddPost widthScreen={widthScreen} createPost={createPost} />;
+      return (
+        <Modal
+          open={true}
+          onClose={handleClose}
+        >
+          <AddPost widthScreen={widthScreen} createPost={createPost} />
+        </Modal>
+      );
     if (location.pathname.includes(HOME_SIDE_MENU.SUBSCRIPTIONS)) return <Subscriptions />;
     return (
       <>
@@ -184,8 +198,13 @@ const NewHome = () => {
         />
       </Helmet>
       <Box style={{ margin: 0 }}>
-        <Grid container sx={{flexWrap:'nowrap'}}>
-          <Grid item xs={0} md={1} sx={{ display: !isMobileScreen ? '' : 'none' }}>
+        <Grid container>
+          <Grid
+            item
+            xs={0}
+            md={1}
+            sx={{ display: widthScreen <= 900 ? "none" : "" }}
+          >
             {userData && !!userData.id && <Sidebar />}
           </Grid>
           <Grid item sx={styleSidebarMobile}>

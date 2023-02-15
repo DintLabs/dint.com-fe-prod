@@ -334,9 +334,10 @@ const Register = () => {
             className="login_divs"
             // style={{ maxWidth: "600px", margin: "0 auto" }}
           >
-            <div className="container px-1" style={{paddingTop:'5vh' , minHeight:"100vh"}}>
+            <div className="container px-1" style={{paddingTop:'5vh' , minHeight:"100vh" , textAlign:"center"}}>
             <img
             className="right-logo"
+            style={{margin: "0px 0px 0% 1.5%"}}
             src={require("../../assets/img/logos/logo-01.png")}
             alt="logo"
               />
@@ -416,7 +417,7 @@ const Register = () => {
 
               <p id="error_signup" style={{padding : "1% 2.5%"}}>{error_msg}</p>
               <div className="signup-div">
-                <div className="form-check mt-3 mb-4">
+                <div className="form-check mt-3 mb-4" style={{textAlign:"left"}}>
                   <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
                   <label className="form-check-label mx-2"  htmlFor="exampleCheck1">By Signing Up You Agree to our <Link to={'/terms'}><span className="text-blue"> terms & service and privacy 
                     Policy.</span></Link></label>
@@ -424,6 +425,32 @@ const Register = () => {
                 <button id="signup_btn" type="button" onClick={signup_sub}>
                   Sign Up
                 </button>
+                <div className="signup_text_div">
+                <p style={{color:'#353535'}}>Already Have An Account?</p>
+                <p id="login_line">
+                  <Link to={`/auth/login${location?.search}`}>
+                    <span id="signup_here"> Log In </span>
+                  </Link>
+                </p>
+                </div>
+                    
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    // marginTop: '20px'
+                  }}
+                >
+                
+
+                <div className="d-flex justify-content-between align-items-center horizontal">
+                  <div className="line"></div>
+                  <p className="m-3">Or</p>
+                  <div className="line"></div>
+                </div>
+                
 
                 <button
                       type="button"
@@ -438,30 +465,7 @@ const Register = () => {
                       />{" "}
                       SignUp with Google
                     </button>
-                    
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: '20px'
-                  }}
-                >
                 
-
-                <div className="d-flex justify-content-between align-items-center horizontal">
-                  <div className="line"></div>
-                  <p className="m-3">Or</p>
-                  <div className="line"></div>
-                </div>
-
-                <p id="login_line">
-                  
-                    <Link to={`/auth/login${location?.search}`}>
-                      <span id="signup_here"> Log In </span>
-                    </Link>
-                  </p>
                   <div
                     style={{
                       width: "100%",

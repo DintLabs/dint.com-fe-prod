@@ -3,7 +3,7 @@
 --------------------------------------------------------------*/
 
 body {
-  font-family: 'Roboto', sans-serif !important;
+  font-family: "Roboto", sans-serif !important;
   color: #444444;
 }
 
@@ -24,7 +24,7 @@ h3,
 h4,
 h5,
 h6 {
-font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 #dropdown_edit_profile {
@@ -425,7 +425,7 @@ font-family: 'Roboto', sans-serif;
 }
 
 #hero .carousel-item::before {
-  content: '';
+  content: "";
   background-color: rgba(12, 11, 10, 0.5);
   position: absolute;
   top: 0;
@@ -662,16 +662,16 @@ section {
 }
 
 .menu .menu-content::after {
-  content: '......................................................................'
-    '....................................................................'
-    '....................................................................';
+  content: "......................................................................"
+    "...................................................................."
+    "....................................................................";
   position: absolute;
   left: 20px;
   right: 0;
   top: -4px;
   z-index: 1;
   color: #dad8d4;
-  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 .menu .menu-content a {
@@ -694,7 +694,7 @@ section {
 .menu .menu-ingredients {
   font-style: italic;
   font-size: 14px;
-  font-family: 'Comic Neue', sans-serif;
+  font-family: "Comic Neue", sans-serif;
   color: #948c81;
 }
 
@@ -953,7 +953,7 @@ button.submit-form.btn.btn-primary:hover {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.form-body .form-group .right-field select option[value='1'] {
+.form-body .form-group .right-field select option[value="1"] {
   display: none;
 }
 
@@ -972,7 +972,9 @@ button.submit-form.btn.btn-primary:hover {
   border-radius: 4px;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__rendered {
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered {
   color: #fff;
   font-size: 13px;
   line-height: 28px;
@@ -1066,12 +1068,12 @@ section.email-col {
 
 .debit-card-img:before {
   position: absolute;
-  content: '';
+  content: "";
 }
 
 .debit-card-img:before {
   position: absolute;
-  content: '';
+  content: "";
   width: 450px;
   height: 100%;
   background: #f1f5fe;
@@ -1106,7 +1108,11 @@ section.email-col {
   position: absolute;
   top: 0;
   left: 0;
-  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.7) 50%);
+  background-image: linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.7) 50%
+  );
   background-size: 3px 3px;
   z-index: 2;
 }
@@ -1270,7 +1276,7 @@ li.mobile-logo {
 }
 
 .tooltip .tooltiptext::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 50%;
@@ -1469,7 +1475,7 @@ li.mobile-logo {
 
   video {
     min-width: 100%;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     z-index: 1;
   }
 
@@ -1485,7 +1491,7 @@ li.mobile-logo {
   .caption-video {
     position: absolute;
     top: 20%;
-    z-index: 9;
+    z-index: 9; 
     left: 5%;
     right: 5%;
   }
@@ -1650,7 +1656,7 @@ li.mobile-logo {
 
   .debit-card-img:before {
     position: absolute;
-    content: '';
+    content: "";
     width: 100%;
     height: 450px;
     background: #f1f5fe;
@@ -1968,7 +1974,8 @@ li.mobile-logo {
     order: 2;
   }
 
-  .about .col-lg-8.d-flex.flex-column.justify-content-center.align-items-stretch {
+  .about
+    .col-lg-8.d-flex.flex-column.justify-content-center.align-items-stretch {
     order: 1;
   }
 
@@ -1976,7 +1983,8 @@ li.mobile-logo {
     order: 2;
   }
 
-  .events .col-lg-8.d-flex.flex-column.justify-content-center.align-items-stretch {
+  .events
+    .col-lg-8.d-flex.flex-column.justify-content-center.align-items-stretch {
     order: 1;
   }
 
@@ -2253,4 +2261,64 @@ span.select2-dropdown.select2-dropdown--below {
 .reply small:hover {
   color: green;
   cursor: pointer;
+}
+.custom-tab-wrapper {
+  padding: 0 25px;
+  margin: 16px 0;
+  overflow: auto;
+}
+.custom-tab-wrapper .MuiTabs-indicator {
+  background: #4aa081;
+  border-radius: 4px;
+}
+
+.custom-tab-wrapper .custom-tabs-root {
+  min-height: auto;
+  display: inline-block;
+}
+.custom-tab-wrapper .custom-tabs-root .MuiTabs-flexContainer {
+  display: inline-block;
+}
+.custom-tab-wrapper .custom-tabs-root .custom-tab-list.Mui-selected {
+  color: #4aa081;
+}
+.custom-tab-wrapper .custom-tabs-root .custom-tab-list {
+  display: inline-block;
+  padding: 10px 0;
+  min-height: auto;
+  white-space: nowrap;
+  color: #bbbbbb;
+  min-width: unset;
+  margin: 0 16px;
+}
+.custom-tab-wrapper .custom-tabs-root .custom-tab-list.active-tab {
+  color: #fff;
+}
+.user-story {
+  padding-bottom: 10px;
+}
+.like-comm {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  margin-bottom: 11px;
+}
+.view-comm {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px;
+  color: #4d4d4d;
+  margin-bottom: 8px;
+}
+
+.custom-padding {
+  padding-top: 26px;
+}
+@media screen and (max-width: 899px) {
+  .custom-tab-wrapper {
+    margin-bottom: 0;
+  }
+  .custom-padding {
+    padding-top: 66px;
+  }
 }

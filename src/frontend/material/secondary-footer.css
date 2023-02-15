@@ -12,6 +12,14 @@
     margin: 5px 0px;
 }
 
+.lightColor{
+    color:#fff;
+}
+
+.darkColor{
+    color:#161c24;
+}
+
 a{
     text-decoration: none !important;
     color: #353535 !important;
