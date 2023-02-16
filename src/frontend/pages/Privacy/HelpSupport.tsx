@@ -98,105 +98,129 @@ const HelpSupport = () => {
                     <Divider />
                     <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" expandIcon={expanded === 'panel1' ? <RemoveIcon /> : <AddIcon />}>
-                            <Typography>What can you pay with Melio?</Typography>
+                            <Typography>Who can use Dint?</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography variant='h5' style={{ fontWeight: 'normal' }}>
-                                Melio is a free, simple, and secure way for businesses to pay their bills and get paid by other businesses. It is designed for the needs of small businesses.
-                                In just a few clicks, you can pay business utility bills, vendors, contractors, and even rent.
-                                <span style={{ fontWeight: 'bold' }}> The first and most important thing to remember is that both payor and payee must be businesses. Meaning you can only pay other businesses with Melio.</span>
+                            To use Dint, you must first create an account by registering with your valid email address and a password. Your password should be unique and strong to protect your account security. Dint also allow you to authenticate using your Google account.
                             </Typography>
-                            <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>Here is the full list of types of bills you can and can't pay with Melio.</Typography>
+                            <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>To register as a user, you must:</Typography>
+                            <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>1.</span> Be at least 18 years old, and you will be required to confirm this during registration.
+
+                                </Typography>
+                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>2.</span> Be permitted by the laws of the country or State/province where you are located to use Dint and to view any content available on it and to use any functionality provided by it.
+
+                                </Typography>
+                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>3.</span> Not be a convicted sex offender.
+
+                                </Typography>
+                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>4.</span> If the laws of the country or State/province where you live provide that you can only be legally bound by a contract with us at an age which is higher than 18 years old, then you must be old enough to be legally bound by a contract with us under the laws of the country or State/province where you live.
+
+                                </Typography>
+                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>5.</span> If you do not meet the above requirements, you must not access or use Dint.
+
+                                </Typography>
+                              
                         </AccordionDetails>
                     </Accordion>
                     <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                         <AccordionSummary aria-controls="panel2d-content" id="panel2d-header" expandIcon={expanded === 'panel2' ? <RemoveIcon /> : <AddIcon />}>
-                            <Typography>How to make recurring payments in Melio</Typography>
+                            <Typography>My Wallet
+</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography variant='h5' style={{ fontWeight: 'normal' }}>
-                                With Melio you can set up automatic payments to pay vendors regularly, so they always get paid on time and you have fewer tasks on your to-do list at the end of the month.
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>Here's how to do it:</Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>1.</span> Go to your Pay dashboard.
-                                </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>2.</span>Click New Payment.
-                                </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>3.</span>Choose how you'd like to add the bill.
-                                </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>4.</span>Fill in the details of the bill.
-                                </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>5.</span>Under payment frequency, choose monthly or weekly. This shows how often the amount will be paid to your vendor.Remember to select the date you'd like the payment to arrive.
-                                </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>6.</span>Choose the payment method.
-                                </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>7.</span>Choose how your vendor will receive the payments.
-                                </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>8.</span>Review and click <span style={{ fontWeight: 'bold' }}>Confirm and schedule payment.</span>
-                                </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    To read the full article click here.
-                                </Typography>
+             
+                                    <span style={{ fontWeight: 'bold' }}></span>Adding funds to your wallet allows you to subscribe to any user, send tips or unlock paid messages without making a credit card transaction every time. Your wallet balance will be used by default as long as it is sufficient for the attempted purchase (or subscription auto-renew). Wallet Credit transactions are instant and easy to use. There is no wait time in processing new transactions.
+
+                       
+                             
                             </Typography>
                         </AccordionDetails>
                     </Accordion>
                     <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
                         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header" expandIcon={expanded === 'panel3' ? <RemoveIcon /> : <AddIcon />}>
-                            <Typography>Expedite your check payment</Typography>
+                            <Typography>Finding a profile</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography variant='h5' style={{ fontWeight: 'normal' }}>
-                                Pay your vendors faster with the fast check option. Fast checks are sent in 3 days via FedEx, instead of USPS’s regular delivery time of 5-7 days.
+               
+                               
                                 <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    You’ll have the option to make a fast check delivery when scheduling your payment deduction date:
+                                    <span style={{ fontWeight: 'bold' }}>1.</span>Standard profiles can be found through the search function.
+
                                 </Typography>
                                 <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>1.</span> Select Paper check when asked how your vendor would like to receive the payment.
+                                    <span style={{ fontWeight: 'bold' }}>2.</span>Once you have subscribed to an account, either paid or free, and have had an interaction with a model, a search icon will appear on your home page.
                                 </Typography>
                                 <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>2.</span> When selecting a date for your payment to be deducted, make sure to select the fast check option (at a $20 fee).
+                                    <span style={{ fontWeight: 'bold' }}>3.</span> If the user has enabled their profile to be easily found, then you can use the search function to find them in the search results.
+
+
                                 </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>3.</span> In the Review & confirm page, click Confirm and schedule payment to complete the process.
-                                </Typography>
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    Read the article here for a complete guide of the steps.
-                                </Typography>
-                            </Typography>
+                           
+                          
                         </AccordionDetails>
                     </Accordion>
                     <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
                         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header" expandIcon={expanded === 'panel4' ? <RemoveIcon /> : <AddIcon />}>
-                            <Typography>How to use the Partial Payments feature</Typography>
+                            <Typography>How to subscribe</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography variant='h5' style={{ fontWeight: 'normal' }}>
-                                The Partial Payments feature gives you more flexibility in how you choose to pay vendors. It allows you to divide a single invoice into several payments and use different methods at various stages of the payment.
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    When you schedule a partial payment, Melio will track and display the remaining balance.
+                          
+
+                        <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>1.</span> Add a valid credit card to your account settings.
+
+
                                 </Typography>
-                            </Typography>
+                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>2.</span> Buy tokens by clicking on the 'Buy Tokens' button and adding them to your wallet.
+
+                                </Typography>
+                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>3.</span> Click 'Subscribe' on the profile you wish to subscribe to. You will be charged the subscription fee and gain access to the profile's content. </Typography>
+
+                                    <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>4.</span> Once you subscribe, you will instantly unlock all the content in that profile, including previous and future posts.
+ </Typography>
+
+                                    <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>5.</span> Subscription periods last one calendar month from the date of purchase
+ </Typography>
+
                         </AccordionDetails>
                     </Accordion>
                     <Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
                         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header" expandIcon={expanded === 'panel5' ? <RemoveIcon /> : <AddIcon />}>
-                            <Typography>Does Melio support international payments?</Typography>
+                            <Typography>How do I start earning on Dint?
+</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography variant='h5' style={{ fontWeight: 'normal' }}>
-                                Yes, we do!
-                                Currently, Melio supports international payments outside the US and its territories in USD only.
-                                You can make international payments to countries in Europe, Asia-pacific, Latin America and more. Every week other locations are added to the list of available countries:
-                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    In the near future other currencies will be available.
+                            To start earning on Dint, follow these steps:
+
+
+                            <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>1.</span> Start creating and posting content.
+
+
+
                                 </Typography>
+                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>2.</span> Add your bank account in your name.
+
+
+                                </Typography>
+                                <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
+                                    <span style={{ fontWeight: 'bold' }}>3.</span> Complete your W-9 form if you are a US creator.
+ </Typography>
+
+
                             </Typography>
                         </AccordionDetails>
                     </Accordion>
@@ -206,7 +230,7 @@ const HelpSupport = () => {
                     Contact us
                 </Typography>
                 <p style={{ color: toggle ? "white" : "#161c24" }}>
-                    You can find additional resources in our Help Center. If you have a specific inquiry, contact us here.
+                   If you have a specific inquiry, contact us here.
                 </p>
                 <Button variant="outlined" sx={{ "&:hover": { background: "transparent", borderColor: "transparent" } }}
                     style={{ border: toggle ? "1px solid white" : "1px solid #161c24", color: toggle ? "white" : "#161c24" }}
