@@ -252,7 +252,8 @@ const PostItem = ({
       const cursorPosition = inputRef.current?.selectionStart || 0;
       const text =
         commentText.slice(0, cursorPosition) +
-         commentText.slice(cursorPosition)+emoji.native;
+        commentText.slice(cursorPosition) +
+        emoji.native;
       setEmoji(emoji);
       setCommentText(text);
     }
@@ -364,6 +365,18 @@ const PostItem = ({
             </video>
           </Box>
         )}
+        {!image && !videos.includes(extension) && (
+          <Box sx={{ px: 2 }}>
+            <Typography
+              component="span"
+              className="like-comm"
+              variant="body2"
+              sx={{ color: toggle ? "#fff" : "#000" }}
+            >
+              {description}
+            </Typography>
+          </Box>
+        )}
         <Box
           sx={{ p: 2 }}
           className="d-flex align-items-center justify-content-between"
@@ -428,16 +441,18 @@ const PostItem = ({
             Likes
           </p>
         </Box>
-        <Box sx={{ px: 2 }}>
-          <Typography
-            component="span"
-            className="like-comm"
-            variant="body2"
-            sx={{ color: toggle ? "#fff" : "#000" }}
-          >
-            {description}
-          </Typography>
-        </Box>
+        {image && (images.includes(extension)  || videos.includes(extension)) && (
+          <Box sx={{ px: 2 }}>
+            <Typography
+              component="span"
+              className="like-comm"
+              variant="body2"
+              sx={{ color: toggle ? "#fff" : "#000" }}
+            >
+              {description}
+            </Typography>
+          </Box>
+        )}
 
         <Box sx={{ px: 2 }}>
           {comments?.length > 0 ? (
@@ -472,24 +487,26 @@ const PostItem = ({
             <IconButton
               className="d-flex align-items-center justify-content-center"
               sx={{ color: toggle ? "#fff" : "#000" }}
-              onClick={()=> setShowEmoji(!showEmoji)}
+              onClick={() => setShowEmoji(!showEmoji)}
             >
               <SentimentSatisfiedOutlinedIcon />
             </IconButton>
-           <div className="emoji-wrapper">
-            {showEmoji &&
-        <Picker 
-            onEmojiSelect={(e: any)=>handleEmojiPickup(e)}  
-            emoji="point_up"
-              title="Pick your emoji"
-              theme={toggle ? "dark" : "light"}
-            style={{
-              position: "absolute",
-              top: "50px",
-              left: 0,
-              zIndex: 9999
-                  }} />}
-              </div>
+            <div className="emoji-wrapper">
+              {showEmoji && (
+                <Picker
+                  onEmojiSelect={(e: any) => handleEmojiPickup(e)}
+                  emoji="point_up"
+                  title="Pick your emoji"
+                  theme={toggle ? "dark" : "light"}
+                  style={{
+                    position: "absolute",
+                    top: "50px",
+                    left: 0,
+                    zIndex: 9999,
+                  }}
+                />
+              )}
+            </div>
             <input
               style={{
                 border: "none",
@@ -504,7 +521,6 @@ const PostItem = ({
               type="text"
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-             
             />
             <IconButton
               sx={{

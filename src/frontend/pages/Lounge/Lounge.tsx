@@ -28,7 +28,7 @@ import DintWallet from '../Wallet/DintWallet';
 import Withdrawal from '../Wallet/Withdrawal';
 import ProcessWithdrawal from '../Wallet/ProcessWithdrawal';
 import { Modal } from '@mui/material';
-
+import Search from "../search/index";
 const NewHome = () => {
   const userData = useSelector((state: RootState) => state?.user?.userData);
   const { addNewPostToContext } = useLounge();
@@ -55,7 +55,8 @@ const NewHome = () => {
       HOME_SIDE_MENU.LOUNGE,
       // HOME_SIDE_MENU.MY_PROFILE,
       HOME_SIDE_MENU.MESSAGES,
-      HOME_SIDE_MENU.SUBSCRIPTIONS
+      HOME_SIDE_MENU.SUBSCRIPTIONS,
+      HOME_SIDE_MENU.SEARCH,
     ];
 
     if (params.page) {
@@ -102,18 +103,18 @@ const NewHome = () => {
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
-  const isMobileScreen = useMemo(() => {
-    return isMobile()
-  }, [widthScreen])
+  // const isMobileScreen = useMemo(() => {
+  //   return isMobile()
+  // }, [widthScreen])
 
-  const styleSidebarMobile = {
-    display: widthScreen >= 900 ? 'none' : '',
-    position: 'fixed',
-    bottom: 0,
-    left: 0,
-    width: '100%',
-    zIndex: '120'
-  };
+  // const styleSidebarMobile = {
+  //   display: widthScreen >= 900 ? "none" : "",
+  //   position: "fixed",
+  //   bottom: 0,
+  //   left: 0,
+  //   width: "100%",
+  //   zIndex: "120",
+  // };
 
   const createPost = useCallback(
     async (toastId: string, data: any) => {
@@ -171,7 +172,9 @@ const NewHome = () => {
           <AddPost widthScreen={widthScreen} createPost={createPost} />
         </Modal>
       );
-    if (location.pathname.includes(HOME_SIDE_MENU.SUBSCRIPTIONS)) return <Subscriptions />;
+    if (location.pathname.includes(HOME_SIDE_MENU.SEARCH)) return <Search />;
+    if (location.pathname.includes(HOME_SIDE_MENU.SUBSCRIPTIONS))
+      return <Subscriptions />;
     return (
       <>
         <Grid container>
@@ -203,12 +206,17 @@ const NewHome = () => {
             item
             xs={0}
             md={1}
-            sx={{ display: widthScreen <= 900 ? "none" : "" }}
+            className="desktop-nav"
           >
             {userData && !!userData.id && <Sidebar />}
           </Grid>
-          <Grid item sx={styleSidebarMobile}>
-            {userData && !!userData.id && isMobileScreen && <SidebarMobile widthScreen={widthScreen} />}
+              <Grid item
+                className="mobile-nav"
+              >
+                {
+                  userData && !!userData.id &&
+                  // isMobileScreen &&
+                  ( <SidebarMobile widthScreen={widthScreen} /> )}
           </Grid>
           <Grid item xs={12} md={10}>
             {isLounge ? renderComponent : null}

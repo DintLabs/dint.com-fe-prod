@@ -64,7 +64,7 @@ const Sidebar = () => {
           height: '100vh',
           overflowX: "hidden",
           overflowY: "auto",
-          position: "fixed",
+        position: "fixed",
         }}
       >
         <ListItem>
@@ -94,14 +94,14 @@ const Sidebar = () => {
         </ListItem>
         <ListItem
           sx={{
-            color: toggle ? 'text.primary' : 'text.secondary',
+            color: HOME_SIDE_MENU.SEARCH === selectedMenu ? toggle ? 'text.primary' : '#161C24' : 'text.secondary',
             cursor: 'pointer',
             paddingBottom: '20px'
           }}
-          // onClick={() => {
-          //   dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.HOME }));
-          //   navigate(`/lounge/${HOME_SIDE_MENU.HOME}`);
-          // }}
+          onClick={() => {
+            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.SEARCH }));
+            navigate(`/lounge/${HOME_SIDE_MENU.SEARCH}`);
+          }}
         >
           <ListItemAvatar>
             <SearchOutlinedIcon />

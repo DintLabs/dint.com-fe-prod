@@ -51,6 +51,7 @@ export interface FollowerDataInterface {
   is_private: boolean;
 }
 export interface UserDataInterface {
+  able_to_be_found: boolean;
   id: number;
   custom_username: string;
   profile_image: string;

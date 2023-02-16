@@ -11,13 +11,16 @@ import { BsSearch } from 'react-icons/bs';
 
 import { useNavigate } from 'react-router';
 
+import { ThemeContext } from "frontend/contexts/ThemeContext";
+import { useContext } from "react";
 interface Props {
   widthScreen: number;
 }
 
 const SidebarMobile = ({ widthScreen }: Props) => {
   const navigate = useNavigate();
-
+  
+  const { toggle } = useContext(ThemeContext);
   const { selectedMenu } = useSelector((rootState: RootState) => rootState.newHome);
 
   const [showMoreDrawer, setShowMoreDrawer] = useState(false);
@@ -36,10 +39,10 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         onClose={() => setShowMoreDrawer(false)}
         openFrom="right"
       />
-      <List sx={{ display: 'flex', backgroundColor: 'black' }}>
+      <List sx={{ display: 'flex', backgroundColor: toggle ? "#000" : "#fff",  }}>
         <ListItem
           sx={{
-            color: HOME_SIDE_MENU.HOME === selectedMenu ? 'text.primary' : 'text.secondary',
+            color: HOME_SIDE_MENU.HOME === selectedMenu ? (toggle ? "#fff" : '#000') : 'text.secondary',
             cursor: 'pointer',
             ...styleListItem
           }}
@@ -54,7 +57,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         </ListItem>
         <ListItem
           sx={{
-            color: HOME_SIDE_MENU.SEARCH === selectedMenu ? 'text.primary' : 'text.secondary',
+            color: HOME_SIDE_MENU.SEARCH === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
             cursor: 'pointer',
             ...styleListItem
           }}
@@ -70,7 +73,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         <ListItem
           sx={{
             cursor: 'pointer',
-            color: HOME_SIDE_MENU.MESSAGES === selectedMenu ? 'text.primary' : 'text.secondary',
+            color: HOME_SIDE_MENU.MESSAGES === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
             ...styleListItem
           }}
           onClick={() => {
@@ -86,7 +89,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         <ListItem
           sx={{
             cursor: 'pointer',
-            color: HOME_SIDE_MENU.WALLET === selectedMenu ? 'text.primary' : 'text.secondary',
+            color: HOME_SIDE_MENU.WALLET === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
             ...styleListItem
           }}
           onClick={() => {
@@ -102,7 +105,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         <ListItem
           sx={{
             cursor: 'pointer',
-            color: HOME_SIDE_MENU.MORE === selectedMenu ? 'text.primary' : 'text.secondary',
+            color: HOME_SIDE_MENU.MORE === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
             ...styleListItem
           }}
           onClick={() => {

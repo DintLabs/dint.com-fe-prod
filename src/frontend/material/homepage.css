@@ -1491,7 +1491,7 @@ li.mobile-logo {
   .caption-video {
     position: absolute;
     top: 20%;
-    z-index: 9; 
+    z-index: 9;
     left: 5%;
     right: 5%;
   }
@@ -2320,5 +2320,31 @@ span.select2-dropdown.select2-dropdown--below {
   }
   .custom-padding {
     padding-top: 66px;
+  }
+}
+
+.desktop-nav {
+  display: flex;
+  box-shadow: none;
+}
+
+.mobile-nav {
+  display: none;
+}
+.mobile-nav ul {
+  width: 100%;
+}
+
+@media screen and (max-width: 899px) {
+  .mobile-nav {
+    display: flex;
+    position: fixed;
+     bottom: 0;
+    left: 0; 
+    width: 100%;
+    z-index: 120;
+  }
+  .desktop-nav {
+    display: none;
   }
 }
