@@ -396,7 +396,7 @@ const Login = () => {
       {/* <MainNavbar /> */}
       <Helmet>
         <title>Dint - Social Media with Referral Monetization powered by Smart Contracts</title>
-        <meta name="description" content="Login to Dint" />
+        <meta name="description" content="Dint is a new social media platform with referral-based monetization, smart contracts, and content earning opportunities. Earn money by referring friends and their activity. Create content and earn through tips and subscriptions. With Dint, you're in control of your earnings." />
       </Helmet>
       {/* <NavbarHome /> */}
       <div className="main-container-login">
@@ -406,7 +406,7 @@ const Login = () => {
           <p className="left-head position-absolute">Dint</p>
           <div className="bg-left-content d-flex justify-content-center">
             <div className="left-text">
-              <p >Dint is a new social media platform with referral-based monetization, smart contracts, and content earning opportunities. Earn money by referring friends and their activity. Create content and earn through tips and subscriptions. With Dint, you're in control of your earnings.</p>
+              <p > Earn money by referring friends and their activity. Create content and earn through tips and subscriptions. With Dint, you're in control of your earnings.</p>
               </div>
           </div>
         </div>
