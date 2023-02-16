@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid, ListItemAvatar, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Avatar, Box, Button, Grid, ListItemAvatar, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import _axios from 'frontend/api/axios';
 import PostItemSkeleton from 'frontend/components/common/skeletons/PostItemSkeleton';
 import { useLounge } from 'frontend/contexts/LoungeContext';
@@ -57,11 +57,14 @@ function TabPanel(props: TabPanelProps) {
 const HomeTab = ({ createPost }: Props) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { toggle } = useContext(ThemeContext);
 
   const [value, setValue] = useState(0);
+  const [suggestionList, setSuggestionList] = useState([]);
+  const [storyList, setStoryList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const savedUser = JSON.parse(localStorage.getItem('userData') ?? '{}');
-  const { toggle } = useContext(ThemeContext);
+  const [showAddPageButton , setShowAddPageButton] = useState(false)
 
   const {
     counts,
@@ -141,9 +144,36 @@ const HomeTab = ({ createPost }: Props) => {
     };
   }, [handleScroll]);
 
+  useEffect(() => {
+    getSuggestionList();
+    getStoryList();
+  }, []);
+
+  const getSuggestionList = async () => {
+    const result = await _axios.get('api/user/get_suggestions/', {});
+    if (result?.data?.code === 200) {
+      setSuggestionList(result?.data?.data);
+    }
+  }
+
+  const getStoryList = async () => {
+    const result = await _axios.get('api/user/get-stories/', {});
+    if (result?.data?.code === 200) {
+      setStoryList(result?.data?.data);
+    }
+  }
+
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const ShowAddPage =() =>{
+    if(showAddPageButton === true){
+      setShowAddPageButton(false)
+    }else{
+      setShowAddPageButton(true)
+    }
+  }
 
   const setHasNextFalse = (postType: string) => {
     if (postType === postTypes.all.value) {
@@ -219,8 +249,8 @@ const HomeTab = ({ createPost }: Props) => {
     <Box
       id="postsListScrollableDiv"
       style={{
-          // borderLeft: `1px solid ${theme.palette.grey[700]}`,
-          // borderRight: `1px solid ${theme.palette.grey[700]}`
+        // borderLeft: `1px solid ${theme.palette.grey[700]}`,
+        // borderRight: `1px solid ${theme.palette.grey[700]}`
       }}
     >
       {/* <AddPost createPost={createPost} widthScreen={0} /> */}
@@ -247,7 +277,7 @@ const HomeTab = ({ createPost }: Props) => {
             <ListItemAvatar
               style={{ cursor: "pointer", display: "flex", gap: "35px" }}
             >
-              {Array.from({ length: 8 }, (_, i) => (
+              {storyList?.map((item: any, i: number) => (
                 <div
                   key={i}
                   style={{ textAlign: "center", width: "fit-content" }}
@@ -255,7 +285,7 @@ const HomeTab = ({ createPost }: Props) => {
                 >
                   <Avatar
                     className="story-avatar"
-                    src={storyImage}
+                    src={item?.profile_image}
                     sx={{
                       width: 92,
                       height: 92,
@@ -272,7 +302,7 @@ const HomeTab = ({ createPost }: Props) => {
                       color: toggle ? "text.primary" : "#161C24",
                     }}
                   >
-                    Karry Wee
+                    {item?.display_name}
                   </Typography>
                 </div>
               ))}
@@ -290,9 +320,8 @@ const HomeTab = ({ createPost }: Props) => {
               className="custom-tabs-root"
             >
               <Tab
-                className={`${
-                  toggle && value === 0 && "active-tab"
-                } custom-tab-list`}
+                className={`${toggle && value === 0 && "active-tab"
+                  } custom-tab-list`}
                 label={`All  (${counts?.all_posts ?? 0})`}
               />
               <Tab
@@ -309,7 +338,7 @@ const HomeTab = ({ createPost }: Props) => {
               />
             </Tabs>
           </Box>
-          
+
           <TabPanel value={value} index={0}>
             {posts.map((item) => (
               <PostItem
@@ -321,8 +350,8 @@ const HomeTab = ({ createPost }: Props) => {
                 userName={
                   item?.user
                     ? item?.user?.display_name ||
-                      item?.user?.first_name ||
-                      item?.user?.custom_username
+                    item?.user?.first_name ||
+                    item?.user?.custom_username
                     : ''
                 }
                 custom_username={item?.user ? item?.user?.custom_username : ''}
@@ -389,7 +418,7 @@ const HomeTab = ({ createPost }: Props) => {
 
           <TabPanel value={value} index={3}>
             {videoPosts.map((item, i) => (
-              
+
               <PostItem
                 fetchPosts={fetchPosts}
                 canDeletePost={true}
@@ -413,20 +442,38 @@ const HomeTab = ({ createPost }: Props) => {
           </TabPanel>
         </Box>
         <Box sx={{
-            display: { xs: "none", md: "block" },
-            marginLeft: '5rem',
-            marginTop: "26px",
-            width: '30%',
-          }}
+          display: { xs: "none", md: "block" },
+          marginLeft: '5rem',
+          marginTop: "26px",
+          width: '30%',
+        }}
         >
           <Box sx={{
-              display: 'flex',
-              width: '100%',
-              alignItems: 'center',
-              gap: '12px'
+            display: 'flex',
+            width: '100%',
+            alignItems: 'center',
+            gap: '12px'
           }}>
-
-            <Avatar src={savedUser?.profile_image} sx={{ width: 50, height: 50 }} />
+           
+              <Button
+              onClick={()=>navigate("/page/creation")} 
+              sx={{
+              '&:hover' :{background : 'grey'},
+              display:showAddPageButton ? 'block' : 'none',
+              position: 'absolute',
+              top: '8%',
+              right: '33%',
+              background: 'black',
+              color: 'white',
+              padding: '10px',
+              borderRadius: '12px',
+              borderTopRightRadius: '0px'
+            }}>
+              + Add Page
+              </Button>
+              <Button onClick={()=>ShowAddPage()}>
+                <Avatar src={savedUser?.profile_image} sx={{ width: 50, height: 50 }} />
+              </Button>
             <div>
               <Typography variant="h4" sx={{ color: toggle ? 'text.primary' : '#161C24' }}>
                 {savedUser.display_name}
@@ -437,65 +484,55 @@ const HomeTab = ({ createPost }: Props) => {
             </div>
           </Box>
           <Box sx={{
-              marginTop: '2rem',
-              marginLeft: '10px',
-            }}
+            marginTop: '2rem',
+            marginLeft: '10px',
+          }}
           >
             <Typography variant="h4" sx={{ color: toggle ? 'text.primary' : '#161C24' }}
             >
               Suggestions
             </Typography>
-
-            {Array.from({ length: 5 }, (_, i) => (
-              <Box key={i} sx={{
+            {suggestionList?.map((item: any, i: number) => (
+              <div onClick={() => navigate(`/${item?.custom_username}`)}>
+                <Box key={i} sx={{
                   display: 'flex',
                   width: '100%',
                   alignItems: 'center',
                   gap: '12px',
-                  marginTop: '20px',
+                  marginTop: '12px',
+                  cursor: 'pointer'
                 }}>
-                <Avatar
-                  src={savedUser?.profile_image}
-                  sx={{ width: 35, height: 35 }}
-                />
-                <div>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      fontSize: "17px",
-                      color: toggle ? "text.primary" : "#161C24",
-                    }}
-                  >
-                    Lucas Williams
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "400", color: "#666666" }}
-                  >
-                    @username
-                  </Typography>
-                </div>
-              </Box>
+                  <Avatar src={item?.profile_image} sx={{ width: 35, height: 35 }} />
+                  <div>
+                    <Typography variant="h5" sx={{ color: toggle ? 'text.primary' : '#161C24' }}>
+                      {item?.display_name}
+                    </Typography>
+                    <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                      {item?.custom_username}
+                    </Typography>
+                  </div>
+                </Box>
+              </div>
             ))}
             <Grid
               direction="row"
               gap={2}
               sx={{ display: "flex", marginTop: "30px" }}
             >
-                <div onClick={() => navigate('/terms')}>
-              <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer'  }}>
-                Terms of Service
-              </Typography>
-                </div>
-                <div onClick={() => navigate('/privacy')}>
-              <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer'  }}>
-                Privacy Policy
-              </Typography>
+              <div onClick={() => navigate('/terms')}>
+                <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer' }}>
+                  Terms of Service
+                </Typography>
+              </div>
+              <div onClick={() => navigate('/privacy')}>
+                <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer' }}>
+                  Privacy Policy
+                </Typography>
               </div>
               <div onClick={() => navigate('/cookies')}>
-              <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer'  }}>
-                Cookie Policy
-              </Typography>
+                <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer' }}>
+                  Cookie Policy
+                </Typography>
               </div>
             </Grid>
             <Grid
@@ -503,19 +540,19 @@ const HomeTab = ({ createPost }: Props) => {
               gap={2}
               sx={{ display: "flex", marginTop: "30px" }}
             >
-                  <div onClick={() => navigate('/help')}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "400",
-                  color: toggle ? "text.primary" : "#536471",cursor: 'pointer' 
-                }}
-              >
-                Help
-              </Typography>
+              <div onClick={() => navigate('/help')}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "400",
+                    color: toggle ? "text.primary" : "#536471", cursor: 'pointer'
+                  }}
+                >
+                  Help
+                </Typography>
               </div>
-            
-         
+
+
               <Typography
                 variant="h6"
                 sx={{
@@ -523,7 +560,7 @@ const HomeTab = ({ createPost }: Props) => {
                   color: toggle ? "text.primary" : "#536471",
                 }}
               >
-               Dint © 2023 
+                Dint © 2023
               </Typography>
             </Grid>
           </Box>

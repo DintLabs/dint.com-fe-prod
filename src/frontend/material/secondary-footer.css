@@ -49,7 +49,12 @@ a{
   }
   .bottom-line {
     height: 1px;
-    /* border: 1px solid #EAE8ED; */
+    border: 1px solid #EAE8ED;
+  }
+  .accordion{
+    width: 25%;
+    margin-top: 2%;
+    color: black;
   }
 @media only screen and (max-width: 480px){
    /* .main-footer{
@@ -75,9 +80,16 @@ a{
    .left-footer{
     text-align: center;
     margin-top: 40px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
    }
    .left-footer div{
     justify-content: center;
+   }
+   .accordion{
+    width: 50%;
    }
 }
 @media (min-width:480px)and (max-width : 768px){
@@ -92,6 +104,9 @@ a{
        .footer-rows-desktop{
         display: none  !important;
        }
+       .accordion{
+        width: 50%;
+      }
 }
 @media (min-width : 2860px) and (max-width:5120px){
     .main-footer{

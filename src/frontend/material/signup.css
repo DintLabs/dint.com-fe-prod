@@ -236,9 +236,10 @@
   color: #FFFFFF;
 }
 .left-text p{
-  top: 5%;
-  left:17%;
-  position: absolute;
+  /* top: 5%; */
+  /* left:17%; */
+  /* position: absolute; */
+  padding:5% 0% 0% 7%;
   font-family: 'Roboto';
   font-size: 2vw;
 }
