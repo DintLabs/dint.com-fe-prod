@@ -42,11 +42,125 @@
   display: flex;
 }
 
-@media only screen and (max-width: 800px) {
+.btn-group-follow {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.post-wrapper-desktop {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin: 16px 0;
+}
+.post-wrapper-desktop p {
+  font-weight: 700;
+  font-size: 18px;
+}
+.post-wrapper-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  display: none;
+}
+.followers-tab-wrap {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.followers-value {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 20px;
+}
+.followers-label {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+.username {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tab-main-wrapper {
+  margin: 20px 0 0;
+}
+.tab-main-wrapper .MuiTabs-flexContainer {
+  display: flex;
+  overflow: auto;
+  justify-content: center;
+}
+.tab-main-wrapper .MuiTabs-scroller .MuiTabs-indicator {
+  bottom: unset;
+  top: 0;
+  background: #000;
+}
+.tab-main-wrapper .MuiTabs-flexContainer .MuiButtonBase-root {
+  flex: none;
+  flex-grow: none;
+}
+.tab-main-wrapper .Mui-selected {
+  color: #000;
+}
+.avatar-icon {
+  width: 120px;
+  height: 120px;
+}
+
+.tab-main-wrapper .profile-tabs-root .profile-tab-list.Mui-selected {
+  color: #000;
+}
+/* .tab-main-wrapper .profile-tabs-root .profile-tab-list {
+  display: inline-block;
+  padding: 10px 0;
+  min-height: auto;
+  white-space: nowrap;
+  color: #bbbbbb;
+  min-width: unset;
+  margin: 0 16px;
+} */
+.tab-main-wrapper .profile-tabs-root .profile-tab-list.active-tab {
+  color: #fff;
+}
+
+@media only screen and (max-width: 899px) {
   .profile_div_child {
     width: 100%;
   }
   .profile_form_div {
     flex-direction: column-reverse;
+  }
+  /* .tab-main-wrapper .MuiTabs-flexContainer {
+    justify-content: flex-start;
+  } */
+  .profile-menu{
+    display: flex;
+    gap: 35px;
+  }
+  .post-wrapper-desktop{
+    display: none;
+  }
+  .post-wrapper-mobile{
+    display: flex;
+    gap: 55px;
+    justify-content: flex-start;
+  }
+  .avatar-icon {
+    width: 80px;
+    height: 80px;
+  }
+  .btn-group-follow-wrapper{
+    width: 100%;
+  }
+  .profile-tab .profile-tab-text{
+display: none;
+  }
+}
+@media (max-width:550px){
+  .post-wrapper-mobile{
+    gap: 0;    
+    justify-content: space-between;
   }
 }

@@ -6,6 +6,7 @@ export interface CountInerface {
   text_posts: number;
   image_posts: number;
   video_posts: number;
+  subscriptions: number;
 }
 export interface OrderInerface {
   column: number;

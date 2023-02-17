@@ -22,6 +22,8 @@ import MessageList from "./MessageList";
 import TipPopUp from "../tip/TipPopUp";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { fetchAllChatsList } from "../../redux/slices/messages";
+import SendIcon from '@mui/icons-material/Send';
+import { Button } from "@mui/material";
 
 let ws: any;
 
@@ -223,10 +225,24 @@ function ChatSection(props: ChatSectionProps) {
           className="chat-section"
           spacing={2}
           width="60%">
-          <BsChatLeftTextFill fontSize={50} />
-          <Typography className="secondary-text-color">
-            Select a user to chat
+          {/* <BsChatLeftTextFill fontSize={50} /> */}
+          <IconButton sx={{color:"black" , border:"1px solid" , padding:"2%"}}>
+            <SendIcon sx={{height:"3vw" , width:"3vw" , transform:"rotate(-20deg)"}}/>
+          </IconButton>
+          <Typography variant="h2">
+           Your Messages
           </Typography>
+          <Typography className="secondary-text-color">
+            Send private message or phots to your friends
+          </Typography>
+          <Button 
+          sx={{
+            background: '#EFEFEF',
+            color: 'black',
+            padding: '10px 20px',
+          }} >
+            Send Message
+          </Button>
         </Stack>
       ) : null}
     </>

@@ -7,19 +7,20 @@ import Badge from "@mui/material/Badge";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/img/logos/logo.png"
+import logo from "../../assets/img/logos/logo.png";
 import ControlPointOutlinedIcon from "@mui/icons-material/ControlPointOutlined";
-import { Avatar } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import storyImage from "frontend/assets/img/web3/story-1.png";
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useContext } from "react";
 import { HOME_SIDE_MENU } from "frontend/redux/slices/newHome";
+import {  useParams } from 'react-router';
 
-export default function PrimarySearchAppBar() {
+export default function MobileTopHeader({ userName, avatar}:{userName:string, avatar: string}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { toggle } = useContext(ThemeContext);
 
@@ -30,6 +31,8 @@ export default function PrimarySearchAppBar() {
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
+
+  const routeurl = useParams()
 
   const menuId = "primary-search-account-menu";
   return (
@@ -58,12 +61,13 @@ export default function PrimarySearchAppBar() {
               </h1>
             </Link>
           </IconButton>
+          <Typography sx={{textOverflow: 'ellipsis',whiteSpace:'nowrap', overflow:'hidden'}} color={toggle ? "#fff" : "#000"} >{routeurl.username && userName}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "flex", md: "flex" } }}>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
-              sx={{ color: toggle ? "#fff" : "#6E747A" }}
+              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px' }}
               onClick={() => navigate(`/lounge/${HOME_SIDE_MENU.ADD_POST}`)}
             >
               <ControlPointOutlinedIcon />
@@ -72,14 +76,14 @@ export default function PrimarySearchAppBar() {
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
-              sx={{ color: toggle ? "#fff" : "#6E747A" }}
+              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px' }}
             >
               <NotificationsOutlinedIcon />
             </IconButton>
             <IconButton
               size="large"
               aria-label="show 4 new mails"
-              sx={{ color: toggle ? "#fff" : "#6E747A" }}
+              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px' }}
               onClick={() => navigate(`/lounge/${HOME_SIDE_MENU.MESSAGES}`)}
             >
               <Badge color="error">
@@ -93,11 +97,11 @@ export default function PrimarySearchAppBar() {
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
-              sx={{ color: toggle ? "#fff" : "#6E747A" }}
+              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px' }}
             >
               <Avatar
                 className="story-avatar avtar-mobile-dev"
-                src={storyImage}
+                src={avatar}
                 sx={{
                   width: 92,
                   height: 92,

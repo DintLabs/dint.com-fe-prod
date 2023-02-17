@@ -29,10 +29,13 @@ import Withdrawal from '../Wallet/Withdrawal';
 import ProcessWithdrawal from '../Wallet/ProcessWithdrawal';
 import { Modal } from '@mui/material';
 import Search from "../search/index";
+import ProfilePage from "./ProfilePage";
+import MobileTopHeader from "./MobileTopHeader";
+
 const NewHome = () => {
   const userData = useSelector((state: RootState) => state?.user?.userData);
   const { addNewPostToContext } = useLounge();
-
+  
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
   const [isLounge, setIsLounge] = useState<boolean>(false);
   const [isViewPage, setIsViewPage] = useState<boolean>(false);
@@ -178,10 +181,9 @@ const NewHome = () => {
     return (
       <>
         <Grid container>
-          <Grid item xs={12} md={8}>
-            <MyProfile username={params.username} />
+          <Grid item xs={12} md={12}>
+            <ProfilePage username={params.username} />
           </Grid>
-          <Grid item xs={12} md={4} />
         </Grid>
       </>
     );
@@ -210,13 +212,14 @@ const NewHome = () => {
           >
             {userData && !!userData.id && <Sidebar />}
           </Grid>
-              <Grid item
-                className="mobile-nav"
-              >
-                {
-                  userData && !!userData.id &&
-                  // isMobileScreen &&
-                  ( <SidebarMobile widthScreen={widthScreen} /> )}
+          <Grid item className="mobile-nav">
+            {userData && !!userData.id && ( 
+              // isMobileScreen &&
+              <>
+                <MobileTopHeader userName={userData.display_name || ""} avatar={userData.profile_image || ""} />
+                <SidebarMobile widthScreen={widthScreen} />
+              </>
+            )}
           </Grid>
           <Grid item xs={12} md={10}>
             {isLounge ? renderComponent : null}

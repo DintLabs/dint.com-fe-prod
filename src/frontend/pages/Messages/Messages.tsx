@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { SyntheticEvent, useCallback, useContext, useEffect, useState } from "react";
 import {
   Box,
   Chip,
@@ -7,6 +7,7 @@ import {
   IconButton,
   TextField,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 
@@ -29,6 +30,11 @@ import NewMessage from "frontend/components/messages/NewMessage";
 import UserListItemSkeleton from "frontend/components/common/skeletons/UserListItemSkeleton";
 import { fetchAllChatsList } from "../../redux/slices/messages";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import { Tab } from "@mui/material";
+import { Tabs } from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const users = [
   {
@@ -211,6 +217,7 @@ const Messages = () => {
   //  User search related states
   const [isUserSearchOpen, setIsUserSearchOpen] = useState<boolean>(false);
   const [userSearchText, setUserSearchText] = useState<string>("");
+  const [value , setValue] = useState(0)
 
   const { toggle } = useContext(ThemeContext);
 
@@ -289,14 +296,28 @@ const Messages = () => {
     }
   };
 
+  const handleChange = (event: SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
   return (
     <>
+      <Stack sx={useMediaQuery("(min-width:899px)")?{
+        display:"none" 
+      }:{ padding:"1%"  }}>
+        <Typography><ArrowBackIcon onClick={()=>navigate(-1)}/>Dint</Typography>
+       
+        <Box> 
+        <PostAddIcon sx={{color:"black"}} className="cursor-pointer"/>
+        </Box>
+      </Stack>
       <Stack
         direction="row"
         className="messages-container"
         style={{
-          borderLeft: `1px solid ${theme.palette.grey[700]}`,
-          borderRight: `1px solid ${theme.palette.grey[700]}`,
+          margin:"1% 0%" ,
+          border:`1px solid #D5D5D5`
+          // borderLeft: `1px solid ${theme.palette.grey[700]}`,
+          // borderRight: `1px solid ${theme.palette.grey[700]}`,
         }}>
         {/* {/ users list /} */}
         <Box
@@ -306,7 +327,7 @@ const Messages = () => {
               ? params.uid
                 ? { width: 0 }
                 : { width: "100%" }
-              : { width: "40%" }
+              : { width: "35%" }
           }>
           {/* {/ messsage header /} */}
           <ClickAwayListener onClickAway={handleClickAwayListener}>
@@ -337,17 +358,19 @@ const Messages = () => {
                 />
               ) : (
                 <Typography
-                  className="primary-text-color capitalize-text"
+                  sx={{width:"100%" , textAlign:'center'}}
+                  className="capitalize-text"
                   variant="subtitle1">
-                  Messages
+                  Dint <ExpandMoreIcon />
                 </Typography>
               )}
               <Stack direction="row" spacing={2} alignItems="center">
-                <IconButton size="small" onClick={handleUserSearchOpen}>
-                  <BsSearch className="primary-text-color cursor-pointer" />
+                <IconButton sx={{color:"black"}} size="small" onClick={handleUserSearchOpen}>
+                  <BsSearch className="cursor-pointer" />
                 </IconButton>
                 <IconButton size="small" onClick={handleModalOpen}>
-                  <BsPlusLg className="primary-text-color cursor-pointer" />
+                  {/* <BsPlusLg className="primary-text-color cursor-pointer" /> */}
+                  <PostAddIcon sx={{color:"black"}} className="cursor-pointer"/>
                 </IconButton>
                 {isAddNewModalOpen && (
                   <NewMessage
@@ -360,26 +383,44 @@ const Messages = () => {
           </ClickAwayListener>
           <Divider />
           <Stack
-            direction="row"
+            // direction="row"
             spacing={1}
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ p: { xs: 0.5, md: 1, xl: 2 } }}>
-            <Typography
+            // justifyContent="space-between"
+            // alignItems="center"
+            // sx={{ p: { xs: 0.5, md: 1, xl: 2 } }}
+            >
+            {/* <Typography
               variant="body2"
               className="secondary-text-color capitalize-text">
               Recent
-            </Typography>
-            <Stack direction="row" spacing={2} alignItems="center">
+            </Typography> */}
+            <Box 
+              sx={{
+                  '& .Mui-selected': {
+                  color: '#4aa081 !important'
+                },
+                '& .MuiTabs-indicator': {
+                  background:'#4aa081',
+                  borderRadius: '4px'
+                }
+            }}>
+              <Tabs value={value} onChange={handleChange} sx={{width:"100%" , justifyContent:"space-between" , color:"black"}}>
+                <Tab sx={{width:"33%"}}label={'Primary'}/>
+                <Tab sx={{width:"33%"}}label={'General'}/>
+                <Tab sx={{width:"33%"}}label={'Requests'}/>
+              </Tabs>
+            </Box>
+            {/* <Stack direction="row" spacing={2} alignItems="center">
               <IconButton size="small">
                 <BsFilterLeft
                   className="secondary-text-color cursor-pointer"
                   fontSize={22}
                 />
               </IconButton>
-            </Stack>
+            </Stack> */}
           </Stack>
-          <Stack
+          <Divider />
+          {/* <Stack
             direction="row"
             spacing={1}
             alignItems="center"
@@ -391,7 +432,7 @@ const Messages = () => {
               clickable
               className="clickable-chip-color"
             />
-          </Stack>
+          </Stack> */}
           {/* {/ list of users /} */}
 
           {chatListLoader ? (

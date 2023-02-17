@@ -262,7 +262,7 @@ const HomeTab = ({ createPost }: Props) => {
           // padding: "10px 0",
         }}
       >
-        <MobileTopHeader />
+        {/* <MobileTopHeader /> */}
         <Box
           sx={{ width: { xs: "100%", md: "60%" } }}
           className="custom-padding"
@@ -325,15 +325,21 @@ const HomeTab = ({ createPost }: Props) => {
                 label={`All  (${counts?.all_posts ?? 0})`}
               />
               <Tab
-                className="custom-tab-list"
+                className={`${
+                  toggle && value === 1 && "active-tab"
+                } custom-tab-list`}
                 label={`Text (${counts?.text_posts ?? 0})`}
               />
               <Tab
-                className="custom-tab-list"
+                className={`${
+                  toggle && value === 2 && "active-tab"
+                } custom-tab-list`}
                 label={`Photos  (${counts?.image_posts ?? 0})`}
               />
               <Tab
-                className="custom-tab-list"
+                className={`${
+                  toggle && value === 3 && "active-tab"
+                } custom-tab-list`}
                 label={`Videos  (${counts?.video_posts ?? 0})`}
               />
             </Tabs>
