@@ -1,10 +1,12 @@
 import React, { SyntheticEvent, useCallback, useContext, useEffect, useState } from "react";
 import {
+  Avatar,
   Box,
   Chip,
   ClickAwayListener,
   Divider,
   IconButton,
+  InputAdornment,
   TextField,
   Typography,
   useMediaQuery,
@@ -35,6 +37,9 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import { Tab } from "@mui/material";
 import { Tabs } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
 
 const users = [
   {
@@ -303,22 +308,23 @@ const Messages = () => {
     <>
       <Stack sx={useMediaQuery("(min-width:899px)")?{
         display:"none" 
-      }:{ padding:"1%"  }}>
+      }:{ padding:"1% 2%" , justifyContent:"space-between" , display:"flex" , flexDirection:"row" }}>
         <Typography><ArrowBackIcon onClick={()=>navigate(-1)}/>Dint</Typography>
        
         <Box> 
+        <MoreHorizIcon />
         <PostAddIcon sx={{color:"black"}} className="cursor-pointer"/>
         </Box>
       </Stack>
       <Stack
         direction="row"
         className="messages-container"
-        style={{
+        sx={useMediaQuery("(min-width:899px)") ? {
           margin:"1% 0%" ,
           border:`1px solid #D5D5D5`
           // borderLeft: `1px solid ${theme.palette.grey[700]}`,
           // borderRight: `1px solid ${theme.palette.grey[700]}`,
-        }}>
+        } : {border:"0px"}}>
         {/* {/ users list /} */}
         <Box
           className="user-list"
@@ -327,7 +333,7 @@ const Messages = () => {
               ? params.uid
                 ? { width: 0 }
                 : { width: "100%" }
-              : { width: "35%" }
+              : { width: "35%" , borderRight:"1px solid grey"}
           }>
           {/* {/ messsage header /} */}
           <ClickAwayListener onClickAway={handleClickAwayListener}>
@@ -337,7 +343,7 @@ const Messages = () => {
               spacing={1}
               justifyContent="space-between"
               alignItems="center"
-              sx={{ p: { xs: 0.5, md: 1, xl: 2 } }}
+              sx={useMediaQuery("(min-width:899px)") ? { p: { xs: 0.5, md: 1, xl: 2 } } : {display:"none"}}
               component="div">
               {isUserSearchOpen ? (
                 <TextField
@@ -381,7 +387,53 @@ const Messages = () => {
               </Stack>
             </Stack>
           </ClickAwayListener>
-          <Divider />
+          <Stack sx={useMediaQuery("(min-width:899px)")
+                ?{display:"none"} :{margin:"1%"}} >
+          <TextField 
+              value={''} 
+              fullWidth
+              size="small"
+              placeholder="Search"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment>
+                    <IconButton>
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+              sx={{
+                "& legend": { display: "none" },
+                "& fieldset": { top: 0 },
+                "& .MuiInputBase-input": {
+                  color: toggle ? "white" : "#161C24",
+                },
+                background:'#F7F6F6',
+                borderRadius:"10px"
+          }}/>
+          <Stack direction="row">
+            <Box sx={{ margin:"1%" ,maxWidth:"min-content",textAlign:"center", position:"relative"}}>
+              <Avatar src={userData?.profile_image} sx={{ height:"60px" , width:"60px" , border:"4px solid #4AA081"}} />
+              <AddIcon sx={{ background:"#4AA081",top:"0%" , left:"65%", position:"absolute" , borderRadius:"50px"}}/>
+              <Typography>{userData?.display_name}</Typography>
+            </Box>
+          
+            {allChatsList.map((user: any) => {
+              return (
+                <>
+                  <Box sx={{margin:"1%"}}>
+                    <Avatar src={user.profile_image} sx={{ height:"60px" , width:"60px"}} />
+                    <Typography>{user.display_name}</Typography>
+                   </Box>
+                </>
+                )
+            }
+            )}
+              </Stack>
+          </Stack>
+         
+          <Divider sx={useMediaQuery("(min-width:899px)") ? {} :{display:"none"}} />
           <Stack
             // direction="row"
             spacing={1}
@@ -389,27 +441,29 @@ const Messages = () => {
             // alignItems="center"
             // sx={{ p: { xs: 0.5, md: 1, xl: 2 } }}
             >
-            {/* <Typography
-              variant="body2"
-              className="secondary-text-color capitalize-text">
-              Recent
-            </Typography> */}
+            {useMediaQuery("(min-width:899px)") ? 
             <Box 
-              sx={{
-                  '& .Mui-selected': {
-                  color: '#4aa081 !important'
-                },
-                '& .MuiTabs-indicator': {
-                  background:'#4aa081',
-                  borderRadius: '4px'
-                }
+            sx={{
+              '& .Mui-selected': {
+                color: '#4aa081 !important'
+              },
+              '& .MuiTabs-indicator': {
+                background:'#4aa081',
+                borderRadius: '4px'
+              }
             }}>
               <Tabs value={value} onChange={handleChange} sx={{width:"100%" , justifyContent:"space-between" , color:"black"}}>
                 <Tab sx={{width:"33%"}}label={'Primary'}/>
                 <Tab sx={{width:"33%"}}label={'General'}/>
                 <Tab sx={{width:"33%"}}label={'Requests'}/>
               </Tabs>
+            </Box> 
+            :<Box sx={{display:"flex" , justifyContent:"space-evenly" , margin:'2% 0%'}}>
+              <Typography sx={{padding:"3px 3%" , borderRadius:"20px" , background:"#EFEFEF"}}>Primary</Typography>
+              <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,border:"1px solid black"}}>General</Typography>
+              <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,border:"1px solid black"}}>Requests</Typography>
             </Box>
+          }
             {/* <Stack direction="row" spacing={2} alignItems="center">
               <IconButton size="small">
                 <BsFilterLeft
@@ -419,21 +473,8 @@ const Messages = () => {
               </IconButton>
             </Stack> */}
           </Stack>
-          <Divider />
-          {/* <Stack
-            direction="row"
-            spacing={1}
-            alignItems="center"
-            sx={{ px: { xs: 0.5, md: 1, xl: 2 }, pb: 1 }}>
-            <Chip label="All" clickable className="active-chip-color" />
-            <Chip label="Following" clickable className="inactive-chip-color" />
-            <Chip
-              label={<BsFillPencilFill />}
-              clickable
-              className="clickable-chip-color"
-            />
-          </Stack> */}
-          {/* {/ list of users /} */}
+          <Divider sx={useMediaQuery("(min-width:899px)") ? {} :{display:"none"}} />
+
 
           {chatListLoader ? (
             <>

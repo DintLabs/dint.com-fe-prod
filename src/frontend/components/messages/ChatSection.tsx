@@ -51,22 +51,8 @@ function ChatSection(props: ChatSectionProps) {
     ws = new WebSocket(
       `wss://bedev.dint.com/ws/chat/${props.selectedUser.chat_room}/`
     );
-
-    const fetchUserChat = async () => {
-      if (props.selectedUser.id > 0) {
-        try {
-          const { data } = await _axios.get(
-            `api/chat/get-chat-by-user/${props.selectedUser.id}`
-          );
-
-          setUserChats(data.data);
-          setChatListLoader(false);
-        } catch (err: any) {
-          console.error("err ===>", err.message);
-        }
-      }
-    };
-
+    
+    fetchUserChat()
     ws.onmessage = function (e: any) {
       const newdata = JSON.parse(e.data);
       setUserChats((prev: any) => [newdata.message, ...prev]);
@@ -78,6 +64,21 @@ function ChatSection(props: ChatSectionProps) {
       ws.close(); 
     };
   }, [props.selectedUser]);
+
+  const fetchUserChat = async () => {
+    if (props.selectedUser.id > 0) {
+      try {
+        const { data } = await _axios.get(
+          `api/chat/get-chat-by-user/${props.selectedUser.id}`
+        );
+
+        setUserChats(data.data);
+        setChatListLoader(false);
+      } catch (err: any) {
+        console.error("err ===>", err.message);
+      }
+    }
+  };
 
   const sendMessageHandler = async () => {
     if (
@@ -94,6 +95,7 @@ function ChatSection(props: ChatSectionProps) {
       );
       if (res) {
         ws.send(JSON.stringify(res));
+        fetchUserChat()
       }
     }
     setMessageContent("");
