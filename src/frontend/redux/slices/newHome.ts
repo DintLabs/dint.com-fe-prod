@@ -21,7 +21,8 @@ export enum HOME_SIDE_MENU {
   LISTS = 'lists',
   ADD_PAYMENT = 'add-payment',
   SEARCH = 'search',
-  MORE = 'more'
+  MORE = 'more' ,
+  NOTIFICATIONS = 'notifications'
 }
 
 const initialState: NewHomeState = {

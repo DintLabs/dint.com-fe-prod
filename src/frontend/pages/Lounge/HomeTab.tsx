@@ -353,13 +353,13 @@ const HomeTab = ({ createPost }: Props) => {
                     key={i}
                     style={{ textAlign: "center", width: "fit-content" }}
                     className="user-story"
-                    // onClick={() => {
-                    //   if (item?.user_stories?.length > 0) {
-                    //     setOpenModal(true);
-                    //     setOpenStoryModal('Follower');
-                    //     setSelectedStory(item);
-                    //   }
-                    // }}
+                    onClick={() => {
+                      if (item?.user_stories?.length > 0) {
+                        setOpenModal(true);
+                        setOpenStoryModal('Follower');
+                        setSelectedStory(item);
+                      }
+                    }}
                   >
                     <Avatar
                       className="story-avatar"
@@ -383,20 +383,18 @@ const HomeTab = ({ createPost }: Props) => {
                       {item?.display_name}
                     </Typography>
                   </div>
-                  <Modal
-                    open={openModal}
-                    onClose={handleClose}
-                  >
-                    {openStoryModal === 'Follower' ?
-                      <>
-                        <ShowStories widthScreen={widthScreen} item={selectedStory} image={selectedStory?.user_stories} />
-                      </>
-                      :
-                      <CreateStory widthScreen={widthScreen} createStory={createNewStory} />
-                    }
-                  </Modal>
                 </>
               ))}
+              <Modal
+                open={openModal}
+                onClose={handleClose}
+              >
+                {openStoryModal === 'Follower' ?
+                  <ShowStories widthScreen={widthScreen} item={selectedStory} image={selectedStory?.user_stories}  setOpenModal={setOpenModal}/>
+                  :
+                  <CreateStory widthScreen={widthScreen} createStory={createNewStory} />
+                }
+              </Modal>
             </ListItemAvatar>
           </Box>
           <Box className="custom-tab-wrapper">

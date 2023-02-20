@@ -27,7 +27,9 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
   const [loading, setLoading] = React.useState(false);
   const { toggle } = useContext(ThemeContext);
 
-  const onCreatePost = async () => {
+  const onCreatePost = async (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (!loading) {
       setLoading(true);
       const toastId = toast.loading("Uploading File...");
@@ -128,7 +130,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
         // Do whatever you want with the file contents
         const binaryStr = reader.result;
         handleFileChange({ target: { files: [file] as any } as any } as any);
-        console.log(binaryStr);
+        // console.log(binaryStr);
       };
       reader.readAsArrayBuffer(file);
     });
@@ -150,89 +152,113 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
         }}
       >
         <Box
-          sx={{ borderRadius: 3 }}
+          sx={{
+            borderRadius: 3,
+          }}
           className={`shadow compose-background p-3 m-3 ${
             toggle ? "bg-dark" : "bg-white"
           }`}
-          {...getRootProps()}
         >
           <Box className="d-flex justify-content-center align-items-center">
             <h4>Create New Post</h4>
           </Box>
           <div style={{ borderBottom: "1px solid grey" }} className="w-100" />
-          <Input
-            multiline
-            rows={1}
-            disableUnderline={true}
-            fullWidth
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Compose new post..."
-            style={{ color: toggle ? "white" : "#161C24" }}
-          />
-
-          {image && (
-            <div
-              className="position-relative"
-              style={{ width: "100%", flex: 1, height: "100%" }}
-            >
-              <img
-                src={image}
-                style={{ maxWidth: "100%", height: "auto" }}
-                className="mb-3"
-                alt="imag"
-              />
-            </div>
-          )}
-          {video && (
-            <div
-              className="post_video"
-              style={{
-                minWidth: "100%",
-                width: "100%",
-                height: "auto !important",
-                flex: 1,
-              }}
-            >
-              {/* we haven't track */}
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-              <video width="100%" height="100%" controls>
-                <source src={video} id="video_here" />
-                Your browser does not support HTML5 video.
-              </video>
-            </div>
-          )}
-
-          <Stack
-            className="d-flex flex-column justify-content-between h-100 flex-1 align-items-center flex-row center-pos"
-            sx={
-              isDragActive ? { border: "2px dotted grey", borderRadius: 1 } : {}
-            }
+          <Box
+            {...getRootProps()}
+            sx={{
+              height: "inherit",
+              minHeight: "100%",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
-            {video.length > 0 || image.length > 0 ? null : (
-              <Stack className="d-flex align-items-center justify-content-center w-100 upload-img flex-row">
-                <IconButton aria-label="upload picture" component="label">
-                  <input
-                    hidden
-                    {...getInputProps()}
-                    accept="video/*,image/*"
-                    multiple
-                    type="file"
-                    onChange={handleFileChange}
-                  />
-                  <ImageIcon />
-                </IconButton>
-                <IconButton>
-                  <MoreHorizIcon />
-                </IconButton>
-              </Stack>
+            <Input
+              multiline
+              rows={1}
+              disableUnderline={true}
+              fullWidth
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Compose new post..."
+              style={{ color: toggle ? "white" : "#161C24" }}
+            />
+
+            {image && (
+              <div
+                className="position-relative"
+                style={{ width: "100%", flex: 1, height: "100%" }}
+              >
+                <img
+                  src={image}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  className="mb-3"
+                  alt="imag"
+                />
+              </div>
             )}
-          </Stack>
+            {video && (
+              <div
+                className="post_video"
+                style={{
+                  minWidth: "100%",
+                  width: "100%",
+                  height: "auto !important",
+                  flex: 1,
+                }}
+              >
+                {/* we haven't track */}
+                {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+                <video width="100%" height="100%" controls>
+                  <source src={video} id="video_here" />
+                  Your browser does not support HTML5 video.
+                </video>
+              </div>
+            )}
+
+            <Stack
+              className="d-flex flex-column justify-content-between h-100 flex-1 align-items-center flex-row center-pos"
+              sx={
+                isDragActive
+                  ? { border: "2px dotted grey", borderRadius: 1 }
+                  : {}
+              }
+            >
+              {video.length > 0 || image.length > 0 ? null : (
+                <Stack className="d-flex align-items-center justify-content-center w-100 upload-img flex-row">
+                  <IconButton aria-label="upload picture" component="label">
+                    <input
+                      hidden
+                      accept="video/*,image/*"
+                      multiple
+                      type="file"
+                      {...getInputProps()}
+                      onClick={(e: any) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                      }}
+                      onChange={(e: any) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                      }}
+                      // onChange={handleFileChange}
+                    />
+                    <ImageIcon />
+                  </IconButton>
+                  <IconButton>
+                    <MoreHorizIcon />
+                  </IconButton>
+                </Stack>
+              )}
+            </Stack>
+          </Box>
           <div className="d-flex justify-content-between align-items-end mt-2 w-100">
             {video.length > 0 || image.length > 0 || content.length > 0 ? (
               <>
                 <Button
-                  onClick={() => {
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    e.preventDefault();
                     setVideo("");
                     setFile({});
                     setImage("");

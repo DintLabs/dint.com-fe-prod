@@ -23,6 +23,7 @@ import blackLogo from "../../material/black.png";
 import whiteLogo from "../../material/white.png";
 import logo from '../../assets/img/logos/logo.png'
 import { Link } from "react-router-dom";
+import Badge from '@mui/material/Badge';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -130,7 +131,11 @@ const Sidebar = () => {
           sx={{
             cursor: 'pointer',
             paddingBottom: '20px',
-            color: toggle ? 'text.primary' : 'text.secondary'
+            color: HOME_SIDE_MENU.NOTIFICATIONS === selectedMenu ? toggle ? 'text.primary' : '#161C24' : 'text.secondary'
+          }}
+          onClick={() => {
+            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.NOTIFICATIONS }));
+            navigate(`/lounge/${HOME_SIDE_MENU.NOTIFICATIONS}`);
           }}
 
           // onClick={() => {
@@ -141,6 +146,7 @@ const Sidebar = () => {
         >
           <ListItemAvatar>
             <NotificationsNoneOutlinedIcon />
+            <Badge badgeContent={4} color="secondary"/>
           </ListItemAvatar>
           {/* <ListItemText primary={<Typography variant="subtitle1">Notifications</Typography>} /> */}
         </ListItem>
@@ -157,6 +163,7 @@ const Sidebar = () => {
         >
           <ListItemAvatar>
             <EmailOutlinedIcon />
+            <Badge color="secondary" badgeContent={4}/>
           </ListItemAvatar>
           {/* <ListItemText primary={<Typography variant="subtitle1">Chat</Typography>} /> */}
         </ListItem>

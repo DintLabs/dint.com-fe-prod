@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Input, Stack, useTheme } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import React, { useContext, useState } from 'react';
 import './navbarTab.css';
 
@@ -88,8 +88,6 @@ const CreateStory = ({ widthScreen, createStory }: Props) => {
     return 'other';
   }
 
-  console.log('video', video)
-
   return (
     <>
       <Box className='custom-modal'
@@ -120,8 +118,8 @@ const CreateStory = ({ widthScreen, createStory }: Props) => {
           <Stack className="d-flex flex-column justify-content-between h-100 flex-1 align-items-center flex-row center-pos">
             {video.length > 0 || image.length > 0 ? null :
               <Stack className="d-flex align-items-center justify-content-center w-100 upload-img flex-column">
-                <img src={MultimediaIcon} style={{ width: '120px', height: '120px' }} />
-                <Button aria-label="upload story" component="label" variant="contained" style={{ marginTop: '15px', width: "20%" }}>
+                <img src={MultimediaIcon} style={{ width: '20%', height: '20%', marginTop: '3%' }} />
+                <Button aria-label="upload story" component="label" variant="contained" style={{ marginTop: '2%', width: "20%" }}>
                   <input
                     hidden
                     accept="video/*,image/*"
@@ -146,7 +144,6 @@ const CreateStory = ({ widthScreen, createStory }: Props) => {
                   }}
                   variant="contained"
                   color="secondary"
-
                 >
                   Remove
                 </Button>

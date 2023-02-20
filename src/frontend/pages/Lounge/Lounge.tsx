@@ -31,6 +31,7 @@ import { Modal } from '@mui/material';
 import Search from "../search/index";
 import ProfilePage from "./ProfilePage";
 import MobileTopHeader from "./MobileTopHeader";
+import NotificationsContainer from '../Notifications';
 
 const NewHome = () => {
   const userData = useSelector((state: RootState) => state?.user?.userData);
@@ -60,6 +61,7 @@ const NewHome = () => {
       HOME_SIDE_MENU.MESSAGES,
       HOME_SIDE_MENU.SUBSCRIPTIONS,
       HOME_SIDE_MENU.SEARCH,
+      HOME_SIDE_MENU.NOTIFICATIONS
     ];
 
     if (params.page) {
@@ -166,6 +168,7 @@ const NewHome = () => {
     if (location.pathname.includes(HOME_SIDE_MENU.WALLET)) return <DintWallet />;
     if (location.pathname.includes(HOME_SIDE_MENU.WITHDRAWAL)) return <Withdrawal />;
     if (location.pathname.includes(HOME_SIDE_MENU.PROCESSWITHDRAWAL)) return <ProcessWithdrawal />;
+    if (location.pathname.includes(HOME_SIDE_MENU.NOTIFICATIONS)) return <NotificationsContainer />;
     if (location.pathname.includes(HOME_SIDE_MENU.ADD_POST))
       return (
         <Modal
