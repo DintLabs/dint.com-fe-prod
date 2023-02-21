@@ -24,6 +24,7 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import { fetchAllChatsList } from "../../redux/slices/messages";
 import SendIcon from '@mui/icons-material/Send';
 import { Button } from "@mui/material";
+import NewMessage from "frontend/components/messages/NewMessage";
 
 let ws: any;
 
@@ -46,6 +47,7 @@ function ChatSection(props: ChatSectionProps) {
   const { messagesList } = useSelector((state: RootState) => state.messages);
   const [userChats, setUserChats] = useState<any>([]);
   const [messageContent, setMessageContent] = useState("");
+  const [isAddNewModalOpen, setIsAddNewModalOpen] = useState(false);
 
   useEffect(() => {
     ws = new WebSocket(
@@ -109,6 +111,15 @@ function ChatSection(props: ChatSectionProps) {
     setOpenPopUpTip(false);
   };
 
+  const handleModalOpen = () => {
+    setIsAddNewModalOpen(true);
+    navigate("/lounge/messages/newMessage");
+  };
+
+  const handleModalClose = () => {
+    setIsAddNewModalOpen(false);
+    navigate("/lounge/messages");
+  };
 
 
   return (
@@ -238,6 +249,7 @@ function ChatSection(props: ChatSectionProps) {
             Send private message or phots to your friends
           </Typography>
           <Button 
+          onClick={handleModalOpen}
           sx={{
             background: '#EFEFEF',
             color: 'black',
@@ -245,6 +257,12 @@ function ChatSection(props: ChatSectionProps) {
           }} >
             Send Message
           </Button>
+          {isAddNewModalOpen && (
+                  <NewMessage
+                    open={isAddNewModalOpen}
+                    handleClose={handleModalClose}
+                  />
+                )}
         </Stack>
       ) : null}
     </>

@@ -229,7 +229,8 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
                   <IconButton aria-label="upload picture" component="label">
                     <input
                       hidden
-                      accept="video/*,image/*"
+                      accept="image/jpeg,image/png,.jpeg,.jpg,.png,video/*"
+                      // accept="video/*,image/*"
                       multiple
                       type="file"
                       {...getInputProps()}

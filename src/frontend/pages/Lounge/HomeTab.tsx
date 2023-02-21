@@ -1,26 +1,47 @@
-import { Avatar, Box, Button, Grid, ListItemAvatar, Modal, Tab, Tabs, Typography, useTheme } from '@mui/material';
-import _axios from 'frontend/api/axios';
-import PostItemSkeleton from 'frontend/components/common/skeletons/PostItemSkeleton';
-import { useLounge } from 'frontend/contexts/LoungeContext';
-import { postTypes } from 'frontend/data';
-import { PaginationPostsInerface } from 'frontend/interfaces/contextInterface';
-import { PostInterface } from 'frontend/interfaces/postInterface';
-import { ReactNode, SyntheticEvent, useCallback, useContext, useEffect, useState } from 'react';
-import BuyToken from 'frontend/pages/BuyToken';
-import storyImage from 'frontend/assets/img/web3/story-1.png'
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  ListItemAvatar,
+  Modal,
+  Tab,
+  Tabs,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import _axios from "frontend/api/axios";
+import PostItemSkeleton from "frontend/components/common/skeletons/PostItemSkeleton";
+import { useLounge } from "frontend/contexts/LoungeContext";
+import { postTypes } from "frontend/data";
+import { PaginationPostsInerface } from "frontend/interfaces/contextInterface";
+import { PostInterface } from "frontend/interfaces/postInterface";
+import {
+  ReactNode,
+  SyntheticEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import BuyToken from "frontend/pages/BuyToken";
+import storyImage from "frontend/assets/img/web3/story-1.png";
 
-
-import AddPost from './AddPost';
-import './navbarTab.css';
-import PostItem from './PostItem';
-import { ThemeContext } from 'frontend/contexts/ThemeContext';
-import { useNavigate } from 'react-router';
+import AddPost from "./AddPost";
+import "./navbarTab.css";
+import PostItem from "./PostItem";
+import { ThemeContext } from "frontend/contexts/ThemeContext";
+import { useNavigate } from "react-router";
 import MobileTopHeader from "./MobileTopHeader";
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import CreateStory from './CreateStory';
-import { toast } from 'react-toastify';
-import ShowStories from './ShowStories';
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import CreateStory from "./CreateStory";
+import { toast } from "react-toastify";
+import ShowStories from "./ShowStories";
+import { getUserOwnStories } from "frontend/redux/slices/lounge";
+import { useSelector } from "react-redux";
+import { RootState, useDispatch } from "frontend/redux/store";
+import StoriesUserOwn from "frontend/components/lounge/StoriesUserOwn";
 
 interface Props {
   createPost: Function;
@@ -68,13 +89,13 @@ const HomeTab = ({ createPost }: Props) => {
   const [suggestionList, setSuggestionList] = useState([]);
   const [storyList, setStoryList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const savedUser = JSON.parse(localStorage.getItem('userData') ?? '{}');
-  const [showAddPageButton, setShowAddPageButton] = useState(false)
+  const savedUser = JSON.parse(localStorage.getItem("userData") ?? "{}");
+  const [showAddPageButton, setShowAddPageButton] = useState(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [openStoryModal, setOpenStoryModal] = useState<string>('');
+  const [openStoryModal, setOpenStoryModal] = useState<string>("");
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
   const [selectedStory, setSelectedStory] = useState<any>();
-
+  const dispatch = useDispatch();
   const {
     counts,
     getUserPostCounts,
@@ -93,7 +114,7 @@ const HomeTab = ({ createPost }: Props) => {
     paginationPhotoPosts,
     setPaginationPhotoPosts,
     paginationVideoPosts,
-    setPaginationVideoPosts
+    setPaginationVideoPosts,
   } = useLounge();
 
   const postDeleted = (postId: number) => {
@@ -106,7 +127,9 @@ const HomeTab = ({ createPost }: Props) => {
 
   const handleScroll = useCallback(() => {
     const windowHeight =
-      'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
+      "innerHeight" in window
+        ? window.innerHeight
+        : document.documentElement.offsetHeight;
     const { body } = document;
     const html = document.documentElement;
     const docHeight = Math.max(
@@ -142,13 +165,13 @@ const HomeTab = ({ createPost }: Props) => {
     paginationTextPosts,
     paginationVideoPosts,
     isLoading,
-    value
+    value,
   ]);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [handleScroll]);
 
@@ -158,18 +181,19 @@ const HomeTab = ({ createPost }: Props) => {
   }, []);
 
   const getSuggestionList = async () => {
-    const result = await _axios.get('api/user/get_suggestions/', {});
+    const result = await _axios.get("api/user/get_suggestions/", {});
     if (result?.data?.code === 200) {
       setSuggestionList(result?.data?.data);
     }
-  }
+  };
 
   const getStoryList = async () => {
-    const result = await _axios.get('api/user/get-stories/', {});
+    dispatch(getUserOwnStories());
+    const result = await _axios.get("api/user/get-stories/", {});
     if (result?.data?.code === 200) {
       setStoryList(result?.data?.data);
     }
-  }
+  };
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -177,11 +201,11 @@ const HomeTab = ({ createPost }: Props) => {
 
   const ShowAddPage = () => {
     if (showAddPageButton === true) {
-      setShowAddPageButton(false)
+      setShowAddPageButton(false);
     } else {
-      setShowAddPageButton(true)
+      setShowAddPageButton(true);
     }
-  }
+  };
 
   const setHasNextFalse = (postType: string) => {
     if (postType === postTypes.all.value) {
@@ -201,7 +225,10 @@ const HomeTab = ({ createPost }: Props) => {
     try {
       setIsLoading(true);
 
-      const { data }: RespPost = await _axios.post(`/api/lounge/pagination/list/`, pagination);
+      const { data }: RespPost = await _axios.post(
+        `/api/lounge/pagination/list/`,
+        pagination
+      );
 
       setIsLoading(false);
 
@@ -256,16 +283,16 @@ const HomeTab = ({ createPost }: Props) => {
   const createNewStory = useCallback(
     async (toastId: string, userId: string, fileData: any) => {
       const formData = new FormData();
-      formData.append('user', userId);
-      formData.append('story', fileData);
+      formData.append("user", userId);
+      formData.append("story", fileData);
       try {
-        const result = await _axios.post('/api/user/create-stories/', formData);
+        const result = await _axios.post("/api/user/create-stories/", formData);
         if (result?.data?.data) {
           setOpenModal(false);
           toast.update(toastId, {
             render: result?.data?.message,
-            type: 'success',
-            isLoading: false
+            type: "success",
+            isLoading: false,
           });
         }
         setTimeout(() => {
@@ -280,16 +307,18 @@ const HomeTab = ({ createPost }: Props) => {
   );
 
   const handleClose = () => {
-    setOpenModal(false)
-  }
+    setOpenModal(false);
+  };
 
   return (
     <Box
       id="postsListScrollableDiv"
-      style={{
-        // borderLeft: `1px solid ${theme.palette.grey[700]}`,
-        // borderRight: `1px solid ${theme.palette.grey[700]}`
-      }}
+      style={
+        {
+          // borderLeft: `1px solid ${theme.palette.grey[700]}`,
+          // borderRight: `1px solid ${theme.palette.grey[700]}`
+        }
+      }
     >
       {/* <AddPost createPost={createPost} widthScreen={0} /> */}
       <Box
@@ -319,7 +348,13 @@ const HomeTab = ({ createPost }: Props) => {
                 style={{ textAlign: "center", width: "fit-content" }}
                 className="user-story"
               >
-                <div style={{ position: 'relative' }} onClick={() => { setOpenModal(true); setOpenStoryModal('User') }}>
+                <div
+                  style={{ position: "relative" }}
+                  onClick={() => {
+                    setOpenModal(true);
+                    setOpenStoryModal("User");
+                  }}
+                >
                   <Avatar
                     className="story-avatar"
                     src={savedUser?.profile_image}
@@ -329,11 +364,25 @@ const HomeTab = ({ createPost }: Props) => {
                       borderWidth: "3px",
                       borderStyle: "solid",
                       borderColor: toggle ? "#4AA081" : "#4AA081",
-                      position: 'relative'
+                      position: "relative",
                     }}
                   />
-                  <Fab disableFocusRipple disableRipple disableTouchRipple sx={{ "&:hover": { background: '#979797' }, background: '#979797' }} size='small' style={{ position: 'absolute', bottom: '-4px', right: '-8px' }}>
-                    <AddIcon fontSize='small' sx={{ color: '#fff' }} />
+                  <Fab
+                    disableFocusRipple
+                    disableRipple
+                    disableTouchRipple
+                    sx={{
+                      "&:hover": { background: "#979797" },
+                      background: "#979797",
+                    }}
+                    size="small"
+                    style={{
+                      position: "absolute",
+                      bottom: "-4px",
+                      right: "-8px",
+                    }}
+                  >
+                    <AddIcon fontSize="small" sx={{ color: "#fff" }} />
                   </Fab>
                 </div>
                 <Typography
@@ -344,9 +393,11 @@ const HomeTab = ({ createPost }: Props) => {
                     color: toggle ? "text.primary" : "#161C24",
                   }}
                 >
-                  {'Your Story'}
+                  {"Your Story"}
                 </Typography>
               </div>
+              <StoriesUserOwn  />
+
               {storyList?.map((item: any, i: number) => (
                 <>
                   <div
@@ -356,7 +407,7 @@ const HomeTab = ({ createPost }: Props) => {
                     onClick={() => {
                       if (item?.user_stories?.length > 0) {
                         setOpenModal(true);
-                        setOpenStoryModal('Follower');
+                        setOpenStoryModal("Follower");
                         setSelectedStory(item);
                       }
                     }}
@@ -385,15 +436,20 @@ const HomeTab = ({ createPost }: Props) => {
                   </div>
                 </>
               ))}
-              <Modal
-                open={openModal}
-                onClose={handleClose}
-              >
-                {openStoryModal === 'Follower' ?
-                  <ShowStories widthScreen={widthScreen} item={selectedStory} image={selectedStory?.user_stories}  setOpenModal={setOpenModal}/>
-                  :
-                  <CreateStory widthScreen={widthScreen} createStory={createNewStory} />
-                }
+              <Modal open={openModal} onClose={handleClose}>
+                {openStoryModal === "Follower" ? (
+                  <ShowStories
+                    widthScreen={widthScreen}
+                    item={selectedStory}
+                    image={selectedStory?.user_stories}
+                    setOpenModal={setOpenModal}
+                  />
+                ) : (
+                  <CreateStory
+                    widthScreen={widthScreen}
+                    createStory={createNewStory}
+                  />
+                )}
               </Modal>
             </ListItemAvatar>
           </Box>
@@ -409,23 +465,27 @@ const HomeTab = ({ createPost }: Props) => {
               className="custom-tabs-root"
             >
               <Tab
-                className={`${toggle && value === 0 && "active-tab"
-                  } custom-tab-list`}
+                className={`${
+                  toggle && value === 0 && "active-tab"
+                } custom-tab-list`}
                 label={`All  (${counts?.all_posts ?? 0})`}
               />
               <Tab
-                className={`${toggle && value === 1 && "active-tab"
-                  } custom-tab-list`}
+                className={`${
+                  toggle && value === 1 && "active-tab"
+                } custom-tab-list`}
                 label={`Text (${counts?.text_posts ?? 0})`}
               />
               <Tab
-                className={`${toggle && value === 2 && "active-tab"
-                  } custom-tab-list`}
+                className={`${
+                  toggle && value === 2 && "active-tab"
+                } custom-tab-list`}
                 label={`Photos  (${counts?.image_posts ?? 0})`}
               />
               <Tab
-                className={`${toggle && value === 3 && "active-tab"
-                  } custom-tab-list`}
+                className={`${
+                  toggle && value === 3 && "active-tab"
+                } custom-tab-list`}
                 label={`Videos  (${counts?.video_posts ?? 0})`}
               />
             </Tabs>
@@ -442,11 +502,11 @@ const HomeTab = ({ createPost }: Props) => {
                 userName={
                   item?.user
                     ? item?.user?.display_name ||
-                    item?.user?.first_name ||
-                    item?.user?.custom_username
-                    : ''
+                      item?.user?.first_name ||
+                      item?.user?.custom_username
+                    : ""
                 }
-                custom_username={item?.user ? item?.user?.custom_username : ''}
+                custom_username={item?.user ? item?.user?.custom_username : ""}
                 image={item?.media || null}
                 post={item}
                 onDelete={postDeleted}
@@ -469,7 +529,9 @@ const HomeTab = ({ createPost }: Props) => {
                 key={`textPosts_${i}`}
                 description={item?.content}
                 createdAt={item?.created_at}
-                userName={item?.user?.display_name || item?.user?.custom_username}
+                userName={
+                  item?.user?.display_name || item?.user?.custom_username
+                }
                 custom_username={item?.user?.custom_username}
                 image={item?.media || null}
                 post={item}
@@ -492,7 +554,9 @@ const HomeTab = ({ createPost }: Props) => {
                 key={`photoPosts_${i}`}
                 description={item?.content}
                 createdAt={item?.created_at}
-                userName={item?.user?.display_name || item?.user?.custom_username}
+                userName={
+                  item?.user?.display_name || item?.user?.custom_username
+                }
                 custom_username={item?.user?.custom_username}
                 image={item?.media || null}
                 post={item}
@@ -510,14 +574,15 @@ const HomeTab = ({ createPost }: Props) => {
 
           <TabPanel value={value} index={3}>
             {videoPosts.map((item, i) => (
-
               <PostItem
                 fetchPosts={fetchPosts}
                 canDeletePost={true}
                 key={`videoPosts_${i}`}
                 description={item?.content}
                 createdAt={item?.created_at}
-                userName={item?.user?.display_name || item?.user?.custom_username}
+                userName={
+                  item?.user?.display_name || item?.user?.custom_username
+                }
                 custom_username={item?.user?.custom_username}
                 image={item?.media || null}
                 post={item}
@@ -533,73 +598,94 @@ const HomeTab = ({ createPost }: Props) => {
             )}
           </TabPanel>
         </Box>
-        <Box sx={{
-          display: { xs: "none", md: "block" },
-          marginLeft: '5rem',
-          marginTop: "26px",
-          width: '30%',
-        }}
+        <Box
+          sx={{
+            display: { xs: "none", md: "block" },
+            marginLeft: "5rem",
+            marginTop: "26px",
+            width: "30%",
+          }}
         >
-          <Box sx={{
-            display: 'flex',
-            width: '100%',
-            alignItems: 'center',
-            gap: '12px'
-          }}>
-
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              alignItems: "center",
+              gap: "12px",
+            }}
+          >
             <Button
               onClick={() => navigate("/page/creation")}
               sx={{
-                '&:hover': { background: 'grey' },
-                display: showAddPageButton ? 'block' : 'none',
-                position: 'absolute',
-                top: '8%',
-                right: '33%',
-                background: 'black',
-                color: 'white',
-                padding: '10px',
-                borderRadius: '12px',
-                borderTopRightRadius: '0px'
-              }}>
+                "&:hover": { background: "grey" },
+                display: showAddPageButton ? "block" : "none",
+                position: "absolute",
+                top: "8%",
+                right: "33%",
+                background: "black",
+                color: "white",
+                padding: "10px",
+                borderRadius: "12px",
+                borderTopRightRadius: "0px",
+              }}
+            >
               + Add Page
             </Button>
             <Button onClick={() => ShowAddPage()}>
-              <Avatar src={savedUser?.profile_image} sx={{ width: 50, height: 50 }} />
+              <Avatar
+                src={savedUser?.profile_image}
+                sx={{ width: 50, height: 50 }}
+              />
             </Button>
             <div>
-              <Typography variant="h4" sx={{ color: toggle ? 'text.primary' : '#161C24' }}>
+              <Typography
+                variant="h4"
+                sx={{ color: toggle ? "text.primary" : "#161C24" }}
+              >
                 {savedUser.display_name}
               </Typography>
-              <Typography variant="h5" sx={{ color: 'text.secondary' }} >
+              <Typography variant="h5" sx={{ color: "text.secondary" }}>
                 @{savedUser.custom_username}
               </Typography>
             </div>
           </Box>
-          <Box sx={{
-            marginTop: '2rem',
-            marginLeft: '10px',
-          }}
+          <Box
+            sx={{
+              marginTop: "2rem",
+              marginLeft: "10px",
+            }}
           >
-            <Typography variant="h4" sx={{ color: toggle ? 'text.primary' : '#161C24' }}
+            <Typography
+              variant="h4"
+              sx={{ color: toggle ? "text.primary" : "#161C24" }}
             >
               Suggestions
             </Typography>
             {suggestionList?.map((item: any, i: number) => (
               <div onClick={() => navigate(`/${item?.custom_username}`)}>
-                <Box key={i} sx={{
-                  display: 'flex',
-                  width: '100%',
-                  alignItems: 'center',
-                  gap: '12px',
-                  marginTop: '12px',
-                  cursor: 'pointer'
-                }}>
-                  <Avatar src={item?.profile_image} sx={{ width: 35, height: 35 }} />
+                <Box
+                  key={i}
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    alignItems: "center",
+                    gap: "12px",
+                    marginTop: "12px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Avatar
+                    src={item?.profile_image}
+                    sx={{ width: 35, height: 35 }}
+                  />
                   <div>
-                    <Typography variant="h5" sx={{ color: toggle ? 'text.primary' : '#161C24' }}>
+                    <Typography
+                      variant="h5"
+                      sx={{ color: toggle ? "text.primary" : "#161C24" }}
+                    >
                       {item?.display_name}
                     </Typography>
-                    <Typography variant="h6" sx={{ color: 'text.secondary' }} >
+                    <Typography variant="h6" sx={{ color: "text.secondary" }}>
                       {item?.custom_username}
                     </Typography>
                   </div>
@@ -611,18 +697,27 @@ const HomeTab = ({ createPost }: Props) => {
               gap={2}
               sx={{ display: "flex", marginTop: "30px" }}
             >
-              <div onClick={() => navigate('/terms')}>
-                <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer' }}>
+              <div onClick={() => navigate("/terms")}>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "#4AA081", cursor: "pointer" }}
+                >
                   Terms of Service
                 </Typography>
               </div>
-              <div onClick={() => navigate('/privacy')}>
-                <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer' }}>
+              <div onClick={() => navigate("/privacy")}>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "#4AA081", cursor: "pointer" }}
+                >
                   Privacy Policy
                 </Typography>
               </div>
-              <div onClick={() => navigate('/cookies')}>
-                <Typography variant="h6" sx={{ color: "#4AA081", cursor: 'pointer' }}>
+              <div onClick={() => navigate("/cookies")}>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "#4AA081", cursor: "pointer" }}
+                >
                   Cookie Policy
                 </Typography>
               </div>
@@ -632,18 +727,18 @@ const HomeTab = ({ createPost }: Props) => {
               gap={2}
               sx={{ display: "flex", marginTop: "30px" }}
             >
-              <div onClick={() => navigate('/help')}>
+              <div onClick={() => navigate("/help")}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: "400",
-                    color: toggle ? "text.primary" : "#536471", cursor: 'pointer'
+                    color: toggle ? "text.primary" : "#536471",
+                    cursor: "pointer",
                   }}
                 >
                   Help
                 </Typography>
               </div>
-
 
               <Typography
                 variant="h6"

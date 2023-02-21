@@ -75,14 +75,15 @@ export default function LoungeLayout({ isSearchPage = false }) {
                   <Grid
                     item
                     xs={0}
-                    md={1}
-                    sx={{ display: widthScreen >= 900 ? "" : "none" }}
+                      md={1}
+                      className="desktop-nav"
+                    // sx={{ display: widthScreen >= 900 ? "" : "none" }}
                   >
-                    {user && !!user.id && !isMobile() && <Sidebar />}
+                    {user && !!user.id && <Sidebar />}
                   </Grid>
                 )}
-                <Grid item sx={styleSidebarMobile}>
-                  {user && !!user.id && isMobile() && (
+                <Grid item className="mobile-nav" >
+                  {user && !!user.id && (
                     <SidebarMobile widthScreen={widthScreen} />
                   )}
                 </Grid>

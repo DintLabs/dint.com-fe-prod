@@ -324,6 +324,7 @@ const AddCard = () => {
                       inputRef={ref}
                       variant="filled"
                       value={value}
+                      inputProps={{ maxLength: 16 }}
                       onChange={(e: any) => onChange(e.target.value)}
                       sx={{
                         '& .MuiFilledInput-input': {
@@ -347,7 +348,7 @@ const AddCard = () => {
                         <DesktopDatePicker
                           label="Expiry Date"
                           views={['year', 'month']}
-                          inputFormat="MM/YYYY"
+                          inputFormat="MM/YY"
                           value={value}
                           inputRef={ref}
                           onChange={(e: any) => onChange(e)}
@@ -383,6 +384,7 @@ const AddCard = () => {
                       inputRef={ref}
                       variant="filled"
                       value={value}
+                      inputProps={{ maxLength: 4 }}
                       onChange={(e: any) => onChange(e.target.value)}
                       sx={{
                         '& .MuiFilledInput-input': {

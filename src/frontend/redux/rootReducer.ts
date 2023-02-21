@@ -1,29 +1,30 @@
-import { combineReducers } from 'redux';
-import storage from 'redux-persist/lib/storage';
-import eventReducer from './slices/event';
-import userProfileReducer from './slices/userProfile';
-import marketplaceReducer from './slices/marketplace';
-import adminReducer from './slices/admin';
-import newHomeReducer from './slices/newHome';
-import createWalletReducer from './actions/createWallet';
-import getMaticBalanceReducer from './actions/wallet/getMaticBalance';
-import getDintBalanceReducer from './actions/wallet/getDintBalance';
-import metamaskReducer from './slices/metamask';
-import messagesReducer from './slices/messages';
-import viewPageReducer from './slices/viewPage';
-import userReducer from './slices/user';
-import pageReducer from './slices/page';
-import subscriptionsReducer from './slices/subscriptions';
-import subscribersReducer from './slices/subscribers';
-import commonReducer from './slices/common';
+import { combineReducers } from "redux";
+import storage from "redux-persist/lib/storage";
+import eventReducer from "./slices/event";
+import userProfileReducer from "./slices/userProfile";
+import marketplaceReducer from "./slices/marketplace";
+import adminReducer from "./slices/admin";
+import newHomeReducer from "./slices/newHome";
+import createWalletReducer from "./actions/createWallet";
+import getMaticBalanceReducer from "./actions/wallet/getMaticBalance";
+import getDintBalanceReducer from "./actions/wallet/getDintBalance";
+import metamaskReducer from "./slices/metamask";
+import messagesReducer from "./slices/messages";
+import viewPageReducer from "./slices/viewPage";
+import userReducer from "./slices/user";
+import pageReducer from "./slices/page";
+import subscriptionsReducer from "./slices/subscriptions";
+import subscribersReducer from "./slices/subscribers";
+import loungeReducer from "./slices/lounge";
+import commonReducer from "./slices/common";
 
 // ----------------------------------------------------------------------
 
 const rootPersistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  keyPrefix: 'redux-',
-  whitelist: []
+  keyPrefix: "redux-",
+  whitelist: [],
 };
 
 const reducers = combineReducers({
@@ -32,6 +33,7 @@ const reducers = combineReducers({
   marketplace: marketplaceReducer,
   admin: adminReducer,
   newHome: newHomeReducer,
+  lounge: loungeReducer,
   wallet: createWalletReducer,
   metamask: metamaskReducer,
   user: userReducer,
@@ -42,11 +44,11 @@ const reducers = combineReducers({
   subscribers: subscribersReducer,
   common: commonReducer,
   maticBalance: getMaticBalanceReducer,
-  dintBalance: getDintBalanceReducer
+  dintBalance: getDintBalanceReducer,
 });
 
 const rootReducer = (state: any, action: any) => {
-  if (action.type === 'RESET_STORE')
+  if (action.type === "RESET_STORE")
     state = {
       ...state,
       messages: undefined,
@@ -54,7 +56,7 @@ const rootReducer = (state: any, action: any) => {
       page: undefined,
       user: undefined,
       subscriptions: undefined,
-      subscribers: undefined
+      subscribers: undefined,
     };
 
   return reducers(state, action);

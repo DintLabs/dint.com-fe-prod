@@ -5,6 +5,7 @@ import { Stack, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { useNavigate } from 'react-router-dom';
 
 type FirstStepPayload = {
   nextStep: () => void;
@@ -13,7 +14,12 @@ const SubmitButton = styled(LoadingButton)(({ theme }) => ({
   borderRadius: 20
 }));
 
-const ThirdPage = (props:FirstStepPayload) => {
+const ThirdPage = (props: FirstStepPayload) => {
+  const navigate = useNavigate()
+  const onWithdraw = () => {
+    navigate("/en/fiat/withdraw/EUR");
+  }
+
   return (
     <>
       <Stack p={2}>
@@ -35,7 +41,14 @@ const ThirdPage = (props:FirstStepPayload) => {
           </IconButton>
         </Tooltip>
         <SubmitButton
-          onClick={props.nextStep}
+          sx = {{mr : 5}}
+          onClick={onWithdraw}
+          variant="contained"
+          type="submit"
+        > Withdraw Amount
+        </SubmitButton>
+        <SubmitButton
+          // onClick={props.nextStep}
           variant="contained"
           type="submit"
         > FAST AUTOMETED VARIFICATION

@@ -40,6 +40,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
+import _axios from "frontend/api/axios";
 
 const users = [
   {
@@ -223,6 +224,7 @@ const Messages = () => {
   const [isUserSearchOpen, setIsUserSearchOpen] = useState<boolean>(false);
   const [userSearchText, setUserSearchText] = useState<string>("");
   const [value , setValue] = useState(0)
+  const [unseenMessages , setUnseenMessages] = useState([])
 
   const { toggle } = useContext(ThemeContext);
 
@@ -286,6 +288,15 @@ const Messages = () => {
       document.getElementById("user-search-input")?.focus();
     }
   }, [isUserSearchOpen]);
+
+  useEffect(()=>{
+    const getUnseenMessages =async()=>{
+      await _axios.get('/api/chat/get-unseen-message/').then((res:any)=>{
+        setUnseenMessages(res.data.data)
+       }).catch((err:any) =>{console.log(err)})
+    }
+    getUnseenMessages()
+  },[])
 
   const handleUserSearchOpen = () => {
     setIsUserSearchOpen(true);
@@ -367,7 +378,8 @@ const Messages = () => {
                   sx={{width:"100%" , textAlign:'center'}}
                   className="capitalize-text"
                   variant="subtitle1">
-                  Dint <ExpandMoreIcon />
+                  Dint 
+                  {/* <ExpandMoreIcon /> */}
                 </Typography>
               )}
               <Stack direction="row" spacing={2} alignItems="center">
@@ -452,16 +464,17 @@ const Messages = () => {
                 borderRadius: '4px'
               }
             }}>
-              <Tabs value={value} onChange={handleChange} sx={{width:"100%" , justifyContent:"space-between" , color:"black"}}>
-                <Tab sx={{width:"33%"}}label={'Primary'}/>
-                <Tab sx={{width:"33%"}}label={'General'}/>
-                <Tab sx={{width:"33%"}}label={'Requests'}/>
-              </Tabs>
+            <Typography sx={{padding:"3%" , textAlign:"center" , fontWeight:"bold"}}>General</Typography>
+              {/* <Tabs value={value} onChange={handleChange} sx={{width:"100%",justifyContent:"center" , color:"black"}}> */}
+                {/* <Tab sx={{width:"33%"}}label={'Primary'}/> */}
+                {/* <Tab sx={{width:"100%"}}label={'General'}/> */}
+                {/* <Tab sx={{width:"33%"}}label={'Requests'}/> */}
+              {/* </Tabs> */}
             </Box> 
-            :<Box sx={{display:"flex" , justifyContent:"space-evenly" , margin:'2% 0%'}}>
-              <Typography sx={{padding:"3px 3%" , borderRadius:"20px" , background:"#EFEFEF"}}>Primary</Typography>
-              <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,border:"1px solid black"}}>General</Typography>
-              <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,border:"1px solid black"}}>Requests</Typography>
+            :<Box sx={{display:"flex" , justifyContent:"left" , margin:'2%'}}>
+              {/* <Typography sx={{padding:"3px 3%" , borderRadius:"20px" , background:"#EFEFEF"}}>Primary</Typography> */}
+              <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,background:"#EFEFEF"}}>General</Typography>
+              {/* <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,border:"1px solid black"}}>Requests</Typography> */}
             </Box>
           }
             {/* <Stack direction="row" spacing={2} alignItems="center">
@@ -508,6 +521,7 @@ const Messages = () => {
                     caption={user?.latest_message?.content || ""}
                     newMessage={newMessage}
                     chatRoom={user.chat_room}
+                    unseenMessages={unseenMessages}
                   />
                 ))}
               </Stack>

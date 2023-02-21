@@ -13,6 +13,7 @@ type UserListItemProps = {
   newMessage: any;
   chatRoom: any;
   onClickHandler?: () => void;
+  unseenMessages:any;
 };
 
 function UserListItem(props: UserListItemProps) {
