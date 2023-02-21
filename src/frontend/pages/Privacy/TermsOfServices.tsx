@@ -288,7 +288,7 @@ const TermsOfServices = () => {
               }}
               id="registration-with-dint"
             />
-            6 <b>Registering with Dint:</b> <br />
+            6. <b>Registering with Dint:</b> <br />
             To use Dint you must have a referral code in order to register and
             create a User account on Dint. You must provide a valid email
             address, a username, and a password or authenticate using a valid
@@ -573,8 +573,7 @@ const TermsOfServices = () => {
             their Dint account and to share certain Content in the form of Dint
             posts to Twitter using the share feature. If you use this feature,
             you must fully comply with Twitter's terms of service from time to
-            time in respect of any Content shared in this way. Linking to and
-            from Dint:
+            time in respect of any Content shared in this way. 
             <br />
             <br />
           </div>
@@ -791,13 +790,20 @@ const TermsOfServices = () => {
             />
             18. <b>Dint Wallet:</b>
             <br />
-            Dint provides every User with their own crypto wallet to store and
-            manage their tokens.
+            Dint provides every User with their own crypto wallet to store and manage their tokens.
+            <br />   <br />
+<b>Ownership and Control</b>   <br />
+You own and control digital assets in your account. As the sole owner, you bear all risk of loss of these assets. Dint will not be held liable for any fluctuations or loss associated with your use of the app. You may withdraw your digital assets at any time, subject to outages, downtime, and other policies, by sending them to a different blockchain address.
+<br />   <br />
+<b>Warranty Disclaimer </b>  <br />
+You acknowledge and agree that the use of the services (including any private key storage service offered as part of the services, whether cloud or hardware-based) and content is at your own risk and that the entire risk of quality, performance, accuracy and effort lies with you. The app, site, and services are provided "as is" and "as available" without any representation or warranty, whether express, implied, or statutory. To the maximum extent permitted by law, Dint specifically disclaims any express or implied warranties of title, merchantability, fitness for a particular purpose, and/or non-infringement. Dint makes no representations or warranties that access to the services or any of the materials contained within will be continuous, uninterrupted, timely, or error-free. Service interruptions may cause you to be signed out of your account and require you to re-enter your recovery phrase to regain access.
+<br />   <br />
+Use of any private key storage service included as part of the services is offered to you as a convenience, subject to the limitations above. You are solely responsible for storing and securing your private key and recovery phrase for the app. Dint does not store a backup of, or have the ability to recover, your private key or recovery phrase. If you lose your recovery phrase, you will lose access to all assets stored in your wallet. You should always backup your private access key via secondary means.
+
             <br />
             <br />
             19. <b id="dint-token">Dint Token:</b> <br />
-            Users can buy the Dint token on the app for $1 each and then sell it
-            for $1 each. Dint tokens are on the Polygon network.
+            The Dint Token is a digital asset with a total supply of 11 billion, issued on the Polygon network. Users can purchase the tokens for $1 each through the Dint app, which is required for using the tokens for purposes such as sending tips and paying for subscriptions. Users can also sell their tokens for $1 each on the Dint app. The issuer of the Dint Token, Dint, offers no representations or warranties, and users bear all associated risks. Users are responsible for securely storing their tokens, and Dint cannot recover any lost tokens. Dint reserves the right to make changes to these terms and conditions at any time and will notify users of any changes.
           </div>
         </p>
       </main>
