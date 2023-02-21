@@ -153,15 +153,15 @@ const SecondaryFooter = () => {
                                 <Link className={colorStyle} to={`/help`}>
                                     <p >Help</p>
                                 </Link>
-                                <p className={colorStyle}>Store</p>
+                           
                                 <Link className={colorStyle} to={`/cookies${location?.search}`}>
                                     <p>Cookie Notice</p>
                                 </Link>
 
                             </div>
                             <div className="col-xs-6">
-                                <p className={colorStyle}>Terms & Conditions </p>
-                                <p className={colorStyle}>About</p>
+                            <Link className={colorStyle} to={"/terms"}><p>Terms of Service</p></Link>
+                            <Link className={colorStyle} to={"/terms"}><p>Privacy</p></Link>
                                 <p></p>
                             </div>
                         </div>
@@ -177,7 +177,8 @@ const SecondaryFooter = () => {
                                 <Link className={colorStyle} to={`/help`}>
                                     <p >Help</p>
                                 </Link>
-                                <Link className={colorStyle} to={"/terms"}><p>Terms of Service</p></Link>
+                                <Link className={colorStyle} to={"/privacy"}><p>Terms of Service</p></Link>
+                                
                             </div>
                             <div className="col footer-column">
 
