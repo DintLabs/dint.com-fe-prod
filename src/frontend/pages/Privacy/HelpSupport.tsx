@@ -226,15 +226,9 @@ const HelpSupport = () => {
                     </Accordion>
 
                 </Grid>
-                <Typography variant="h3" sx={{ color: toggle ? "white" : "#161c24" }} mb={2}>
-                    Contact us
-                </Typography>
-                <p style={{ color: toggle ? "white" : "#161c24" }}>
-                   If you have a specific inquiry, contact us here.
-                </p>
-                <Button variant="outlined" sx={{ "&:hover": { background: "transparent", borderColor: "transparent" } }}
-                    style={{ border: toggle ? "1px solid white" : "1px solid #161c24", color: toggle ? "white" : "#161c24" }}
-                    onClick={() => { }}>Start a chat</Button>
+                 
+               
+                   
             </div>
         </>
     )
