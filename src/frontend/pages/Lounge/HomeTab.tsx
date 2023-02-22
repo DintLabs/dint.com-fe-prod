@@ -315,9 +315,9 @@ const HomeTab = ({ createPost }: Props) => {
     setTimeout(() => {
       const userStoriesItem = {
         ...objStory,
-        story: objStory.story.replace("http://bedev.dint.com", ""),
+        story: objStory.story.replace(process.env.REACT_APP_API_URL, ""), 
       };
-      userStoriesItem.story.replace("http://bedev.dint.com", "");
+      userStoriesItem.story.replace(process.env.REACT_APP_API_URL, "");
       const objStoryItem = {
         custom_username: savedUser?.custom_username,
         display_name: savedUser?.display_name,

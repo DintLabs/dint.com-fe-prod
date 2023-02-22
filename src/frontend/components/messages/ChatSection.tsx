@@ -51,7 +51,7 @@ function ChatSection(props: ChatSectionProps) {
 
   useEffect(() => {
     ws = new WebSocket(
-      `wss://bedev.dint.com/ws/chat/${props.selectedUser.chat_room}/`
+      `wss://${process.env.WSS}/ws/chat/${props.selectedUser.chat_room}/`
     );
   
     ws.onmessage = function (e: any) {
