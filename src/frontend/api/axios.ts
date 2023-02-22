@@ -7,13 +7,20 @@ const baseURL = process.env.REACT_APP_API_URL;
 const _axios = axios.create({ baseURL });
 
 _axios.interceptors.request.use((req) => {
-  const apiToken = localStorage.getItem('apiToken');
+  const apiToken = localStorage.getItem("apiToken");
   if (apiToken) {
-    req.headers = {
-      'Content-type': 'application/json',
-      Accept: 'application/json',
-      Authorization: `bearer ${apiToken}`
-    };
+    if (req.url === "api/user/verify_identity/") {
+      req.headers = {
+        "Content-type": "multipart/form-data",
+        Authorization: `bearer ${apiToken}`,
+      };
+    } else {
+      req.headers = {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        Authorization: `bearer ${apiToken}`,
+      };
+    }
   }
   return req;
 });

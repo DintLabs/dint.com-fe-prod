@@ -15,6 +15,7 @@ import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useContext } from "react";
 import { HOME_SIDE_MENU } from "frontend/redux/slices/newHome";
 import {  useParams } from 'react-router';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 
 export default function MobileTopHeader({ userName, avatar}:{userName:string, avatar: string}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -64,6 +65,13 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
           <Typography sx={{textOverflow: 'ellipsis',whiteSpace:'nowrap', overflow:'hidden'}} color={toggle ? "#fff" : "#000"} >{routeurl.username && userName}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "flex", md: "flex" } }}>
+            <IconButton 
+            onClick={() => navigate("/page/creation")}
+            size="large"
+            aria-label="Add Page"
+            sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px' }}>
+              <PostAddIcon/>
+            </IconButton>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"

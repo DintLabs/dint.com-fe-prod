@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 import ThirdPage from "./BankingSteps/ThirdPage";
 import AddHomeWorkOutlinedIcon from "@mui/icons-material/AddHomeWorkOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import AddPost from "frontend/pages/Lounge/AddPost";
 
 const style = {
   position: "absolute" as "absolute",
@@ -87,6 +88,7 @@ const BankContainer = () => {
 
   const handleClose = () => {
     toggleVerificationModal(false);
+    setOpenModal(false);
   };
 
   const handleCloseMenu = () => {
@@ -132,7 +134,7 @@ const BankContainer = () => {
   const onUpdatePrimary = (bankId: string) => {
     handleCloseMenu();
     setLoading(true);
-    
+
     _axios
       .put(`/api/user/update_bank_account/${bankId}/`)
       .then((res: any) => {
@@ -153,16 +155,19 @@ const BankContainer = () => {
 
   const handleKYC = async (image: string) => {
     setLoading(true);
+    toast.update("Documents and face image uploading...........")
     try {
-      const { data } = await _axios.post("api/user/verify_identity/", {
-        // document: image,
-        face_image: image,
-      });
+      // condition for attach id and image
+      const formData = new FormData();
+      formData.append("document", attachId);
+      formData.append("face_image", image.split(",")[1]);
+
+      const { data } = await _axios.post("api/user/verify_identity/", formData);
       setLoading(false);
       console.log(data);
       if (data && data.code === 400) {
         toast.error("Action Failed");
-      } else {
+      } else {        
         toast.success("Verification Done");
       }
     } catch (err) {
@@ -171,7 +176,23 @@ const BankContainer = () => {
       console.error(err);
     }
   };
-
+  
+  const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
+  useLayoutEffect(() => {
+    function updateWidth() {
+      setWidthScreen(window.screen.width);
+    }
+    window.addEventListener('resize', updateWidth);
+    updateWidth();
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+  const [attachId, setAttchId] = useState();
+  const [openModal, setOpenModal] = useState(false);
+  const onAttachDocument = (document: any) => {
+    setAttchId(document);
+    toggleVerificationModal(false);
+    setOpenModal(true);
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Grid container>
@@ -227,7 +248,7 @@ const BankContainer = () => {
             )}
           </Stack>
 
-          {!loading && showAddBank && state.active === 0  && (
+          {!loading && showAddBank && state.active === 0 && (
             <>
               <div
                 style={{
@@ -296,8 +317,14 @@ const BankContainer = () => {
             </Stack>
           )}
           <Loader loading={loading} />
-
           <Modal open={open} onClose={handleClose}>
+            <AddPost
+              widthScreen={widthScreen}
+              onAttachDocument={onAttachDocument}
+              verification={true}
+            />
+          </Modal>
+          <Modal open={openModal} onClose={handleClose}>
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h1" component="h1">
                 Identity Verification Modal

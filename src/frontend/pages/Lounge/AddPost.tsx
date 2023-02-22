@@ -12,13 +12,15 @@ import "./navbarTab.css";
 
 interface Props {
   widthScreen: number;
-  createPost: Function;
+  createPost?: Function;
+  verification: Boolean;
+  onAttachDocument?: Function;
 }
 
-const AddPost = ({ widthScreen, createPost }: Props) => {
+const AddPost = ({ widthScreen, createPost, verification,onAttachDocument }: Props) => {
   const theme = useTheme();
   const navigate = useNavigate();
-
+  
   const [file, setFile] = useState<any>({});
   const [content, setContent] = React.useState("");
   const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
@@ -91,6 +93,36 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
     }
   };
 
+  const onAttachIdDocument = async (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!loading) {
+      setLoading(true);
+
+      if (isFileUploaded && file) {
+        try {
+          onAttachDocument(file)
+        } catch (exception: any) {
+          toast.update("Error adding...", {
+            render: exception.toString(),
+            type: "error",
+          });
+
+          setTimeout(() => toast.dismiss(), 2000);
+        }
+      }
+
+      setTimeout(() => {
+        setContent("");
+        setFile(null);
+        setIsFileUploaded(false);
+        setImage("");
+        setLoading(false);
+        setVideo("");
+      }, 2000);
+    }
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? (event.target.files[0] as File) : null;
 
@@ -102,7 +134,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
     if (getFileType(file) === "image") {
       setImage(URL.createObjectURL(file));
       setVideo("");
-    } else if (getFileType(file) === "video") {
+    } else if (!verification && getFileType(file) === "video") {
       setVideo(URL.createObjectURL(file));
       setImage("");
     }
@@ -160,7 +192,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
           }`}
         >
           <Box className="d-flex justify-content-center align-items-center">
-            <h4>Create New Post</h4>
+            <h4>{verification ? "Attach you ID card" : "Create New Post"}</h4>
           </Box>
           <div style={{ borderBottom: "1px solid grey" }} className="w-100" />
           <Box
@@ -173,21 +205,23 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
               flexDirection: "column",
             }}
           >
-            <Input
-              multiline
-              rows={1}
-              disableUnderline={true}
-              fullWidth
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Compose new post..."
-              style={{ color: toggle ? "white" : "#161C24" }}
-            />
+            {!verification && (
+              <Input
+                multiline
+                rows={1}
+                disableUnderline={true}
+                fullWidth
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Compose new post..."
+                style={{ color: toggle ? "white" : "#161C24" }}
+              />
+            )}
 
             {image && (
               <div
                 className="position-relative"
-                style={{ width: "100%", flex: 1, height: "100%" }}
+                style={{ width: "100%", flex: 1, height: "100%"}}
               >
                 <img
                   src={image}
@@ -216,6 +250,11 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
               </div>
             )}
 
+            <h4>
+              {verification
+                && !image && "Please select only image!"}
+            </h4>
+
             <Stack
               className="d-flex flex-column justify-content-between h-100 flex-1 align-items-center flex-row center-pos"
               sx={
@@ -229,9 +268,13 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
                   <IconButton aria-label="upload picture" component="label">
                     <input
                       hidden
-                      accept="image/jpeg,image/png,.jpeg,.jpg,.png,video/*"
+                      accept={` ${
+                        verification
+                          ? " image/jpeg,image/png"
+                          : " image/jpeg,image/png,.jpeg,.jpg,.png,video/*"
+                      }`}
                       // accept="video/*,image/*"
-                      multiple
+                      multiple={!verification}
                       type="file"
                       {...getInputProps()}
                       onClick={(e: any) => {
@@ -246,9 +289,9 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
                     />
                     <ImageIcon />
                   </IconButton>
-                  <IconButton>
+                  {/* <IconButton>
                     <MoreHorizIcon />
-                  </IconButton>
+                  </IconButton> */}
                 </Stack>
               )}
             </Stack>
@@ -270,7 +313,10 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
                 >
                   Reset Post
                 </Button>
-                <Button onClick={onCreatePost} variant="contained">
+                <Button
+                  onClick={verification ? onAttachIdDocument : onCreatePost}
+                  variant="contained"
+                >
                   Publish
                 </Button>
               </>

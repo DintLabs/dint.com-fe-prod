@@ -39,6 +39,13 @@ img {
   }
 }
 
+body{
+  top: 0px !important;
+}
+body .skiptranslate iframe{
+  top: -40px !important;
+}
+
 .body_Content {
   padding-top: 14px;
 }

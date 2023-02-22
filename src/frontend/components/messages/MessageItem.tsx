@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Avatar, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 type MessageItemProps = {
@@ -6,6 +6,8 @@ type MessageItemProps = {
   message: string;
   isSender: boolean;
   time: string;
+  receiverImage:string;
+  senderImage:string;
 };
 
 function MessageItem(props: MessageItemProps) {
@@ -22,12 +24,14 @@ function MessageItem(props: MessageItemProps) {
         justifyContent="center"
         className="message-container"
       >
-        <Box className="message">
-          <Typography component="span">{`${props.message} `} </Typography>
-
-          <Typography component="span" variant="caption" className="message-time">
-            {props.time}
-          </Typography>
+        <Box sx={{ display:"flex" , flexDirection:props.isSender?"row-reverse" :"" }}>
+          <Avatar component="span" sx={{margin:"0% 5px"}} src={props.isSender ? `${props.senderImage}` : `${props.senderImage}`} />
+          <Box className="message">
+            <Typography component="span">{`${props.message} `} </Typography>
+            <Typography component="span" variant="caption" className="message-time">
+              {props.time}
+            </Typography>
+          </Box>
         </Box>
       </Stack>
     </Box>

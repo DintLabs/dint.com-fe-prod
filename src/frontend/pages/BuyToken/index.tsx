@@ -141,6 +141,7 @@ export default function BuyToken() {
             style={{
               color: toggle ? "white" : "#161C24",
               textAlign: "center",
+              paddingTop:"70px"
             }}
           >
             Buy Dint Token

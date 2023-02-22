@@ -29,6 +29,8 @@ interface Props {
   item: any;
   image: any;
   setOpenModal: Function;
+  handlePreviousStories?: () => void;
+  handleNextStories?: () => void;
 }
 
 const images = ["jpg", "gif", "png", "svg", "webp", "ico", "jpeg"];
@@ -74,6 +76,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const ShowStories = ({ widthScreen, item, image, setOpenModal }: Props) => {
+  console.log(widthScreen, item, image, setOpenModal);
   const theme = useTheme();
   const navigate = useNavigate();
   const { toggle } = useContext(ThemeContext);

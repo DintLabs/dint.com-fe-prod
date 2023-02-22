@@ -66,7 +66,7 @@ const TipPopUp: FC<TipPopUpProps> = ({
     const toastId = toast.loading("");
    
 
-    if (amount > 0) {
+    if (amount >= 1) {
       // toast.update(toastId, {
       //   render: "Sending...",
       //   type: "info",
@@ -131,7 +131,7 @@ const TipPopUp: FC<TipPopUpProps> = ({
       
     } else {
       toast.update(toastId, {
-        render: "Amount Should not be 0",
+        render: "Amount Should not be  less then 1",
         type: "error",
         isLoading: false,
       });

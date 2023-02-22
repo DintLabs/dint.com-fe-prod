@@ -42,6 +42,7 @@ import { getUserOwnStories } from "frontend/redux/slices/lounge";
 import { useSelector } from "react-redux";
 import { RootState, useDispatch } from "frontend/redux/store";
 import StoriesUserOwn from "frontend/components/lounge/StoriesUserOwn";
+import { getApiURL } from "frontend/config";
 
 interface Props {
   createPost: Function;
@@ -93,8 +94,10 @@ const HomeTab = ({ createPost }: Props) => {
   const [showAddPageButton, setShowAddPageButton] = useState(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openStoryModal, setOpenStoryModal] = useState<string>("");
+
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
   const [selectedStory, setSelectedStory] = useState<any>();
+  const userData = useSelector((state: RootState) => state.user.userData);
   const dispatch = useDispatch();
   const {
     counts,
@@ -288,7 +291,9 @@ const HomeTab = ({ createPost }: Props) => {
       try {
         const result = await _axios.post("/api/user/create-stories/", formData);
         if (result?.data?.data) {
+          dispatch(getUserOwnStories());
           setOpenModal(false);
+          handleStoryOnCreateStory(result?.data?.data);
           toast.update(toastId, {
             render: result?.data?.message,
             type: "success",
@@ -305,6 +310,26 @@ const HomeTab = ({ createPost }: Props) => {
     },
     []
   );
+
+  const handleStoryOnCreateStory = (objStory: any) => {
+    setTimeout(() => {
+      const userStoriesItem = {
+        ...objStory,
+        story: objStory.story.replace("http://bedev.dint.com", ""),
+      };
+      userStoriesItem.story.replace("http://bedev.dint.com", "");
+      const objStoryItem = {
+        custom_username: savedUser?.custom_username,
+        display_name: savedUser?.display_name,
+        id: savedUser?.id,
+        profile_image: savedUser?.id,
+        user_stories: [userStoriesItem],
+      };
+      setSelectedStory(objStoryItem);
+      setOpenStoryModal("Follower");
+      setOpenModal(true);
+    }, 500);
+  };
 
   const handleClose = () => {
     setOpenModal(false);
@@ -396,7 +421,7 @@ const HomeTab = ({ createPost }: Props) => {
                   {"Your Story"}
                 </Typography>
               </div>
-              <StoriesUserOwn  />
+              <StoriesUserOwn />
 
               {storyList?.map((item: any, i: number) => (
                 <>

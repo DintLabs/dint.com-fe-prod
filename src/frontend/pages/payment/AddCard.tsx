@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import React, { useState, useContext } from "react";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import {
   FormControl,
   Grid,
@@ -18,33 +18,42 @@ import {
   Box,
   Divider,
   Chip,
-  Switch
-} from '@mui/material';
-import { IoMdArrowRoundBack } from 'react-icons/io';
-import { useNavigate } from 'react-router';
-import { LoadingButton } from '@mui/lab';
-import moment from 'moment';
-import { toast } from 'react-toastify';
-import _ from 'lodash';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { Controller, useForm } from 'react-hook-form';
-import { AddCreditCard ,getCreditCards } from '../../redux/actions/StripeAction';
-import { useDispatch } from '../../redux/store';
-import { statesData } from './states';
-import { ThemeContext } from '../../contexts/ThemeContext';
+  Switch,
+} from "@mui/material";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { useNavigate } from "react-router";
+import { LoadingButton } from "@mui/lab";
+import moment from "moment";
+import { toast } from "react-toastify";
+import _ from "lodash";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { Controller, useForm } from "react-hook-form";
+import {
+  AddCreditCard,
+  getCreditCards,
+} from "../../redux/actions/StripeAction";
+import { useDispatch } from "../../redux/store";
+import { statesData } from "./states";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { RadioGroup } from "@mui/material";
 
 const AddCard = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [validAge, setValidAge] = useState<boolean>(false);
   const { toggle } = useContext(ThemeContext);
 
   const { handleSubmit, control, formState} = useForm({
     mode: 'onChange'
   });
 
-  const submitValue = async (values: any)=>{
+  const submitValue = async (values: any) => {
+    if(!validAge){
+      toast.error("Minimum  age required.");
+      return
+    }
     setIsLoading(true);
     const formData = {
       ...values,
@@ -118,15 +127,17 @@ const AddCard = () => {
                         inputRef={ref}
                         onChange={(e: any) => onChange(e.target.value)}
                         style={{
-                          backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
-                          color: toggle ? 'white' : '#161C24'
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.13)"
+                            : "#DFE3E8",
+                          color: toggle ? "white" : "#161C24",
                         }}
                       >
                         <MenuItem
                           style={{
-                          backgroundColor: toggle ? 'transparent' : '#DFE3E8',
-                          color: toggle ? 'white' : '#161C24'
-                        }}
+                            backgroundColor: toggle ? "transparent" : "#DFE3E8",
+                            color: toggle ? "white" : "#161C24",
+                          }}
                           value="USA"
                         >
                           United States of America
@@ -140,26 +151,30 @@ const AddCard = () => {
                   name="state"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field: { onChange, value = '', ref } }: any) => (
-                    <FormControl variant="filled"  style={{ flex: 1 }}>
+                  render={({ field: { onChange, value = "", ref } }: any) => (
+                    <FormControl variant="filled" style={{ flex: 1 }}>
                       <InputLabel>State</InputLabel>
                       <Select
-                        error={formState.errors?.state?.type === 'required'}
+                        error={formState.errors?.state?.type === "required"}
                         label="State"
                         variant="filled"
                         value={value}
                         onChange={(e: any) => onChange(e.target.value)}
                         inputRef={ref}
                         style={{
-                          backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
-                          color: toggle ? 'white' : '#161C24'
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.13)"
+                            : "#DFE3E8",
+                          color: toggle ? "white" : "#161C24",
                         }}
                       >
-                        {statesData.map((state:string,index:number)=> (
+                        {statesData.map((state: string, index: number) => (
                           <MenuItem
                             style={{
-                              backgroundColor: toggle ? 'transparent' : '#DFE3E8',
-                              color: toggle ? 'white' : '#161C24'
+                              backgroundColor: toggle
+                                ? "transparent"
+                                : "#DFE3E8",
+                              color: toggle ? "white" : "#161C24",
                             }}
                             key={index}
                             value={state}
@@ -178,9 +193,9 @@ const AddCard = () => {
                   name="street"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field: { onChange, value = '', ref } }: any) => (
+                  render={({ field: { onChange, value = "", ref } }: any) => (
                     <TextField
-                      error={formState.errors?.street?.type === 'required'}
+                      error={formState.errors?.street?.type === "required"}
                       style={{ flex: 1 }}
                       label="Street"
                       inputRef={ref}
@@ -188,11 +203,13 @@ const AddCard = () => {
                       value={value}
                       onChange={(e: any) => onChange(e.target.value)}
                       sx={{
-                        '& .MuiFilledInput-input': {
-                          color: toggle ? 'white' : '#161C24',
+                        "& .MuiFilledInput-input": {
+                          color: toggle ? "white" : "#161C24",
                         },
-                        '& .MuiInputBase-root': {
-                          backgroundColor: toggle ? 'rgba(255, 255, 255, 0.09)' : '#DFE3E8'
+                        "& .MuiInputBase-root": {
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.09)"
+                            : "#DFE3E8",
                         },
                       }}
                     />
@@ -205,9 +222,9 @@ const AddCard = () => {
                   name="city"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field: { onChange, value = '', ref } }: any) => (
+                  render={({ field: { onChange, value = "", ref } }: any) => (
                     <TextField
-                      error={formState.errors?.city?.type === 'required'}
+                      error={formState.errors?.city?.type === "required"}
                       style={{ flex: 1 }}
                       label="City"
                       inputRef={ref}
@@ -215,11 +232,13 @@ const AddCard = () => {
                       value={value}
                       onChange={(e: any) => onChange(e.target.value)}
                       sx={{
-                        '& .MuiFilledInput-input': {
-                          color: toggle ? 'white' : '#161C24',
+                        "& .MuiFilledInput-input": {
+                          color: toggle ? "white" : "#161C24",
                         },
-                        '& .MuiInputBase-root': {
-                          backgroundColor: toggle ? 'rgba(255, 255, 255, 0.09)' : '#DFE3E8'
+                        "& .MuiInputBase-root": {
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.09)"
+                            : "#DFE3E8",
                         },
                       }}
                     />
@@ -229,14 +248,14 @@ const AddCard = () => {
                   name="zip_code"
                   control={control}
                   rules={{
-                    required:true,
-                    maxLength: 6
+                    required: true,
+                    maxLength: 6,
                   }}
-                  render={({ field: { onChange, value = '', ref } }: any) => (
+                  render={({ field: { onChange, value = "", ref } }: any) => (
                     <TextField
                       error={
-                        formState.errors?.zip_code?.type === 'required' ||
-                        formState.errors?.zip_code?.type === 'maxLength'
+                        formState.errors?.zip_code?.type === "required" ||
+                        formState.errors?.zip_code?.type === "maxLength"
                       }
                       style={{ flex: 1 }}
                       label="Zip code"
@@ -245,11 +264,13 @@ const AddCard = () => {
                       value={value}
                       onChange={(e: any) => onChange(e.target.value)}
                       sx={{
-                        '& .MuiFilledInput-input': {
-                          color: toggle ? 'white' : '#161C24',
+                        "& .MuiFilledInput-input": {
+                          color: toggle ? "white" : "#161C24",
                         },
-                        '& .MuiInputBase-root': {
-                          backgroundColor: toggle ? 'rgba(255, 255, 255, 0.09)' : '#DFE3E8'
+                        "& .MuiInputBase-root": {
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.09)"
+                            : "#DFE3E8",
                         },
                       }}
                     />
@@ -257,7 +278,11 @@ const AddCard = () => {
                 />
               </Stack>
 
-              <Typography pt={2} className="secondary-text-color capitalize-text" variant="subtitle1">
+              <Typography
+                pt={2}
+                className="secondary-text-color capitalize-text"
+                variant="subtitle1"
+              >
                 CARD DETAILS
               </Typography>
 
@@ -266,9 +291,9 @@ const AddCard = () => {
                   name="email"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field: { onChange, value = '', ref } }: any) => (
+                  render={({ field: { onChange, value = "", ref } }: any) => (
                     <TextField
-                      error={formState.errors?.email?.type === 'required'}
+                      error={formState.errors?.email?.type === "required"}
                       style={{ flex: 1 }}
                       label="Email"
                       inputRef={ref}
@@ -276,11 +301,13 @@ const AddCard = () => {
                       value={value}
                       onChange={(e: any) => onChange(e.target.value)}
                       sx={{
-                        '& .MuiFilledInput-input': {
-                          color: toggle ? 'white' : '#161C24',
+                        "& .MuiFilledInput-input": {
+                          color: toggle ? "white" : "#161C24",
                         },
-                        '& .MuiInputBase-root': {
-                          backgroundColor: toggle ? 'rgba(255, 255, 255, 0.09)' : '#DFE3E8'
+                        "& .MuiInputBase-root": {
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.09)"
+                            : "#DFE3E8",
                         },
                       }}
                     />
@@ -290,9 +317,9 @@ const AddCard = () => {
                   name="card_name"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field: { onChange, value = '', ref } }: any) => (
+                  render={({ field: { onChange, value = "", ref } }: any) => (
                     <TextField
-                      error={formState.errors?.card_name?.type === 'required'}
+                      error={formState.errors?.card_name?.type === "required"}
                       style={{ flex: 1 }}
                       label="Name on the card"
                       inputRef={ref}
@@ -300,11 +327,13 @@ const AddCard = () => {
                       value={value}
                       onChange={(e: any) => onChange(e.target.value)}
                       sx={{
-                        '& .MuiFilledInput-input': {
-                          color: toggle ? 'white' : '#161C24',
+                        "& .MuiFilledInput-input": {
+                          color: toggle ? "white" : "#161C24",
                         },
-                        '& .MuiInputBase-root': {
-                          backgroundColor: toggle ? 'rgba(255, 255, 255, 0.09)' : '#DFE3E8'
+                        "& .MuiInputBase-root": {
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.09)"
+                            : "#DFE3E8",
                         },
                       }}
                     />
@@ -316,9 +345,12 @@ const AddCard = () => {
                   name="card_number"
                   control={control}
                   rules={{ required: true, maxLength: 16 }}
-                  render={({ field: { onChange, value = '', ref } }: any) => (
+                  render={({ field: { onChange, value = "", ref } }: any) => (
                     <TextField
-                      error={formState.errors?.card_number?.type === 'required' || formState.errors?.card_number?.type === 'maxLength'}
+                      error={
+                        formState.errors?.card_number?.type === "required" ||
+                        formState.errors?.card_number?.type === "maxLength"
+                      }
                       style={{ flex: 1 }}
                       label="Card Number"
                       inputRef={ref}
@@ -327,11 +359,13 @@ const AddCard = () => {
                       inputProps={{ maxLength: 16 }}
                       onChange={(e: any) => onChange(e.target.value)}
                       sx={{
-                        '& .MuiFilledInput-input': {
-                          color: toggle ? 'white' : '#161C24',
+                        "& .MuiFilledInput-input": {
+                          color: toggle ? "white" : "#161C24",
                         },
-                        '& .MuiInputBase-root': {
-                          backgroundColor: toggle ? 'rgba(255, 255, 255, 0.09)' : '#DFE3E8'
+                        "& .MuiInputBase-root": {
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.09)"
+                            : "#DFE3E8",
                         },
                       }}
                     />
@@ -343,30 +377,34 @@ const AddCard = () => {
                   name="date"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field: { onChange, value = '', ref } }: any) => (
+                  render={({ field: { onChange, value = "", ref } }: any) => (
                     <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <DesktopDatePicker
-                          label="Expiry Date"
-                          views={['year', 'month']}
-                          inputFormat="MM/YY"
-                          value={value}
-                          inputRef={ref}
-                          onChange={(e: any) => onChange(e)}
-                          renderInput={(params) => (
+                      <DesktopDatePicker
+                        label="Expiry Date"
+                        views={["year", "month"]}
+                        inputFormat="MM/YY"
+                        value={value}
+                        inputRef={ref}
+                        onChange={(e: any) => onChange(e)}
+                        renderInput={(params) => (
                           <TextField
-                          {...params}
-                          variant="filled"
-                          error={formState.errors?.card_number?.type === 'required'}
-                          sx={{
-                            '& .MuiFilledInput-input': {
-                              color: toggle ? 'white' : '#161C24',
-                            },
-                            '& .MuiInputBase-root': {
-                              backgroundColor: toggle ? 'rgba(255, 255, 255, 0.09)' : '#DFE3E8'
-                            },
-                          }}
+                            {...params}
+                            variant="filled"
+                            error={
+                              formState.errors?.card_number?.type === "required"
+                            }
+                            sx={{
+                              "& .MuiFilledInput-input": {
+                                color: toggle ? "white" : "#161C24",
+                              },
+                              "& .MuiInputBase-root": {
+                                backgroundColor: toggle
+                                  ? "rgba(255, 255, 255, 0.09)"
+                                  : "#DFE3E8",
+                              },
+                            }}
                           />
-                          )}
+                        )}
                       />
                     </LocalizationProvider>
                   )}
@@ -375,10 +413,13 @@ const AddCard = () => {
                 <Controller
                   name="cvc"
                   control={control}
-                  rules={{ required: true , maxLength:4}}
-                  render={({ field: { onChange, value = '', ref } }: any) => (
+                  rules={{ required: true, maxLength: 4 }}
+                  render={({ field: { onChange, value = "", ref } }: any) => (
                     <TextField
-                      error={formState.errors?.cvc?.type === 'required' || formState.errors?.cvc?.type === 'maxLength'}
+                      error={
+                        formState.errors?.cvc?.type === "required" ||
+                        formState.errors?.cvc?.type === "maxLength"
+                      }
                       style={{ flex: 1 }}
                       label="CVC"
                       inputRef={ref}
@@ -387,11 +428,13 @@ const AddCard = () => {
                       inputProps={{ maxLength: 4 }}
                       onChange={(e: any) => onChange(e.target.value)}
                       sx={{
-                        '& .MuiFilledInput-input': {
-                          color: toggle ? 'white' : '#161C24',
+                        "& .MuiFilledInput-input": {
+                          color: toggle ? "white" : "#161C24",
                         },
-                        '& .MuiInputBase-root': {
-                          backgroundColor: toggle ? 'rgba(255, 255, 255, 0.09)' : '#DFE3E8'
+                        "& .MuiInputBase-root": {
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.09)"
+                            : "#DFE3E8",
                         },
                       }}
                     />
@@ -401,15 +444,23 @@ const AddCard = () => {
 
               <Stack direction="row" gap={2} mt={2}>
                 <FormControl>
-                  <FormControlLabel
-                    control={<Radio />}
-                    sx={{ color: toggle ? 'white' : '#161C24' }}
-                    label="Tick here to confirm that you are at least 18 years old and age of majority in your place of residence"
-                  />
+                  <RadioGroup>
+                    <FormControlLabel
+                      control={<Radio />}
+                      value={validAge} onChange={(e: any) => setValidAge(e.target.value)}
+                      sx={{ color: toggle ? "white" : "#161C24" }}
+                      label="Tick here to confirm that you are at least 18 years old and age of majority in your place of residence"
+                    />
+                  </RadioGroup>
                 </FormControl>
               </Stack>
 
-              <LoadingButton variant="contained" loading={isLoading} type="submit" sx={{ marginTop: 2, marginBottom: 2 }}>
+              <LoadingButton
+                variant="contained"
+                loading={isLoading}
+                type="submit"
+                sx={{ marginTop: 2, marginBottom: 2 }}
+              >
                 Submit
               </LoadingButton>
             </Stack>
@@ -420,14 +471,22 @@ const AddCard = () => {
             m={1}
             sx={{
               border: `1px solid ${theme.palette.grey[700]}`,
-              borderRadius: '4px'
+              borderRadius: "4px",
             }}
           >
+            Fix tip minimum and format: we need to make this minimum 1. Do not allow users to enter anything below like 0.99
             <Box p={1}>
-              <Typography color={toggle ? 'white' : '#161C24'} variant="subtitle1">
+              <Typography
+                color={toggle ? "white" : "#161C24"}
+                variant="subtitle1"
+              >
                 $0
               </Typography>
-              <Typography fontWeight="400" color={toggle ? 'white' : '#161C24'} variant="subtitle1">
+              <Typography
+                fontWeight="400"
+                color={toggle ? "white" : "#161C24"}
+                variant="subtitle1"
+              >
                 Wallet Credits
               </Typography>
             </Box>
@@ -438,53 +497,89 @@ const AddCard = () => {
                 Add Funds To Your Wallet
               </Typography>
               <Box mt={1} mb={1} display="flex" gap="4px">
-                <Chip label="$10" variant="outlined" sx={{
-                  '& .MuiChip-label':{
-                    color: toggle ? 'white' : '#161C24'
-                  }
-                }}/>
-                <Chip label="$20" variant="outlined"  sx={{
-                  '& .MuiChip-label':{
-                    color: toggle ? 'white' : '#161C24'
-                  }
-                }}/>
-                <Chip label="$50" variant="outlined"  sx={{
-                  '& .MuiChip-label':{
-                    color: toggle ? 'white' : '#161C24'
-                  }
-                }}/>
-                <Chip label="$100" variant="outlined"  sx={{
-                  '& .MuiChip-label':{
-                    color: toggle ? 'white' : '#161C24'
-                  }
-                }}/>
+                <Chip
+                  label="$10"
+                  variant="outlined"
+                  sx={{
+                    "& .MuiChip-label": {
+                      color: toggle ? "white" : "#161C24",
+                    },
+                  }}
+                />
+                <Chip
+                  label="$20"
+                  variant="outlined"
+                  sx={{
+                    "& .MuiChip-label": {
+                      color: toggle ? "white" : "#161C24",
+                    },
+                  }}
+                />
+                <Chip
+                  label="$50"
+                  variant="outlined"
+                  sx={{
+                    "& .MuiChip-label": {
+                      color: toggle ? "white" : "#161C24",
+                    },
+                  }}
+                />
+                <Chip
+                  label="$100"
+                  variant="outlined"
+                  sx={{
+                    "& .MuiChip-label": {
+                      color: toggle ? "white" : "#161C24",
+                    },
+                  }}
+                />
               </Box>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Typography fontWeight="400" color={toggle ? 'white' : '#161C24'} fontSize="11px">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography
+                  fontWeight="400"
+                  color={toggle ? "white" : "#161C24"}
+                  fontSize="11px"
+                >
                   Make wallet primary method for rebills
                 </Typography>
-                <Switch defaultChecked sx={{
-                  '& .MuiSwitch-track': {
-                    backgroundColor: toggle ? 'white' : 'black'
-                  },
-                }} />
+                <Switch
+                  defaultChecked
+                  sx={{
+                    "& .MuiSwitch-track": {
+                      backgroundColor: toggle ? "white" : "black",
+                    },
+                  }}
+                />
               </Box>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Typography fontWeight="400" color={toggle ? 'white' : '#161C24'} fontSize="11px">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography
+                  fontWeight="400"
+                  color={toggle ? "white" : "#161C24"}
+                  fontSize="11px"
+                >
                   Auto-recharge
                 </Typography>
-                <Switch defaultChecked sx={{
-                  '& .MuiSwitch-track': {
-                    backgroundColor: toggle ? 'white' : 'black'
-                  },
-                }}/>
+                <Switch
+                  defaultChecked
+                  sx={{
+                    "& .MuiSwitch-track": {
+                      backgroundColor: toggle ? "white" : "black",
+                    },
+                  }}
+                />
               </Box>
             </Box>
           </Box>
-
         </Grid>
       </Grid>
-
     </LocalizationProvider>
   );
 };

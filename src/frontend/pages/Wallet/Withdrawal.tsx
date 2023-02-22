@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Col, Row } from "react-bootstrap";
 import {
   FormControl,
@@ -23,6 +23,7 @@ import { currencyData } from "./currency";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import _axios from "frontend/api/axios";
 import { toast } from "react-toastify";
+import { FormHelperText } from "@mui/material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -58,13 +59,20 @@ const Withdrawal = () => {
   const { toggle } = useContext(ThemeContext);
   const [bankSelect, setBankSelect] = useState();
   const [bankData, setBankData] = useState<any | []>([]);
+  const { handleSubmit, formState, control } =
+    useForm({
+      mode: "onChange",
+    });
 
   useEffect(() => {
     _axios
       .get("api/user/get_bank_accounts/")
       .then((res: any) => {
         res?.data?.data?.length
-          ? (setBankData(res.data.data), setBankSelect(res?.data?.data.find((data:any) => data.primary === true)))
+          ? (setBankData(res.data.data),
+            setBankSelect(
+              res?.data?.data.find((data: any) => data.primary === true)
+            ))
           : navigate("/your-bank");
       })
       .catch((error: any) => {
@@ -73,7 +81,7 @@ const Withdrawal = () => {
       });
   }, []);
 
-  const onSubmit = () => {
+  const submitValues = () => {
     navigate("/processWithdraw");
   };
   const handleChange = (e: any) => {
@@ -83,7 +91,7 @@ const Withdrawal = () => {
     <Stack mt={5} px={2}>
       <Row>
         <Col md={8}>
-          <form>
+          <form onSubmit={handleSubmit(submitValues)}>
             <Stack>
               <TabPanel value={0} index={0}>
                 <FormControl style={{ padding: "0" }} fullWidth>
@@ -96,7 +104,10 @@ const Withdrawal = () => {
                       value={bankSelect}
                       style={{ background: "#DFE3E8", borderRadius: "5px" }}
                     >
-                      {[...bankData.filter((d:any) => d.primary === true),...bankData.filter((d:any) => d.primary === false)]?.map((bank: string | any, index: number) => {
+                      {[
+                        ...bankData.filter((d: any) => d.primary === true),
+                        ...bankData.filter((d: any) => d.primary === false),
+                      ]?.map((bank: string | any, index: number) => {
                         return (
                           <MenuItem
                             style={{ paddingTop: "0px", paddingBottom: "0" }}
@@ -173,7 +184,46 @@ const Withdrawal = () => {
                   <InputLabel id="demo-simple-select-filled-label">
                     Currency
                   </InputLabel>
-                  <Select
+                  <Controller
+                    control={control}
+                    name="currency"
+                    rules={{ required: true }}
+                    render={({ field: { onChange, value = '', ref } }: any) => (
+                      <Select
+                        inputRef={ref}
+                        className="mb-3"
+                        value={value}
+                        onChange={(e: any) => onChange(e.target.value)}
+                        style={{
+                          backgroundColor: toggle
+                            ? "rgba(255, 255, 255, 0.13)"
+                            : "#DFE3E8",
+                          color: toggle ? "white" : "#161C24",
+                        }}
+                      >
+                        {currencyData.map((currency: string, index: number) => (
+                          <MenuItem
+                            style={{
+                              backgroundColor: toggle
+                                ? "rgba(255, 255, 255, 0.13)"
+                                : "#DFE3E8",
+                              color: toggle ? "white" : "#161C24",
+                            }}
+                            key={index}
+                            value={currency}
+                          >
+                            {currency}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  {formState.errors?.currency?.type === "required" && (
+                    <FormHelperText error={true}>
+                      Currency is required
+                    </FormHelperText>
+                  )}
+                  {/* <Select
                     label="Currency"
                     variant="filled"
                     style={{
@@ -197,7 +247,7 @@ const Withdrawal = () => {
                         {currency}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </Select> */}
                 </FormControl>
               </Stack>
               <Stack
@@ -240,7 +290,6 @@ const Withdrawal = () => {
                   variant="contained"
                   type="submit"
                   sx={{ color: "white", width: "100%" }}
-                  onClick={onSubmit}
                 >
                   {" "}
                   Submit

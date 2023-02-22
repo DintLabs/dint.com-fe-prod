@@ -75,10 +75,25 @@ const DintWallet = () => {
     (rootState: RootState) => rootState.dintBalance
   );
   const [displayAssets, setdisplayAssets] = useState(true);
+  const [activitesData, setActivitesData] = useState([]);
   const mobileView = useMediaQuery("(max-width:899px)");
+
   useEffect(() => {
     getToken();
+    getActivitiesData();
   }, [1]);
+
+  const getActivitiesData = async () => {
+    await _axios
+      .get("api/user/get_payouts_by_token/")
+      .then((res: any) => {
+        if (res?.data?.data) setActivitesData(res.data.data);
+      })
+      .catch((error: any) => {
+        console.log("error fetch bank details", error);
+        toast.error("Action Failed");
+      });
+  };
 
   const getToken = async () => {
     await dispatch(getKeys());
@@ -268,56 +283,17 @@ const DintWallet = () => {
           useMediaQuery("(min-width:899px)")
             ? {
                 border: `1px solid #CCCCCC`,
-                borderRadius: "10px",
-                margin: "3% 0%",
-                width: "95%",
-              }
-            : { marginTop: "10%" }
-        }
-      >
-        <Grid
-          sx={
-            mobileView
-              ? {
-                  display: "flex",
-                  cursor: "pointer",
-                  width: "100%",
-                  padding: "0% 20%",
-                  textAlign: "center",
-                }
-              : {
-                  display: "flex",
-                  cursor: "pointer",
-                  width: "100%",
-                  textAlign: "center",
-                  borderBottom: "1px solid #CCCCCC",
-                }
-          }
-        >
+          borderRadius:"10px",
+          margin:'3% 0%',
+          width: "95%" 
+        } : { marginTop:'10%' }}>
+        <Grid  sx={ mobileView ? 
+        {display:"flex",cursor:'pointer' , width:"100%" , padding:"2% 20%" , textAlign:"center" } 
+        : {display:"flex",cursor:'pointer' , width:"100%" , textAlign:"center" ,borderBottom:"1px solid #CCCCCC"}}>
           <Box
-            onClick={() => setdisplayAssets(true)}
-            sx={
-              mobileView
-                ? {
-                    padding: "3%",
-                    borderTopLeftRadius: "30px",
-                    borderBottomLeftRadius: "30px",
-                    color: "#fff",
-                    backgroundColor: displayAssets ? "#3B3F58" : "#212436",
-                    borderRight: "1px solid #CCCCCC",
-                    width: "50%",
-                  }
-                : {
-                    padding: "2%",
-                    color: displayAssets ? "#fff" : "",
-                    borderTopLeftRadius: "10px",
-                    backgroundColor: displayAssets ? "#3B3F58" : "#F5F9FF",
-                    borderRight: "1px solid #CCCCCC",
-                    width: "50%",
-                  }
-            }
-          >
-            <Typography sx={{ fontWeight: "bold" }}>Assets</Typography>
+            onClick={()=>setdisplayAssets(true)}
+            sx={mobileView ?{padding:'3%', borderTopLeftRadius:'30px',borderBottomLeftRadius:"30px" ,color:'#fff' ,backgroundColor:displayAssets ?  '#3B3F58' : '#212436' , borderRight:'1px solid #CCCCCC' ,width:'50%' } :{padding:'2%' ,color:displayAssets ?  '#fff' : '',borderTopLeftRadius:'10px' ,backgroundColor:displayAssets ?  '#3B3F58' : '#F5F9FF' , borderRight:'1px solid #CCCCCC' ,width:'50%' }}>
+            <Typography sx={{fontWeight:"bold"}}>Assets</Typography>
           </Box>
           <Box
             onClick={() => setdisplayAssets(false)}
@@ -524,9 +500,128 @@ const DintWallet = () => {
               backgroundColor: toggle ? "#212B36" : "white",
             }}
           >
-            <div>
+            <TableContainer component={Paper}>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow
+                    sx={{
+                      fontSize: "12px",
+                      "& th": {
+                        fontSize: "15px",
+                        color: "text.secondary",
+                      },
+                      borderBottom: "#D2D2D2",
+                    }}
+                  >
+                    <TableCell>Account Number</TableCell>
+                    <TableCell align="center">Amount</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody sx={{overflow:"auto", height:"30%"}}>
+                  {activitesData.length > 0 ? (
+                      activitesData?.map((activity: any) => (
+                      <TableRow
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                        onClick={() => !isLargeScreen && setOpen(!open)}
+                      >
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{
+                            border: "0",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              color: toggle ? "white" : "#161C24",
+                            }}
+                          >
+                            <div
+                              className="mx-4"
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <span style={{ fontWeight: "700" }}>
+                                {activity.accountNumber}
+                              </span>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          style={{
+                            border: "0",
+                            color: toggle ? "white" : "#161C24",
+                          }}
+                        >
+                          <span style={{ fontWeight: "bold" }}>
+                            ${activity.amount}{" "}
+                          </span>
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          style={{
+                            border: "0",
+                            color: toggle ? "white" : "#161C24",
+                          }}
+                        >
+                          <span style={{ fontWeight: "bold" }}>
+                            {activity.paid ? "Success" : "Pending"}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      onClick={() => !isLargeScreen && setOpen(!open)}
+                    >
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{
+                          border: "0",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            color: toggle ? "white" : "#161C24",
+                          }}
+                        >
+                          <div
+                            className="mx-4"
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <span style={{ fontWeight: "700" }}>
+                              There are no data!
+                            </span>
+                          </div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {/* <div>
               <p style={{ color: "black" }}>Coming Soon...</p>
-            </div>
+            </div> */}
           </Card>
         )}
 

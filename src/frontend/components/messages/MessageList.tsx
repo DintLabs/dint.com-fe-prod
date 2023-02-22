@@ -93,6 +93,8 @@ const MessageList = (props: MessageListProp) => {
           return (
             <MessageItem
               key={message.id}
+              senderImage={message.sender?.profile_image}
+              receiverImage={message.reciever?.profile_image}
               message={message.content}
               messageId={message.id}
               isSender={props.loggedInUser.id === message.sender.id}

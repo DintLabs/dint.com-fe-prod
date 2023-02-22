@@ -134,7 +134,7 @@ const ProfileSettings = () => {
         }}
       >
         <MUIButton variant="contained" component="label" sx={{ m: 1 }}>
-          <input hidden accept="image/*" type="file" onChange={handleCoverPhotoChange} />
+          <input hidden accept="image/*,.jpg, .jpeg, .png" type="file" onChange={handleCoverPhotoChange} />
           Upload cover photo
         </MUIButton>
       </div>

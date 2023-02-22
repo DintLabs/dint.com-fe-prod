@@ -317,17 +317,17 @@ const Messages = () => {
   };
   return (
     <>
-      <Stack sx={useMediaQuery("(min-width:899px)")?{
+        <Stack sx={useMediaQuery("(min-width:899px)")?{
         display:"none" 
-      }:{ padding:"1% 2%" , justifyContent:"space-between" , display:"flex" , flexDirection:"row" }}>
+      }:{ padding:"1% 2%" ,marginTop: '60px' , justifyContent:"space-between" , display:"flex" , flexDirection:"row" }}>
         <Typography><ArrowBackIcon onClick={()=>navigate(-1)}/>Dint</Typography>
        
         <Box> 
         <MoreHorizIcon />
-        <PostAddIcon sx={{color:"black"}} className="cursor-pointer"/>
+        <PostAddIcon sx={{color:"black"}} onClick={handleModalOpen}  className="cursor-pointer"/>
         </Box>
       </Stack>
-      <Stack
+       <Stack
         direction="row"
         className="messages-container"
         sx={useMediaQuery("(min-width:899px)") ? {
@@ -335,7 +335,7 @@ const Messages = () => {
           border:`1px solid #D5D5D5`
           // borderLeft: `1px solid ${theme.palette.grey[700]}`,
           // borderRight: `1px solid ${theme.palette.grey[700]}`,
-        } : {border:"0px"}}>
+        } : {border:"0px" ,padding:"1% 2%"}}>
         {/* {/ users list /} */}
         <Box
           className="user-list"
@@ -474,6 +474,7 @@ const Messages = () => {
             :<Box sx={{display:"flex" , justifyContent:"left" , margin:'2%'}}>
               {/* <Typography sx={{padding:"3px 3%" , borderRadius:"20px" , background:"#EFEFEF"}}>Primary</Typography> */}
               <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,background:"#EFEFEF"}}>General</Typography>
+              <Typography onClick={handleModalOpen}  sx={{padding:"3px 3%" ,margin:"0% 3%", borderRadius:"20px" ,border:"1px solid "}}>+ New Message</Typography>
               {/* <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,border:"1px solid black"}}>Requests</Typography> */}
             </Box>
           }
