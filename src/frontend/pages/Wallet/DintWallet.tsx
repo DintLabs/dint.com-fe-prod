@@ -222,7 +222,7 @@ const DintWallet = () => {
                 alt="Withdraw"
                 src={PLUS_ICON}
               />
-              <span>Buy</span>
+              <span>Add Funds</span>
             </Box>
           ) : (
             <Button
@@ -240,7 +240,7 @@ const DintWallet = () => {
                 navigate(`/buy-dint-token`);
               }}
             >
-              BUY
+            ADD FUNDS
             </Button>
           )}
           {mobileView ? (
