@@ -94,7 +94,10 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
-              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px' }}
+              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px', cursor:"pointer" }}
+              onClick={() => {
+                navigate(`/lounge/${HOME_SIDE_MENU.NOTIFICATIONS}`);
+              }}
             >
               <NotificationsOutlinedIcon />
               <Badge badgeContent={notificationsLength} color="secondary"/>

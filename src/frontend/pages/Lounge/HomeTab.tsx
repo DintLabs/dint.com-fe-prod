@@ -405,6 +405,7 @@ const HomeTab = ({ createPost }: Props) => {
                       position: "absolute",
                       bottom: "-4px",
                       right: "-8px",
+                      zIndex: "9",
                     }}
                   >
                     <AddIcon fontSize="small" sx={{ color: "#fff" }} />

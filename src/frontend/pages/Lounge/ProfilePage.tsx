@@ -628,7 +628,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                           },
                         }}
                       >
-                        {isFollowLoading ? `Loading...` : `Unfollow`}
+                          {isFollowLoading ? `Loading...` : `Following`}
                       </Button>
                     )}
                     {userDetails?.is_followed === false && (
@@ -730,7 +730,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                       >
                         Following
                       </Button>
-                      <Button
+                      {/* <Button
                         variant="contained"
                         size="medium"
                         sx={{
@@ -744,7 +744,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         }}
                       >
                         Message
-                      </Button>
+                      </Button> */}
                       <Button
                         variant="contained"
                         size="medium"
@@ -788,14 +788,14 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                 )}
               </Stack>
               <div className="post-wrapper-desktop">
-                <Typography color={toggle ? "#fff" : "#000"}>
-                  200 Post
+                <Typography color={toggle ? "#fff" : "#000"} >
+                {counts?.all_posts ?? 0} Post
                 </Typography>
-                <Typography color={toggle ? "#fff" : "#000"}>
-                  200 Followers
+                <Typography color={toggle ? "#fff" : "#000"} onClick={() => navigate('/followers')} sx={{cursor:"pointer"}} >
+                {(Array.isArray(follower) && follower.length) || 0} Followers
                 </Typography>
-                <Typography color={toggle ? "#fff" : "#000"}>
-                  200 Following
+                <Typography color={toggle ? "#fff" : "#000"} onClick={() => navigate('/lounge/following')} sx={{cursor:"pointer"}} >
+                {(Array.isArray(following) && following.length) || 0} Following
                 </Typography>
               </div>
               {/* <input type="hidden" id="dummy" /> */}
@@ -1012,7 +1012,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
         </div>
         {isEligibleForFetchingPost && (
           <>
-            <Box className="tab-main-wrapper">
+            <Box className="tab-main-wrapper" id="postId">
               <Tabs
                 value={value}
                 variant="fullWidth"
@@ -1084,6 +1084,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
             </Box>
 
             <TabPanel value={value} index={0}>
+              
               <div className="image-wrapper">
                 {posts.map((item, i) => {
                   url = new URL(item?.media ?? "https://google.com");
@@ -1097,6 +1098,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         borderRadius: "10px",
                         overflow: "hidden",
                         // marginBottom: "30px",
+                        cursor:"pointer"
                       }}
                     >
                       {item?.media && images.includes(extension) && (
@@ -1151,7 +1153,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                     <PostItemSkeleton />
                   </>
                 )}
-              </div>
+              </div> 
             </TabPanel>
             <TabPanel value={value} index={1}>
               <div className="image-wrapper">
@@ -1207,6 +1209,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         border: `1px solid ${theme.palette.grey[400]}`,
                         borderRadius: "10px",
                         overflow: "hidden",
+                        cursor:"pointer"
                       }}
                     >
                       {item?.media && images.includes(extension) && (
@@ -1245,6 +1248,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         border: `1px solid ${theme.palette.grey[400]}`,
                         borderRadius: "10px",
                         overflow: "hidden",
+                        cursor:"pointer"
                       }}
                     >
                       {item?.media && videos.includes(extension) && (

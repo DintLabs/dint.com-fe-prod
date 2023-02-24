@@ -320,11 +320,11 @@ const Messages = () => {
         <Stack sx={useMediaQuery("(min-width:899px)")?{
         display:"none" 
       }:{ padding:"1% 2%" ,marginTop: '60px' , justifyContent:"space-between" , display:"flex" , flexDirection:"row" }}>
-        <Typography><ArrowBackIcon onClick={()=>navigate(-1)}/>Dint</Typography>
+        <Typography sx={{ color:toggle ? "white" : ""}}><ArrowBackIcon onClick={()=>navigate(-1)}/>Dint</Typography>
        
         <Box> 
-        <MoreHorizIcon />
-        <PostAddIcon sx={{color:"black"}} onClick={handleModalOpen}  className="cursor-pointer"/>
+        <MoreHorizIcon sx={{ color:toggle ? "white" : "black"}} />
+        <PostAddIcon sx={{ color:toggle ? "white" : "black"}} onClick={handleModalOpen}  className="cursor-pointer"/>
         </Box>
       </Stack>
        <Stack
@@ -375,7 +375,7 @@ const Messages = () => {
                 />
               ) : (
                 <Typography
-                  sx={{width:"100%" , textAlign:'center'}}
+                  sx={{width:"100%" , textAlign:'center' , color:toggle ? "white" : ""}}
                   className="capitalize-text"
                   variant="subtitle1">
                   Dint 
@@ -383,12 +383,12 @@ const Messages = () => {
                 </Typography>
               )}
               <Stack direction="row" spacing={2} alignItems="center">
-                <IconButton sx={{color:"black"}} size="small" onClick={handleUserSearchOpen}>
+                <IconButton sx={{ color:toggle ? "white" : "black"}} size="small" onClick={handleUserSearchOpen}>
                   <BsSearch className="cursor-pointer" />
                 </IconButton>
                 <IconButton size="small" onClick={handleModalOpen}>
                   {/* <BsPlusLg className="primary-text-color cursor-pointer" /> */}
-                  <PostAddIcon sx={{color:"black"}} className="cursor-pointer"/>
+                  <PostAddIcon sx={{ color:toggle ? "white" : "black" }} className="cursor-pointer"/>
                 </IconButton>
                 {isAddNewModalOpen && (
                   <NewMessage
@@ -421,22 +421,22 @@ const Messages = () => {
                 "& .MuiInputBase-input": {
                   color: toggle ? "white" : "#161C24",
                 },
-                background:'#F7F6F6',
+                background:toggle ? "black" :'#F7F6F6',
                 borderRadius:"10px"
           }}/>
           <Stack direction="row">
             <Box sx={{ margin:"1%" ,maxWidth:"min-content",textAlign:"center", position:"relative"}}>
               <Avatar src={userData?.profile_image} sx={{ height:"60px" , width:"60px" , border:"4px solid #4AA081"}} />
               <AddIcon sx={{ background:"#4AA081",top:"0%" , left:"65%", position:"absolute" , borderRadius:"50px"}}/>
-              <Typography>{userData?.display_name}</Typography>
+              <Typography sx={{ color:toggle ? "white" : ""}}>{userData?.display_name}</Typography>
             </Box>
           
             {allChatsList.map((user: any) => {
               return (
                 <>
-                  <Box sx={{margin:"1%"}}>
+                  <Box sx={{margin:"1%" , textAlign:"center" , maxWidth:"min-content"}}>
                     <Avatar src={user.profile_image} sx={{ height:"60px" , width:"60px"}} />
-                    <Typography>{user.display_name}</Typography>
+                    <Typography sx={{ color:toggle ? "white" : ""}}>{user.display_name}</Typography>
                    </Box>
                 </>
                 )
@@ -464,7 +464,7 @@ const Messages = () => {
                 borderRadius: '4px'
               }
             }}>
-            <Typography sx={{padding:"3%" , textAlign:"center" , fontWeight:"bold"}}>General</Typography>
+            <Typography sx={{ color:toggle ? "white" : "" , padding:"3%" , textAlign:"center" , fontWeight:"bold"}}>General</Typography>
               {/* <Tabs value={value} onChange={handleChange} sx={{width:"100%",justifyContent:"center" , color:"black"}}> */}
                 {/* <Tab sx={{width:"33%"}}label={'Primary'}/> */}
                 {/* <Tab sx={{width:"100%"}}label={'General'}/> */}
@@ -473,8 +473,8 @@ const Messages = () => {
             </Box> 
             :<Box sx={{display:"flex" , justifyContent:"left" , margin:'2%'}}>
               {/* <Typography sx={{padding:"3px 3%" , borderRadius:"20px" , background:"#EFEFEF"}}>Primary</Typography> */}
-              <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,background:"#EFEFEF"}}>General</Typography>
-              <Typography onClick={handleModalOpen}  sx={{padding:"3px 3%" ,margin:"0% 3%", borderRadius:"20px" ,border:"1px solid "}}>+ New Message</Typography>
+              <Typography sx={{ padding:"3px 3%" , borderRadius:"20px" ,background:"#EFEFEF"}}>General</Typography>
+              <Typography onClick={handleModalOpen}  sx={{ color:toggle ? "white" : "" , padding:"3px 3%" ,margin:"0% 3%", borderRadius:"20px" ,border:"1px solid "}}>+ New Message</Typography>
               {/* <Typography sx={{padding:"3px 3%" , borderRadius:"20px" ,border:"1px solid black"}}>Requests</Typography> */}
             </Box>
           }
