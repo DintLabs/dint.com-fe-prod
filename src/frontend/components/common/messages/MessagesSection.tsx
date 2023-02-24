@@ -49,13 +49,13 @@ const MessagesSection = (props: any) => {
               style={{ cursor: 'pointer' }}
             />
           ) : (
-            <CloseIcon onClick={() => props.handleClose()} style={{ cursor: 'pointer' }} />
+            <CloseIcon onClick={() => props.handleClose()} style={{ cursor: 'pointer' , color : toggle ? 'white' : "" }} />
           )}
 
-          <Typography component="span" id="modal-modal-title2" variant="h4">
+          <Typography sx={{color : toggle ? 'white' : ""}} component="span" id="modal-modal-title2" variant="h4">
             New Message
           </Typography>
-          <Typography component="span" id="modal-modal-title3" variant="h4" mr={1}>
+          <Typography sx={{color : toggle ? 'white' : ""}} component="span" id="modal-modal-title3" variant="h4" mr={1}>
             Next
           </Typography>
         </Box>
@@ -68,7 +68,7 @@ const MessagesSection = (props: any) => {
             flexDirection: 'row'
           }}
         >
-          <Typography id="modal-modal-title3" variant="h4" pt={2} pb={2} ml={1}>
+          <Typography sx={{color : toggle ? 'white' : ""}} id="modal-modal-title3" variant="h4" pt={2} pb={2} ml={1}>
             To:
           </Typography>
           <InputBase
@@ -85,7 +85,7 @@ const MessagesSection = (props: any) => {
           />
         </Box>
         <Divider style={{ width: '100%' }} />
-        <Typography id="modal-modal-description" sx={{ mt: 2, ml: 1 }} variant="h4">
+        <Typography id="modal-modal-description" sx={{color : toggle ? 'white' : "" ,  mt: 2, ml: 1 }} variant="h4">
           Suggested
         </Typography>
       </Box>

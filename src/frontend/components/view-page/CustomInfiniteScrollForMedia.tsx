@@ -41,7 +41,16 @@ const CustomInfiniteScrollForMedia = ({
                   <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                     <Card
                       className="image-cards card-container"
-                      onClick={() => onClickHandler({ id: data.id, media: data?.media })}
+                      onClick={() =>
+                        onClickHandler({
+                          id: data.id,
+                          media: data?.media,
+                          type: data?.type,
+                          userId: data?.user.id,
+                          likePost: data?.like_post,
+                          is_bookmarked: data?.is_bookmarked
+                        })
+                      }
                     >
                       <Box
                         className="full-image-container"
@@ -54,7 +63,16 @@ const CustomInfiniteScrollForMedia = ({
                   <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                     <Card
                       className="video-cards card-container"
-                      onClick={() => onClickHandler({ id: data.id, media: data?.media })}
+                      onClick={() =>
+                        onClickHandler({
+                          id: data.id,
+                          media: data?.media,
+                          type: data?.type,
+                          userId: data?.user.id,
+                          likePost: data?.like_post,
+                          is_bookmarked: data?.is_bookmarked
+                        })
+                      }
                     >
                       {isModalOpen && selectedMedia?.id === data?.id ? null : (
                         <IconButton className="floating-play-icon">

@@ -57,7 +57,7 @@ const Search = () => {
   return (
     <div className={toggle ? "searchDrawerDark" : "searchDrawer"}>
       <div className={toggle ? 'searchHeaderDark' : 'searchHeader'}>
-        <label>Search</label>
+        <label style={{color: toggle ? "white" : 'black'}}>Search</label>
         <TextField
           // {...params}
           id="user-search-input"

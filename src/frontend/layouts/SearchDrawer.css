@@ -48,13 +48,13 @@
 }
 .searchList {
     padding: 26px;
+    padding-bottom: 50px;
 }
 .closeIcon {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 0;
-
+    right: 10px;
 }
 .closeIcon svg {
     width: 16px;

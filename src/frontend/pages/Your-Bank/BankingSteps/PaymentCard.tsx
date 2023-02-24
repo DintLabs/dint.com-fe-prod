@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Grid, IconButton, Stack, useTheme } from '@mui/material';
+import { Grid, IconButton, Stack, useMediaQuery, useTheme } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import Menu from '@mui/material/Menu';
@@ -66,6 +66,7 @@ export default function PaymentCard() {
   const [curentElemnt, setCurentElemnt] = React.useState<object | null>(null);
   const [paymentsData , setPaymentsData] = React.useState()
   const open = Boolean(anchorEl);
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -175,22 +176,22 @@ export default function PaymentCard() {
           {(cardData || []).map((card:string | any, index:number) => (
             <Stack
               key={index}
-              sx={{ background: '#0b1419', borderRadius: '10px' }}
-              p={2}
+              sx={{ background: "linear-gradient(248.61deg, #124c5e 0.03%, #29252e 99.03%)" , borderRadius: '10px' }}
+              p={4}
               mb={2}>
               <Stack
-                direction="row"
+                direction= {isSmallScreen ? "column" :"row"}
                 gap={2}
                 pb={2}
-                sx={{ justifyContent: 'space-between', borderBottom: `2px solid ${theme.palette.grey[700]}` }}
+                sx={{ justifyContent: 'space-between', borderBottom: `2px solid ${theme.palette.grey[500]}` }}
               >
                 <Stack direction="row" gap={1}>
-                  <img src={discover} alt="discover" width={30}/>
+                  <img src={visa} alt="discover" width={30}/>
                   <Typography className="primary-text-color" style={{ fontSize: '16px' }}>
                     mastercard *** *** **** {card ? card.card_number : ""}
                   </Typography>
                 </Stack>
-                <Stack direction="row" alignItems="center">
+                <Stack sx={{marginLeft :isSmallScreen ? "5%" : "" }}direction="row" alignItems="center">
                   <Typography className="secondary-text-color" style={{ fontSize: '16px' }} mx={2}>
                     Expiration date {card ? card.card_expired : ""}
                   </Typography>
@@ -228,7 +229,7 @@ export default function PaymentCard() {
               <Stack direction="row" gap={2} mt={1} sx={{ justifyContent: 'space-between' }}>
                 <Stack>
                   <Typography className="primary-text-color" style={{ fontSize: '14px' }}>
-                    {card.is_activate ? "Active" : "disabled"}
+                    {card.is_activate ? "🟢 Active" : "⚫ disabled"}
                   </Typography>
                 </Stack>
                 <Stack>

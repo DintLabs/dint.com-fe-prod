@@ -6,23 +6,38 @@ import ViewMediaModal from './ViewMediaModal';
 type MediaListProps = {
   mediaList: any;
   totalMedia: number;
-  mediaType: 'image' | 'video';
+  mediaType?: string | null;
   fetchMoreMedia: () => void;
   loader: boolean;
+  userDetails?: any;
+  getUserPostCounts?: (id: number) => void;
+  postDeleted?: (id: number) => void;
 };
 
 export type SelectedMediaType = {
   id: number | null;
   media: string | null;
+  type: string | null;
+  userId: number | null;
+  likePost: [] | null;
+  is_bookmarked: Boolean
 };
 
 const MediaList = (props: MediaListProps) => {
-  const [isMediaViewModalOpen, setIsMediaViewModalOpen] = useState<boolean>(false);
-  const [selectedMedia, setSelectedMedia] = useState<SelectedMediaType>({ id: null, media: null });
+  const [isMediaViewModalOpen, setIsMediaViewModalOpen] =
+    useState<boolean>(false);
+  const [selectedMedia, setSelectedMedia] = useState<SelectedMediaType>({
+    id: null,
+    media: null,
+    type: null,
+    userId: null,
+    likePost: null ,
+    is_bookmarked:false
+  });
 
   const handleModalClose = () => {
     setIsMediaViewModalOpen(false);
-    setSelectedMedia({ id: null, media: null });
+    setSelectedMedia({ id: null, media: null, type: null, userId:null, likePost: null, is_bookmarked:false });
   };
   const handleMediaView = (media: SelectedMediaType) => {
     setSelectedMedia(media);
@@ -42,7 +57,14 @@ const MediaList = (props: MediaListProps) => {
     }
     if (currentMediaIndex >= 0) {
       const nextMedia = props?.mediaList[currentMediaIndex + 1];
-      setSelectedMedia({ id: nextMedia?.id, media: nextMedia?.media });
+      setSelectedMedia({
+        id: nextMedia?.id,
+        media: nextMedia?.media,
+        type: nextMedia?.type,
+        userId: nextMedia?.user.id,
+        likePost: nextMedia?.like_post,
+        is_bookmarked : nextMedia?.is_bookmarked
+      });
     }
   };
 
@@ -53,7 +75,14 @@ const MediaList = (props: MediaListProps) => {
     );
     if (currentMediaIndex > 0) {
       const nextMedia = props?.mediaList[currentMediaIndex - 1];
-      setSelectedMedia({ id: nextMedia?.id, media: nextMedia?.media });
+      setSelectedMedia({
+        id: nextMedia?.id,
+        media: nextMedia?.media,
+        type: nextMedia?.type,
+        userId: nextMedia?.user.id,
+        likePost: nextMedia?.like_post,
+        is_bookmarked : nextMedia?.is_bookmarked
+      });
     }
   };
 
@@ -77,13 +106,21 @@ const MediaList = (props: MediaListProps) => {
           props?.mediaList?.findIndex((media: PostInterface) => media.id === selectedMedia.id) ===
           props?.totalMedia - 1
         }
+        getUserPostCounts={props?.getUserPostCounts}
         renderNextMedia={viewNextMedia}
         renderPrevMedia={viewPrevMedia}
         open={isMediaViewModalOpen}
         handleClose={handleModalClose}
         source={selectedMedia.media}
-        type={props?.mediaType}
+        type={selectedMedia?.type}
         loading={props?.loader}
+        userDetails={props?.userDetails}
+        canDeletePost={true}
+        onDelete={props?.postDeleted}
+        postUser={selectedMedia?.userId}
+        likePost={selectedMedia?.likePost}
+        is_bookmarked={selectedMedia?.is_bookmarked}
+        selectedMedia={selectedMedia}
       />
     </>
   );

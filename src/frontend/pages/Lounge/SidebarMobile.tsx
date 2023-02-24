@@ -39,7 +39,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         onClose={() => setShowMoreDrawer(false)}
         openFrom="right"
       />
-      <List sx={{ display: 'flex', backgroundColor: toggle ? "#000" : "#fff",  }}>
+      <List sx={{ display: 'flex', padding :"3% 0%" , backgroundColor: toggle ? "#000" : "#fff",  }}>
         <ListItem
           sx={{
             color: HOME_SIDE_MENU.HOME === selectedMenu ? (toggle ? "#fff" : '#000') : 'text.secondary',
@@ -52,7 +52,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <OtherHousesIcon />
+            <OtherHousesIcon sx={{ height :"30px" , width : "30px"}}/>
           </ListItemAvatar>
         </ListItem>
         <ListItem
@@ -67,7 +67,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <BsSearch />
+            <BsSearch style={{ height :"25px" , width : "30px"}} />
           </ListItemAvatar>
         </ListItem>
         <ListItem
@@ -82,7 +82,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <TextsmsRoundedIcon />
+            <TextsmsRoundedIcon sx={{ height :"30px" , width : "30px"}}/>
           </ListItemAvatar>
         </ListItem>
 
@@ -98,7 +98,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <AccountBalanceWalletIcon  />
+            <AccountBalanceWalletIcon  sx={{ height :"30px" , width : "30px"}}/>
           </ListItemAvatar>
         </ListItem>
 
@@ -114,7 +114,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <AccountCircleRoundedIcon />
+            <AccountCircleRoundedIcon sx={{ height :"30px" , width : "30px"}}/>
           </ListItemAvatar>
         </ListItem>
       </List>

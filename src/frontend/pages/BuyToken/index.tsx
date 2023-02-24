@@ -22,6 +22,7 @@ import { getCreditCards } from "frontend/redux/actions/StripeAction";
 import discover from "../../assets/img/cc/card_discover.png";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getDintBalance } from "frontend/redux/actions/wallet/getDintBalance";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -55,6 +56,7 @@ export default function BuyToken() {
   const [inProgress, setInProgress] = useState(false);
   const { handleSubmit, formState, watch, control, setValue } = useForm();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.up("sm"));
   const [cardSelect, setCardSelect] = useState();
   const { selectedMenu } = useSelector(
     (rootState: RootState) => rootState.newHome
@@ -95,7 +97,12 @@ export default function BuyToken() {
           .then((res: any) => {
             const { data } = res;
             if(data.paid === true){
-              navigate('/dint-wallet')
+              toast.loading('Plaese wait...');
+              dispatch(getDintBalance()).then((res:any)=>{
+                toast.dismiss();
+                toast.success("Payment successful")
+                navigate('/dint-wallet')
+              })
             }else{
               toast.error('Payment Unsuccessful!')
             }
@@ -126,16 +133,16 @@ export default function BuyToken() {
       }
     >
       <div
-        style={{
+        style={useMediaQuery("(min-width:899px)") ? {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-        }}
+        } :{margin:"5%"}}
       >
         <main
-          style={{
-            width: HOME_SIDE_MENU.HOME === selectedMenu ? "80%" : "50%",
-          }}
+          // style={{
+          //   width: HOME_SIDE_MENU.HOME === selectedMenu ? "80%" : "50%",
+          // }}
         >
           <h1
             style={{
@@ -153,7 +160,7 @@ export default function BuyToken() {
           ></Typography>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack gap={2} mt={2} ml={isLargeScreen ? 3 : 0}>
+            <Stack gap={2} mt={2} ml={isLargeScreen ? 3 : 0} sx={{ '& .css-19kzrtu' :{padding:"0px"} }}>
               {/* <FormControl fullWidth>
               <Controller
                 control={control}
@@ -227,7 +234,7 @@ export default function BuyToken() {
               />
             </FormControl> */}
               <TabPanel   value={0} index={0}>
-                <FormControl style={{padding:'0'}} fullWidth>
+                <FormControl sx={{ padding:'0' }} fullWidth>
                   {cardSelect ? (
                     <Select
                       labelId="demo-simple-select-label"
@@ -235,19 +242,19 @@ export default function BuyToken() {
                       label="Age"
                       onChange={(e) => handleChange(e)}
                       value={cardSelect}
-                      style={{background:"#DFE3E8" , borderRadius:'5px' }}
+                      sx={{background:toggle ? '':"#DFE3E8" , borderRadius:'5px' }}
                     >
 
                       {(cardData || []).map(
                         (card: string | any, index: number) =>  (
                           <MenuItem style={{paddingTop : "0px" ,paddingBottom:"0" }} value={card}>
                             <Stack
-                            className="card"
+                            // className="card"
                               key={index}
                               sx={{
-                                background: "#0b1419", 
+                                background: toggle  ? "#0b1419" : "white", 
                                 borderRadius: "10px",
-                                width:"100%"
+                                width:"100%",
                               }}
                               p={1}
                               m={1}
@@ -256,8 +263,11 @@ export default function BuyToken() {
                                 direction="row"
                                 gap={2}
                                 pb={2}
-                                sx={{
+                                sx={ isLargeScreen ? {
                                   justifyContent: "space-between",
+                                  borderBottom: `2px solid ${theme.palette.grey[700]}`,
+                                } : {
+                                  flexDirection:"column",
                                   borderBottom: `2px solid ${theme.palette.grey[700]}`,
                                 }}
                               >
@@ -268,8 +278,8 @@ export default function BuyToken() {
                                     width={30}
                                   />
                                   <Typography
-                                    className="primary-text-color"
-                                    style={{ fontSize: "16px" ,color:"black" }}
+                                    // className="primary-text-color"
+                                    sx={{ fontSize: isSmallScreen ? "14px" : "16px" ,color:toggle ? "white" : "black" }}
                                   >
                                     mastercard *** *** ****{" "}
                                     {card ? card.card_number : ""}
@@ -277,8 +287,8 @@ export default function BuyToken() {
                                 </Stack>
                                 <Stack direction="row" alignItems="center">
                                   <Typography
-                                    className="secondary-text-color"
-                                    style={{ fontSize: "16px" , color:"black" }}
+                                    // className="secondary-text-color"
+                                    style={{ fontSize:isSmallScreen ? "14px" : "16px" , color:toggle ? "white" : "black" }}
                                     mx={2}
                                   >
                                     Expiration date{" "}
@@ -294,16 +304,16 @@ export default function BuyToken() {
                               >
                                 <Stack>
                                   <Typography
-                                    className="primary-text-color"
-                                    style={{ fontSize: "14px" , color:"black"}}
+                                    // className="primary-text-color"
+                                    style={{ fontSize: "14px" , color:toggle ? "white" : "black" }}
                                   >
                                     {card.is_activate ? "Active" : "disabled"}
                                   </Typography>
                                 </Stack>
                                 <Stack>
                                   <Typography
-                                    className="primary-text-color"
-                                    style={{ fontSize: "14px" , color:"black" }}
+                                    // className="primary-text-color"
+                                    style={{ fontSize: "14px" , color:toggle ? "white" : "black" }}
                                   >
                                     {card.default_card ? "DEFAULT" : null}
                                   </Typography>
@@ -314,7 +324,7 @@ export default function BuyToken() {
                         )
                       )}
                     </Select>
-                  ) : <Typography >You have not added any Card !<Link to={'/payment/add'} style={{color:"brown !important" , fontWeight:"bold"}}> Add a card </Link></Typography>}
+                  ) : <Typography sx={{color : toggle ? "white" : ""}}>You have not added any Card !<Link to={'/payment/add'} style={{color:"brown !important" , fontWeight:"bold"}}> Add a card </Link></Typography>}
                 </FormControl>
               </TabPanel>
 

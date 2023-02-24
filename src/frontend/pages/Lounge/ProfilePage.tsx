@@ -11,6 +11,8 @@ import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import BrokenImageOutlinedIcon from "@mui/icons-material/BrokenImageOutlined";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
+import MediaList from 'frontend/components/view-page/MediaList';
+import NothingToShow from 'frontend/components/common/NothingToShow';
 
 import {
   Avatar,
@@ -87,6 +89,14 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
+type PostPaginationPayload = {
+  page: number | null;
+  start: number;
+  length: number;
+  post_type: string;
+};
+
+
 const ProfilePage = ({ username }: { username: string | null | undefined }) => {
   const dispatch = useDispatch();
 
@@ -145,7 +155,21 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
       ...DEFAULT_POSTS_PAGINATION,
       post_type: postTypes.video.value,
     });
-
+  
+    const [fetchImagePostPayload, setFetchImagePostPayload] = useState<PostPaginationPayload>({
+      page: null,
+      post_type: 'image',
+      start: 0,
+      length: 5
+    });
+  
+    const [fetchVideoPostPayload, setFetchVideoPostPayload] = useState<PostPaginationPayload>({
+      page: null,
+      post_type: 'video',
+      start: 0,
+      length: 5
+    });
+  
   const handleScroll = useCallback(() => {
     const windowHeight =
       "innerHeight" in window
@@ -237,7 +261,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
 
     return false;
   }, [userDetails]);
-
+console.log(posts,'posts==')
   const fetchPosts = async (
     userId: number,
     pagination: PaginationPostsInerface
@@ -250,6 +274,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
         `/api/posts/pagination/list_by_user_id/${userId}/`,
         pagination
       );
+
       setIsLoading(false);
       if (data?.data?.length) {
         if (pagination.post_type === postTypes.all.value) {
@@ -433,6 +458,23 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
 
   const handleClickOpen = () => {
     setOpenPopUpTip(true);
+  };
+
+  const fetchImageHandler = () => {
+    setFetchImagePostPayload((prevState: PostPaginationPayload) => {
+      return {
+        ...prevState,
+        start: prevState.start + prevState.length
+      };
+    });
+  };
+  const fetchVideoHandler = () => {
+    setFetchVideoPostPayload((prevState: PostPaginationPayload) => {
+      return {
+        ...prevState,
+        start: prevState.start + prevState.length
+      };
+    });
   };
 
   if (!user)
@@ -860,9 +902,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                       src={storyImage}
                     />
                   </AvatarGroup>
-                  <Typography sx={{ color: toggle ? "#fff" : "#000" }}>
-                    <b>Followed by</b> animairaon, tyar and 45 others
-                  </Typography>
+                
                 </Box>
                 <Box display="flex" gap={1} sx={{ padding: "15px 0" }}>
                   {!!userDetails?.instagram && (
@@ -974,40 +1014,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
               scrollBehavior: "smooth",
             }}
           >
-            <ListItemAvatar
-              style={{ cursor: "pointer", display: "flex" }}
-              sx={{ gap: { xs: "16px", md: "35px" } }}
-            >
-              {Array.from({ length: 8 }, (_, i) => (
-                <div
-                  key={i}
-                  style={{ textAlign: "center", width: "fit-content" }}
-                  className="user-story"
-                >
-                  <Avatar
-                    className="story-avatar"
-                    src={storyImage}
-                    sx={{
-                      width: { xs: "48px", md: "92px" },
-                      height: { xs: "48px", md: "92px" },
-                      borderWidth: "3px",
-                      borderStyle: "solid",
-                      borderColor: toggle ? "#4AA081" : "#4AA081",
-                    }}
-                  />
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      fontWeight: "600",
-                      marginTop: "10px",
-                      color: toggle ? "text.primary" : "#161C24",
-                    }}
-                  >
-                    Highlight
-                  </Typography>
-                </div>
-              ))}
-            </ListItemAvatar>
+           
           </Box>
         </div>
         {isEligibleForFetchingPost && (
@@ -1084,76 +1091,21 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
             </Box>
 
             <TabPanel value={value} index={0}>
-              
-              <div className="image-wrapper">
-                {posts.map((item, i) => {
-                  url = new URL(item?.media ?? "https://google.com");
-                  splits = url.pathname.split(".");
-                  extension = splits?.length ? splits[splits.length - 1] : "";
-
-                  return (
-                    <Box
-                      style={{
-                        border: `1px solid ${theme.palette.grey[400]}`,
-                        borderRadius: "10px",
-                        overflow: "hidden",
-                        // marginBottom: "30px",
-                        cursor:"pointer"
-                      }}
-                    >
-                      {item?.media && images.includes(extension) && (
-                        <Box sx={{ textAlign: "center" }}>
-                          <img
-                            src={item?.media}
-                            alt="image post"
-                            style={{ width: "100%", height: "100%" }}
-                          />
-                        </Box>
-                      )}
-
-                      {item?.media && videos.includes(extension) && (
-                        <Box sx={{ textAlign: "center" }}>
-                          {/* we haven't track */}
-                          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-                          <video
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                            }}
-                            controls
-                          >
-                            <source src={item?.media} id="video_here" />
-                            Your browser does not support HTML5 video.
-                          </video>
-                        </Box>
-                      )}
-
-                      {!item?.media &&
-                        !videos.includes(extension) &&
-                        !images.includes(extension) && (
-                          <Box sx={{ px: 2 }}>
-                            <Typography
-                              component="span"
-                              className="like-comm"
-                              variant="body2"
-                              sx={{ color: toggle ? "#fff" : "#000" }}
-                            >
-                              {item?.content}
-                            </Typography>
-                          </Box>
-                        )}
-                    </Box>
-                  );
-                })}
-                {isLoading && (
-                  <>
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                  </>
-                )}
-              </div> 
+              {
+                 posts?.length > 0 ? (
+                  <MediaList
+                    mediaList={posts}
+                    totalMedia={counts.all_posts}
+                    fetchMoreMedia={fetchImageHandler}
+                    loader={isLoading}
+                    userDetails={userDetails}
+                    getUserPostCounts={getUserPostCounts}
+                    postDeleted={postDeleted}
+                  />
+                ) : (
+                  <NothingToShow padding={14} />
+                )
+              }
             </TabPanel>
             <TabPanel value={value} index={1}>
               <div className="image-wrapper">
