@@ -575,23 +575,24 @@ console.log(posts,'posts==')
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                       >
-                        <span className="followers-value">0</span>
-                        <span className="followers-label">Post</span>
+                        {counts?.all_posts ?? 0} Post
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
-                      >
-                        <span className="followers-value">0</span>
-                        <span className="followers-label">Followers</span>
+                      
+                        onClick={() => navigate('/followers')} sx={{cursor:"pointer"}} >
+                        {(Array.isArray(follower) && follower.length) || 0} Followers
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
-                      >
-                        <span className="followers-value">0</span>
-                        <span className="followers-label">Following</span>
+                        onClick={() => navigate('/lounge/following')} sx={{cursor:"pointer"}} >
+                        {(Array.isArray(following) && following.length) || 0} Following
                       </Typography>
+
+
+
                     </div>
                   </div>
                 </Box>
