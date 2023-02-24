@@ -787,21 +787,7 @@ console.log(posts,'posts==')
                       >
                         Message
                       </Button> */}
-                      <Button
-                        variant="contained"
-                        size="medium"
-                        sx={{
-                          color: "#353535",
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          boxShadow: "none",
-                          width: "100%",
-                          ":hover": {
-                            backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          },
-                        }}
-                      >
-                        Subscribe
-                      </Button>
+                
                       <Button
                         variant="contained"
                         size="medium"
