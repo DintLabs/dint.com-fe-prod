@@ -211,7 +211,7 @@ const ProcessWithdrawal = () => {
                     onClick={(e) => onCompleteWithdraw(e)}
                   >
                     {" "}
-                    Continue
+                    Start withdrawal 
                   </Button>
                 </Stack>
               </Stack>
