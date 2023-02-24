@@ -102,17 +102,7 @@ const ProcessWithdrawal = () => {
         <Col md={7}>
           <form>
             <Stack>
-              <Stack mb={2}>
-                <ArrowBackIcon
-                  style={{
-                    color: toggle ? "white" : "#161C24",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    navigate("/en/fiat/withdraw/EUR");
-                  }}
-                />
-              </Stack>
+            
               <Typography
                 className="capitalize-text"
                 variant="subtitle1"
