@@ -212,24 +212,7 @@ const ProcessWithdrawal = () => {
                 </Stack>
               </Stack>
               <Stack mt={4} direction="row" sx={{ flexDirection: "row" }}>
-                <Stack style={{ width: "50%" }} px={1}>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    style={{
-                      color: "white",
-                      width: "100%",
-                      backgroundColor: "rgb(69, 79, 91)",
-                      boxShadow: "none",
-                    }}
-                    onClick={() => {
-                      navigate("/en/fiat/withdraw/EUR");
-                    }}
-                  >
-                    {" "}
-                    Previous
-                  </Button>
-                </Stack>
+             
                 <Stack style={{ width: "50%" }} px={1}>
                   <Button
                     variant="contained"
