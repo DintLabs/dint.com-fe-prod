@@ -14,6 +14,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { HOME_SIDE_MENU, setNewHomeSliceChanges } from 'frontend/redux/slices/newHome';
 import { RootState, useDispatch, useSelector } from 'frontend/redux/store';
 import MoreOptionsDrawer from 'frontend/layouts/MoreOptionsDrawer';
+import SearchDrawer from 'frontend/layouts/SearchDrawer';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
 import { useEffect, useState, useContext } from 'react';
@@ -21,9 +22,12 @@ import { getCreditCards } from '../../redux/actions/StripeAction';
 import { ThemeContext } from '../../contexts/ThemeContext'
 import blackLogo from "../../material/black.png";
 import whiteLogo from "../../material/white.png";
+import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import logo from '../../assets/img/logos/logo.png'
 import { Link } from "react-router-dom";
 import Badge from '@mui/material/Badge';
+import _axios from 'frontend/api/axios';
+import { CgLayoutGrid } from 'react-icons/cg';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -31,8 +35,10 @@ const Sidebar = () => {
   const theme = useTheme();
   const { selectedMenu } = useSelector((rootState: RootState) => rootState.newHome);
   const user = useSelector((state: RootState) => state.user.userData);
+  const [ notificationsLength , setNotificationsLength ] = useState();
 
   const [showMoreDrawer, setShowMoreDrawer] = useState(false);
+  const [showSearchDrawer, setShowSearchDrawer] = useState(false);
 
   
   const [clicked, setClicked] = useState(false);
@@ -56,9 +62,20 @@ const Sidebar = () => {
     }
   });
 
+
+  useEffect(()=>{
+    const getUnseenMessagesLength = async() => {
+      await _axios.get('/api/chat/get-unseen-message/').then((res:any)=>{
+        setNotificationsLength(res.data.data.length)
+       }).catch((err:any) =>{console.log(err)})
+    }
+    getUnseenMessagesLength()
+  },[])
+
   return (
     <>
       <MoreOptionsDrawer open={showMoreDrawer} onClose={() => setShowMoreDrawer(false)} />
+      <SearchDrawer open={showSearchDrawer} onClose={() => setShowSearchDrawer(false)} />
       <List sx={{
           borderRight: `1px solid ${theme.palette.grey[400]}`,
           width: '60px',
@@ -100,8 +117,8 @@ const Sidebar = () => {
             paddingBottom: '20px'
           }}
           onClick={() => {
-            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.SEARCH }));
-            navigate(`/lounge/${HOME_SIDE_MENU.SEARCH}`);
+            setShowSearchDrawer(true);
+            translate();
           }}
         >
           <ListItemAvatar>
@@ -146,7 +163,7 @@ const Sidebar = () => {
         >
           <ListItemAvatar>
             <NotificationsNoneOutlinedIcon />
-            <Badge badgeContent={4} color="secondary"/>
+            <Badge badgeContent={notificationsLength} color="secondary"/>
           </ListItemAvatar>
           {/* <ListItemText primary={<Typography variant="subtitle1">Notifications</Typography>} /> */}
         </ListItem>
@@ -163,7 +180,7 @@ const Sidebar = () => {
         >
           <ListItemAvatar>
             <EmailOutlinedIcon />
-            <Badge color="secondary" badgeContent={4}/>
+            <Badge color="secondary" badgeContent={notificationsLength}/>
           </ListItemAvatar>
           {/* <ListItemText primary={<Typography variant="subtitle1">Chat</Typography>} /> */}
         </ListItem>

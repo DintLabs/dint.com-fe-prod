@@ -46,7 +46,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useRouteLoaderData } from "react-router";
 import { toast } from "react-toastify";
 import TipPopUp from "frontend/components/tip/TipPopUp";
 import DiscordIcon from "../../assets/img/socialmedia/discord.png";
@@ -55,10 +55,11 @@ import TwitterIcon from "../../assets/img/socialmedia/twitter.png";
 import PostItem from "./PostItem";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import moment from "moment";
-import { useDispatch } from "frontend/redux/store";
+import { RootState, useDispatch } from "frontend/redux/store";
 import { messagesActions } from "frontend/redux/slices/messages";
 import { display } from "@mui/system";
 import { Flex } from "../../reusable/reusableStyled";
+import { useSelector } from "react-redux";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -125,7 +126,8 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
   const [subscriptions, setSubscriptions] = useState<PostInterface[]>([]);
   const [paginationPosts, setPaginationPosts] =
     useState<PaginationPostsInerface>(DEFAULT_POSTS_PAGINATION);
-
+  const { follower, following } = useSelector((state: RootState) => state.user);
+  
   const [paginationPhotoPosts, setPaginationPhotoPosts] =
     useState<PaginationPostsInerface>({
       ...DEFAULT_POSTS_PAGINATION,
@@ -531,21 +533,21 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                       >
-                        <span className="followers-value">200</span>
+                        <span className="followers-value">0</span>
                         <span className="followers-label">Post</span>
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                       >
-                        <span className="followers-value">200</span>
+                        <span className="followers-value">0</span>
                         <span className="followers-label">Followers</span>
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                       >
-                        <span className="followers-value">200</span>
+                        <span className="followers-value">0</span>
                         <span className="followers-label">Following</span>
                       </Typography>
                     </div>

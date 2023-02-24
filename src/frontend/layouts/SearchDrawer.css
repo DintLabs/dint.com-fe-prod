@@ -1,0 +1,63 @@
+.searchDrawer .MuiPaper-root {
+    background: #FFFFFF;
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+.searchDrawerDark .MuiPaper-root {
+    background: #000000;
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+.searchHeaderDark {
+    padding: 24px;
+    border-bottom: 1px solid #777;
+    background: #000;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+}
+.searchHeader {
+    padding: 24px;
+    border-bottom: 1px solid #777;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+}
+.searchHeader input {
+    border: none;
+    border-radius: 5px;
+}
+.searchHeader label {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 21px;
+    color: #000000;
+}
+.recentClass {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 18px;
+    color: #000000;
+}
+.recentClassDark {
+    font-weight: 500;
+    font-size: 15.05px;
+    line-height: 18px;
+    color: #FFFFFF;
+}
+.searchList {
+    padding: 26px;
+}
+.closeIcon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+
+}
+.closeIcon svg {
+    width: 16px;
+    height: 16px;
+    fill: #7A7A7A;
+}

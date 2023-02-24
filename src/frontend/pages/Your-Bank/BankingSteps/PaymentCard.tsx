@@ -20,6 +20,8 @@ import jcbcard from '../../../assets/img/cc/card_jcb.png';
 import ConfirmationModel from '../../../components/ConfirmationModel';
 import { deleteCreditCard, getCreditCards } from '../../../redux/actions/StripeAction';
 import { useDispatch } from '../../../redux/store';
+import _axios from 'frontend/api/axios';
+import { toast } from 'react-toastify';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -62,6 +64,7 @@ export default function PaymentCard() {
   const [cardData, setCardData] = useState<any | []>([]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [curentElemnt, setCurentElemnt] = React.useState<object | null>(null);
+  const [paymentsData , setPaymentsData] = React.useState()
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -79,6 +82,7 @@ export default function PaymentCard() {
 
   useEffect(() => {
     callDefaultAPI();
+    getPaymentsData();
   }, []);
 
   const callDefaultAPI = () => {
@@ -101,6 +105,19 @@ export default function PaymentCard() {
       callDefaultAPI()
     })
   }
+
+  const getPaymentsData = async () => {
+    await _axios
+      .get("api/user/get_payouts_by_token/")
+      .then((res: any) => {
+        if (res?.data?.data) setPaymentsData(res.data.data);
+      })
+      .catch((error: any) => {
+        console.log("error fetch bank details", error);
+        toast.error("Action Failed");
+      });
+  };
+  
 
   return (
     <Grid
@@ -246,12 +263,16 @@ export default function PaymentCard() {
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Stack direction="row" justifyContent="center" alignItems="center" >
-            <Stack alignItems="center">
+            {paymentsData ?
+            paymentsData.map((res:any)=>{
+              console.log(res)
+            })
+            :<Stack alignItems="center">
               <ShoppingBagOutlinedIcon sx={{fontSize:"80px"}}/>
               <Typography className="primary-text-color" style={{ fontSize: '14px' }} mt={1} pb={4} align="center">
                 No Payments done yet.
               </Typography>
-            </Stack>
+            </Stack>}
           </Stack>
         </TabPanel>
       </Box>

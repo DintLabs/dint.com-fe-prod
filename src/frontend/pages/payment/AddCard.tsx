@@ -379,14 +379,14 @@ const AddCard = () => {
                   rules={{ required: true }}
                   render={({ field: { onChange, value = "", ref } }: any) => (
                     <LocalizationProvider dateAdapter={AdapterMoment}>
-                      <DesktopDatePicker
-                        label="Expiry Date"
-                        views={["year", "month"]}
-                        inputFormat="MM/YY"
-                        value={value}
-                        inputRef={ref}
-                        onChange={(e: any) => onChange(e)}
-                        renderInput={(params) => (
+                        <DesktopDatePicker
+                          label="Expiry Date"
+                          views={['year']}
+                          inputFormat="MM/YYYY"
+                          value={value}
+                          inputRef={ref}
+                          onChange={(e: any) => onChange(e)}
+                          renderInput={(params) => (
                           <TextField
                             {...params}
                             variant="filled"

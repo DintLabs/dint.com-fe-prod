@@ -15,12 +15,14 @@ import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useContext } from "react";
 import { HOME_SIDE_MENU } from "frontend/redux/slices/newHome";
 import {  useParams } from 'react-router';
+import _axios from "frontend/api/axios";
 import PostAddIcon from '@mui/icons-material/PostAdd';
 
 export default function MobileTopHeader({ userName, avatar}:{userName:string, avatar: string}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
+  const [ notificationsLength , setNotificationsLength ] = React.useState();
   const navigate = useNavigate();
 
   const { toggle } = useContext(ThemeContext);
@@ -36,6 +38,14 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
   const routeurl = useParams()
 
   const menuId = "primary-search-account-menu";
+  React.useEffect(()=>{
+    const getUnseenMessagesLength = async() => {
+      await _axios.get('/api/chat/get-unseen-message/').then((res:any)=>{
+        setNotificationsLength(res.data.data.length)
+       }).catch((err:any) =>{console.log(err)})
+    }
+    getUnseenMessagesLength()
+  },[])
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -87,6 +97,7 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
               sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px' }}
             >
               <NotificationsOutlinedIcon />
+              <Badge badgeContent={notificationsLength} color="secondary"/>
             </IconButton>
             <IconButton
               size="large"
@@ -94,9 +105,10 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
               sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px' }}
               onClick={() => navigate(`/lounge/${HOME_SIDE_MENU.MESSAGES}`)}
             >
-              <Badge color="error">
+              {/* <Badge color="error"> */}
                 <MailOutlinedIcon />
-              </Badge>
+                <Badge badgeContent={notificationsLength} color="secondary"/>
+              {/* </Badge> */}
             </IconButton>
             <IconButton
               size="large"

@@ -2334,6 +2334,15 @@ span.select2-dropdown.select2-dropdown--below {
 .mobile-nav ul {
   width: 100%;
 }
+.mobile-nav li {
+  padding: 0;
+  min-width: 0;
+}
+
+.mobile-nav svg {
+  height: 20px;
+  width: 20px;
+}
 
 @media screen and (max-width: 899px) {
   .mobile-nav {
