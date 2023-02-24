@@ -151,7 +151,7 @@ export default function BuyToken() {
               paddingTop:"70px"
             }}
           >
-            Buy Dint Token
+           Buy Dint Tokens for $1 each
           </h1>
           <Typography
             className="primary-text-color"

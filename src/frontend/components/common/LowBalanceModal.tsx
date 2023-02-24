@@ -52,7 +52,7 @@ const LowBalanceModal = (props: LowbBalancePayload) => {
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={() => navigate(`/buy-dint-token`)}>
-          Buy Dint Tokens
+        Buy Dint Tokens for $1 each
         </Button>
       </DialogActions>
     </StyledDailog>

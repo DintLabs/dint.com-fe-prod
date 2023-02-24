@@ -137,7 +137,7 @@ const ProcessWithdrawal = () => {
                         margin: "0px",
                       }}
                     >
-                      Transaction Requirement{" "}
+                      Transaction requirement{" "}
                       <InfoIcon style={{ fontSize: "16px" }} />
                     </FormHelperText>
                   </Stack>
