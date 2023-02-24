@@ -46,7 +46,7 @@ const LowBalanceModal = (props: LowbBalancePayload) => {
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          In order to process this transaction you must purchase Dint Tokens
+        To process this transaction, you need to add funds to your wallet
         </DialogContentText>
       </DialogContent>
       <DialogActions>
