@@ -138,18 +138,9 @@ const ProcessWithdrawal = () => {
                         margin: "0px",
                       }}
                     >
-                      Amount
+                      Amount to withdraw 
                     </FormHelperText>
-                    <FormHelperText
-                      id="filled-weight-helper-text"
-                      style={{
-                        color: toggle ? "white" : "#161C24",
-                        margin: "0px",
-                      }}
-                    >
-                      Transaction Requirement{" "}
-                      <InfoIcon style={{ fontSize: "16px" }} />
-                    </FormHelperText>
+                 
                   </Stack>
                   <FilledInput
                     id="filled-adornment-weight"
@@ -196,79 +187,19 @@ const ProcessWithdrawal = () => {
               </Stack>
               <Stack mt={4} className="d-flex">
                 <Stack>
-                  <Typography
-                    variant="subtitle4"
-                    style={{
-                      fontSize: "12px",
-                      color: toggle ? "white" : "#161C24",
-                    }}
-                  >
-                    You recive:
-                  </Typography>
-                  <Typography
-                    className="capitalize-text"
-                    variant="subtitle1"
-                    style={{
-                      fontSize: "26px",
-                      color: toggle ? "white" : "#161C24",
-                    }}
-                  >
-                    0.00 EUR
-                  </Typography>
+                 
+               
                 </Stack>
                 <Stack sx={{ flexDirection: "row" }} mt={3} mb={1}>
-                  <Typography
-                    variant="subtitle4"
-                    style={{
-                      width: "200px",
-                      fontSize: "14px",
-                      color: toggle ? "white" : "#161C24",
-                    }}
-                  >
-                    Card Number:
-                  </Typography>
-                  <Typography
-                    variant="subtitle5"
-                    style={{ color: toggle ? "white" : "#161C24" }}
-                  >
-                    0.00 EUR
-                  </Typography>
+                 
+               
                 </Stack>
                 <Stack sx={{ flexDirection: "row" }} mb={1}>
-                  <Typography
-                    variant="subtitle4"
-                    style={{
-                      width: "200px",
-                      fontSize: "14px",
-                      color: toggle ? "white" : "#161C24",
-                    }}
-                  >
-                    Transaction Mathod:
-                  </Typography>
-                  <Typography
-                    variant="subtitle5"
-                    style={{ color: toggle ? "white" : "#161C24" }}
-                  >
-                    Bank Card (Visa)
-                  </Typography>
+                 
+                
                 </Stack>
                 <Stack sx={{ flexDirection: "row" }} mb={1}>
-                  <Typography
-                    variant="subtitle4"
-                    style={{
-                      width: "200px",
-                      fontSize: "14px",
-                      color: toggle ? "white" : "#161C24",
-                    }}
-                  >
-                    Transaction Fee:
-                  </Typography>
-                  <Typography
-                    variant="subtitle5"
-                    style={{ color: toggle ? "white" : "#161C24" }}
-                  >
-                    0.00 EUR
-                  </Typography>
+                 
                 </Stack>
               </Stack>
               <Stack mt={4} direction="row" sx={{ flexDirection: "row" }}>
@@ -309,9 +240,7 @@ const ProcessWithdrawal = () => {
                     color: toggle ? "white" : "#161C24",
                   }}
                 >
-                  The withdraw to card service is powered by Bifinity UAB
-                  (Company Registration Number: 305595206, registered office
-                  address: Didžioji g. 18, Vilnius, Lithuania).
+                
                 </Typography>
               </Stack>
             </Stack>
@@ -323,31 +252,20 @@ const ProcessWithdrawal = () => {
             variant="subtitle1"
             style={{ color: toggle ? "white" : "#161C24" }}
           >
-            Notice
+        
           </Typography>
           <Stack
             mt={3}
             sx={{ color: toggle ? "white" : "#161C24", fontSize: "12px" }}
           >
             <Stack>
-              <li>
-                Please note that Binance only accepts 1st party transfers with
-                accounts in your name (3rd party transfers are not allowed) and
-                will not be held responsible for any potential losses/rejection
-                of funds associated with 3rd party transfers.
-              </li>
+            
             </Stack>
             <Stack mt={3}>
-              <li>
-                Withdrawals via French banks SOCIETE GENERALE S.A./LE CREDIT
-                LYONNAIS/BNP PARIBAS may experience transaction declines. If you
-                experience such issues, please try with another card.
-              </li>
+        
             </Stack>
             <Stack mt={3}>
-              We do not support withdrawing EUR to Binance Visa card. You can
-              transfer EUR from your Spot Wallet to Funding Wallet and it will
-              be immediately be available for use.
+          
             </Stack>
           </Stack>
         </Col>

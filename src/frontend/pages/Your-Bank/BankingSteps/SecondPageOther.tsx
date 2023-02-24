@@ -70,7 +70,7 @@ const SecondPageOther = (props:StepPayload) => {
             <Stack gap={2} mt={2}>
               <TextField
                 style={{ flex: 1 }}
-                label="Full Name of the account holder"
+                label="Full name of the account holder"
                 variant="filled"
                 sx={{
                   '& .MuiFilledInput-input': {
@@ -124,7 +124,7 @@ const SecondPageOther = (props:StepPayload) => {
             <Stack gap={2} mt={2}>
               <TextField
                 style={{ flex: 1 }}
-                label="Full Name of the account holder"
+                label="Full name of the account holder"
                 variant="filled"
                 sx={{
                   '& .MuiFilledInput-input': {

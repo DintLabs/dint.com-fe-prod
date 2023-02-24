@@ -268,7 +268,7 @@ console.log("Close friends", closeFriend);
                 variant="caption"
                 sx={{ fontWeight: "bold", fontSize: "13px" }}
               >
-                CUSTOM ORDER
+                CUSTOM LISTS
               </Typography>
 
               <SortIcon />

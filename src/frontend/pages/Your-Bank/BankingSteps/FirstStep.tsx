@@ -29,8 +29,8 @@ const FirstStep = (props:FirstStepPayload) => {
   return (
     <form onSubmit={handleSubmit(submitValues)}>
       <Stack p={2}>
-        <Typography className="secondary-text-color capitalize-text" variant="subtitle1">
-          COUNTRY OF YOUR LEAGEL RESIDENCE
+        <Typography className="secondary-text-color" variant="subtitle1">
+        Country of your legal residence
         </Typography>
         <Typography className="primary-text-color" style={{ fontSize: '12px' }} mt={2}>
           Please note that you will not be able to change it later.

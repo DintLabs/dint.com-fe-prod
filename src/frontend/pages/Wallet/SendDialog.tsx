@@ -136,10 +136,10 @@ export default function SendDialog(props: any) {
                       formState.errors?.recipient_address?.type === 'required'
                     }
                     inputRef={ref}
-                    label="Recipient Address"
+                    label="Recipient address"
                     value={value}
                     variant="filled"
-                    placeholder="Recipient Address"
+                    placeholder="Recipient address"
                     inputProps={{
                       style: {
                         color: 'white',

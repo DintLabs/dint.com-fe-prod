@@ -135,7 +135,7 @@ export default function SecondPageUsa(props:StepPayload) {
                       <TextField
                     error={formState.errors?.first_name?.type === 'required'}
                         style={{ flex: 1 }}
-                        label="Full Name of the account holder"
+                        label="Full name of the account holder"
                         inputRef={ref}
                         variant="filled"
                         value={value}
@@ -260,7 +260,7 @@ export default function SecondPageUsa(props:StepPayload) {
                     render={({ field: { onChange, value = "", ref } }: any) => (
                       <TextField
                         style={{ flex: 1 }}
-                        label="Full Name of the account holder"
+                        label="Full name of the account holder"
                         variant="filled"
                         sx={{
                 '& .MuiFilledInput-input': {
@@ -362,7 +362,7 @@ export default function SecondPageUsa(props:StepPayload) {
                   />
                 </Stack>
           <Typography className="secondary-text-color capitalize-text my-2 " variant="subtitle1">
-                  Recipiend Address
+                  Recipient Address
                 </Typography>
                 <Stack gap={2} mt={2}>
                   <FormControl variant="filled" style={{ flex: 1 }}>
@@ -444,7 +444,7 @@ export default function SecondPageUsa(props:StepPayload) {
                         }: any) => (
                           <TextField
                             style={{ flex: 1 }}
-                            label="Recipient Address"
+                            label="Recipient address"
                             variant="filled"
                             sx={{
                     '& .MuiFilledInput-input': {
@@ -516,7 +516,7 @@ export default function SecondPageUsa(props:StepPayload) {
                     render={({ field: { onChange, value = "", ref } }: any) => (
                       <TextField
                         style={{ flex: 1 }}
-                        label="Full Name of the account holder"
+                        label="Full name of the account holder"
                         variant="filled"
                         sx={{
                 '& .MuiFilledInput-input': {
@@ -586,7 +586,7 @@ export default function SecondPageUsa(props:StepPayload) {
                   />
                 </Stack>
           <Typography className="secondary-text-color capitalize-text my-2 mt-5" variant="subtitle1">
-                  Recipiend Address
+                  Recipient Address
                 </Typography>
                 <Stack gap={2} mt={2}>
                   <FormControl variant="filled" style={{ flex: 1 }}>
@@ -678,7 +678,7 @@ export default function SecondPageUsa(props:StepPayload) {
                         }: any) => (
                           <TextField
                             style={{ flex: 1 }}
-                            label="Recipient Address"
+                            label="Recipient address"
                             variant="filled"
                             sx={{
                     '& .MuiFilledInput-input': {

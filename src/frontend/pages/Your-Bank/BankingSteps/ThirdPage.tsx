@@ -23,11 +23,11 @@ const ThirdPage = (props: FirstStepPayload) => {
   return (
     <>
       <Stack p={2}>
-        <Typography className="secondary-text-color capitalize-text mb-2" variant="subtitle1">
-          YOUR ACCOUNT IS BEING APPROVED
+        <Typography className="secondary-text-color" variant="subtitle1">
+      Your bank account was added successfully 
         </Typography>
         <Typography className="primary-text-color" style={{ fontSize: '12px' }}>
-          Please.allow 24-48 hours for review
+          Please allow 24-48 hours for review
         </Typography>
       </Stack>
       <Stack p={2} direction="row" justifyContent="end">
@@ -45,13 +45,13 @@ const ThirdPage = (props: FirstStepPayload) => {
           onClick={onWithdraw}
           variant="contained"
           type="submit"
-        > Withdraw Amount
+        > Withdraw 
         </SubmitButton>
         <SubmitButton
           // onClick={props.nextStep}
           variant="contained"
           type="submit"
-        > FAST AUTOMETED VARIFICATION
+        > Verification
         </SubmitButton>
       </Stack>
     </>

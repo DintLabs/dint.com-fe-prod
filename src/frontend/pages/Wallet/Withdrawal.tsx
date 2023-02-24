@@ -271,7 +271,7 @@ const Withdrawal = () => {
                       color: toggle ? "white" : "#161C24",
                     }}
                   >
-                    Bank Transfer (SEPA)
+                 
                   </Typography>
                   <Typography
                     className="capitalize-text"
@@ -281,7 +281,7 @@ const Withdrawal = () => {
                       color: toggle ? "white" : "#161C24",
                     }}
                   >
-                    1 EUR
+                  
                   </Typography>
                 </Stack>
               </Stack>
@@ -303,9 +303,9 @@ const Withdrawal = () => {
                     color: toggle ? "white" : "#161C24",
                   }}
                 >
-                  This service is powered by Bifinity UAB. Your information is
+                 Your information is
                   used for identity verification only, and will be kept secure
-                  by Bifinity UAB.
+                  by Dint.
                 </Typography>
               </Stack>
             </Stack>
@@ -337,7 +337,7 @@ const Withdrawal = () => {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  SEPA might take about 1-4 business days.
+                A withdrawal might take up to 7 business days.
                 </Typography>
               </AccordionDetails>
             </Accordion>

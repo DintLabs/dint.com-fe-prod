@@ -1070,7 +1070,7 @@ console.log(posts,'posts==')
                   iconPosition="start"
                   label={
                     <div className="profile-tab-text">
-                      Subscriptions ({counts?.subscriptions ?? 0})
+                      Subscription ({counts?.subscriptions ?? 0})
                     </div>
                   }
                 />
