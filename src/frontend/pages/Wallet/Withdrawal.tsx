@@ -1,175 +1,118 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useContext, useState } from "react";
 import { Col, Row } from "react-bootstrap";
+
 import {
+  Button,
   FormControl,
-  FormControlLabel,
-  InputLabel,
-  MenuItem,
-  Radio,
-  Select,
   Stack,
   Typography,
-  Button,
-  AccordionSummary,
-  AccordionDetails,
-  Accordion,
+  InputAdornment,
+  FilledInput,
+  FormHelperText,
   Box,
-  useTheme,
+  CircularProgress,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { currencyData } from "./currency";
+import { useNavigate } from "react-router";
+import InfoIcon from "@mui/icons-material/Info";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import { RootState } from "frontend/redux/store";
+import { useSelector } from "react-redux";
 import _axios from "frontend/api/axios";
 import { toast } from "react-toastify";
-import { FormHelperText } from "@mui/material";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`payment-tabpanel-${index}`}
-      aria-labelledby={`payment-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-const Withdrawal = () => {
-  const param = useParams();
+const ProcessWithdrawal = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
-
-  const cur = param.currency;
   const { toggle } = useContext(ThemeContext);
-  const [bankSelect, setBankSelect] = useState();
-  const [bankData, setBankData] = useState<any | []>([]);
-  const { handleSubmit, formState, control } =
-    useForm({
-      mode: "onChange",
-    });
 
-  useEffect(() => {
+  const { balance } = useSelector((rootState: RootState) => rootState.wallet);
+  const userData = useSelector((state: RootState) => state?.user?.userData);
+
+  const [amount, setAmount] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+
+  const onCompleteWithdraw = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!parseInt(amount)) {
+      return toast.error("Please enter valid amount!");
+    }
+    const data = {
+      user_id: userData?.id,
+      amount: parseInt(amount),
+    };
     _axios
-      .get("api/user/get_bank_accounts/")
+      .post(`/api/user/withdraw-dint/`, data)
       .then((res: any) => {
-        res?.data?.data?.length
-          ? (setBankData(res.data.data),
-            setBankSelect(
-              res?.data?.data.find((data: any) => data.primary === true)
-            ))
-          : navigate("/your-bank");
+        setLoading(true);
+        if (res?.data && res.data.code === 400) {
+          setLoading(false);
+          toast.error("Action Failed");
+        } else {
+          _axios
+            .post(`/api/user/request_payouts/`, {
+              amount: parseInt(amount),
+            })
+            .then((res: any) => {
+              if (res?.data && res.data.code === 400) {
+                setLoading(false);
+                toast.error("Action Failed");
+              } else {
+                setLoading(false);
+                toast.success("Account Updated successfully.");
+                return navigate("/dint-wallet");
+                
+              }
+            })
+            .catch((error: any) => {
+              toast.error("Action Failed");
+              console.error("error in update bank", error);
+            });
+        }
       })
       .catch((error: any) => {
-        console.log("error fetch bank details", error);
         toast.error("Action Failed");
+        console.error("error in update bank", error);
       });
-  }, []);
+  };
 
-  const submitValues = () => {
-    navigate("/processWithdraw");
-  };
-  const handleChange = (e: any) => {
-    setBankSelect(e.target.value);
-  };
   return (
-    <Stack mt={5} px={2}>
-      <Row>
-        <Col md={8}>
-          <form onSubmit={handleSubmit(submitValues)}>
+    <Stack mt={4} px={2}>
+      {loading === true ? (
+        <>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#00000029",
+              zIndex: "999",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        </>
+      ) : (
+        <Row>
+        <Col md={7}>
+          <form>
             <Stack>
-              <TabPanel value={0} index={0}>
-                <FormControl style={{ padding: "0" }} fullWidth>
-                  {bankSelect && (
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Age"
-                      onChange={(e) => handleChange(e)}
-                      value={bankSelect}
-                      style={{ background: "#DFE3E8", borderRadius: "5px" }}
-                    >
-                      {[
-                        ...bankData.filter((d: any) => d.primary === true),
-                        ...bankData.filter((d: any) => d.primary === false),
-                      ]?.map((bank: string | any, index: number) => {
-                        return (
-                          <MenuItem
-                            style={{ paddingTop: "0px", paddingBottom: "0" }}
-                            value={bank}
-                          >
-                            <Stack
-                              className="card"
-                              key={index}
-                              sx={{
-                                background: "#0b1419",
-                                borderRadius: "10px",
-                                width: "100%",
-                              }}
-                              p={1}
-                              m={1}
-                            >
-                              <Stack
-                                key={index}
-                                sx={{ background: "#0b1419" }}
-                                p={2}
-                                mb={2}
-                              >
-                                <Stack
-                                  direction="row"
-                                  gap={1}
-                                  sx={{
-                                    pr: 1,
-                                    justifyContent: "space-between",
-                                  }}
-                                >
-                                  <Typography
-                                    className="primary-text-color"
-                                    style={{ fontSize: "16px" }}
-                                  >
-                                    Account Number:*** *** ****{" "}
-                                    {bank ? bank.accountNumber.substr(-4) : ""}
-                                  </Typography>
-                                </Stack>
-                                <Stack
-                                  direction="row"
-                                  gap={2}
-                                  mt={1}
-                                  sx={{ justifyContent: "space-between" }}
-                                >
-                                  <Stack>
-                                    <Typography
-                                      className="primary-text-color"
-                                      style={{ fontSize: "14px" }}
-                                    >
-                                      {bank.primary ? "Primary" : "Not Primary"}
-                                    </Typography>
-                                  </Stack>
-                                </Stack>
-                              </Stack>
-                            </Stack>
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  )}
-                </FormControl>
-              </TabPanel>
+              <Stack mb={2}>
+                <ArrowBackIcon
+                  style={{
+                    color: toggle ? "white" : "#161C24",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    navigate("/en/fiat/withdraw/EUR");
+                  }}
+                />
+              </Stack>
               <Typography
                 className="capitalize-text"
                 variant="subtitle1"
@@ -177,135 +120,136 @@ const Withdrawal = () => {
                   color: toggle ? "white" : "#161C24",
                 }}
               >
-                1. Select currency
+                 Enter Amount
               </Typography>
               <Stack mt={3}>
-                <FormControl variant="filled" style={{ flex: 1 }}>
-                  <InputLabel id="demo-simple-select-filled-label">
-                    Currency
-                  </InputLabel>
-                  <Controller
-                    control={control}
-                    name="currency"
-                    rules={{ required: true }}
-                    render={({ field: { onChange, value = '', ref } }: any) => (
-                      <Select
-                        inputRef={ref}
-                        className="mb-3"
-                        value={value}
-                        onChange={(e: any) => onChange(e.target.value)}
-                        style={{
-                          backgroundColor: toggle
-                            ? "rgba(255, 255, 255, 0.13)"
-                            : "#DFE3E8",
-                          color: toggle ? "white" : "#161C24",
-                        }}
-                      >
-                        {currencyData.map((currency: string, index: number) => (
-                          <MenuItem
+                <FormControl variant="filled">
+                  <Stack
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    <FormHelperText
+                      id="filled-weight-helper-text"
+                      style={{
+                        color: toggle ? "white" : "#161C24",
+                        margin: "0px",
+                      }}
+                    >
+                      Amount to withdraw 
+                    </FormHelperText>
+                    <FormHelperText
+                      id="filled-weight-helper-text"
+                      style={{
+                        color: toggle ? "white" : "#161C24",
+                        margin: "0px",
+                      }}
+                    >
+                      Transaction Requirement{" "}
+                      <InfoIcon style={{ fontSize: "16px" }} />
+                    </FormHelperText>
+                  </Stack>
+                  <FilledInput
+                    id="filled-adornment-weight"
+                    // label="Enter Amount"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <Stack sx={{ flexDirection: "row" }}>
+                          <Typography
+                            variant="subtitle4"
                             style={{
-                              backgroundColor: toggle
-                                ? "rgba(255, 255, 255, 0.13)"
-                                : "#DFE3E8",
+                              marginRight: "5px",
                               color: toggle ? "white" : "#161C24",
                             }}
-                            key={index}
-                            value={currency}
                           >
-                            {currency}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                  {formState.errors?.currency?.type === "required" && (
-                    <FormHelperText error={true}>
-                      Currency is required
-                    </FormHelperText>
-                  )}
-                  {/* <Select
-                    label="Currency"
-                    variant="filled"
-                    style={{
+                            Balance:
+                          </Typography>
+                          <Typography
+                            variant="subtitle5"
+                            style={{
+                              color: toggle ? "white" : "#161C24",
+                            }}
+                          >
+                            {`$ ${balance}` || "0.00 EUR"}
+                          </Typography>
+                        </Stack>
+                      </InputAdornment>
+                    }
+                    value={amount}
+                    required
+                    type="number"
+                    onChange={(e) => setAmount(e.target.value)}
+                    aria-describedby="filled-weight-helper-text"
+                    inputProps={{
+                      "aria-label": "weight",
+                    }}
+                    sx={{
                       backgroundColor: toggle
-                        ? "rgba(255, 255, 255, 0.13)"
+                        ? "rgba(255, 255, 255, 0.09)"
                         : "#DFE3E8",
                       color: toggle ? "white" : "#161C24",
                     }}
-                  >
-                    {currencyData.map((currency: string, index: number) => (
-                      <MenuItem
-                        style={{
-                          backgroundColor: toggle
-                            ? "rgba(255, 255, 255, 0.13)"
-                            : "#DFE3E8",
-                          color: toggle ? "white" : "#161C24",
-                        }}
-                        key={index}
-                        value={currency}
-                      >
-                        {currency}
-                      </MenuItem>
-                    ))}
-                  </Select> */}
+                  />
                 </FormControl>
               </Stack>
-              <Stack
-                mt={4}
-                sx={{ flexDirection: "row", alignItems: "flex-start" }}
-              >
+              <Stack mt={4} className="d-flex">
                 <Stack>
-                  {/* <FormControlLabel
-                value="1"
-                control={<Radio />}
-                sx={{ color: 'white',width:'unset' }}
-               label=''/>
-               */}
-                </Stack>
-                <Stack>
-                  <Typography
-                    className="capitalize-text"
-                    variant="subtitle4"
-                    style={{
-                      fontSize: "16px",
-                      color: toggle ? "white" : "#161C24",
-                    }}
-                  >
                  
-                  </Typography>
-                  <Typography
-                    className="capitalize-text"
-                    variant="subtitle5"
-                    style={{
-                      fontSize: "14px",
-                      color: toggle ? "white" : "#161C24",
-                    }}
-                  >
-                  
-                  </Typography>
+               
+                </Stack>
+                <Stack sx={{ flexDirection: "row" }} mt={3} mb={1}>
+                 
+               
+                </Stack>
+                <Stack sx={{ flexDirection: "row" }} mb={1}>
+                 
+                
+                </Stack>
+                <Stack sx={{ flexDirection: "row" }} mb={1}>
+                 
                 </Stack>
               </Stack>
-              <Stack mt={4} justifyContent="start" direction="row">
-                <Button
-                  variant="contained"
-                  type="submit"
-                  sx={{ color: "white", width: "100%" }}
-                >
-                  {" "}
-                  Submit
-                </Button>
+              <Stack mt={4} direction="row" sx={{ flexDirection: "row" }}>
+                <Stack style={{ width: "50%" }} px={1}>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    style={{
+                      color: "white",
+                      width: "100%",
+                      backgroundColor: "rgb(69, 79, 91)",
+                      boxShadow: "none",
+                    }}
+                    onClick={() => {
+                      navigate("/en/fiat/withdraw/EUR");
+                    }}
+                  >
+                    {" "}
+                    Previous
+                  </Button>
+                </Stack>
+                <Stack style={{ width: "50%" }} px={1}>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    style={{ color: "white", width: "100%" }}
+                    onClick={(e) => onCompleteWithdraw(e)}
+                  >
+                    {" "}
+                    Continue
+                  </Button>
+                </Stack>
               </Stack>
               <Stack mt={2}>
                 <Typography
-                  variant="subtitle6"
                   style={{
                     fontSize: "12px",
                     color: toggle ? "white" : "#161C24",
                   }}
                 >
-                 Your information is
-                  used for identity verification only, and will be kept secure
-                  by Dint.
+                
                 </Typography>
               </Stack>
             </Stack>
@@ -315,37 +259,29 @@ const Withdrawal = () => {
           <Typography
             className="capitalize-text"
             variant="subtitle1"
-            style={{
-              color: toggle ? "white" : "#161C24",
-            }}
+            style={{ color: toggle ? "white" : "#161C24" }}
           >
-            FAQ
+        
           </Typography>
-          <Stack mt={3}>
-            <Accordion
-              sx={{
-                backgroundColor: toggle ? "#212B36" : "white",
-                color: toggle ? "white" : "#161C24",
-              }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography>How long does the withdrawal take?</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                A withdrawal might take up to 7 business days.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
+          <Stack
+            mt={3}
+            sx={{ color: toggle ? "white" : "#161C24", fontSize: "12px" }}
+          >
+            <Stack>
+            
+            </Stack>
+            <Stack mt={3}>
+        
+            </Stack>
+            <Stack mt={3}>
+          
+            </Stack>
           </Stack>
         </Col>
       </Row>
+      )}
     </Stack>
   );
 };
 
-export default Withdrawal;
+export default ProcessWithdrawal;
