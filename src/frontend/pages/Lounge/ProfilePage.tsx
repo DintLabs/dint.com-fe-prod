@@ -581,13 +581,13 @@ console.log(posts,'posts==')
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                       
-                        onClick={() => navigate('/followers')} sx={{cursor:"pointer"}} >
+                        >
                         {(Array.isArray(follower) && follower.length) || 0} Followers
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
-                        onClick={() => navigate('/lounge/following')} sx={{cursor:"pointer"}} >
+                        >
                         {(Array.isArray(following) && following.length) || 0} Following
                       </Typography>
 
@@ -820,10 +820,10 @@ console.log(posts,'posts==')
                 <Typography color={toggle ? "#fff" : "#000"} >
                 {counts?.all_posts ?? 0} Post
                 </Typography>
-                <Typography color={toggle ? "#fff" : "#000"} onClick={() => navigate('/followers')} sx={{cursor:"pointer"}} >
+                <Typography color={toggle ? "#fff" : "#000"}  >
                 {(Array.isArray(follower) && follower.length) || 0} Followers
                 </Typography>
-                <Typography color={toggle ? "#fff" : "#000"} onClick={() => navigate('/lounge/following')} sx={{cursor:"pointer"}} >
+                <Typography color={toggle ? "#fff" : "#000"}  >
                 {(Array.isArray(following) && following.length) || 0} Following
                 </Typography>
               </div>
