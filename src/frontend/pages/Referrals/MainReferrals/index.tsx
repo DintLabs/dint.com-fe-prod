@@ -43,9 +43,9 @@ const MainReferrals = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Join Dint with my referral code at sign up ${refCode}, or just scan the QR code`,
+          title: `Join Dint with my referral code at sign up ${refCode}, or just scan my QR code`,
           files: [
-            new File([await (await fetch(qrCodeUrl)).blob()], 'qr-code.png', {
+            new File([await (await fetch(qrCodeUrl)).blob()], 'qr-referral-code.png', {
               type: 'image/png'
             })
           ]
