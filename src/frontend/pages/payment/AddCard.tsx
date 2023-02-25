@@ -352,7 +352,7 @@ const AddCard = () => {
                         formState.errors?.card_number?.type === "maxLength"
                       }
                       style={{ flex: 1 }}
-                      label="Card Number"
+                      label="Card number"
                       inputRef={ref}
                       variant="filled"
                       value={value}
@@ -380,7 +380,7 @@ const AddCard = () => {
                   render={({ field: { onChange, value = "", ref } }: any) => (
                     <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DesktopDatePicker
-                          label="Expiry Date"
+                          label="Expiry date"
                           views={['year']}
                           inputFormat="MM/YYYY"
                           value={value}

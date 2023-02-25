@@ -81,7 +81,7 @@ export default function BuyToken() {
 
   const onSubmit = async (data: any) => {
     if(!cardSelect){
-      return toast.warning('Please add a card to do a payment')
+      return toast.warning('Please add a card to buy tokens and fund your wallet')
     }
     try {
       setInProgress(true);
@@ -324,7 +324,7 @@ export default function BuyToken() {
                         )
                       )}
                     </Select>
-                  ) : <Typography sx={{color : toggle ? "white" : ""}}>You have not added any Card !<Link to={'/payment/add'} style={{color:"brown !important" , fontWeight:"bold"}}> Add a card </Link></Typography>}
+                  ) : <Typography sx={{color : toggle ? "white" : ""}}>You have not added any card yet. <Link to={'/payment/add'} style={{color:"brown !important" , fontWeight:"bold"}}> Add a card </Link></Typography>}
                 </FormControl>
               </TabPanel>
 
