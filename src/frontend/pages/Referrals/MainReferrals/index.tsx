@@ -37,12 +37,15 @@ const MainReferrals = () => {
   };
 
   const shareQrCode = async () => {
+    const canvas = document.getElementById('qr-code-canvas');
+    const qrCodeUrl = canvas.toDataURL('image/png');
+  
     if (navigator.share) {
       try {
         await navigator.share({
           title: 'My Referral QR Code',
           files: [
-            new File([document.getElementById('qr-code-canvas').toDataURL()], 'qr-code.png', {
+            new File([await (await fetch(qrCodeUrl)).blob()], 'qr-code.png', {
               type: 'image/png'
             })
           ]
