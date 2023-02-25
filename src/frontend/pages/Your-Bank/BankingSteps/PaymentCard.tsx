@@ -151,7 +151,7 @@ export default function PaymentCard() {
             <IoMdArrowRoundBack className="primary-text-color cursor-pointer" onClick={() => navigate(-1)}/>
           </IconButton>
           <Typography className="primary-text-color capitalize-text" variant="subtitle1">
-            PAYMENT CARD
+            PAYMENT CARDS
           </Typography>
         </Stack>
         <Stack
