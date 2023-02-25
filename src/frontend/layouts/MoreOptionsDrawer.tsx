@@ -375,7 +375,7 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
               <ListItemIcon>
                 <Payment />
               </ListItemIcon>
-              <ListItemText primary="Your Cards" secondary="(to add funds)" />
+              <ListItemText primary="Your Cards" secondary="(to get coins)" />
             </ListItemButton>
           </ListItem>
 
@@ -388,7 +388,7 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
               <ListItemIcon>
                 <CurrencyExchangeIcon />
               </ListItemIcon>
-              <ListItemText primary="Buy Token" secondary="(to play)" />
+              <ListItemText primary="Get Coins" secondary="(to play)" />
             </ListItemButton>
           </ListItem>
 
@@ -401,7 +401,7 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
               <ListItemIcon>
                 <AccountBalance />
               </ListItemIcon>
-              <ListItemText primary="Your bank" secondary="(to withdrawal)" />
+              <ListItemText primary="Your Bank" secondary="(to withdrawal)" />
             </ListItemButton>
           </ListItem>
 
@@ -429,7 +429,7 @@ onClick={() => navigate('/dint-wallet')}
               <ListItemIcon>
                 <ContactSupportIcon />
               </ListItemIcon>
-              <ListItemText primary="Help and support" />
+              <ListItemText primary="Help and Support" />
             </ListItemButton>
           </ListItem>
 

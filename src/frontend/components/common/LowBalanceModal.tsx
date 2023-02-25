@@ -42,17 +42,17 @@ const LowBalanceModal = (props: LowbBalancePayload) => {
           color="error"
           sx={{ fontSize: "22px", marginRight: "7px" }}
         />
-        Insufficient Balance
+        Insufficient Funds
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-        To process this transaction, you need to add funds to your wallet
+        To process this transaction, you need to add coins to your wallet
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={() => navigate(`/buy-dint-token`)}>
-        Add funds
+        Get Coins
         </Button>
       </DialogActions>
     </StyledDailog>

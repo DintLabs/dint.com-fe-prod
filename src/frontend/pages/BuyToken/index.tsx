@@ -151,7 +151,7 @@ export default function BuyToken() {
               paddingTop:"70px"
             }}
           >
-          Each token equals $1
+          Each coin equals $1
           </h1>
           <Typography
             className="primary-text-color"
@@ -376,7 +376,7 @@ export default function BuyToken() {
                 }}
                 type="submit"
               >
-                Start payment
+                Complete Order
               </button>
             </Stack>
           </form>

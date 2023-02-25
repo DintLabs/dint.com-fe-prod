@@ -227,7 +227,7 @@ const SubscriptionModal = (props: SubscriptionModalProps) => {
       }
     } else {
       toast.update(toastId, {
-        render: `Insufficient Balance!`,
+        render: `Insufficient Funds!`,
         type: "error",
         isLoading: false,
       });

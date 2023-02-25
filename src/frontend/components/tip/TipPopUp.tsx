@@ -119,7 +119,7 @@ const TipPopUp: FC<TipPopUpProps> = ({
         }
       }else{
           toast.update(toastId, {
-            render:`Insufficient Balance!`,
+            render:`Insufficient Funds!`,
             type: "error",
             isLoading: false,
           });

@@ -179,7 +179,7 @@ const HelpSupport = () => {
 
                                 </Typography>
                                 <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>2.</span> Buy tokens by clicking on the 'Buy Tokens' button and adding them to your wallet.
+                                    <span style={{ fontWeight: 'bold' }}>2.</span> Get coins by clicking on the 'Buy Coins' button and adding them to your wallet.
 
                                 </Typography>
                                 <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
