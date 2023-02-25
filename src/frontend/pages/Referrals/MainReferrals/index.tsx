@@ -41,8 +41,11 @@ const MainReferrals = () => {
       try {
         await navigator.share({
           title: 'My Referral QR Code',
-          text: 'Scan this QR code to sign up for Dint',
-          url: qrCodeUrl
+          files: [
+            new File([document.getElementById('qr-code-canvas').toDataURL()], 'qr-code.png', {
+              type: 'image/png'
+            })
+          ]
         });
       } catch (err) {
         console.error('Error sharing:', err);
@@ -51,13 +54,6 @@ const MainReferrals = () => {
       console.warn('Web Share API not supported');
     }
   };
-
-  const downloadQrCode = () => {
-    const canvas = document.getElementById('qr-code-canvas');
-    canvas.toBlob(function (blob) {
-      saveAs(blob, 'referral_qr_code.png');
-    });
-  }
 
   const getRefUrl = async () => {
     try {
