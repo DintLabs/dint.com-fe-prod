@@ -101,7 +101,7 @@ const MainReferrals = () => {
         sx={{
           color: '#919eab',
           '&:hover': {
-            color: toggle ? '#fff' : '#6f42c1'
+            color: toggle ? '#fff' : '#fff'
           }
         }}
       >
@@ -120,7 +120,7 @@ const MainReferrals = () => {
         sx={{
           color: '#919eab',
           '&:hover': {
-            color: toggle ? '#fff' : '#6f42c1'
+            color: toggle ? '#fff' : '#fff'
           }
         }}
       >
@@ -139,7 +139,12 @@ const MainReferrals = () => {
 
     {/* Other code here */}
 {/* QR Code */}
-<GridWithBoxConteiner>
+<GridWithBoxConteiner sx={{
+  color: '#919eab',
+  '&:hover': {
+    color: toggle ? '#fff' : '#fff'
+  }
+}}>
   <Typography variant="subtitle2">REFERRAL QR CODE</Typography>
   <QRCode value={refLink} size={200} fgColor={qrCodeColor} id="qr-code-canvas" />
   <div>
@@ -176,7 +181,7 @@ const MainReferrals = () => {
             color: '#919eab',
             '&:hover': {
               '& .referrals': {
-                color: toggle ? '#fff' : '#6f42c1'
+                color: toggle ? '#fff' : '#fff'
               }
             }
           }}
