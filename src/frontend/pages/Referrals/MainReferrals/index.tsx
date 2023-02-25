@@ -150,7 +150,7 @@ const MainReferrals = () => {
   </div>
   {isMobile() ? (
     <React.Fragment>
-      <FlexRow color="#00aeff" onClick={() => {navigator.share({title: 'Referral Link', url: refLink})}}>
+      <FlexRow color="#00aeff" onClick={shareQrCode}>
         SHARE
       </FlexRow>
     </React.Fragment>
