@@ -375,7 +375,7 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
               <ListItemIcon>
                 <Payment />
               </ListItemIcon>
-              <ListItemText primary="Your Cards" secondary="(to get coins)" />
+              <ListItemText primary="Your Card" secondary="(to get coins)" />
             </ListItemButton>
           </ListItem>
 
