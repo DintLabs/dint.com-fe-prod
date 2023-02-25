@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import React from 'react';
-import { Box, Card, CircularProgress, Grid, IconButton, Stack } from '@mui/material';
+import { Box, Card, CircularProgress, Grid, IconButton, Stack,
+  Typography, } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { SelectedMediaType } from './MediaList';
@@ -34,21 +35,27 @@ const CustomInfiniteScrollForMedia = ({
           hasMore={dataList.length !== totalData}
           scrollableTarget="media-infinite-scroll-container"
         >
-          <Grid container direction="row" spacing={0.5} className="page-media-container">
-            {dataList.map((data: any) => (
-              <>
-                {data.type === 'image' ? (
+          <Grid
+            container
+            direction="row"
+            spacing={0.5}
+            className="page-media-container"
+          >
+            {dataList.map((data: any, i: number) => (
+              <React.Fragment key={i}>
+                {data.type === "image" ? (
                   <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                     <Card
                       className="image-cards card-container"
                       onClick={() =>
                         onClickHandler({
-                          id: data.id,
+                          id: data.id,  
                           media: data?.media,
                           type: data?.type,
                           userId: data?.user.id,
-                          likePost: data?.like_post,
-                          is_bookmarked: data?.is_bookmarked
+                          like_post: data?.like_post,
+                          is_bookmarked: data?.is_bookmarked,
+                          description: data?.content,
                         })
                       }
                     >
@@ -59,7 +66,7 @@ const CustomInfiniteScrollForMedia = ({
                       />
                     </Card>
                   </Grid>
-                ) : data.type === 'video' ? (
+                ) : data.type === "video" ? (
                   <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                     <Card
                       className="video-cards card-container"
@@ -69,8 +76,9 @@ const CustomInfiniteScrollForMedia = ({
                           media: data?.media,
                           type: data?.type,
                           userId: data?.user.id,
-                          likePost: data?.like_post,
-                          is_bookmarked: data?.is_bookmarked
+                          like_post: data?.like_post,
+                          is_bookmarked: data?.is_bookmarked,
+                          description: data?.content,
                         })
                       }
                     >
@@ -86,11 +94,43 @@ const CustomInfiniteScrollForMedia = ({
                     </Card>
                   </Grid>
                 ) : (
-                  <Stack justifyContent="center" alignItems="center" p={8}>
-                    Type Formate of Media Doesn't Match
-                  </Stack>
+                  <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                    <Card
+                      className="image-cards card-container"
+                      onClick={() =>
+                        onClickHandler({
+                          id: data.id,
+                          media: null,
+                          type: data?.type,
+                          userId: data?.user.id,
+                          like_post: data?.like_post,
+                          is_bookmarked: data?.is_bookmarked,
+                          description: data?.content,
+                        })
+                      }
+                    >
+                      <Box
+                        className="full-image-container"
+                        height={285}
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        sx={{ p: 2 }}
+                        // sx={{ backgroundImage: `url(${data.media})` }}
+                      >
+                        <Typography
+                          component="span"
+                          className="like-comm"
+                          variant="body2"
+                          sx={{ color: "#fff" }}
+                        >
+                          {data.content}
+                        </Typography>
+                      </Box>
+                    </Card>
+                  </Grid>
                 )}
-              </>
+              </React.Fragment>
             ))}
             {loader
               ? Array.from({ length: 3 }, (e, i) => (

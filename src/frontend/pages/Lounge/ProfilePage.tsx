@@ -158,7 +158,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
   
     const [fetchImagePostPayload, setFetchImagePostPayload] = useState<PostPaginationPayload>({
       page: null,
-      post_type: 'image',
+      post_type: "",
       start: 0,
       length: 5
     });
@@ -198,10 +198,10 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
           pagination = paginationVideoPosts;
         }
         if (userDetails && pagination && !isLoading && pagination.hasNext) {
-          fetchPosts(userDetails.id, {
-            ...pagination,
-            start: pagination.start + 5,
-          });
+          // fetchPosts(userDetails.id, {
+          //   ...pagination,
+          //   start: pagination.start + 5,
+          // });
         }
       }
     }
@@ -261,7 +261,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
 
     return false;
   }, [userDetails]);
-console.log(posts,'posts==')
+
   const fetchPosts = async (
     userId: number,
     pagination: PaginationPostsInerface
@@ -1095,129 +1095,59 @@ console.log(posts,'posts==')
               }
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <div className="image-wrapper">
-                {textPosts.map((item, i) => {
-                  url = new URL(item?.media ?? "https://google.com");
-
-                  splits = url.pathname.split(".");
-                  extension = splits?.length ? splits[splits.length - 1] : "";
-
-                  return (
-                    <Box
-                      style={{
-                        border: `1px solid ${theme.palette.grey[400]}`,
-                        borderRadius: "10px",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {!item?.media &&
-                        !videos.includes(extension) &&
-                        !images.includes(extension) && (
-                          <Box sx={{ px: 2 }}>
-                            <Typography
-                              component="span"
-                              className="like-comm"
-                              variant="body2"
-                              sx={{ color: toggle ? "#fff" : "#000" }}
-                            >
-                              {item?.content}
-                            </Typography>
-                          </Box>
-                        )}
-                    </Box>
-                  );
-                })}
-                {isLoading && (
-                  <>
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                  </>
-                )}
-              </div>
+            {
+                 textPosts?.length > 0 ? (
+                  <MediaList
+                    mediaList={textPosts}
+                    totalMedia={counts.text_posts}
+                    fetchMoreMedia={fetchImageHandler}
+                    loader={isLoading}
+                    userDetails={userDetails}
+                    getUserPostCounts={getUserPostCounts}
+                    postDeleted={postDeleted}
+                  />
+                ) : (
+                  <NothingToShow padding={14} />
+                )
+              }
+             
             </TabPanel>
             <TabPanel value={value} index={2}>
-              <div className="image-wrapper">
-                {photoPosts.map((item, i) => {
-                  url = new URL(item?.media ?? "https://google.com");
-                  splits = url.pathname.split(".");
-                  extension = splits?.length ? splits[splits.length - 1] : "";
-                  return (
-                    <Box
-                      style={{
-                        border: `1px solid ${theme.palette.grey[400]}`,
-                        borderRadius: "10px",
-                        overflow: "hidden",
-                        cursor:"pointer"
-                      }}
-                    >
-                      {item?.media && images.includes(extension) && (
-                        <Box sx={{ textAlign: "center" }}>
-                          <img
-                            src={item?.media}
-                            alt="post"
-                            style={{ width: "100%", height: "100%" }}
-                          />
-                        </Box>
-                      )}
-                    </Box>
-                  );
-                })}
-                {isLoading && (
-                  <>
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                  </>
-                )}
-              </div>
+            {
+                 photoPosts?.length > 0 ? (
+                  <MediaList
+                    mediaList={photoPosts}
+                    totalMedia={counts.image_posts}
+                    fetchMoreMedia={fetchImageHandler}
+                    loader={isLoading}
+                    userDetails={userDetails}
+                    getUserPostCounts={getUserPostCounts}
+                    postDeleted={postDeleted}
+                  />
+                ) : (
+                  <NothingToShow padding={14} />
+                )
+              }
+             
             </TabPanel>
 
             <TabPanel value={value} index={3}>
-              <div className="image-wrapper">
-                {videoPosts.map((item, i) => {
-                  url = new URL(item?.media ?? "https://google.com");
-
-                  splits = url.pathname.split(".");
-                  extension = splits?.length ? splits[splits.length - 1] : "";
-
-                  return (
-                    <Box
-                      style={{
-                        border: `1px solid ${theme.palette.grey[400]}`,
-                        borderRadius: "10px",
-                        overflow: "hidden",
-                        cursor:"pointer"
-                      }}
-                    >
-                      {item?.media && videos.includes(extension) && (
-                        <Box sx={{ textAlign: "center" }}>
-                          {/* we haven't track */}
-                          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-                          <video
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                            }}
-                            controls
-                          >
-                            <source src={item?.media} id="video_here" />
-                            Your browser does not support HTML5 video.
-                          </video>
-                        </Box>
-                      )}
-                    </Box>
-                  );
-                })}
-                {isLoading && (
-                  <>
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                  </>
-                )}
-              </div>
+            {
+                 videoPosts?.length > 0 ? (
+                  <MediaList
+                    mediaList={videoPosts}
+                    totalMedia={counts.video_posts}
+                    fetchMoreMedia={fetchImageHandler}
+                    loader={isLoading}
+                    userDetails={userDetails}
+                    getUserPostCounts={getUserPostCounts}
+                    postDeleted={postDeleted}
+                  />
+                ) : (
+                  <NothingToShow padding={14} />
+                )
+              }
+            
             </TabPanel>
             <TabPanel value={value} index={4}>
               <div className="image-wrapper">

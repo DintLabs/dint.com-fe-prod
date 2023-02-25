@@ -19,11 +19,13 @@ export type SelectedMediaType = {
   media: string | null;
   type: string | null;
   userId: number | null;
-  likePost: [] | null;
-  is_bookmarked: Boolean
+  like_post: [] | null;
+  is_bookmarked: Boolean;
+  description: string;
 };
 
 const MediaList = (props: MediaListProps) => {
+  console.log("mediaList---",props.mediaList);
   const [isMediaViewModalOpen, setIsMediaViewModalOpen] =
     useState<boolean>(false);
   const [selectedMedia, setSelectedMedia] = useState<SelectedMediaType>({
@@ -31,13 +33,22 @@ const MediaList = (props: MediaListProps) => {
     media: null,
     type: null,
     userId: null,
-    likePost: null ,
-    is_bookmarked:false
+    like_post: null,
+    is_bookmarked: false,
+    description: "",
   });
 
   const handleModalClose = () => {
     setIsMediaViewModalOpen(false);
-    setSelectedMedia({ id: null, media: null, type: null, userId:null, likePost: null, is_bookmarked:false });
+    setSelectedMedia({
+      id: null,
+      media: null,
+      type: null,
+      userId: null,
+      like_post: null,
+      is_bookmarked: false,
+      description: "",
+    });
   };
   const handleMediaView = (media: SelectedMediaType) => {
     setSelectedMedia(media);
@@ -57,14 +68,17 @@ const MediaList = (props: MediaListProps) => {
     }
     if (currentMediaIndex >= 0) {
       const nextMedia = props?.mediaList[currentMediaIndex + 1];
-      setSelectedMedia({
-        id: nextMedia?.id,
-        media: nextMedia?.media,
-        type: nextMedia?.type,
-        userId: nextMedia?.user.id,
-        likePost: nextMedia?.like_post,
-        is_bookmarked : nextMedia?.is_bookmarked
-      });
+      console.log("nextMedia--", nextMedia);
+      nextMedia &&
+        setSelectedMedia({
+          id: nextMedia?.id,
+          media: nextMedia.media,
+          type: nextMedia?.type,
+          userId: nextMedia?.user.id,
+          like_post: nextMedia?.like_post,
+          is_bookmarked: nextMedia?.is_bookmarked,
+          description: nextMedia?.content,
+        });
     }
   };
 
@@ -77,11 +91,12 @@ const MediaList = (props: MediaListProps) => {
       const nextMedia = props?.mediaList[currentMediaIndex - 1];
       setSelectedMedia({
         id: nextMedia?.id,
-        media: nextMedia?.media,
+        media: nextMedia.media,
         type: nextMedia?.type,
         userId: nextMedia?.user.id,
-        likePost: nextMedia?.like_post,
-        is_bookmarked : nextMedia?.is_bookmarked
+        like_post: nextMedia?.like_post,
+        is_bookmarked: nextMedia?.is_bookmarked,
+        description: nextMedia?.content,
       });
     }
   };
@@ -97,31 +112,38 @@ const MediaList = (props: MediaListProps) => {
         isModalOpen={isMediaViewModalOpen}
         selectedMedia={selectedMedia}
       />
-      <ViewMediaModal
-        selectedMediaId={selectedMedia?.id}
-        isFirstPost={
-          props?.mediaList?.findIndex((media: PostInterface) => media.id === selectedMedia.id) === 0
-        }
-        isLastPost={
-          props?.mediaList?.findIndex((media: PostInterface) => media.id === selectedMedia.id) ===
-          props?.totalMedia - 1
-        }
-        getUserPostCounts={props?.getUserPostCounts}
-        renderNextMedia={viewNextMedia}
-        renderPrevMedia={viewPrevMedia}
-        open={isMediaViewModalOpen}
-        handleClose={handleModalClose}
-        source={selectedMedia.media}
-        type={selectedMedia?.type}
-        loading={props?.loader}
-        userDetails={props?.userDetails}
-        canDeletePost={true}
-        onDelete={props?.postDeleted}
-        postUser={selectedMedia?.userId}
-        likePost={selectedMedia?.likePost}
-        is_bookmarked={selectedMedia?.is_bookmarked}
-        selectedMedia={selectedMedia}
-      />
+      {isMediaViewModalOpen && (
+        <ViewMediaModal
+          selectedMediaId={selectedMedia?.id}
+          isFirstPost={
+            props?.mediaList?.findIndex(
+              (media: PostInterface) => media.id === selectedMedia.id
+            ) === 0
+          }
+          isLastPost={
+            props?.mediaList?.findIndex(
+              (media: PostInterface) => media.id === selectedMedia.id
+            ) ===
+            props?.totalMedia - 1
+          }
+          getUserPostCounts={props?.getUserPostCounts}
+          renderNextMedia={viewNextMedia}
+          renderPrevMedia={viewPrevMedia}
+          open={isMediaViewModalOpen}
+          handleClose={handleModalClose}
+          source={selectedMedia.media}
+          type={selectedMedia?.type}
+          loading={props?.loader}
+          userDetails={props?.userDetails}
+          canDeletePost={true}
+          onDelete={props?.postDeleted}
+          postUser={selectedMedia?.userId}
+          like_post={selectedMedia?.like_post}
+          is_bookmarked={selectedMedia?.is_bookmarked}
+          selectedMedia={selectedMedia}
+          description={selectedMedia?.description}
+        />
+      )}
     </>
   );
 };

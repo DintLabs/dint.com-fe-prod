@@ -53,6 +53,7 @@ type ViewMediaModalProps = {
   is_bookmarked: Boolean;
   selectedMedia: any;
   like_post: [];
+  description: string;
 };
 
 const ViewMediaModal = (props: ViewMediaModalProps) => {
@@ -62,12 +63,14 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
   const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false);
   const { toggle } = useContext(ThemeContext);
   const [canHeDeletePost, setCanHeDeletePost] = useState(false);
-  const alreadyBookmarkVal = props?.is_bookmarked ?? false;
-  const [alreadyBookmark, setAlreadyBookmark] = useState(alreadyBookmarkVal);
+  const [alreadyBookmark, setAlreadyBookmark] = useState(props?.is_bookmarked);
+
+  useEffect(() => {
+    setAlreadyBookmark(props?.is_bookmarked);
+  }, [props?.selectedMediaId, props?.is_bookmarked, props?.like_post]);
 
   useEffect(() => {
     if (props?.userDetails?.id) {
-      console.log("hello");
       if (
         props?.like_post?.find((item: any) =>
           typeof item.user !== "number"
@@ -88,14 +91,14 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       toast.error("Can't find User");
       return;
     }
-
+    
+    console.log("post----",post)
     if (alreadyLike) {
       const unlikeResp: UnlikePostInterface = await dispatch(
         unlikeForPost(props?.userDetails?.id, props?.selectedMediaId)
       );
-      console.log("unlikeResp----", unlikeResp);
+      console.log("unlikeResp---",unlikeResp)
       setAlreadyLike(false);
-
       setPost((prevState: any) => ({
         ...prevState,
         unlike_post: [...(prevState?.unlike_post || []), unlikeResp],
@@ -104,7 +107,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       const likeResp: LikePostInterface = await dispatch(
         addLikeForPost(props?.userDetails?.id, props?.selectedMediaId)
       );
-      console.log("likeResp----",likeResp)
+      console.log("likeResp=====",likeResp)
       setAlreadyLike(true);
       setPost((prevState: any) => ({
         ...prevState,
@@ -129,6 +132,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
     if (props?.onDelete) {
       props?.onDelete(props.selectedMediaId);
     }
+    props.handleClose();
     toast.success("Post Deleted Successful!");
   };
 
@@ -137,7 +141,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
     setOpenPopUpTip(true);
   };
 
-  const handleClose = () => {
+  const handleCloseTip = () => {
     setOpenPopUpTip(false);
   };
 
@@ -151,10 +155,11 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       toast.error("Can't find User");
       return;
     }
-
+    // console.log("props.selectedMediaId--", props.selectedMediaId);
     const bookmarkResp: BookmarkPostInterface = await dispatch(
       addBookmarkForPost(props.selectedMediaId)
     );
+    // console.log("bookmarkResp---", bookmarkResp);
     if (bookmarkResp) setAlreadyBookmark(true);
   };
 
@@ -164,9 +169,12 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       return;
     }
 
-    await dispatch(deleteBookmarkForPost(props.selectedMediaId));
-
-    setAlreadyBookmark(false);
+    // console.log("props.selectedMediaId--", props.selectedMediaId);
+    const deleteBookmark = await dispatch(
+      deleteBookmarkForPost(props.selectedMediaId)
+    );
+    // console.log("deleteBookmark----", deleteBookmark);
+    deleteBookmark.code === 200 && setAlreadyBookmark(false);
   };
 
   return (
@@ -211,7 +219,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
         </Stack>
       ) : props?.type === "image" ? (
         <img src={props?.source} alt="Not Displayed" />
-      ) : (
+      ) : props?.type === "video" ? (
         <video
           key={props?.selectedMediaId}
           className="video-dialog"
@@ -221,6 +229,17 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
           <source src={props?.source} id="video_here" />
           Your browser does not support HTML5 video.
         </video>
+      ) : (
+        <Typography
+          component="span"
+          className="like-comm"
+          variant="body2"
+          align="center"
+          sx={{ color: "#fff" }}
+          padding="50px"
+        >
+          {props?.description}
+        </Typography>
       )}
       <Box
         sx={{ p: 2 }}
@@ -276,7 +295,6 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
           Likes
         </p>
       </Box>
-      {/* {image && (images.includes(extension)  || videos.includes(extension)) && ( */}
       <Box sx={{ px: 2 }}>
         <Typography
           component="span"
@@ -284,13 +302,12 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
           variant="body2"
           sx={{ color: toggle ? "#fff" : "#000" }}
         >
-          {/* {description} */}
+          {props.type !== "text" && props?.description}
         </Typography>
       </Box>
-      {/* )} */}
       <TipPopUp
         user={post?.user}
-        onClose={handleClose}
+        onClose={handleCloseTip}
         setOpenPopUpTip={setOpenPopUpTip}
         onOpen={handleClickOpen}
         openPopUpTip={openPopUpTip}
