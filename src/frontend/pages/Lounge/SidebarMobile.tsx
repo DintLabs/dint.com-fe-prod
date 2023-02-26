@@ -32,6 +32,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
     px: widthScreen > 375 ? '' : '0px'
   };
   const ICON_SIZE = 24;
+  const ADD_ICON_SIZE = 60;
 
   return (
     <>
@@ -90,7 +91,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <AddIcon sx={{height: ICON_SIZE, width: ICON_SIZE }} />
+            <AddIcon sx={{height: ADD_ICON_SIZE, width: ADD_ICON_SIZE }} />
           </ListItemAvatar>
         </ListItem>
 
