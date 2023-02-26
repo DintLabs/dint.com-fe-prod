@@ -84,7 +84,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Add  sx={{ height :"40px" , width : "40px"}}/>
+            <Add  sx={{ height :"70px" , width : "70px"}}/>
           </ListItemAvatar>
         </ListItem>
 
