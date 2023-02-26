@@ -75,12 +75,12 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         <ListItem
           sx={{
             cursor: 'pointer',
-            color: HOME_SIDE_MENU.ADD === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
+            color: HOME_SIDE_MENU.ADD_POST === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
             ...styleListItem
           }}
           onClick={() => {
-            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.ADD}));
-            navigate(`/add-post`);
+            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.ADD_POST}));
+            navigate(`/lounge/${HOME_SIDE_MENU.ADD_POST}`);
           }}
         >
     <ListItemAvatar sx={{ 
