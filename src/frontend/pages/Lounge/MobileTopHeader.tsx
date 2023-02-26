@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
@@ -9,14 +9,14 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/img/logos/logo.png";
 import ControlPointOutlinedIcon from "@mui/icons-material/ControlPointOutlined";
-import { Avatar, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import storyImage from "frontend/assets/img/web3/story-1.png";
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useContext } from "react";
 import { HOME_SIDE_MENU } from "frontend/redux/slices/newHome";
 import {  useParams } from 'react-router';
 import _axios from "frontend/api/axios";
-
+import { AccountBalanceWallet } from "@mui/icons-material";
 
 export default function MobileTopHeader({ userName, avatar}:{userName:string, avatar: string}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -84,8 +84,7 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
                 navigate(`/dint-wallet/${HOME_SIDE_MENU.WALLET}`);
               }}
             >
-              <NotificationsOutlinedIcon />
-              <Badge badgeContent={notificationsLength} color="secondary"/>
+             <AccountBalanceWallet />
             </IconButton>
        
 

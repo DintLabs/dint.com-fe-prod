@@ -75,16 +75,23 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         <ListItem
           sx={{
             cursor: 'pointer',
-            color: HOME_SIDE_MENU.WALLET === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
+            color: HOME_SIDE_MENU.ADD === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
             ...styleListItem
           }}
           onClick={() => {
-            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.WALLET }));
-            navigate(`/lounge/wallet`);
+            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.ADD}));
+            navigate(`/add-post`);
           }}
         >
-          <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Add  sx={{ height :"70px" , width : "70px"}}/>
+    <ListItemAvatar sx={{ 
+  display: 'flex', 
+  justifyContent: 'center', 
+  alignItems: 'center',
+  height: 100,
+  width: 100
+}}>
+
+          <AddIcon sx={{ fontSize: '3rem' }} />
           </ListItemAvatar>
         </ListItem>
 
