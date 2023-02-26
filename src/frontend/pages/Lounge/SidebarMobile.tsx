@@ -8,12 +8,11 @@ import { HOME_SIDE_MENU, setNewHomeSliceChanges } from 'frontend/redux/slices/ne
 import { dispatch, RootState, useSelector } from 'frontend/redux/store';
 import { useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
-
 import { useNavigate } from 'react-router';
-
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useContext } from "react";
 import { Add } from '@mui/icons-material';
+
 interface Props {
   widthScreen: number;
 }
@@ -33,6 +32,11 @@ const SidebarMobile = ({ widthScreen }: Props) => {
     px: widthScreen > 375 ? '' : '0px'
   };
 
+  const iconStyle = {
+    height: "40px",
+    width: "40px"
+  };
+
   return (
     <>
       <MoreOptionsDrawer
@@ -40,7 +44,13 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         onClose={() => setShowMoreDrawer(false)}
         openFrom="right"
       />
-      <List sx={{ display: 'flex', padding :"3% 0%" , backgroundColor: toggle ? "#000" : "#fff",  }}>
+      <List sx={{ 
+        display: 'flex', 
+        padding: '3% 0%', 
+        backgroundColor: toggle ? "#000" : "#fff", 
+        height: '100vh',
+        width: '100px'
+      }}>
         <ListItem
           sx={{
             color: HOME_SIDE_MENU.HOME === selectedMenu ? (toggle ? "#fff" : '#000') : 'text.secondary',
@@ -53,7 +63,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <OtherHousesIcon sx={{ height :"30px" , width : "30px"}}/>
+            <OtherHousesIcon sx={{ height: '40px', width: '40px' }} />
           </ListItemAvatar>
         </ListItem>
         <ListItem
@@ -68,7 +78,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <BsSearch style={{ height :"20px" , width : "20px"}} />
+            <BsSearch style={{ height: '30px', width: '30px' }} />
           </ListItemAvatar>
         </ListItem>
 
@@ -83,16 +93,10 @@ const SidebarMobile = ({ widthScreen }: Props) => {
             navigate(`/lounge/${HOME_SIDE_MENU.ADD_POST}`);
           }}
         >
- <ListItemAvatar sx={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center',
-    height: 100,
-    width: 100
-  }}>
-    <AddIcon />
-  </ListItemAvatar>
-</ListItem>
+          <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <AddIcon sx={{ height: '40px', width: '40px' }} />
+          </ListItemAvatar>
+        </ListItem>
 
         <ListItem
           sx={{
@@ -106,10 +110,9 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <TextsmsRoundedIcon sx={{ height :"35px" , width : "35px"}}/>
+            <TextsmsRoundedIcon sx={{ height: '40px', width: '40px' }} />
           </ListItemAvatar>
         </ListItem>
-
       
 
         <ListItem
