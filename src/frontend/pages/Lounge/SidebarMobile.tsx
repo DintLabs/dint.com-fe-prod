@@ -32,10 +32,6 @@ const SidebarMobile = ({ widthScreen }: Props) => {
     px: widthScreen > 375 ? '' : '0px'
   };
 
-  const iconStyle = {
-    height: "40px",
-    width: "40px"
-  };
 
   return (
     <>
@@ -48,8 +44,8 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         display: 'flex', 
         padding: '3% 0%', 
         backgroundColor: toggle ? "#000" : "#fff", 
-        height: '100vh',
-        width: '100px'
+        height: '30vh',
+        width: '30px'
       }}>
         <ListItem
           sx={{
@@ -63,7 +59,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <OtherHousesIcon sx={{ height: '40px', width: '40px' }} />
+            <OtherHousesIcon sx={{ height: '60px', width: '60px' }} />
           </ListItemAvatar>
         </ListItem>
         <ListItem
