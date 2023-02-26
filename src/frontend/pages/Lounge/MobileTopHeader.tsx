@@ -81,7 +81,7 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
               aria-label="show 17 new notifications"
               sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px', cursor:"pointer" }}
               onClick={() => {
-                navigate(`/dint-wallet/${HOME_SIDE_MENU.WALLET}`);
+                navigate(`/dint-wallet/`);
               }}
             >
              <AccountBalanceWallet />
