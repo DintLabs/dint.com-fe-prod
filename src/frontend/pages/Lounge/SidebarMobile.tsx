@@ -83,17 +83,16 @@ const SidebarMobile = ({ widthScreen }: Props) => {
             navigate(`/lounge/${HOME_SIDE_MENU.ADD_POST}`);
           }}
         >
-    <ListItemAvatar sx={{ 
-  display: 'flex', 
-  justifyContent: 'center', 
-  alignItems: 'center',
-  height: 100,
-  width: 100
-}}>
-
-          <AddIcon sx={{ fontSize: '10rem' }} />
-          </ListItemAvatar>
-        </ListItem>
+ <ListItemAvatar sx={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    height: 100,
+    width: 100
+  }}>
+    <AddIcon />
+  </ListItemAvatar>
+</ListItem>
 
         <ListItem
           sx={{
