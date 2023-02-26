@@ -76,6 +76,23 @@ const CreateStory = ({ widthScreen, createStory }: Props) => {
     }
   };
 
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    setFile(file);
+    if (getFileType(file) === 'image') {
+      setImage(URL.createObjectURL(file));
+      setVideo('');
+    } else if (getFileType(file) === 'video') {
+      setVideo(URL.createObjectURL(file));
+      setImage('');
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
   function getFileType(file: File) {
     if (file.type.match('image.*')) return 'image';
 
@@ -88,10 +105,13 @@ const CreateStory = ({ widthScreen, createStory }: Props) => {
     return 'other';
   }
 
+
   return (
     <>
       <Box className='custom-modal'
-        sx={{ height: widthScreen >= 900 ? '90vh' : 'full', overflowY: 'scroll', maxWidth: '720px', margin: 'auto' }}
+        sx={{ height: widthScreen >= 900 ? '75vh' : 'full', overflowY: 'scroll', maxWidth: '720px', margin: 'auto' }}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
       >
         <Box sx={{ borderRadius: 3 }} className={`shadow compose-background p-3 m-3 ${toggle ? 'bg-dark' : 'bg-white'}`}>
           <Box className='d-flex justify-content-center align-items-center'>
@@ -114,6 +134,7 @@ const CreateStory = ({ widthScreen, createStory }: Props) => {
               </video>
             </div>
           )}
+
 
           <Stack className="d-flex flex-column justify-content-between h-100 flex-1 align-items-center flex-row center-pos">
             {video.length > 0 || image.length > 0 ? null :
