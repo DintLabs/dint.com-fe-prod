@@ -31,7 +31,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
     alignItems: 'center',
     px: widthScreen > 375 ? '' : '0px'
   };
-
+  const ICON_SIZE = 40;
 
   return (
     <>
@@ -59,7 +59,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <OtherHousesIcon sx={{ height: '60px', width: '60px' }} />
+            <OtherHousesIcon sx={{height: ICON_SIZE, width: ICON_SIZE }} />
           </ListItemAvatar>
         </ListItem>
         <ListItem
@@ -74,7 +74,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <BsSearch style={{ height: '30px', width: '30px' }} />
+            <BsSearch style={{ height: ICON_SIZE, width: ICON_SIZE }} />
           </ListItemAvatar>
         </ListItem>
 
@@ -90,7 +90,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <AddIcon sx={{ height: '40px', width: '40px' }} />
+            <AddIcon sx={{height: ICON_SIZE, width: ICON_SIZE }} />
           </ListItemAvatar>
         </ListItem>
 
@@ -106,7 +106,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <TextsmsRoundedIcon sx={{ height: '40px', width: '40px' }} />
+            <TextsmsRoundedIcon sx={{height: ICON_SIZE, width: ICON_SIZE }} />
           </ListItemAvatar>
         </ListItem>
       
@@ -123,7 +123,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <AccountCircleRoundedIcon sx={{ height :"35px" , width : "35px"}}/>
+            <AccountCircleRoundedIcon sx={{ height: ICON_SIZE, width: ICON_SIZE}}/>
           </ListItemAvatar>
         </ListItem>
       </List>
