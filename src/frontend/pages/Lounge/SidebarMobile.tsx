@@ -44,7 +44,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         display: 'flex', 
         padding: '3% 0%', 
         backgroundColor: toggle ? "#000" : "#fff", 
-        height: '30vh',
+        height: '10vh',
         width: '30px'
       }}>
         <ListItem
