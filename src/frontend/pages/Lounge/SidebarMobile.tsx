@@ -32,7 +32,6 @@ const SidebarMobile = ({ widthScreen }: Props) => {
     px: widthScreen > 375 ? '' : '0px'
   };
   const ICON_SIZE = 40;
-
   return (
     <>
       <MoreOptionsDrawer
@@ -74,7 +73,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <BsSearch style={{ height: ICON_SIZE, width: ICON_SIZE }} />
+            <BsSearch style={{ height: '28px', width: '28px' }} />
           </ListItemAvatar>
         </ListItem>
 
