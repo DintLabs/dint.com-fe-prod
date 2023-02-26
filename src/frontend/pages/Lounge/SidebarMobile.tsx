@@ -11,7 +11,6 @@ import { BsSearch } from 'react-icons/bs';
 import { useNavigate } from 'react-router';
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useContext } from "react";
-import { Add } from '@mui/icons-material';
 
 interface Props {
   widthScreen: number;
@@ -31,9 +30,8 @@ const SidebarMobile = ({ widthScreen }: Props) => {
     alignItems: 'center',
     px: widthScreen > 375 ? '' : '0px'
   };
-  const ICON_SIZE = 24;
-  const ADD_ICON_SIZE = 60;
-
+  const ICON_SIZE = 40;
+  const ADD_ICON_SIZE = 50;
   return (
     <>
       <MoreOptionsDrawer
@@ -75,7 +73,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <BsSearch style={{ height: ICON_SIZE, width: ICON_SIZE }} />
+            <BsSearch size={ICON_SIZE} />
           </ListItemAvatar>
         </ListItem>
 
