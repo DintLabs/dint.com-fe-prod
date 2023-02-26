@@ -91,7 +91,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
   width: 100
 }}>
 
-          <AddIcon sx={{ fontSize: '3rem' }} />
+          <AddIcon sx={{ fontSize: '10rem' }} />
           </ListItemAvatar>
         </ListItem>
 
