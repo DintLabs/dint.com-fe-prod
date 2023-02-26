@@ -2,7 +2,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import OtherHousesIcon from '@mui/icons-material/OtherHouses';
 import TextsmsRoundedIcon from '@mui/icons-material/TextsmsRounded';
 import { List, ListItem, ListItemAvatar } from '@mui/material';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import AddIcon from '@mui/icons-material/Add';
 import MoreOptionsDrawer from 'frontend/layouts/MoreOptionsDrawer';
 import { HOME_SIDE_MENU, setNewHomeSliceChanges } from 'frontend/redux/slices/newHome';
 import { dispatch, RootState, useSelector } from 'frontend/redux/store';
@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router';
 
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useContext } from "react";
+import { Add } from '@mui/icons-material';
 interface Props {
   widthScreen: number;
 }
@@ -67,9 +68,26 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <BsSearch style={{ height :"25px" , width : "30px"}} />
+            <BsSearch style={{ height :"20px" , width : "20px"}} />
           </ListItemAvatar>
         </ListItem>
+
+        <ListItem
+          sx={{
+            cursor: 'pointer',
+            color: HOME_SIDE_MENU.WALLET === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
+            ...styleListItem
+          }}
+          onClick={() => {
+            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.WALLET }));
+            navigate(`/lounge/add-post`);
+          }}
+        >
+          <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Add  sx={{ height :"40px" , width : "40px"}}/>
+          </ListItemAvatar>
+        </ListItem>
+
         <ListItem
           sx={{
             cursor: 'pointer',
@@ -82,25 +100,11 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <TextsmsRoundedIcon sx={{ height :"30px" , width : "30px"}}/>
+            <TextsmsRoundedIcon sx={{ height :"35px" , width : "35px"}}/>
           </ListItemAvatar>
         </ListItem>
 
-        <ListItem
-          sx={{
-            cursor: 'pointer',
-            color: HOME_SIDE_MENU.WALLET === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
-            ...styleListItem
-          }}
-          onClick={() => {
-            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.WALLET }));
-            navigate(`/dint-wallet`);
-          }}
-        >
-          <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <AccountBalanceWalletIcon  sx={{ height :"30px" , width : "30px"}}/>
-          </ListItemAvatar>
-        </ListItem>
+      
 
         <ListItem
           sx={{
@@ -114,7 +118,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <AccountCircleRoundedIcon sx={{ height :"30px" , width : "30px"}}/>
+            <AccountCircleRoundedIcon sx={{ height :"35px" , width : "35px"}}/>
           </ListItemAvatar>
         </ListItem>
       </List>

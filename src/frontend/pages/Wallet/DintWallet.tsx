@@ -609,7 +609,7 @@ const DintWallet = () => {
                             }}
                           >
                             <span style={{ fontWeight: "700" }}>
-                              There are no data!
+                            There are no withdrawals yet
                             </span>
                           </div>
                         </div>

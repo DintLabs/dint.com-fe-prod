@@ -201,8 +201,8 @@ const NewHome = () => {
       <Helmet>
         <title>Lounge</title>
         <meta
-          name="description"
-          content="Dint Events, buy event tickets. Use your digital assets to create event tickets"
+          name=""
+          content=""
         />
       </Helmet>
       <Box style={{ margin: 0 }}>
