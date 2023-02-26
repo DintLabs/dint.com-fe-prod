@@ -75,6 +75,18 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
           <Typography sx={{textOverflow: 'ellipsis',whiteSpace:'nowrap', overflow:'hidden'}} color={toggle ? "#fff" : "#000"} >{routeurl.username && userName}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "flex", md: "flex" } }}>
+
+          <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px', cursor:"pointer" }}
+              onClick={() => {
+                navigate(`/dint-wallet/${HOME_SIDE_MENU.WALLET}`);
+              }}
+            >
+              <NotificationsOutlinedIcon />
+              <Badge badgeContent={notificationsLength} color="secondary"/>
+            </IconButton>
        
 
             <IconButton

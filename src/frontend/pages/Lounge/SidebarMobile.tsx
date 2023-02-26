@@ -80,7 +80,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
           onClick={() => {
             dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.WALLET }));
-            navigate(`/lounge/add-post`);
+            navigate(`/lounge/wallet`);
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
