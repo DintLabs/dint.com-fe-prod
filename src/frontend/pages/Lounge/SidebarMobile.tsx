@@ -23,7 +23,6 @@ const SidebarMobile = ({ widthScreen }: Props) => {
   const { selectedMenu } = useSelector((rootState: RootState) => rootState.newHome);
 
   const [showMoreDrawer, setShowMoreDrawer] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
 
   const styleListItem = {
     display: 'flex',
@@ -32,8 +31,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
     px: widthScreen > 375 ? '' : '0px'
   };
   const ICON_SIZE = 40;
-  const ADD_ICON_SIZE = showAddModal ? 60 : 40; // update size based on modal status
-
+  const ADD_ICON_SIZE = 50;
   return (
     <>
       <MoreOptionsDrawer
@@ -80,21 +78,21 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         </ListItem>
 
         <ListItem
-      sx={{
-        cursor: 'pointer',
-        color: HOME_SIDE_MENU.ADD_POST === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
-        ...styleListItem
-      }}
-      onClick={() => {
-        dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.ADD_POST}));
-        setShowAddModal(true);
-      }}
-    >
-      <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <AddIcon sx={{height: ADD_ICON_SIZE, width: ADD_ICON_SIZE, color: showAddModal ? 'primary.main' : 'inherit' }} />
-      </ListItemAvatar>
-    </ListItem>
-    
+          sx={{
+            cursor: 'pointer',
+            color: HOME_SIDE_MENU.ADD_POST === selectedMenu ?  (toggle ? "#fff" : '#000') : 'text.secondary',
+            ...styleListItem
+          }}
+          onClick={() => {
+            dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.ADD_POST}));
+            navigate(`/lounge/${HOME_SIDE_MENU.ADD_POST}`);
+          }}
+        >
+          <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <AddIcon sx={{height: ADD_ICON_SIZE, width: ADD_ICON_SIZE }} />
+          </ListItemAvatar>
+        </ListItem>
+
         <ListItem
           sx={{
             cursor: 'pointer',
