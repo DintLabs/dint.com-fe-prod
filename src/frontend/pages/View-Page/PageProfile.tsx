@@ -256,6 +256,7 @@ const PageProfile = (props: PageProfileProps) => {
                 mediaType="image"
                 fetchMoreMedia={fetchImageHandler}
                 loader={imagePostLoader}
+                isPage={true}
               />
             ) : (
               <NothingToShow padding={14} />
@@ -274,6 +275,7 @@ const PageProfile = (props: PageProfileProps) => {
                 mediaType="video"
                 fetchMoreMedia={fetchVideoHandler}
                 loader={videoPostLoader}
+                isPage={true}
               />
             ) : (
               <NothingToShow padding={14} />

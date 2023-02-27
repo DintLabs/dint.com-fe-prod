@@ -203,10 +203,10 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
           pagination = paginationVideoPosts;
         }
         if (userDetails && pagination && !isLoading && pagination.hasNext) {
-          // fetchPosts(userDetails.id, {
-          //   ...pagination,
-          //   start: pagination.start + 5,
-          // });
+          fetchPosts(userDetails.id, {
+            ...pagination,
+            start: pagination.start + 5,
+          });
         }
       }
     }

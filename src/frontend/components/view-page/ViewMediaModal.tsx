@@ -34,12 +34,8 @@ import {
 } from "frontend/redux/actions/postActions";
 
 type ViewMediaModalProps = {
-  selectedMediaId: number;
-  type: string | null;
   open: boolean;
   handleClose: () => void;
-  source: any;
-  post: any;
   isFirstPost: boolean;
   isLastPost: boolean;
   renderNextMedia: (mediaId: number) => void;
@@ -49,70 +45,83 @@ type ViewMediaModalProps = {
   canDeletePost?: Boolean;
   getUserPostCounts?: (id: number) => void;
   onDelete?: (id: number) => void;
-  postUser: number;
-  is_bookmarked: Boolean;
   selectedMedia: any;
-  like_post: [];
-  description: string;
+  isPage?: Boolean;
+  onLikePost?: (post: any[], id: number) => void;
+  onBookmark?: (isBookmark: Boolean, id: number) => void;
 };
 
 const ViewMediaModal = (props: ViewMediaModalProps) => {
-  const user = useSelector((state: RootState) => state.user.userData);
+  const user: any = useSelector((state: RootState) => state.user.userData);
   const [post, setPost] = useState(props.selectedMedia);
+  const [countLike, setCountLike] = useState(0);
   const [alreadyLike, setAlreadyLike] = useState(false);
   const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false);
   const { toggle } = useContext(ThemeContext);
   const [canHeDeletePost, setCanHeDeletePost] = useState(false);
-  const [alreadyBookmark, setAlreadyBookmark] = useState(props?.is_bookmarked);
+  const [alreadyBookmark, setAlreadyBookmark] = useState(false);
 
   useEffect(() => {
-    setAlreadyBookmark(props?.is_bookmarked);
-  }, [props?.selectedMediaId, props?.is_bookmarked, props?.like_post]);
+    setPost(props?.selectedMedia);
+    setAlreadyBookmark(props?.selectedMedia.is_bookmarked ?? false);
+  }, [props?.selectedMedia]);
 
   useEffect(() => {
     if (props?.userDetails?.id) {
       if (
-        props?.like_post?.find((item: any) =>
-          typeof item.user !== "number"
-            ? item.user?.id === props?.userDetails?.id
-            : item.user === props?.userDetails?.id
+        post.like_post.length &&
+        post?.like_post?.find((item: any) =>
+          typeof item?.user !== "number"
+            ? item?.user?.id === user?.id
+            : item?.user === user?.id
         )
       ) {
         setAlreadyLike(true);
+        setCountLike(post.like_post?.length);
+      } else {
+        setCountLike(post.like_post?.length);
+        setAlreadyLike(false);
       }
-      if (props?.postUser === user?.id) {
+      if (post?.userId === user?.id) {
         setCanHeDeletePost(true);
       }
     }
-  }, [props?.like_post, props?.postUser, user, props.selectedMediaId, post]);
+  }, [post, user, alreadyLike, countLike]);
+
+  useEffect(() => {
+    if (props?.userDetails?.id) {
+      if (post?.is_bookmarked) {
+        setAlreadyBookmark(true);
+      } else {
+        setAlreadyBookmark(false);
+      }
+    }
+  }, [post, user, alreadyBookmark]);
 
   const handleLike = async () => {
     if (!props?.userDetails || !props?.userDetails?.id) {
       toast.error("Can't find User");
       return;
     }
-    
-    console.log("post----",post)
     if (alreadyLike) {
       const unlikeResp: UnlikePostInterface = await dispatch(
-        unlikeForPost(props?.userDetails?.id, props?.selectedMediaId)
+        unlikeForPost(user?.id, post?.id)
       );
-      console.log("unlikeResp---",unlikeResp)
       setAlreadyLike(false);
-      setPost((prevState: any) => ({
-        ...prevState,
-        unlike_post: [...(prevState?.unlike_post || []), unlikeResp],
-      }));
+      const unlikePost = post.like_post?.filter((item: any) =>
+        typeof item.user !== "number"
+          ? item.user?.id !== user?.id
+          : item.user !== user?.id
+      );
+      setCountLike(unlikePost.length);
+      props?.onLikePost && props.onLikePost(unlikePost, post?.id);
     } else {
       const likeResp: LikePostInterface = await dispatch(
-        addLikeForPost(props?.userDetails?.id, props?.selectedMediaId)
+        addLikeForPost(user?.id, post?.id)
       );
-      console.log("likeResp=====",likeResp)
+      const likePost = [...post.like_post, likeResp];
       setAlreadyLike(true);
-      setPost((prevState: any) => ({
-        ...prevState,
-        like_post: [...(prevState?.like_post || []), likeResp],
-      }));
+      props?.onLikePost && props.onLikePost(likePost, post?.id);
     }
   };
 
@@ -127,10 +136,10 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       return;
     }
 
-    await dispatch(postDelete(props.selectedMediaId));
+    await dispatch(postDelete(post.id));
 
     if (props?.onDelete) {
-      props?.onDelete(props.selectedMediaId);
+      props?.onDelete(post.id);
     }
     props.handleClose();
     toast.success("Post Deleted Successful!");
@@ -155,12 +164,13 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       toast.error("Can't find User");
       return;
     }
-    // console.log("props.selectedMediaId--", props.selectedMediaId);
     const bookmarkResp: BookmarkPostInterface = await dispatch(
-      addBookmarkForPost(props.selectedMediaId)
+      addBookmarkForPost(post.id)
     );
-    // console.log("bookmarkResp---", bookmarkResp);
-    if (bookmarkResp) setAlreadyBookmark(true);
+    if (bookmarkResp) {
+      setAlreadyBookmark(true);
+      props?.onBookmark && props.onBookmark(true, post.id);
+    }
   };
 
   const deleteBookmark = async () => {
@@ -169,12 +179,12 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       return;
     }
 
-    // console.log("props.selectedMediaId--", props.selectedMediaId);
-    const deleteBookmark = await dispatch(
-      deleteBookmarkForPost(props.selectedMediaId)
-    );
-    // console.log("deleteBookmark----", deleteBookmark);
-    deleteBookmark.code === 200 && setAlreadyBookmark(false);
+    const deleteBookmark = await dispatch(deleteBookmarkForPost(post.id));
+    
+    if (deleteBookmark.code === 200) {
+      setAlreadyBookmark(false);
+      props?.onBookmark && props.onBookmark(false, post.id);
+    }
   };
 
   return (
@@ -189,8 +199,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
         <IconButton
           className="media-dialog-left-navigation-icon"
           onClick={() => {
-            if (props?.selectedMediaId)
-              props?.renderPrevMedia(props?.selectedMediaId);
+            if (post?.id) props?.renderPrevMedia(post?.id);
           }}
         >
           <ArrowLeftIcon />
@@ -200,8 +209,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
         <IconButton
           className="media-dialog-right-navigation-icon"
           onClick={() => {
-            if (props?.selectedMediaId)
-              props?.renderNextMedia(props?.selectedMediaId);
+            if (post?.id) props?.renderNextMedia(post?.id);
           }}
           disabled={props?.loading}
         >
@@ -217,16 +225,11 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
         >
           <CircularProgress />
         </Stack>
-      ) : props?.type === "image" ? (
-        <img src={props?.source} alt="Not Displayed" />
-      ) : props?.type === "video" ? (
-        <video
-          key={props?.selectedMediaId}
-          className="video-dialog"
-          controls
-          autoPlay
-        >
-          <source src={props?.source} id="video_here" />
+      ) : post?.type === "image" ? (
+        <img src={post?.media} alt="Not Displayed" />
+      ) : post?.type === "video" ? (
+        <video key={post?.id} className="video-dialog" controls autoPlay>
+          <source src={post?.media} id="video_here" />
           Your browser does not support HTML5 video.
         </video>
       ) : (
@@ -238,80 +241,79 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
           sx={{ color: "#fff" }}
           padding="50px"
         >
-          {props?.description}
+          {post?.description}
         </Typography>
       )}
-      <Box
-        sx={{ p: 2 }}
-        className="d-flex align-items-center justify-content-between"
-      >
-        <Stack width="100%" direction="row" justifyContent="space-between">
-          <Box sx={{ display: "flex" }}>
-            <IconButton
-              className="d-flex align-items-center justify-content-center"
-              onClick={handleLike}
-            >
-              {!alreadyLike ? (
-                <FavoriteBorderRoundedIcon />
+      {!props?.isPage && (
+        <>
+          <Box
+            sx={{ p: 2 }}
+            className="d-flex align-items-center justify-content-between"
+          >
+            <Stack width="100%" direction="row" justifyContent="space-between">
+              <Box sx={{ display: "flex" }}>
+                <IconButton
+                  className="d-flex align-items-center justify-content-center"
+                  onClick={handleLike}
+                >
+                  {!alreadyLike ? (
+                    <FavoriteBorderRoundedIcon />
+                  ) : (
+                    <FaHeart color="red" />
+                  )}
+                </IconButton>
+                <IconButton
+                  onClick={() => setOpenPopUpTip(true)}
+                  sx={{ fontSize: "12px" }}
+                >
+                  <MonetizationOnIcon />
+                  SEND TIP
+                </IconButton>
+              </Box>
+              {!alreadyBookmark ? (
+                <IconButton
+                  className="d-flex align-items-center justify-content-center"
+                  onClick={sendBookmark}
+                >
+                  <BookmarkBorderIcon />
+                </IconButton>
               ) : (
-                <FaHeart color="red" />
+                <IconButton
+                  className="d-flex align-items-center justify-content-center"
+                  onClick={deleteBookmark}
+                >
+                  <BookmarkIcon />
+                </IconButton>
               )}
-            </IconButton>
-            <IconButton
-              onClick={() => setOpenPopUpTip(true)}
-              sx={{ fontSize: "12px" }}
-            >
-              <MonetizationOnIcon />
-              SEND TIP
-            </IconButton>
+            </Stack>
+            {props?.canDeletePost && canHeDeletePost ? (
+              <IconButton onClick={deletePost}>
+                <MdDelete />
+              </IconButton>
+            ) : null}
           </Box>
-          {!alreadyBookmark ? (
-            <IconButton
-              className="d-flex align-items-center justify-content-center"
-              onClick={sendBookmark}
+          <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
+            <p className="like-comm">{countLike} Likes</p>
+          </Box>
+          <Box sx={{ px: 2 }}>
+            <Typography
+              component="span"
+              className="like-comm"
+              variant="body2"
+              sx={{ color: toggle ? "#fff" : "#000" }}
             >
-              <BookmarkBorderIcon />
-            </IconButton>
-          ) : (
-            <IconButton
-              className="d-flex align-items-center justify-content-center"
-              onClick={deleteBookmark}
-            >
-              <BookmarkIcon />
-            </IconButton>
-          )}
-        </Stack>
-        {props?.canDeletePost && canHeDeletePost ? (
-          <IconButton onClick={deletePost}>
-            <MdDelete />
-          </IconButton>
-        ) : null}
-      </Box>
-      <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
-        <p className="like-comm">
-          {+post?.like_post?.length -
-            (+post?.unlike_post?.length ? post?.unlike_post?.length : 0) ??
-            post?.like_post?.length}{" "}
-          Likes
-        </p>
-      </Box>
-      <Box sx={{ px: 2 }}>
-        <Typography
-          component="span"
-          className="like-comm"
-          variant="body2"
-          sx={{ color: toggle ? "#fff" : "#000" }}
-        >
-          {props.type !== "text" && props?.description}
-        </Typography>
-      </Box>
-      <TipPopUp
-        user={post?.user}
-        onClose={handleCloseTip}
-        setOpenPopUpTip={setOpenPopUpTip}
-        onOpen={handleClickOpen}
-        openPopUpTip={openPopUpTip}
-      />
+              {post.type !== "text" && post?.description}
+            </Typography>
+          </Box>
+          <TipPopUp
+            user={post?.user}
+            onClose={handleCloseTip}
+            setOpenPopUpTip={setOpenPopUpTip}
+            onOpen={handleClickOpen}
+            openPopUpTip={openPopUpTip}
+          />
+        </>
+      )}
     </Dialog>
   );
 };

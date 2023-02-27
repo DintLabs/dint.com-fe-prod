@@ -43,6 +43,9 @@ import { useSelector } from "react-redux";
 import { RootState, useDispatch } from "frontend/redux/store";
 import StoriesUserOwn from "frontend/components/lounge/StoriesUserOwn";
 import { getApiURL } from "frontend/config";
+import Carousel from "./Carousel";
+import Stories from "react-insta-stories";
+import { config } from "react-spring";
 
 interface Props {
   createPost: Function;
@@ -81,6 +84,12 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
+const getTouches = (evt: any) => {
+  return (
+    evt.touches || evt.originalEvent.touches // browser API
+  );
+};
+
 const HomeTab = ({ createPost }: Props) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -98,6 +107,14 @@ const HomeTab = ({ createPost }: Props) => {
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
   const [selectedStory, setSelectedStory] = useState<any>();
   const userData = useSelector((state: RootState) => state.user.userData);
+  const [userStories, setUserStories] = useState<any[]>([])
+  const [state, setState] = useState<any>({
+    goToSlide: 0,
+    offsetRadius: 2,
+    showNavigation: true,
+    enableSwipe: true,
+    config: config.gentle
+  })
   const dispatch = useDispatch();
   const {
     counts,
@@ -315,7 +332,7 @@ const HomeTab = ({ createPost }: Props) => {
     setTimeout(() => {
       const userStoriesItem = {
         ...objStory,
-        story: objStory.story.replace(process.env.REACT_APP_API_URL, ""), 
+        story: objStory.story.replace(process.env.REACT_APP_API_URL, ""),
       };
       userStoriesItem.story.replace(process.env.REACT_APP_API_URL, "");
       const objStoryItem = {
@@ -333,6 +350,122 @@ const HomeTab = ({ createPost }: Props) => {
 
   const handleClose = () => {
     setOpenModal(false);
+  };
+ 
+  useEffect(() => {
+    const data: any = []
+    if (storyList.length > 0) {
+      storyList?.map((story: any, index) => {
+        data.push({
+          key: story?.id,
+          content: (
+            <Box sx={{
+              '@media screen and (max-width: 767px)': {
+                  height:'100%', width: '100%', display: 'flex', alignItems:'center'
+                }
+              }}
+            >
+              <Stories
+                keyboardNavigation
+                stories={createUserStories(story)}
+                onStoryEnd={(s: any, st: any) => {
+                  console.log("story ended===", s, st, state.goToSlide)
+                }}
+                onAllStoriesEnd={(s: any, st: any) => {
+                  console.log("all stories ended", s, st, state.goToSlide)
+                  setState({
+                    ...state,
+                    goToSlide: index + 1
+                  })
+                }}
+                onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
+              />
+            </Box>
+          )
+        })
+      })
+      setUserStories(data)
+    }
+  }, [storyList])
+
+  const createUserStories = (item: any) => {
+    const { user_stories } = item;
+    const data = user_stories.map(({ story }: any) => {
+      const url = new URL(`${getApiURL()}${story}`);
+      const extension = url.href.substr(url.href.length - 3);
+      switch (extension.toLowerCase()) {
+        case "mp4":
+          return {
+            url: url.href,
+            type: 'video',
+          }
+          
+          default:
+            return {
+              content: () => (
+              <div style={contentStylestoryback}>
+                <img style={image} src={url.href}></img>
+              </div>
+            ),
+          }
+        }
+      })
+    return data
+  }
+
+  const image = {
+    display: "block",
+    maxWidth: "100%",
+    borderRadius: 4
+  };
+
+  const contentStylestoryback = {
+    background: "black",
+    width: "100%",
+    padding: 20,
+    color: "white"
+  };
+
+  const handleTouchStart = (evt: any) => {
+    if (!state.enableSwipe) {
+      return;
+    }
+
+    const firstTouch = getTouches(evt)[0];
+    setState({
+      ...state,
+      xDown: firstTouch.clientX,
+      yDown: firstTouch.clientY
+    });
+  };
+
+  const handleTouchMove = (evt: any) => {
+    if (!state.enableSwipe || (!state.xDown && !state.yDown)) {
+      return;
+    }
+
+    let xUp = evt.touches[0].clientX;
+    let yUp = evt.touches[0].clientY;
+
+    let xDiff = state.xDown - xUp;
+    let yDiff = state.yDown - yUp;
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+      if (xDiff > 0) {
+        /* left swipe */
+        setState({
+          goToSlide: state.goToSlide + 1,
+          xDown: null,
+          yDown: null
+        });
+      } else {
+        /* right swipe */
+        setState({
+          goToSlide: state.goToSlide - 1,
+          xDown: null,
+          yDown: null
+        });
+      }
+    }
   };
 
   return (
@@ -422,7 +555,7 @@ const HomeTab = ({ createPost }: Props) => {
                   {"Your Story"}
                 </Typography>
               </div>
-              <StoriesUserOwn />
+              <StoriesUserOwn createUserStories={createUserStories} />
 
               {storyList?.map((item: any, i: number) => (
                 <>
@@ -435,6 +568,11 @@ const HomeTab = ({ createPost }: Props) => {
                         setOpenModal(true);
                         setOpenStoryModal("Follower");
                         setSelectedStory(item);
+                        createUserStories(item);
+                        setState({
+                          ...state,
+                          goToSlide: i
+                        })
                       }
                     }}
                   >
@@ -464,12 +602,22 @@ const HomeTab = ({ createPost }: Props) => {
               ))}
               <Modal open={openModal} onClose={handleClose}>
                 {openStoryModal === "Follower" ? (
-                  <ShowStories
-                    widthScreen={widthScreen}
-                    item={selectedStory}
-                    image={selectedStory?.user_stories}
-                    setOpenModal={setOpenModal}
-                  />
+                  <div 
+                    className="App" 
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                  >
+                    <Carousel
+                      height="100%"
+                      width="100%"
+                      margin="0 200px 0 200px"
+                      // offset={2}
+                      showNavigation={true}
+                      goToSlide={state.goToSlide}
+                      animationConfig={state.config}
+                      cards={userStories || []}
+                    />
+                  </div>
                 ) : (
                   <CreateStory
                     widthScreen={widthScreen}
@@ -491,27 +639,23 @@ const HomeTab = ({ createPost }: Props) => {
               className="custom-tabs-root"
             >
               <Tab
-                className={`${
-                  toggle && value === 0 && "active-tab"
-                } custom-tab-list`}
+                className={`${toggle && value === 0 && "active-tab"
+                  } custom-tab-list`}
                 label={`All  (${counts?.all_posts ?? 0})`}
               />
               <Tab
-                className={`${
-                  toggle && value === 1 && "active-tab"
-                } custom-tab-list`}
+                className={`${toggle && value === 1 && "active-tab"
+                  } custom-tab-list`}
                 label={`Text (${counts?.text_posts ?? 0})`}
               />
               <Tab
-                className={`${
-                  toggle && value === 2 && "active-tab"
-                } custom-tab-list`}
+                className={`${toggle && value === 2 && "active-tab"
+                  } custom-tab-list`}
                 label={`Photos  (${counts?.image_posts ?? 0})`}
               />
               <Tab
-                className={`${
-                  toggle && value === 3 && "active-tab"
-                } custom-tab-list`}
+                className={`${toggle && value === 3 && "active-tab"
+                  } custom-tab-list`}
                 label={`Videos  (${counts?.video_posts ?? 0})`}
               />
             </Tabs>
@@ -528,8 +672,8 @@ const HomeTab = ({ createPost }: Props) => {
                 userName={
                   item?.user
                     ? item?.user?.display_name ||
-                      item?.user?.first_name ||
-                      item?.user?.custom_username
+                    item?.user?.first_name ||
+                    item?.user?.custom_username
                     : ""
                 }
                 custom_username={item?.user ? item?.user?.custom_username : ""}

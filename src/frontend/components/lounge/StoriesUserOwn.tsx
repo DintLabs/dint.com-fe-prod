@@ -2,15 +2,16 @@ import { Avatar, Modal, Typography } from "@mui/material";
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import ShowStories from "frontend/pages/Lounge/ShowStories";
 import { RootState } from "frontend/redux/store";
-import { useContext, useState } from "react";
+import { useContext, useState, useLayoutEffect } from "react";
 import { useSelector } from "react-redux";
+import Stories from "react-insta-stories";
 
-const StoriesUserOwn = () => {
+const StoriesUserOwn = ({createUserStories}: any) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { toggle } = useContext(ThemeContext);
   const { userOwnStories } = useSelector((state: RootState) => state.lounge);
   const { userData } = useSelector((state: RootState) => state.user);
-  const [widthScreen] = useState<number>(window.screen.width);
+  const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
 
   const objStoriesItem = {
     custom_username: userData?.custom_username,
@@ -19,6 +20,15 @@ const StoriesUserOwn = () => {
     profile_image: userData?.profile_image,
     user_stories: userOwnStories,
   };
+
+   useLayoutEffect(() => {
+      function updateWidth() {
+          setWidthScreen(window.screen.width);
+      }
+      window.addEventListener('resize', updateWidth);
+      updateWidth();
+      return () => window.removeEventListener('resize', updateWidth);
+    }, []);
 
   if (!userOwnStories || userOwnStories.length === 0) return null;
 
@@ -55,16 +65,30 @@ const StoriesUserOwn = () => {
       </div>
       {openModal && (
         <Modal
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
           open={openModal}
           onClose={() => {
             setOpenModal(false);
           }}
         >
-          <ShowStories
+          {/* <ShowStories
             widthScreen={widthScreen}
             item={objStoriesItem}
             image={userOwnStories}
             setOpenModal={setOpenModal}
+          /> */}
+          <Stories
+            keyboardNavigation
+            stories={createUserStories(objStoriesItem)}
+            onStoryEnd={(s: any, st: any) => console.log("story ended", s, st)}
+            onAllStoriesEnd={(s: any, st: any) => setOpenModal(false)}
+            onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
+            width={widthScreen < 900 ? "100%" : undefined}
+            height={widthScreen < 900 ? "100%" : undefined}
           />
         </Modal>
       )}
