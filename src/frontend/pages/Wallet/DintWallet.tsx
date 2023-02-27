@@ -513,7 +513,7 @@ const DintWallet = () => {
                       borderBottom: "#D2D2D2",
                     }}
                   >
-                    <TableCell>Account Number</TableCell>
+                    <TableCell>Date</TableCell>
                     <TableCell align="center">Amount</TableCell>
                     <TableCell align="center">Status</TableCell>
                   </TableRow>
@@ -609,7 +609,7 @@ const DintWallet = () => {
                             }}
                           >
                             <span style={{ fontWeight: "700" }}>
-                            There are no withdrawals yet
+                            There are no activities yet
                             </span>
                           </div>
                         </div>

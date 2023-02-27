@@ -27,8 +27,7 @@ const Referrals = () => {
               routes={referralsSubmenu}
               secondBlocks={[]}
               noTag
-              isLink={false}
-            />
+              isLink={false} handleOpen={undefined} handleClose={undefined}            />
           </>
         ) : (
           <>

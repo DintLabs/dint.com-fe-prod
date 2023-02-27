@@ -10,7 +10,7 @@ const Audio = () => {
   const {data:bookmarkedPosts, loading:isLoading} = GetUserBookmark(postTypes.audio.value)
   return (
     <Grid container>
-      <Submenu title="AUDIO" username="" routes={[]} noTag md={12} />
+      <Submenu title="AUDIO" username="" routes={[]} noTag md={12} handleOpen={undefined} handleClose={undefined} />
       <FlexRow fWrap="wrap">
         {!isLoading  && bookmarkedPosts.map((audio, i) => (
           <Col lg={4} md={6} sm={12} key={`${audio}_${i}`} style={{height:"200px"}}>

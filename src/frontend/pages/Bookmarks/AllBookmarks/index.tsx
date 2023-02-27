@@ -76,54 +76,7 @@ const HomeTab = () => {
     setPaginationVideoPosts
   } = useLounge();
 
-  // const handleScroll = useCallback(() => {
-  //   const windowHeight =
-  //     'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
-  //   const { body } = document;
-  //   const html = document.documentElement;
-  //   const docHeight = Math.max(
-  //     body.scrollHeight,
-  //     body.offsetHeight,
-  //     html.clientHeight,
-  //     html.scrollHeight,
-  //     html.offsetHeight
-  //   );
 
-  //   const currentHeight = windowHeight + window.pageYOffset;
-
-  //   if (currentHeight + 900 >= docHeight) {
-  //     console.log('handleScroll called ===>');
-  //     if (!isLoading) {
-  //       let pagination = null;
-  //       if (value === 0) {
-  //         pagination = paginationPosts;
-  //       } else if (value === 1) {
-  //         pagination = paginationTextPosts;
-  //       } else if (value === 2) {
-  //         pagination = paginationPhotoPosts;
-  //       } else if (value === 3) {
-  //         pagination = paginationVideoPosts;
-  //       }
-  //       if (pagination && !isLoading && pagination.hasNext) {
-  //         fetchPosts({ ...pagination, start: pagination.start + 5 });
-  //       }
-  //     }
-  //   }
-  // }, [
-  //   paginationPosts,
-  //   paginationPhotoPosts,
-  //   paginationTextPosts,
-  //   paginationVideoPosts,
-  //   isLoading,
-  //   value
-  // ]);
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, [handleScroll]);
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -235,7 +188,7 @@ const HomeTab = () => {
   return (
     <>
     <Grid container>
-      <Submenu title="ALL BOOKMARKS" username="" routes={[]} noTag md={12} />
+      <Submenu title="ALL BOOKMARKS" username="" routes={[]} noTag md={12} handleOpen={undefined} handleClose={undefined} />
       <FlexRow gap="5px" fWrap="wrap" style={{ width: "100%"}}>
 
         {/* <Box>

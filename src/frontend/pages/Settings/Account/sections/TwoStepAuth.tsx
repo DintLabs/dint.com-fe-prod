@@ -45,35 +45,14 @@ const TwoStepAuth = () => {
         username="Primary options"
         routes={[]}
         noTag
-        md={12}
-      />
+        md={12} handleOpen={undefined} handleClose={undefined}      />
       <GridWithBoxConteiner>
         <FlexCol>
           <Typography className="primary-text-color" variant="subtitle2">
             Authenticator App
           </Typography>
           <Typography className="primary-text-color" variant="caption">
-            You can use Microsoft or Google Authenticator application for IOS or Android
-          </Typography>
-        </FlexCol>
-        <Switch
-          checked={checkboxes.importantSubscription}
-          onChange={() =>
-            handleChangeCheckboxes('importantSubscription', !checkboxes.importantSubscription)
-          }
-          color="primary"
-          sx={{
-            '& .MuiSwitch-track': {
-              backgroundColor: toggle ? 'white' : 'black'
-            }
-          }}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-      </GridWithBoxConteiner>
-      <GridWithBoxConteiner>
-        <FlexCol>
-          <Typography className="primary-text-color" variant="subtitle2">
-            Verification via SMS
+            You can use Google Authenticator application for IOS or Android
           </Typography>
         </FlexCol>
         <Switch
@@ -91,31 +70,8 @@ const TwoStepAuth = () => {
         />
       </GridWithBoxConteiner>
 
-      <Submenu title="" username="Additional options" routes={[]} noTag md={12} />
-      <GridWithBoxConteiner>
-        <FlexCol>
-          <Typography className="primary-text-color" variant="subtitle2">
-            Verification via Face ID
-          </Typography>
-          <Typography className="primary-text-color" variant="caption">
-            This will allow you to verify your identity with a selfie as a part of 2 step
-            authentication process
-          </Typography>
-        </FlexCol>
-        <Switch
-          checked={checkboxes.importantSubscription}
-          onChange={() =>
-            handleChangeCheckboxes('importantSubscription', !checkboxes.importantSubscription)
-          }
-          color="primary"
-          sx={{
-            '& .MuiSwitch-track': {
-              backgroundColor: toggle ? 'white' : 'black'
-            }
-          }}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-      </GridWithBoxConteiner>
+
+     
     </Grid>
   );
 };

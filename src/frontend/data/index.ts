@@ -205,12 +205,7 @@ export const settingsSubmenuAccount = [
 ];
 
 export const settingsSubmenuSocialAccount = [
-  {
-    name: 'Twitter account',
-    href: '/settings/display/account/twitter',
-    icon: null,
-    selectionCondition: 'equal'
-  },
+  
   {
     name: 'Google account',
     href: '/settings/display/account/google',

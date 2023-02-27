@@ -26,25 +26,22 @@ const Account = () => {
         routes={settingsSubmenuAccount}
         secondBlocks={[{ title: 'Liked Accounts', block: settingsSubmenuSocialAccount }]}
         noTag
-        md={12}
-      />
+        md={12} handleOpen={undefined} handleClose={undefined}      />
 
       <Submenu
         title=""
-        username="Connected account"
+
         routes={settingsSubmenuConnectAccount}
         secondBlocks={[{ title: 'Security', block: settingsSubmenuConnectSecurity }]}
         noTag
-        md={12}
-      />
+        md={12} username={''} handleOpen={undefined} handleClose={undefined}      />
 
       <Submenu
         title=""
         username="Account management"
         routes={settingsSubmenuAccountManagement}
         noTag
-        md={12}
-      />
+        md={12} handleOpen={undefined} handleClose={undefined}      />
     </Grid>
   );
 };
