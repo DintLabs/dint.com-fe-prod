@@ -62,6 +62,11 @@ import { messagesActions } from "frontend/redux/slices/messages";
 import { display } from "@mui/system";
 import { Flex } from "../../reusable/reusableStyled";
 import { useSelector } from "react-redux";
+import { MenuItem } from "@mui/material";
+import { Select } from "@mui/material";
+import { FormControl } from "@mui/material";
+import { InputLabel } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -169,7 +174,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
       start: 0,
       length: 5
     });
-  
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
   const handleScroll = useCallback(() => {
     const windowHeight =
       "innerHeight" in window
@@ -804,14 +809,26 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                       >
                         <KeyboardArrowDownOutlinedIcon />
                       </Button>
-                      <IconButton
+                      {/* <IconButton
                         sx={{
                           color: toggle ? "#fff" : "#000",
                           display: { xs: "none", md: "flex" },
                         }}
                       >
                         <MoreHorizIcon />
-                      </IconButton>
+                      </IconButton> */}
+                      <FormControl sx={{'& .css-17pnwyl-MuiSvgIcon-root-MuiSelect-icon' : {display:"none"} , width:isLargeScreen ? "100%" : "20%"}} >
+                      <InputLabel id="demo-simple-select-label"><MoreHorizIcon sx={{  color: toggle? "#fff" : "black"}} /></InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Options"
+                            >
+                            <MenuItem>Unfollow</MenuItem>
+                            <MenuItem>Block</MenuItem>
+                            <MenuItem>Restrict</MenuItem>
+                          </Select>
+                        </FormControl>
                     </Box>
                   </div>
                 )}
