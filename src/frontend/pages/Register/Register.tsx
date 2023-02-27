@@ -24,6 +24,7 @@ import useUser from "frontend/hooks/useUser";
 
 import { globalWindow } from "../../components/App";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import Loading from "./Loading";
 
 const Register = () => {
   const userHook = useUser();
@@ -45,7 +46,7 @@ const Register = () => {
 
   const data =  useLocation();
   const { toggle } = useContext(ThemeContext);
-
+  const [isLoading , setIsLoading] = useState(false)
   useEffect(()=>{
     if(data.state && data.state.referCode){
       setReferCode(data.state.referCode) 
@@ -73,6 +74,7 @@ const Register = () => {
       // if (password === confirmPassword) {
       if (password) {
         try {
+          setIsLoading(true)
           // email and password matched Successfully
           const userData = {
             email,
@@ -117,6 +119,7 @@ const Register = () => {
               // dispatch(createWallet())
 
               toast.success("User registration done!");
+              setIsLoading(false)
               onSuccessSignup();
             })
 
@@ -314,7 +317,9 @@ const Register = () => {
 
   return (
     <>
-      <Helmet>
+      {isLoading ? <Loading /> :
+    <>
+    <Helmet>
         <title>Sign Up</title>
         <meta name="description" content="Sign Up to Dint" />
       </Helmet>
@@ -490,6 +495,8 @@ const Register = () => {
           </div>
         </div>
       </div>
+    </>
+      }
     </>
   );
 };
