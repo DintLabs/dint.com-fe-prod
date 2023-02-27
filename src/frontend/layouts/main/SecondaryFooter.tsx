@@ -97,7 +97,7 @@ const SecondaryFooter = () => {
     
     return (
         <>
-            <footer style={{background : loginOrSignup && toggle ? "#353535" : ''  }}>
+            <footer style={{background : loginOrSignup && toggle ? "#353535" : ''  }} id="secondary-footer">
                 <div className="bottom-line"></div>
                 <div className="row main-footer m-auto">
                     {/* <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12 left-footer" > */}
