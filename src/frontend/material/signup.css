@@ -391,3 +391,19 @@
     height: 1vw !important;
   }
 }
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.linear {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation: rotation 5s linear infinite;
+  color: #000;
+}
