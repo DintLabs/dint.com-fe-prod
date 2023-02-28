@@ -109,7 +109,8 @@ const ProcessWithdrawal = () => {
                     cursor: "pointer",
                   }}
                   onClick={() => {
-                    navigate("/en/fiat/withdraw/EUR");
+                    // navigate("/en/fiat/withdraw/EUR");
+                    navigate("/en/fiat/withdraw")
                   }}
                 />
               </Stack>
@@ -214,7 +215,8 @@ const ProcessWithdrawal = () => {
                       boxShadow: "none",
                     }}
                     onClick={() => {
-                      navigate("/en/fiat/withdraw/EUR");
+                      // navigate("/en/fiat/withdraw/EUR");
+                      navigate("/en/fiat/withdraw")
                     }}
                   >
                     {" "}

@@ -23,6 +23,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useLayoutEffect,
 } from "react";
 import BuyToken from "frontend/pages/BuyToken";
 import storyImage from "frontend/assets/img/web3/story-1.png";
@@ -46,6 +47,7 @@ import { getApiURL } from "frontend/config";
 import Carousel from "./Carousel";
 import Stories from "react-insta-stories";
 import { config } from "react-spring";
+import CloseIcon from '@mui/icons-material/Close';
 
 interface Props {
   createPost: Function;
@@ -198,6 +200,15 @@ const HomeTab = ({ createPost }: Props) => {
   useEffect(() => {
     getSuggestionList();
     getStoryList();
+  }, []);
+
+  useLayoutEffect(() => {
+    function updateWidth() {
+        setWidthScreen(window.screen.width);
+    }
+    window.addEventListener('resize', updateWidth);
+    updateWidth();
+    return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
   const getSuggestionList = async () => {
@@ -359,9 +370,11 @@ const HomeTab = ({ createPost }: Props) => {
         data.push({
           key: story?.id,
           content: (
-            <Box sx={{
-              '@media screen and (max-width: 767px)': {
-                  height:'100%', width: '100%', display: 'flex', alignItems:'center'
+            <Box 
+              sx={{
+                position: 'relative',
+                '@media screen and (max-width: 899px)': {
+                  height: '100%', width: '100%', display: 'flex', alignItems: 'center'
                 }
               }}
             >
@@ -370,15 +383,32 @@ const HomeTab = ({ createPost }: Props) => {
                 stories={createUserStories(story)}
                 onStoryEnd={(s: any, st: any) => {
                   console.log("story ended===", s, st, state.goToSlide)
-                }}
-                onAllStoriesEnd={(s: any, st: any) => {
-                  console.log("all stories ended", s, st, state.goToSlide)
                   setState({
                     ...state,
                     goToSlide: index + 1
                   })
                 }}
+                onAllStoriesEnd={(s: any, st: any) => {
+                  console.log("all stories ended", s, st, state.goToSlide)
+                  // setState({
+                  //   ...state,
+                  //   goToSlide: index + 1
+                  // })
+                }}
                 onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
+                width={widthScreen < 900 ? "100%" : undefined}
+                height={widthScreen < 900 ? "100%" : undefined}
+              />
+              <CloseIcon 
+                onClick={() => setOpenModal(false)} 
+                style={{ 
+                  cursor: 'pointer',
+                  color: 'white',
+                  zIndex: 9999,
+                  position: 'absolute',
+                  top: '25px',
+                  right: '15px'
+                }} 
               />
             </Box>
           )

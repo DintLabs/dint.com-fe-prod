@@ -1,5 +1,5 @@
 import React,{ useContext } from 'react';
-import { FormControl, FormControlLabel, InputLabel, MenuItem, Radio, Select, Stack, Typography } from '@mui/material';
+import { FormControl, FormControlLabel, InputLabel, MenuItem, Radio, Select, Stack, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Controller, useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
@@ -12,7 +12,7 @@ const SubmitButton = styled(LoadingButton)(({ theme }) => ({
 }));
 
 type FirstStepPayload = {
-  nextStep: (country : any) => void;
+  nextStep: (values : any) => void;
 };
 
 const FirstStep = (props:FirstStepPayload) => {
@@ -20,8 +20,8 @@ const FirstStep = (props:FirstStepPayload) => {
     mode: 'onChange'
   });
 
-  const submitValues = async (values: any)=>{
-    props.nextStep(values.country);
+  const submitValues = (values: any)=>{
+    props.nextStep(values);
   }
 
   const { toggle } = useContext(ThemeContext);
@@ -68,6 +68,77 @@ const FirstStep = (props:FirstStepPayload) => {
                     </MenuItem>
                   )}
                 </Select>
+              </FormControl>
+            )}
+          />
+        </Stack>
+        
+        <Stack direction="row" gap={2} mt={2}>
+          <Controller
+            name="state"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value = '', ref } }: any) => (
+              <FormControl variant="filled" sx={{ flex: 1  , '& .css-y9hmg1-MuiInputBase-root-MuiFilledInput-root' : {color: toggle ? 'white' : '#161C24'}}}>
+                <TextField
+                  error={formState.errors?.state?.type === 'required'}
+                  label="State"
+                  variant="filled"
+                  value={value}
+                  inputRef={ref}
+                  onChange={(e: any) => onChange(e.target.value)}
+                  sx={{
+                    backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
+                  }}
+                >
+                </TextField>
+              </FormControl>
+            )}
+          />
+        </Stack>
+
+        <Stack direction="row" gap={2} mt={2}>
+          <Controller
+            name="city"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value = '', ref } }: any) => (
+              <FormControl variant="filled" sx={{ flex: 1 ,'& .css-y9hmg1-MuiInputBase-root-MuiFilledInput-root' : {color: toggle ? 'white' : '#161C24'}}}>
+                <TextField
+                  error={formState.errors?.city?.type === 'required'}
+                  label="City"
+                  variant="filled"
+                  value={value}
+                  inputRef={ref}
+                  onChange={(e: any) => onChange(e.target.value)}
+                  sx={{
+                    backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
+                  }}
+                >
+                </TextField>
+              </FormControl>
+            )}
+          />
+        </Stack>
+        <Stack direction="row" gap={2} mt={2}>
+          <Controller
+            name="postal_code"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value = '', ref } }: any) => (
+              <FormControl variant="filled" sx={{ flex: 1 ,'& .css-y9hmg1-MuiInputBase-root-MuiFilledInput-root' : {color: toggle ? 'white' : '#161C24'}}}>
+                <TextField
+                  error={formState.errors?.city?.type === 'required'}
+                  label="Postal Code"
+                  variant="filled"
+                  value={value}
+                  inputRef={ref}
+                  onChange={(e: any) => onChange(e.target.value)}
+                  sx={{
+                    backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
+                  }}
+                >
+                </TextField>
               </FormControl>
             )}
           />

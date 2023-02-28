@@ -817,7 +817,8 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                       >
                         <MoreHorizIcon />
                       </IconButton> */}
-                      <FormControl sx={{'& .css-17pnwyl-MuiSvgIcon-root-MuiSelect-icon' : {display:"none"} , width:isLargeScreen ? "100%" : "20%"}} >
+                      <FormControl sx={{'& .css-17pnwyl-MuiSvgIcon-root-MuiSelect-icon' : {display:"none"} , width:isLargeScreen ? "100%" : "20%" , 
+                      '& .css-stmnjt-MuiFormLabel-root-MuiInputLabel-root' :{top:"50%"} }} >
                       <InputLabel id="demo-simple-select-label"><MoreHorizIcon sx={{  color: toggle? "#fff" : "black"}} /></InputLabel>
                           <Select
                             labelId="demo-simple-select-label"

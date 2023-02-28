@@ -17,7 +17,8 @@ const SubmitButton = styled(LoadingButton)(({ theme }) => ({
 const ThirdPage = (props: FirstStepPayload) => {
   const navigate = useNavigate()
   const onWithdraw = () => {
-    navigate("/en/fiat/withdraw/EUR");
+    // navigate("/en/fiat/withdraw/EUR");
+    navigate("/en/fiat/withdraw")
   }
 
   return (

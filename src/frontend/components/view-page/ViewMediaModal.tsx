@@ -187,6 +187,32 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
     }
   };
 
+  let touchendX:number, touchstartX:number ; 
+  const handleUserTouchStart = (event:any) => {
+      if (props.open) {
+        touchstartX = event.changedTouches[0].screenX;
+      }
+  };
+  const handleUserTouchEnd = (event:any) => {
+    if (props.open) {
+      touchendX = event.changedTouches[0].screenX;
+      handleGesture();
+    }
+  };
+
+  const handleGesture = () => {
+    if (touchendX < touchstartX) {
+      if (props?.selectedMediaId) {
+        props?.renderNextMedia(props?.selectedMediaId);
+      }
+    }
+    if (touchendX > touchstartX) {
+      if (props?.selectedMediaId) {
+        props?.renderPrevMedia(props?.selectedMediaId);
+      }
+    }
+  };
+
   return (
     <Dialog
       open={props?.open}
@@ -194,6 +220,8 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       className="view-media-modal"
+      onTouchStart={handleUserTouchStart}
+      onTouchEnd={handleUserTouchEnd}
     >
       {!props?.isFirstPost ? (
         <IconButton

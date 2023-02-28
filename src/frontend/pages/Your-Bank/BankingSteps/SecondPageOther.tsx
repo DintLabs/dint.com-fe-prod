@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Stack, TextField } from '@mui/material';
+import { FormControl, Stack, TextField } from '@mui/material';
 import styled from '@emotion/styled';
 import { LoadingButton } from '@mui/lab';
 import Alert from '@mui/material/Alert';
 import { ThemeContext } from '../../../contexts/ThemeContext';
-
+import { Controller, useForm } from 'react-hook-form';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -47,7 +47,7 @@ function a11yProps(index: number) {
 }
 
 type StepPayload = {
-  nextStep: () => void;
+  nextStep: (values : any) => void;
 };
 const SecondPageOther = (props:StepPayload) => {
   const [value, setValue] = React.useState(0);
@@ -56,6 +56,14 @@ const SecondPageOther = (props:StepPayload) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const { handleSubmit, control, formState } = useForm({
+    mode: 'onChange'
+  });
+
+  const submitValues = (values: any)=>{
+      props.nextStep(values)
+  }
   return (
     <>
       <Box sx={{ width: '100%' }}>
@@ -67,6 +75,7 @@ const SecondPageOther = (props:StepPayload) => {
         </Box>
         <TabPanel value={value} index={0}>
           <Stack>
+            {/* <form >
             <Stack gap={2} mt={2}>
               <TextField
                 style={{ flex: 1 }}
@@ -101,9 +110,90 @@ const SecondPageOther = (props:StepPayload) => {
               <SubmitButton
                 variant="contained"
                 type="submit"
+                onClick={handleSubmit}
               > Confirm
               </SubmitButton>
             </Stack>
+            </form> */}
+            <form onSubmit={handleSubmit(submitValues)}>
+            <Stack direction="row" gap={2} mt={2}>
+              <Controller
+                name="fullname"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value = '', ref } }: any) => (
+                  <FormControl variant="filled" sx={{ flex: 1  , '& .css-y9hmg1-MuiInputBase-root-MuiFilledInput-root' : {color: toggle ? 'white' : '#161C24'}}}>
+                    <TextField
+                      error={formState.errors?.state?.type === 'required'}
+                      label="Full name of the account holder"
+                      variant="filled"
+                      value={value}
+                      inputRef={ref}
+                      onChange={(e: any) => onChange(e.target.value)}
+                      sx={{
+                        backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
+                      }}
+                    >
+                    </TextField>
+                  </FormControl>
+                )}
+              />
+            </Stack>
+            <Stack direction="row" gap={2} mt={2}>
+            <Controller
+              name="iban"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value = '', ref } }: any) => (
+                <FormControl variant="filled" sx={{ flex: 1  , '& .css-y9hmg1-MuiInputBase-root-MuiFilledInput-root' : {color: toggle ? 'white' : '#161C24'}}}>
+                  <TextField
+                    error={formState.errors?.state?.type === 'required'}
+                    label="IBAN"
+                    variant="filled"
+                    value={value}
+                    inputRef={ref}
+                    onChange={(e: any) => onChange(e.target.value)}
+                    sx={{
+                      backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
+                    }}
+                  >
+                  </TextField>
+                </FormControl>
+              )}
+            />
+            </Stack>
+            <Stack direction="row" gap={2} mt={2}>
+            <Controller
+              name="account_number"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value = '', ref } }: any) => (
+                <FormControl variant="filled" sx={{ flex: 1  , '& .css-y9hmg1-MuiInputBase-root-MuiFilledInput-root' : {color: toggle ? 'white' : '#161C24'}}}>
+                  <TextField
+                    error={formState.errors?.account_number?.type === 'required'}
+                    label="Account number"
+                    variant="filled"
+                    value={value}
+                    inputRef={ref}
+                    onChange={(e: any) => onChange(e.target.value)}
+                    sx={{
+                      backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
+                    }}
+                  >
+                  </TextField>
+                </FormControl>
+              )}
+            />
+            </Stack>
+          <Stack mt={3}>
+              <SubmitButton
+                variant="contained"
+                type="submit"
+              > Confirm
+              </SubmitButton>
+            </Stack>
+            </form>
+
           </Stack>
         </TabPanel>
         <TabPanel value={value} index={1}>

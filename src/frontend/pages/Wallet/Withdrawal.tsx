@@ -70,6 +70,7 @@ export default function SellToken() {
   const { toggle } = useContext(ThemeContext);
   
 
+  const id = JSON.parse(localStorage.getItem("userData")).id;
 
   const onSubmit = async (data: any) => {
     if(!cardSelect){
@@ -79,11 +80,11 @@ export default function SellToken() {
       setInProgress(true);
       const sendDetail = {
         amount: data.amount,
-      
-      };
+        user_id:id 
+      }
       if (sendDetail) {
         await _axios
-          .post(`${process.env.REACT_APP_API_URL}/api/withdrawal`)
+          .post(`${process.env.REACT_APP_API_URL}api/user/withdraw-dint` , sendDetail)
           .then((res: any) => {
             const { data } = res;
             if(data.paid === true){
@@ -111,8 +112,9 @@ export default function SellToken() {
     _axios
       .get("api/user/get_bank_accounts/")
       .then((res: any) => {
-        console.log(res.data); // Log the payload to the console
+        console.log('bank account details----' , res.data); // Log the payload to the console
         if (res?.data?.data?.length > 0) {
+          setCardSelect(res.data.data[0])
           setBankData(res.data.data);
           setShowAddBank(false);
         } else {
@@ -267,7 +269,7 @@ export default function SellToken() {
                         )
                       )}
                     </Select>
-                  ) : <Typography sx={{color : toggle ? "white" : ""}}>You have not added any bank yet. <Link to={'/payment/add'} style={{color:"brown !important" , fontWeight:"bold"}}> Add a bank</Link></Typography>}
+                  ) : <Typography sx={{color : toggle ? "white" : ""}}>You have not added any bank yet. <Link to={'/your-bank'} style={{color:"brown !important" , fontWeight:"bold"}}> Add a bank</Link></Typography>}
                 </FormControl>
               </TabPanel>
 

@@ -323,7 +323,7 @@ export default function Router() {
           ),
         },
         {
-          path: "/en/fiat/withdraw/:currency",
+          path: "/en/fiat/withdraw",
           element: (
             <AuthGuard>
               <NewHome />

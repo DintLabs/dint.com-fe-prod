@@ -46,7 +46,13 @@ const style = {
 
 const BankContainer = () => {
   const [state, setState] = useState<any>({
-    country: null,
+    state: "",
+    city: "",
+    iban: "",
+    fullname: "",
+    country: "",
+    post_code: "",
+    account_number: "",
     active: 0,
   });
   const [open, toggleVerificationModal] = useState(false);
@@ -57,7 +63,7 @@ const BankContainer = () => {
   const [bankData, setBankData] = useState([]);
   const [showBankDetails, setShowBankDetails] = useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [openMenu, setOpenMenu] = useState(null)
+  const [openMenu, setOpenMenu] = useState(null);
 
   const getBankDetails = () => {
     setLoading(true);
@@ -81,7 +87,7 @@ const BankContainer = () => {
     getBankDetails();
   }, []);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>, index:any) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>, index: any) => {
     setAnchorEl(event.currentTarget);
     setOpenMenu(index);
   };
@@ -96,23 +102,59 @@ const BankContainer = () => {
     setOpenMenu(null);
   };
 
-  const handleNextStep = (item = null) => {
+  const handleNextStep = (item: null | any) => {
     if (state.active !== 2) {
       setShowBankDetails(false);
-      setState((oldState: any) => ({
-        ...oldState,
-        country: item,
-        active: state.active + 1,
-      }));
+      const bankDetails1 = Object.assign(state, item)
+      // console.log("**test",test);
+      setState((oldState: any) => {
+        return {
+          ...oldState,
+          ...bankDetails1,
+          active: state.active + 1,
+        };
+      });
+      console.log("**staetttt 2 after", state);
     }
 
     if (state.country !== null && state.active === 2) {
       setShowBankDetails(false);
+      const bankDetails2 = Object.assign(state, item)
       setState((oldState: any) => ({
         ...oldState,
-        country: item,
+        ...bankDetails2,
         active: state.active + 1,
       }));
+      addBankAccount();
+    }
+  };
+  //  useEffect(() => {
+  //   console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!",state)
+  // },[handleNextStep])
+
+  const addBankAccount = async () => {
+    try {
+      const { data } = await _axios.post("api/user/add_bank_accounts/", {
+        accountHolderName: state.fullname,
+        accountNumber: state.account_number,
+        iban: state.iban,
+        country: state.country,
+        city: state.city,
+        state: state.state,
+        postCode: state.postal_code,
+      });
+      if (data && data.code === 400) {
+        setLoading(false);
+        toast.error("Action Failed");
+      } else {
+        setLoading(false);
+        toast.success("Verification Done");
+        handleNextStep();
+      }
+    } catch (err) {
+      setLoading(false);
+      toast.error("Action Failed");
+      console.error(err);
     }
   };
 

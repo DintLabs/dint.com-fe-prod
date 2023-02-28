@@ -147,7 +147,8 @@ const DintWallet = () => {
   const dintPrice = 1;
 
   const onWithdrawal = async () => {
-    navigate("/en/fiat/withdraw/EUR");
+    // navigate("/en/fiat/withdraw/EUR");
+    navigate("/en/fiat/withdraw")
   };
   const onBuyToken = () => {
     navigate("/buy-dint-token");
