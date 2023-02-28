@@ -48,6 +48,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export default function SellToken() {
+  const navigate = useNavigate()
   const [open] = useState(false);
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
@@ -66,6 +67,9 @@ export default function SellToken() {
   const { selectedMenu } = useSelector(
     (rootState: RootState) => rootState.newHome
   );
+  const { balance } = useSelector(
+    (rootState: RootState) => rootState.wallet
+  );
 
   const { toggle } = useContext(ThemeContext);
   
@@ -79,28 +83,42 @@ export default function SellToken() {
     try {
       setInProgress(true);
       const sendDetail = {
-        amount: data.amount,
+        amount: parseInt(data.amount),
         user_id:id 
       }
       if (sendDetail) {
-        await _axios
-          .post(`${process.env.REACT_APP_API_URL}api/user/withdraw-dint` , sendDetail)
+        _axios
+          .post(`/api/user/withdraw-dint/`, sendDetail)
           .then((res: any) => {
-            const { data } = res;
-            if(data.paid === true){
-              toast.loading('Plaese wait...');
-              dispatch(getDintBalance()).then((res:any)=>{
-                toast.dismiss();
-                toast.success("Payment successful")
-             
-              })
-            }else{
-              toast.error('Payment Unsuccessful!')
+            setLoading(true);
+            if (res?.data && res.data.code === 400) {
+              setLoading(false);
+              toast.error("Action Failed");
+            } else {
+              _axios
+                .post(`/api/user/request_payouts/`, {
+                  amount: parseInt(data.amount),
+                })
+                .then((res: any) => {
+                  if (res?.data && res.data.code === 400) {
+                    setLoading(false);
+                    toast.error("Action Failed");
+                  } else {
+                    setLoading(false);
+                    toast.success("Account Updated successfully.");
+                    return navigate("/dint-wallet");
+                    
+                  }
+                })
+                .catch((error: any) => {
+                  toast.error("Action Failed");
+                  console.error("error in update bank", error);
+                });
             }
-            // window.open(data.session.url);
-          }).catch((err:any) => {
-            console.log(err)
-            toast.error('Payment Unsucessful!')
+          })
+          .catch((error: any) => {
+            toast.error("Action Failed");
+            console.error("error in update bank", error);
           });
         setInProgress(false);
       }
@@ -217,11 +235,11 @@ export default function SellToken() {
                                 }}
                               >
                                 <Stack direction="row" gap={1}>
-                                  <img
+                                  {/* <img
                                     src={discover}
                                     alt="discover"
                                     width={30}
-                                  />
+                                  /> */}
                                   
                                   <Typography
                                     // className="primary-text-color"
@@ -230,7 +248,7 @@ export default function SellToken() {
                         Account Number: *** *** **** {bank.accountNumber.substr(-4)}
                         </Typography>
                                 </Stack>
-                                <Stack direction="row" alignItems="center">
+                                {/* <Stack direction="row" alignItems="center">
                                   <Typography
                                     // className="secondary-text-color"
                                     style={{ fontSize:isSmallScreen ? "14px" : "16px" , color:toggle ? "white" : "black" }}
@@ -239,7 +257,7 @@ export default function SellToken() {
                                     Expiration date{" "}
                                     {bank.accountNumber.substr(-4)}
                                   </Typography>
-                                </Stack>
+                                </Stack> */}
                               </Stack>
                               <Stack
                                 direction="row"
@@ -310,6 +328,7 @@ export default function SellToken() {
                     />
                   )}
                 />
+                <Typography style={{position: "absolute", right: "-35%", lineHeight: 3.5}}>{`Balance: $ ${balance}` || "0.00 EUR"}</Typography>
               </FormControl>
               <button
                 className="btn btn-primary"
