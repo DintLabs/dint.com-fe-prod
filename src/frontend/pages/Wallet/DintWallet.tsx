@@ -79,7 +79,6 @@ const DintWallet = () => {
   const mobileView = useMediaQuery("(max-width:899px)");
 
   useEffect(() => {
-    getToken();
     getActivitiesData();
   }, [1]);
 
@@ -95,18 +94,22 @@ const DintWallet = () => {
       });
   };
 
-  const getToken = async () => {
-    await dispatch(getKeys());
-    await axios
-      .default(
-        `${process.env.REACT_APP_COINGECKO_API}simple/price?ids=matic-network&vs_currencies=usd`
-      )
-      .then(({ data }: any) => {
-        setMaticPrice(data["matic-network"].usd);
-      });
-    await dispatch(getMaticBalance());
-    await dispatch(getDintBalance());
-  };
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      await dispatch(getKeys());
+      await axios
+        .default(
+          `${process.env.REACT_APP_COINGECKO_API}simple/price?ids=matic-network&vs_currencies=usd`
+        )
+        .then(({ data }: any) => {
+          setMaticPrice(data["matic-network"].usd);
+        });
+      await dispatch(getMaticBalance());
+      await dispatch(getDintBalance());
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const openQrScan = () => {
     setIsQrScan(true);
@@ -148,7 +151,7 @@ const DintWallet = () => {
 
   const onWithdrawal = async () => {
     // navigate("/en/fiat/withdraw/EUR");
-    navigate("/en/fiat/withdraw")
+    navigate("/en/fiat/withdraw");
   };
   const onBuyToken = () => {
     navigate("/buy-dint-token");
@@ -186,12 +189,27 @@ const DintWallet = () => {
               : { display: "flex", flexDirection: "column-reverse" }
           }
         >
-          <h1
-            className="notranslate"
-            style={{ color: toggle ? "white" : "#161C24", textAlign: "center" }}
-          >
-            ${balance}
-          </h1>
+          {balance ? (
+            <h1
+              className="notranslate"
+              style={{
+                color: toggle ? "white" : "#161C24",
+                textAlign: "center",
+              }}
+            >
+              ${balance}
+            </h1>
+          ) : (
+            <p
+              className="notranslate"
+              style={{
+                color: toggle ? "white" : "#666666",
+                textAlign: "center",
+              }}
+            >
+              We are fetching your balance. Please wait...
+            </p>
+          )}
           <p
             className="notranslate"
             style={{ color: toggle ? "white" : "#666666", textAlign: "center" }}
@@ -241,7 +259,7 @@ const DintWallet = () => {
                 navigate(`/buy-dint-token`);
               }}
             >
-            ADD FUNDS
+              ADD FUNDS
             </Button>
           )}
           {mobileView ? (
@@ -284,17 +302,56 @@ const DintWallet = () => {
           useMediaQuery("(min-width:899px)")
             ? {
                 border: `1px solid #CCCCCC`,
-          borderRadius:"10px",
-          margin:'3% 0%',
-          width: "95%" 
-        } : { marginTop:'10%' }}>
-        <Grid  sx={ mobileView ? 
-        {display:"flex",cursor:'pointer' , width:"100%" , padding:"2% 20%" , textAlign:"center" } 
-        : {display:"flex",cursor:'pointer' , width:"100%" , textAlign:"center" ,borderBottom:"1px solid #CCCCCC"}}>
+                borderRadius: "10px",
+                margin: "3% 0%",
+                width: "95%",
+              }
+            : { marginTop: "10%" }
+        }
+      >
+        <Grid
+          sx={
+            mobileView
+              ? {
+                  display: "flex",
+                  cursor: "pointer",
+                  width: "100%",
+                  padding: "2% 20%",
+                  textAlign: "center",
+                }
+              : {
+                  display: "flex",
+                  cursor: "pointer",
+                  width: "100%",
+                  textAlign: "center",
+                  borderBottom: "1px solid #CCCCCC",
+                }
+          }
+        >
           <Box
-            onClick={()=>setdisplayAssets(true)}
-            sx={mobileView ?{padding:'3%', borderTopLeftRadius:'30px',borderBottomLeftRadius:"30px" ,color:'#fff' ,backgroundColor:displayAssets ?  '#3B3F58' : '#212436' , borderRight:'1px solid #CCCCCC' ,width:'50%' } :{padding:'2%' ,color:displayAssets ?  '#fff' : '',borderTopLeftRadius:'10px' ,backgroundColor:displayAssets ?  '#3B3F58' : '#F5F9FF' , borderRight:'1px solid #CCCCCC' ,width:'50%' }}>
-            <Typography sx={{fontWeight:"bold"}}>Assets</Typography>
+            onClick={() => setdisplayAssets(true)}
+            sx={
+              mobileView
+                ? {
+                    padding: "3%",
+                    borderTopLeftRadius: "30px",
+                    borderBottomLeftRadius: "30px",
+                    color: "#fff",
+                    backgroundColor: displayAssets ? "#3B3F58" : "#212436",
+                    borderRight: "1px solid #CCCCCC",
+                    width: "50%",
+                  }
+                : {
+                    padding: "2%",
+                    color: displayAssets ? "#fff" : "",
+                    borderTopLeftRadius: "10px",
+                    backgroundColor: displayAssets ? "#3B3F58" : "#F5F9FF",
+                    borderRight: "1px solid #CCCCCC",
+                    width: "50%",
+                  }
+            }
+          >
+            <Typography sx={{ fontWeight: "bold" }}>Assets</Typography>
           </Box>
           <Box
             onClick={() => setdisplayAssets(false)}
@@ -519,9 +576,9 @@ const DintWallet = () => {
                     <TableCell align="center">Status</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody sx={{overflow:"auto", height:"30%"}}>
+                <TableBody sx={{ overflow: "auto", height: "30%" }}>
                   {activitesData.length > 0 ? (
-                      activitesData?.map((activity: any) => (
+                    activitesData?.map((activity: any) => (
                       <TableRow
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
@@ -610,7 +667,7 @@ const DintWallet = () => {
                             }}
                           >
                             <span style={{ fontWeight: "700" }}>
-                            There are no activities yet
+                              There are no activities yet
                             </span>
                           </div>
                         </div>

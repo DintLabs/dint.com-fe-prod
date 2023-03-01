@@ -3,6 +3,7 @@ import {
   Box,
   CircularProgress,
   Dialog,
+  DialogContent,
   IconButton,
   Stack,
   Typography,
@@ -20,6 +21,8 @@ import { dispatch, RootState, useSelector } from "frontend/redux/store";
 import { MdDelete } from "react-icons/md";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import TipPopUp from "../tip/TipPopUp";
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 import {
   LikePostInterface,
   BookmarkPostInterface,
@@ -32,6 +35,7 @@ import {
   postDelete,
   unlikeForPost,
 } from "frontend/redux/actions/postActions";
+import { useTheme } from "@mui/material";
 
 type ViewMediaModalProps = {
   open: boolean;
@@ -52,6 +56,9 @@ type ViewMediaModalProps = {
 };
 
 const ViewMediaModal = (props: ViewMediaModalProps) => {
+  const theme = useTheme();
+  // const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   const user: any = useSelector((state: RootState) => state.user.userData);
   const [post, setPost] = useState(props.selectedMedia);
   const [countLike, setCountLike] = useState(0);
@@ -194,6 +201,8 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       }
   };
   const handleUserTouchEnd = (event:any) => {
+    console.log("touch----");
+    
     if (props.open) {
       touchendX = event.changedTouches[0].screenX;
       handleGesture();
@@ -213,6 +222,9 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
     }
   };
 
+
+
+
   return (
     <Dialog
       open={props?.open}
@@ -222,7 +234,9 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       className="view-media-modal"
       onTouchStart={handleUserTouchStart}
       onTouchEnd={handleUserTouchEnd}
+      // fullScreen={fullScreen}
     >
+      <DialogContent className="dialogContent" >
       {!props?.isFirstPost ? (
         <IconButton
           className="media-dialog-left-navigation-icon"
@@ -248,15 +262,14 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
         <Stack
           justifyContent="center"
           alignItems="center"
-          width={300}
-          height={300}
+          style={{ width: "100%", height: "70%", minHeight: "70%" }}
         >
           <CircularProgress />
         </Stack>
       ) : post?.type === "image" ? (
-        <img src={post?.media} alt="Not Displayed" />
+        <img src={post?.media} alt="Not Displayed" className="responsiveimg" style={{ width: "100%", height: "70%", minHeight: "70%" }} />
       ) : post?.type === "video" ? (
-        <video key={post?.id} className="video-dialog" controls autoPlay>
+        <video key={post?.id}  style={{ width: "100%", height: "70%", minHeight: "70%" }} controls autoPlay>
           <source src={post?.media} id="video_here" />
           Your browser does not support HTML5 video.
         </video>
@@ -275,7 +288,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       {!props?.isPage && (
         <>
           <Box
-            sx={{ p: 2 }}
+            sx={{ padding: "16px 5px" }}
             className="d-flex align-items-center justify-content-between"
           >
             <Stack width="100%" direction="row" justifyContent="space-between">
@@ -342,6 +355,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
           />
         </>
       )}
+      </DialogContent>
     </Dialog>
   );
 };

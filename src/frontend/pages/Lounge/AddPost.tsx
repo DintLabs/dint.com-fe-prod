@@ -13,11 +13,9 @@ import { Image, MoreHoriz } from "@mui/icons-material";
 interface Props {
   widthScreen: number;
   createPost?: Function;
-  verification: Boolean;
-  onAttachDocument?: Function;
 }
 
-const AddPost = ({ widthScreen, createPost, verification,onAttachDocument }: Props) => {
+const AddPost = ({ widthScreen, createPost}: Props) => {
   const theme = useTheme();
   const navigate = useNavigate();
   

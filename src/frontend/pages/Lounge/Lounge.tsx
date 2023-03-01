@@ -175,7 +175,7 @@ const NewHome = () => {
           open={true}
           onClose={handleClose}
         >
-          <AddPost widthScreen={widthScreen} createPost={createPost}  verification={false} />
+          <AddPost widthScreen={widthScreen} createPost={createPost}  />
         </Modal>
       );
     if (location.pathname.includes(HOME_SIDE_MENU.SEARCH)) return <Search />;

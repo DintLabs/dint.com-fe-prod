@@ -111,6 +111,28 @@
   }
 }
 
+@media only screen and (min-width: 320px) and (max-width: 600px)  {
+  .dialogContent{
+    width: 360px;
+    height: 360px;
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1440px)  {
+  .dialogContent{
+    width: 450px;
+    height: 450px;
+  }
+}
+
+@media only screen and (min-width: 1440px) and (max-width: 2560px)  {
+  .dialogContent{
+    width: 600px;
+    height: 600px;
+  }
+}
+
+
 .page-media-container {
   .card-container {
     height: 285px;
@@ -136,6 +158,33 @@
     }
   }
 }
+
+@media only screen and (min-width: 320px) and (max-width: 600px)  {
+  .page-media-container{
+    .card-container{
+      height: 100px;
+    }
+  }
+}
+
+
+
+@media only screen and (min-width: 600px) and (max-width: 1440px)  {
+  .page-media-container{
+    .card-container{
+      height: 220px;
+    }
+  }
+}
+
+@media only screen and (min-width: 1440px) and (max-width: 2560px)  {
+  .page-media-container{
+    .card-container{
+      height: 300px;
+    }
+  }
+}
+
 
 .unsubscribe-modal {
   border: 1px solid;

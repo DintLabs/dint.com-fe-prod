@@ -28,7 +28,7 @@ import { toast } from "react-toastify";
 import ThirdPage from "./BankingSteps/ThirdPage";
 import AddHomeWorkOutlinedIcon from "@mui/icons-material/AddHomeWorkOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import AddPost from "frontend/pages/Lounge/AddPost";
+import AddVerificationDocument from "../Lounge/AddVerificationDocument";
 
 const style = {
   position: "absolute" as "absolute",
@@ -231,6 +231,7 @@ const BankContainer = () => {
   const [attachId, setAttchId] = useState();
   const [openModal, setOpenModal] = useState(false);
   const onAttachDocument = (document: any) => {
+    console.log(("onAttachDocument----",document))
     setAttchId(document);
     toggleVerificationModal(false);
     setOpenModal(true);
@@ -360,10 +361,9 @@ const BankContainer = () => {
           )}
           <Loader loading={loading} />
           <Modal open={open} onClose={handleClose}>
-            <AddPost
+            <AddVerificationDocument
               widthScreen={widthScreen}
               onAttachDocument={onAttachDocument}
-              verification={true}
             />
           </Modal>
           <Modal open={openModal} onClose={handleClose}>
