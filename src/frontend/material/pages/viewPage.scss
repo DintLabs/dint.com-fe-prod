@@ -1,7 +1,7 @@
 @import './../../material/utilities/colors.scss';
 
 .view-page-container {
-  height: calc(100vh - 80px);
+  min-height: 100vh;
   .left-side-panel {
     width: 20%;
   }
@@ -133,9 +133,9 @@
   .css-octjbh{
     display: none;
   }
-  .css-m69qwo-MuiStack-root{
-    display: none;
-  }
+  // .css-m69qwo-MuiStack-root{
+  //   display: none;
+  // }
 }
 
 @media only screen and (min-width: 600px) and (max-width: 1440px)  {
@@ -152,9 +152,9 @@
   .css-octjbh{
     display: none;
   }
-  .css-m69qwo-MuiStack-root{
-    display: none;
-  }
+  // .css-m69qwo-MuiStack-root{
+  //   display: none;
+  // }
 }
 
 @media only screen and (min-width: 1440px) and (max-width: 2560px)  {

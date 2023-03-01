@@ -1,37 +1,34 @@
-.compose-background{
-    --bs-bg-opacity: 1;
-    background-color: #DFE3E8;
-    min-height: 500px;
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+.compose-background {
+  --bs-bg-opacity: 1;
+  background-color: #dfe3e8;
+  min-height: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 .center-pos {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
 }
 .custom-modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 .upload-img {
-    /* max-height: calc(100vh - 650px); */
-    height: 100%;
-    flex: 1;
+  /* max-height: calc(100vh - 650px); */
+  height: 100%;
+  flex: 1;
 }
 @media screen and (max-width: 767px) {
-    .compose-background {
-        min-height: auto;
-        max-height: 500px;
-
-    }
-    .center-pos {
-       flex: 1;
-    }
+  .compose-background {
+    max-height: 500px;
+  }
+  .center-pos {
+    flex: 1;
+  }
 }

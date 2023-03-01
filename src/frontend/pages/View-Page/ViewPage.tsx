@@ -1,128 +1,137 @@
-import { List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
 
-import React, { useEffect, useState, useContext } from 'react';
-import { useSelector } from 'react-redux';
-import HomeIcon from '@mui/icons-material/Home';
-import EditIcon from '@mui/icons-material/Edit';
-import SettingsIcon from '@mui/icons-material/Settings';
-import GroupsIcon from '@mui/icons-material/Groups';
-import { useLocation, useNavigate, useParams } from 'react-router';
-import { fetchViewPageDataByPageName, viewPageActions } from 'frontend/redux/slices/viewPage';
-import PageProfile from 'frontend/pages/View-Page/PageProfile';
-import { dispatch } from 'frontend/redux/store';
-import PageSkeleton from 'frontend/components/common/skeletons/PageSkeleton';
-import PageSettings from './PageSettings';
-import Subscribers from './Subscribers';
-import { ThemeContext } from '../../contexts/ThemeContext';
+import React, { useEffect, useState, useContext } from 'react'
+import { fetchViewPageDataByPageName, viewPageActions } from 'frontend/redux/slices/viewPage'
+import { useLocation, useNavigate, useParams } from 'react-router'
+import { ThemeContext } from '../../contexts/ThemeContext'
+import { useSelector } from 'react-redux'
+import { dispatch } from 'frontend/redux/store'
+import PageSkeleton from 'frontend/components/common/skeletons/PageSkeleton'
+import PageSettings from './PageSettings'
+import SettingsIcon from '@mui/icons-material/Settings'
+import PageProfile from 'frontend/pages/View-Page/PageProfile'
+import Subscribers from './Subscribers'
+import HomeIcon from '@mui/icons-material/Home'
+import EditIcon from '@mui/icons-material/Edit'
+import GroupsIcon from '@mui/icons-material/Groups'
+import {
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from '@mui/material'
 
 const ViewPage = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const params = useParams();
-  const [selectedMenuItemIndex, setSelectedMenuItemIndex] = useState<number | null>();
-  const pageData = useSelector((state: any) => state?.viewPage?.pageData);
-  const [pageProfileLoader, setPageProfileLoader] = useState<boolean>(false);
-  const [loggedInUser, setLoggedInUser] = useState<any>();
-  const { toggle } = useContext(ThemeContext);
+  const mobileView = useMediaQuery('(max-width:899px)')
+  const navigate = useNavigate()
+  const location = useLocation()
+  const params = useParams()
+  const pageData = useSelector((state: any) => state?.viewPage?.pageData)
+  const [selectedMenuItemIndex, setSelectedMenuItemIndex] = useState<number | null>()
+  const [pageProfileLoader, setPageProfileLoader] = useState<boolean>(false)
+  const [loggedInUser, setLoggedInUser] = useState<any>()
+
+  const { toggle } = useContext(ThemeContext)
 
   // to fetch loggedIn user Details
-  const userData = localStorage.getItem('userData');
+  const userData = localStorage.getItem('userData')
   useEffect(() => {
     if (typeof userData === 'string') {
-      setLoggedInUser(JSON.parse(userData));
+      setLoggedInUser(JSON.parse(userData))
     }
-  }, [userData]);
+  }, [userData])
 
-  const [isCreator, setIsCreator] = useState<boolean>(false);
-  const [isCreatorSet, setIsCreatorSet] = useState<boolean>(false);
+  const [isCreator, setIsCreator] = useState<boolean>(false)
+  const [isCreatorSet, setIsCreatorSet] = useState<boolean>(false)
 
   const navigateOnViewPage = () => {
-    navigate(`/${pageData?.page_name}`);
-  };
+    navigate(`/${pageData?.page_name}`)
+  }
 
   const navigateOnEditPage = () => {
-    navigate('/page/creation');
-  };
+    navigate('/page/creation')
+  }
 
   const navigateOnSubcribersPage = () => {
-    navigate(`/${pageData?.page_name}/subscribers`);
-  };
+    navigate(`/${pageData?.page_name}/subscribers`)
+  }
 
   const navigateOnSettingsPage = () => {
-    navigate(`/${pageData?.page_name}/settings`);
-  };
+    navigate(`/${pageData?.page_name}/settings`)
+  }
 
   // to reset the exsiting page data
   useEffect(() => {
     return () => {
-      dispatch(viewPageActions.resetViewPageData());
-    };
-  }, []);
+      dispatch(viewPageActions.resetViewPageData())
+    }
+  }, [])
 
   useEffect(() => {
     if (loggedInUser?.id && pageData?.user?.id) {
-      setIsCreator(loggedInUser?.id === pageData?.user?.id);
-      setIsCreatorSet(true);
+      setIsCreator(loggedInUser?.id === pageData?.user?.id)
+      setIsCreatorSet(true)
     } else {
-      setIsCreator(false);
-      setIsCreatorSet(true);
+      setIsCreator(false)
+      setIsCreatorSet(true)
     }
-  }, [loggedInUser, pageData]);
+  }, [loggedInUser, pageData])
 
   // to fetch the page data
 
   useEffect(() => {
     if (params.username) {
-      setPageProfileLoader(true);
+      setPageProfileLoader(true)
       dispatch(fetchViewPageDataByPageName(params.username))
         .then((res: any) => {
           if (res) {
-            setPageProfileLoader(false);
+            setPageProfileLoader(false)
           } else {
-            setPageProfileLoader(false);
-            navigate('/404');
+            setPageProfileLoader(false)
+            navigate('/404')
           }
         })
         .catch(() => {
-          setPageProfileLoader(false);
-          navigate('/404');
-        });
+          setPageProfileLoader(false)
+          navigate('/404')
+        })
     }
-  }, [params, navigate]);
+  }, [params, navigate])
 
   useEffect(() => {
     if (location.pathname.split('/')[2] === 'settings') {
-      setSelectedMenuItemIndex(3);
+      setSelectedMenuItemIndex(3)
     } else if (location.pathname.split('/')[2] === 'subscribers') {
-      setSelectedMenuItemIndex(2);
+      setSelectedMenuItemIndex(2)
     } else if (location.pathname.split('/')[2] === 'creation') {
-      setSelectedMenuItemIndex(1);
+      setSelectedMenuItemIndex(1)
     } else {
-      setSelectedMenuItemIndex(0);
+      setSelectedMenuItemIndex(0)
     }
-  }, [location]);
+  }, [location])
 
   const getPageWithCheckPermission = () => {
     if (location.pathname.split('/')[2] === 'settings') {
-      return <PageSettings />;
+      return <PageSettings />
     }
     if (location.pathname.split('/')[2] === 'subscribers') {
-      return <Subscribers />;
+      return <Subscribers />
     }
-    return <PageProfile isCreator={isCreator} />;
-  };
+    return <PageProfile isCreator={isCreator} />
+  }
 
   return !isCreatorSet && pageProfileLoader ? (
     <PageSkeleton />
   ) : (
-    <Stack direction="row" className="view-page-container">
+    <Stack direction='row' className='view-page-container'>
       {/* <Loader loading={!isCreatorSet && pageProfileLoader} /> */}
       {/* left-side creator's menu */}
-      {isCreator && !(window.innerWidth < 1000) ? (
-        <Stack className="left-side-panel" direction="column">
+      {isCreator && !mobileView ? (
+        <Stack className='left-side-panel' direction='column'>
           {/* navigation menu */}
-
-          <List className="navigation-menu">
+          <List className='navigation-menu'>
             <ListItem
               className={`secondary-text-color navigation-menu-item ${
                 selectedMenuItemIndex === 0 ? 'selected-menu-item' : ''
@@ -132,20 +141,22 @@ const ViewPage = () => {
               <ListItemAvatar>
                 <HomeIcon
                   sx={{
-                    color: toggle ? 'white' : 'text.secondary'
+                    color: toggle ? 'white' : 'text.secondary',
                   }}
                 />
               </ListItemAvatar>
-              <ListItemText primary={
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    color: toggle ? 'white' : 'text.secondary'
-                  }}
-                >
-                  Page
-                </Typography>
-              } />
+              <ListItemText
+                primary={
+                  <Typography
+                    variant='subtitle1'
+                    sx={{
+                      color: toggle ? 'white' : 'text.secondary',
+                    }}
+                  >
+                    Page
+                  </Typography>
+                }
+              />
             </ListItem>
             <ListItem
               className={`secondary-text-color navigation-menu-item ${
@@ -156,20 +167,22 @@ const ViewPage = () => {
               <ListItemAvatar>
                 <EditIcon
                   sx={{
-                    color: toggle ? 'white' : 'text.secondary'
+                    color: toggle ? 'white' : 'text.secondary',
                   }}
                 />
               </ListItemAvatar>
-              <ListItemText primary={
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    color: toggle ? 'white' : 'text.secondary'
-                  }}
-                >
-                  Edit Page
-                </Typography>
-              } />
+              <ListItemText
+                primary={
+                  <Typography
+                    variant='subtitle1'
+                    sx={{
+                      color: toggle ? 'white' : 'text.secondary',
+                    }}
+                  >
+                    Edit Page
+                  </Typography>
+                }
+              />
             </ListItem>
             <ListItem
               className={`secondary-text-color navigation-menu-item ${
@@ -180,21 +193,23 @@ const ViewPage = () => {
               <ListItemAvatar>
                 <GroupsIcon
                   sx={{
-                    color: toggle ? 'white' : 'text.secondary'
+                    color: toggle ? 'white' : 'text.secondary',
                   }}
-                  fontSize="medium"
+                  fontSize='medium'
                 />
               </ListItemAvatar>
-              <ListItemText primary={
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    color: toggle ? 'white' : 'text.secondary'
-                  }}
-                >
-                  Subscribers
-                </Typography>
-              } />
+              <ListItemText
+                primary={
+                  <Typography
+                    variant='subtitle1'
+                    sx={{
+                      color: toggle ? 'white' : 'text.secondary',
+                    }}
+                  >
+                    Subscribers
+                  </Typography>
+                }
+              />
             </ListItem>
             <ListItem
               className={`secondary-text-color navigation-menu-item ${
@@ -205,20 +220,22 @@ const ViewPage = () => {
               <ListItemAvatar>
                 <SettingsIcon
                   sx={{
-                    color: toggle ? 'white' : 'text.secondary'
+                    color: toggle ? 'white' : 'text.secondary',
                   }}
                 />
               </ListItemAvatar>
-              <ListItemText primary={
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    color: toggle ? 'white' : 'text.secondary'
-                  }}
-                >
-                  Settings
-                </Typography>
-              } />
+              <ListItemText
+                primary={
+                  <Typography
+                    variant='subtitle1'
+                    sx={{
+                      color: toggle ? 'white' : 'text.secondary',
+                    }}
+                  >
+                    Settings
+                  </Typography>
+                }
+              />
             </ListItem>
           </List>
         </Stack>
@@ -229,7 +246,7 @@ const ViewPage = () => {
       {isCreatorSet && getPageWithCheckPermission()}
       {/* <PageProfile isCreator={isCreator} /> */}
     </Stack>
-  );
-};
+  )
+}
 
-export default ViewPage;
+export default ViewPage
