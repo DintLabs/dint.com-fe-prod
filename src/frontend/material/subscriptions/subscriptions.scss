@@ -4,8 +4,14 @@
   height: calc(100vh - 80px);
   overflow: hidden;
 
+  @media (max-width: 899px) {
+    width: 100vw;
+    margin-top: 65px;
+    border: 0;
+  }
+
   .container-header {
-    border-bottom: 1px solid;
+    // border-bottom: 1px solid;
   }
   .container-body {
     overflow: auto;

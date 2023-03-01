@@ -3,10 +3,12 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
   ListItemAvatar,
   Modal,
   Tab,
   Tabs,
+  TextField,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -23,6 +25,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useRef,
   useLayoutEffect,
 } from "react";
 import BuyToken from "frontend/pages/BuyToken";
@@ -48,6 +51,11 @@ import Carousel from "./Carousel";
 import Stories from "react-insta-stories";
 import { config } from "react-spring";
 import CloseIcon from '@mui/icons-material/Close';
+import { sendMessage } from "frontend/redux/slices/messages";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import TipPopUp from "frontend/components/tip/TipPopUp";
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import { FaHeart } from "react-icons/fa";
 
 interface Props {
   createPost: Function;
@@ -105,6 +113,8 @@ const HomeTab = ({ createPost }: Props) => {
   const [showAddPageButton, setShowAddPageButton] = useState(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openStoryModal, setOpenStoryModal] = useState<string>("");
+  const [messageContent, setMessageContent] = useState<string>("test")
+  const inputRef = useRef(null)
 
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
   const [selectedStory, setSelectedStory] = useState<any>();
@@ -117,6 +127,9 @@ const HomeTab = ({ createPost }: Props) => {
     enableSwipe: true,
     config: config.gentle
   })
+  const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false);
+  const [profileByUsername, setProfileByUsername] = useState<any>();
+  const [alreadyLike, setAlreadyLike] = useState(false);
   const dispatch = useDispatch();
   const {
     counts,
@@ -362,11 +375,97 @@ const HomeTab = ({ createPost }: Props) => {
   const handleClose = () => {
     setOpenModal(false);
   };
- 
+
+  const renderData = useCallback((story: any) => (
+    <TextField
+      inputRef={inputRef}
+      fullWidth
+      color="secondary"
+      onChange={(e) => setMessageContent(e.target.value)}
+      onKeyPress={(e) => {
+        if (e.key === "Enter") {
+          sendMessageHandler(story.id.toString(), userData);
+        }
+      }}
+      placeholder="Send Message"
+      sx={{color: toggle ? 'white' : '#161C24', height: 40,
+      '.MuiInputBase-root': {
+        borderRadius: '25px',
+        '.MuiInputBase-input': {
+          height: '40px !important',
+          padding: '0 14px',
+          outline: 'none',
+          boxShadow: 'none',
+        '&:hover': {
+            borderColor: 'transparent',
+            boxShadow: 'none',
+          },
+          '&:focus': {
+            boxShadow: 'none',
+            outline: 'none',
+            borderColor: 'red',
+          }
+        },
+      },
+    }}
+    />
+  ), [messageContent, userData])
+
+  const sendTip = async (story: any) => {
+    try {
+      const { data } = await _axios.post('/api/user/get-profile-by-username/', {
+        custom_username: story.custom_username
+      });
+
+      if (data.code === 200) {
+        setProfileByUsername(data.data)
+        setOpenPopUpTip(true)
+      } else {
+        toast.error("User is not availabe for tip!!")
+      }
+    } catch (err) {
+      toast.error("User is not availabe!!")
+    }
+  }
+
+  const handleLike = async (story: any) => {
+    if (!userData || !userData.id) {
+      toast.error("Can't find User");
+      return;
+    }
+
+    if (alreadyLike) {
+      try {
+      const { data } = await _axios.post(`/user/unlike_stories/${story.id}/`);
+
+      if (data.code === 200) {
+        setAlreadyLike(false);
+        toast.success("You disliked the story!!")
+      } else {
+        toast.error("story is not availabe!!")
+      }
+    } catch (err) {
+      toast.error("story is not availabe!!")
+    }
+    } else {
+      try {
+      const { data } = await _axios.post(`/user/like_stories/${story.id}/`);
+      if (data.code === 200) {
+        setAlreadyLike(true);
+        toast.success("You liked the story!!")
+      } else {
+        toast.error("story is not availabe!!")
+      }
+    } catch (err) {
+      toast.error("story is not availabe!!")
+    }
+    }
+  };
+
   useEffect(() => {
     const data: any = []
     if (storyList.length > 0) {
-      storyList?.map((story: any, index) => {
+      storyList?.map((story: any, index: number, {length}: any) => {
         data.push({
           key: story?.id,
           content: (
@@ -379,21 +478,25 @@ const HomeTab = ({ createPost }: Props) => {
               }}
             >
               <Stories
-                keyboardNavigation
                 stories={createUserStories(story)}
                 onStoryEnd={(s: any, st: any) => {
                   console.log("story ended===", s, st, state.goToSlide)
-                  setState({
-                    ...state,
-                    goToSlide: index + 1
-                  })
-                }}
-                onAllStoriesEnd={(s: any, st: any) => {
-                  console.log("all stories ended", s, st, state.goToSlide)
                   // setState({
                   //   ...state,
                   //   goToSlide: index + 1
                   // })
+                }}
+                onAllStoriesEnd={(s: any, st: any) => {
+                  console.log("all stories ended", s, st, state.goToSlide)
+                  if(state.goToSlide === length) {
+                    setOpenModal(false)
+                  }
+                  else {
+                    setState({
+                      ...state,
+                      goToSlide: index + 1
+                    })
+                  }
                 }}
                 onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
                 width={widthScreen < 900 ? "100%" : undefined}
@@ -410,13 +513,33 @@ const HomeTab = ({ createPost }: Props) => {
                   right: '15px'
                 }} 
               />
+              <div style={{display:'flex', position: 'absolute', bottom: 10, left: 0, width: '100%', padding: '0 10px', zIndex: 999}}>
+                {renderData(story)}
+                <IconButton
+                className="d-flex align-items-center justify-content-center"
+                // onClick={() => handleLike(story)}
+                >
+                  {!alreadyLike ? (
+                    <FavoriteBorderRoundedIcon />
+                  ) : (
+                    <FaHeart color="red" />
+                  )}
+                </IconButton>
+                <IconButton
+                  onClick={() => sendTip(story)}
+                  sx={{ fontSize: "12px" }}
+                > 
+                  <MonetizationOnIcon />
+                </IconButton>
+              </div>
             </Box>
-          )
+          ),
+          
         })
       })
       setUserStories(data)
     }
-  }, [storyList])
+  }, [storyList, userData, alreadyLike, state.goToSlide])
 
   const createUserStories = (item: any) => {
     const { user_stories } = item;
@@ -438,8 +561,8 @@ const HomeTab = ({ createPost }: Props) => {
               </div>
             ),
           }
-        }
-      })
+      }
+    })
     return data
   }
 
@@ -498,7 +621,36 @@ const HomeTab = ({ createPost }: Props) => {
     }
   };
 
+  const sendMessageHandler = useCallback(async (receiverId:string, userData: any) => {
+    const messageContent = inputRef?.current?.value
+    if (
+      messageContent.trim().length > 0
+    ) {
+      const res = await dispatch(
+        sendMessage({
+          reciever: receiverId,
+          sender: userData?.id?.toString(),
+          content: messageContent.trim(),
+        })
+      );
+      if (res) {
+        toast.success("Message sent successful!!")
+      }
+    }
+    setMessageContent("");
+  }, [messageContent, userData]);
+
+  // for popup tip
+  const handleClickOpen = () => {
+    setOpenPopUpTip(true);
+  };
+
+  const handleCloseTipModal = () => {
+    setOpenPopUpTip(false);
+  };
+
   return (
+    <>
     <Box
       id="postsListScrollableDiv"
       style={
@@ -954,6 +1106,14 @@ const HomeTab = ({ createPost }: Props) => {
         </Box>
       </Box>
     </Box>
+    <TipPopUp
+      user={profileByUsername}
+      onClose={handleCloseTipModal}
+      setOpenPopUpTip={setOpenPopUpTip}
+      onOpen={handleClickOpen}
+      openPopUpTip={openPopUpTip}
+    />
+    </>
   );
 };
 

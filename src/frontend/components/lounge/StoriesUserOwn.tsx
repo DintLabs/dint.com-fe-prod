@@ -5,6 +5,8 @@ import { RootState } from "frontend/redux/store";
 import { useContext, useState, useLayoutEffect } from "react";
 import { useSelector } from "react-redux";
 import Stories from "react-insta-stories";
+import CloseIcon from '@mui/icons-material/Close';
+import { Box } from "@mui/material";
 
 const StoriesUserOwn = ({createUserStories}: any) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -81,15 +83,36 @@ const StoriesUserOwn = ({createUserStories}: any) => {
             image={userOwnStories}
             setOpenModal={setOpenModal}
           /> */}
-          <Stories
-            keyboardNavigation
-            stories={createUserStories(objStoriesItem)}
-            onStoryEnd={(s: any, st: any) => console.log("story ended", s, st)}
-            onAllStoriesEnd={(s: any, st: any) => setOpenModal(false)}
-            onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
-            width={widthScreen < 900 ? "100%" : undefined}
-            height={widthScreen < 900 ? "100%" : undefined}
-          />
+          <Box 
+            sx={{
+              position: 'relative',
+              outline: 'none',
+              '@media screen and (max-width: 899px)': {
+                height: '100%', width: '100%', display: 'flex', alignItems: 'center'
+              },
+            }}
+          >
+            <Stories
+              keyboardNavigation
+              stories={createUserStories(objStoriesItem)}
+              onStoryEnd={(s: any, st: any) => console.log("story ended", s, st)}
+              onAllStoriesEnd={(s: any, st: any) => setOpenModal(false)}
+              onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
+              width={widthScreen < 900 ? "100%" : undefined}
+              height={widthScreen < 900 ? "100%" : undefined}
+            />
+            <CloseIcon
+              onClick={() => setOpenModal(false)} 
+              style={{ 
+                cursor: 'pointer',
+                color: 'white',
+                zIndex: 9999,
+                position: 'absolute',
+                top: '25px',
+                right: '15px'
+              }} 
+            />
+          </Box>
         </Modal>
       )}
     </>

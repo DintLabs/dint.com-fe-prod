@@ -17,11 +17,12 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { FaHeart } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+// import { useDetectScroll } from "@smakss/react-scroll-direction";
 import { dispatch, RootState, useSelector } from "frontend/redux/store";
 import { MdDelete } from "react-icons/md";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import TipPopUp from "../tip/TipPopUp";
-import useMediaQuery from '@mui/material/useMediaQuery';
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import {
   LikePostInterface,
@@ -36,6 +37,7 @@ import {
   unlikeForPost,
 } from "frontend/redux/actions/postActions";
 import { useTheme } from "@mui/material";
+import { PowerInputSharp } from "@mui/icons-material";
 
 type ViewMediaModalProps = {
   open: boolean;
@@ -53,12 +55,13 @@ type ViewMediaModalProps = {
   isPage?: Boolean;
   onLikePost?: (post: any[], id: number) => void;
   onBookmark?: (isBookmark: Boolean, id: number) => void;
+  dataList?: any;
 };
 
 const ViewMediaModal = (props: ViewMediaModalProps) => {
   const theme = useTheme();
-  // const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  // const [scrollDir] = useDetectScroll({});
   const user: any = useSelector((state: RootState) => state.user.userData);
   const [post, setPost] = useState(props.selectedMedia);
   const [countLike, setCountLike] = useState(0);
@@ -96,6 +99,8 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
   }, [post, user, alreadyLike, countLike]);
 
   useEffect(() => {
+    console.log("**test--", props.dataList);
+
     if (props?.userDetails?.id) {
       if (post?.is_bookmarked) {
         setAlreadyBookmark(true);
@@ -187,43 +192,49 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
     }
 
     const deleteBookmark = await dispatch(deleteBookmarkForPost(post.id));
-    
+
     if (deleteBookmark.code === 200) {
       setAlreadyBookmark(false);
       props?.onBookmark && props.onBookmark(false, post.id);
     }
   };
 
-  let touchendX:number, touchstartX:number ; 
-  const handleUserTouchStart = (event:any) => {
-      if (props.open) {
-        touchstartX = event.changedTouches[0].screenX;
-      }
-  };
-  const handleUserTouchEnd = (event:any) => {
-    console.log("touch----");
-    
-    if (props.open) {
-      touchendX = event.changedTouches[0].screenX;
-      handleGesture();
-    }
-  };
+  // let touchendX:number, touchstartX:number ;
+  // const handleUserTouchStart = (event:any) => {
+  //     if (props.open) {
+  //       touchstartX = event.changedTouches[0].screenX;
+  //       handleGesture();
+  //     }
+  // };
+  // const handleUserTouchEnd = (event:any) => {
+  //   if (props.open) {
+  //     touchendX = event.changedTouches[0].screenX;
+  //     handleGesture();
+  //   }
+  // };
 
-  const handleGesture = () => {
-    if (touchendX < touchstartX) {
-      if (props?.selectedMediaId) {
-        props?.renderNextMedia(props?.selectedMediaId);
-      }
-    }
-    if (touchendX > touchstartX) {
-      if (props?.selectedMediaId) {
-        props?.renderPrevMedia(props?.selectedMediaId);
-      }
-    }
-  };
+  // const  handleGesture = () => {
+  //   if (touchendX < touchstartX) {
+  //     if (props?.selectedMedia) {
+  //       if (post?.id) props?.renderPrevMedia(post?.id);
+  //     }
+  //   }
+  //   if (touchendX > touchstartX) {
+  //     if (props?.selectedMedia) {
 
+  //     }
+  //   }
+  // };
 
+  // const handleScroll = () => {
+  //   console.log("scrolling");
 
+  //   if (scrollDir === "up") {
+  //     if (post?.id) props?.renderPrevMedia(post?.id);
+  //   } else {
+  //     if (post?.id) props?.renderNextMedia(post?.id);
+  //   }
+  // };
 
   return (
     <Dialog
@@ -232,130 +243,260 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       className="view-media-modal"
-      onTouchStart={handleUserTouchStart}
-      onTouchEnd={handleUserTouchEnd}
-      // fullScreen={fullScreen}
+      // onTouchStart={handleUserTouchStart}
+      // onTouchEnd={handleUserTouchEnd}
+      // onScroll={handleScroll}
+      fullScreen={fullScreen}
     >
-      <DialogContent className="dialogContent" >
-      {!props?.isFirstPost ? (
-        <IconButton
-          className="media-dialog-left-navigation-icon"
-          onClick={() => {
-            if (post?.id) props?.renderPrevMedia(post?.id);
-          }}
-        >
-          <ArrowLeftIcon />
-        </IconButton>
-      ) : null}
-      {!props?.isLastPost ? (
-        <IconButton
-          className="media-dialog-right-navigation-icon"
-          onClick={() => {
-            if (post?.id) props?.renderNextMedia(post?.id);
-          }}
-          disabled={props?.loading}
-        >
-          <ArrowRightIcon />
-        </IconButton>
-      ) : null}
-      {props?.loading ? (
-        <Stack
-          justifyContent="center"
-          alignItems="center"
-          style={{ width: "100%", height: "70%", minHeight: "70%" }}
-        >
-          <CircularProgress />
-        </Stack>
-      ) : post?.type === "image" ? (
-        <img src={post?.media} alt="Not Displayed" className="responsiveimg" style={{ width: "100%", height: "70%", minHeight: "70%" }} />
-      ) : post?.type === "video" ? (
-        <video key={post?.id}  style={{ width: "100%", height: "70%", minHeight: "70%" }} controls autoPlay>
-          <source src={post?.media} id="video_here" />
-          Your browser does not support HTML5 video.
-        </video>
-      ) : (
-        <Typography
-          component="span"
-          className="like-comm"
-          variant="body2"
-          align="center"
-          sx={{ color: "#fff" }}
-          padding="50px"
-        >
-          {post?.description}
-        </Typography>
-      )}
-      {!props?.isPage && (
-        <>
-          <Box
-            sx={{ padding: "16px 5px" }}
-            className="d-flex align-items-center justify-content-between"
-          >
-            <Stack width="100%" direction="row" justifyContent="space-between">
-              <Box sx={{ display: "flex" }}>
-                <IconButton
-                  className="d-flex align-items-center justify-content-center"
-                  onClick={handleLike}
-                >
-                  {!alreadyLike ? (
-                    <FavoriteBorderRoundedIcon />
-                  ) : (
-                    <FaHeart color="red" />
-                  )}
-                </IconButton>
-                <IconButton
-                  onClick={() => setOpenPopUpTip(true)}
-                  sx={{ fontSize: "12px" }}
-                >
-                  <MonetizationOnIcon />
-                  SEND TIP
-                </IconButton>
-              </Box>
-              {!alreadyBookmark ? (
-                <IconButton
-                  className="d-flex align-items-center justify-content-center"
-                  onClick={sendBookmark}
-                >
-                  <BookmarkBorderIcon />
-                </IconButton>
-              ) : (
-                <IconButton
-                  className="d-flex align-items-center justify-content-center"
-                  onClick={deleteBookmark}
-                >
-                  <BookmarkIcon />
-                </IconButton>
-              )}
+      <div className="post-horizontal">
+        <DialogContent className="dialogContent">
+          {!props?.isFirstPost ? (
+            <IconButton
+              className="media-dialog-left-navigation-icon"
+              onClick={() => {
+                if (post?.id) props?.renderPrevMedia(post?.id);
+              }}
+            >
+              <ArrowLeftIcon />
+            </IconButton>
+          ) : null}
+          {!props?.isLastPost ? (
+            <IconButton
+              className="media-dialog-right-navigation-icon"
+              onClick={() => {
+                if (post?.id) props?.renderNextMedia(post?.id);
+              }}
+              disabled={props?.loading}
+            >
+              <ArrowRightIcon />
+            </IconButton>
+          ) : null}
+          {props?.loading ? (
+            <Stack
+              justifyContent="center"
+              alignItems="center"
+              style={{ width: "100%", height: "70%", minHeight: "70%" }}
+            >
+              <CircularProgress />
             </Stack>
-            {props?.canDeletePost && canHeDeletePost ? (
-              <IconButton onClick={deletePost}>
-                <MdDelete />
-              </IconButton>
-            ) : null}
-          </Box>
-          <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
-            <p className="like-comm">{countLike} Likes</p>
-          </Box>
-          <Box sx={{ px: 2 }}>
+          ) : post?.type === "image" ? (
+            <img
+              src={post?.media}
+              alt="Not Displayed"
+              className="responsiveimg"
+              style={{ width: "100%", height: "70%", minHeight: "70%" }}
+            />
+          ) : post?.type === "video" ? (
+            <video
+              key={post?.id}
+              style={{ width: "100%", height: "70%", minHeight: "70%" }}
+              controls
+              autoPlay
+            >
+              <source src={post?.media} id="video_here" />
+              Your browser does not support HTML5 video.
+            </video>
+          ) : (
             <Typography
               component="span"
               className="like-comm"
               variant="body2"
-              sx={{ color: toggle ? "#fff" : "#000" }}
+              align="center"
+              sx={{ color: "#fff" }}
+              padding="50px"
             >
-              {post.type !== "text" && post?.description}
+              {post?.description}
             </Typography>
-          </Box>
-          <TipPopUp
-            user={post?.user}
-            onClose={handleCloseTip}
-            setOpenPopUpTip={setOpenPopUpTip}
-            onOpen={handleClickOpen}
-            openPopUpTip={openPopUpTip}
-          />
-        </>
-      )}
-      </DialogContent>
+          )}
+          {!props?.isPage && (
+            <>
+              <Box
+                sx={{ padding: "16px 5px" }}
+                className="d-flex align-items-center justify-content-between"
+              >
+                <Stack
+                  width="100%"
+                  direction="row"
+                  justifyContent="space-between"
+                >
+                  <Box sx={{ display: "flex" }}>
+                    <IconButton
+                      className="d-flex align-items-center justify-content-center"
+                      onClick={handleLike}
+                    >
+                      {!alreadyLike ? (
+                        <FavoriteBorderRoundedIcon />
+                      ) : (
+                        <FaHeart color="red" />
+                      )}
+                    </IconButton>
+                    <IconButton
+                      onClick={() => setOpenPopUpTip(true)}
+                      sx={{ fontSize: "12px" }}
+                    >
+                      <MonetizationOnIcon />
+                      SEND TIP
+                    </IconButton>
+                  </Box>
+                  {!alreadyBookmark ? (
+                    <IconButton
+                      className="d-flex align-items-center justify-content-center"
+                      onClick={sendBookmark}
+                    >
+                      <BookmarkBorderIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      className="d-flex align-items-center justify-content-center"
+                      onClick={deleteBookmark}
+                    >
+                      <BookmarkIcon />
+                    </IconButton>
+                  )}
+                </Stack>
+                {props?.canDeletePost && canHeDeletePost ? (
+                  <IconButton onClick={deletePost}>
+                    <MdDelete />
+                  </IconButton>
+                ) : null}
+              </Box>
+              <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
+                <p className="like-comm">{countLike} Likes</p>
+              </Box>
+              <Box sx={{ px: 2 }}>
+                <Typography
+                  component="span"
+                  className="like-comm"
+                  variant="body2"
+                  sx={{ color: toggle ? "#fff" : "#000" }}
+                >
+                  {post.type !== "text" && post?.description}
+                </Typography>
+              </Box>
+              <TipPopUp
+                user={post?.user}
+                onClose={handleCloseTip}
+                setOpenPopUpTip={setOpenPopUpTip}
+                onOpen={handleClickOpen}
+                openPopUpTip={openPopUpTip}
+              />
+            </>
+          )}
+        </DialogContent>
+      </div>
+
+      <div className="post-vertical">
+        <DialogContent className="dialogContent">
+          {props?.dataList.map((post: any) => {
+            return (
+              <>
+                <div className="full-content">
+                  <div className="post">
+                    {post?.type === "image" ? (
+                      <img
+                        src={post?.media}
+                        alt="Not Displayed"
+                        className="responsiveimg"
+                        style={{
+                          width: "100%",
+                          height: "70%",
+                          minHeight: "70%",
+                        }}
+                      />
+                    ) : (
+                      <video
+                        key={post?.id}
+                        style={{
+                          width: "100%",
+                          height: "70%",
+                          minHeight: "70%",
+                        }}
+                        controls
+                        autoPlay
+                      >
+                        <source src={post?.media} id="video_here" />
+                        Your browser does not support HTML5 video.
+                      </video>
+                    )}
+                  </div>
+                  <div>
+                    <Box
+                      sx={{ padding: "16px 5px" }}
+                      className="d-flex align-items-center justify-content-between"
+                    >
+                      <Stack
+                        width="100%"
+                        direction="row"
+                        justifyContent="space-between"
+                      >
+                        <Box sx={{ display: "flex" }}>
+                          <IconButton
+                            className="d-flex align-items-center justify-content-center"
+                            onClick={handleLike}
+                          >
+                            {!alreadyLike ? (
+                              <FavoriteBorderRoundedIcon />
+                            ) : (
+                              <FaHeart color="red" />
+                            )}
+                          </IconButton>
+                          <IconButton
+                            onClick={() => setOpenPopUpTip(true)}
+                            sx={{ fontSize: "12px" }}
+                          >
+                            <MonetizationOnIcon />
+                            SEND TIP
+                          </IconButton>
+                        </Box>
+                        {!alreadyBookmark ? (
+                          <IconButton
+                            className="d-flex align-items-center justify-content-center"
+                            onClick={sendBookmark}
+                          >
+                            <BookmarkBorderIcon />
+                          </IconButton>
+                        ) : (
+                          <IconButton
+                            className="d-flex align-items-center justify-content-center"
+                            onClick={deleteBookmark}
+                          >
+                            <BookmarkIcon />
+                          </IconButton>
+                        )}
+                      </Stack>
+                      {props?.canDeletePost && canHeDeletePost ? (
+                        <IconButton onClick={deletePost}>
+                          <MdDelete />
+                        </IconButton>
+                      ) : null}
+                    </Box>
+                    <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
+                      <p className="like-comm">{countLike} Likes</p>
+                    </Box>
+                    <Box sx={{ px: 2 }}>
+                      <Typography
+                        component="span"
+                        className="like-comm"
+                        variant="body2"
+                        sx={{ color: toggle ? "#fff" : "#000" }}
+                      >
+                        {post.type !== "text" && post?.description}
+                      </Typography>
+                    </Box>
+                    <TipPopUp
+                      user={post?.user}
+                      onClose={handleCloseTip}
+                      setOpenPopUpTip={setOpenPopUpTip}
+                      onOpen={handleClickOpen}
+                      openPopUpTip={openPopUpTip}
+                    />
+                  </div>
+                </div>
+              </>
+            );
+          })}
+        </DialogContent>
+      </div>
     </Dialog>
   );
 };

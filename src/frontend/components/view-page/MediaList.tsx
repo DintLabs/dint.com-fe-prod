@@ -154,6 +154,7 @@ const MediaList = (props: MediaListProps) => {
           isPage={props?.isPage}
           onLikePost={onLikePost}
           onBookmark={onBookMark}
+          dataList={mediaList}
         />
       )}
     </>
