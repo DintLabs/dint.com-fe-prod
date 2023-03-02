@@ -10,6 +10,7 @@ import {
   Tabs,
   TextField,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import _axios from "frontend/api/axios";
@@ -103,6 +104,7 @@ const HomeTab = ({ createPost }: Props) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { toggle } = useContext(ThemeContext);
+  const mobileView = useMediaQuery("(max-width:899px)");
 
   const [value, setValue] = useState(0);
   const [suggestionList, setSuggestionList] = useState([]);
@@ -692,7 +694,7 @@ const HomeTab = ({ createPost }: Props) => {
             <ListItemAvatar
               style={{ cursor: "pointer", display: "flex", gap: "35px" }}
             >
-              <div
+              {mobileView && <div
                 style={{ textAlign: "center", width: "fit-content" }}
                 className="user-story"
               >
@@ -715,6 +717,8 @@ const HomeTab = ({ createPost }: Props) => {
                       position: "relative",
                     }}
                   />
+
+                  {/* Create Story Button */}
                   <Fab
                     disableFocusRipple
                     disableRipple
@@ -730,6 +734,10 @@ const HomeTab = ({ createPost }: Props) => {
                       right: "-8px",
                       zIndex: "9",
                     }}
+                    onClick={() => {
+                      setOpenModal(true);
+                      setOpenStoryModal("User");
+                    }}
                   >
                     <AddIcon fontSize="small" sx={{ color: "#fff" }} />
                   </Fab>
@@ -744,7 +752,7 @@ const HomeTab = ({ createPost }: Props) => {
                 >
                   {"Your Story"}
                 </Typography>
-              </div>
+              </div>}
               <StoriesUserOwn createUserStories={createUserStories} />
 
               {storyList?.map((item: any, i: number) => (
