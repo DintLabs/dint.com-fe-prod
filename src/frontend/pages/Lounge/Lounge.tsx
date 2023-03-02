@@ -1,50 +1,52 @@
-import { useLayoutEffect, useMemo, useState, useEffect, useCallback } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router'
-import { checkUsernameAvailability } from 'frontend/redux/actions/commonActions'
-import { dispatch, RootState } from 'frontend/redux/store'
-import { commonSliceActions } from 'frontend/redux/slices/common'
-import { HOME_SIDE_MENU } from 'frontend/redux/slices/newHome'
-import { useSelector } from 'react-redux'
-import { useLounge } from 'frontend/contexts/LoungeContext'
-import { isMobile } from 'frontend/utils'
-import { Helmet } from 'react-helmet'
-import { toast } from 'react-toastify'
-import _axios from 'frontend/api/axios'
+import { Box, Grid } from '@mui/material';
+import { useLayoutEffect, useMemo, useState, useEffect, useCallback } from 'react';
+import { Helmet } from 'react-helmet';
+import { toast } from 'react-toastify';
+import { useLocation, useNavigate, useParams } from 'react-router';
+import { useSelector } from 'react-redux';
 
-import { Box, Grid, Modal, useMediaQuery } from '@mui/material'
-import NotificationsContainer from '../Notifications'
-import ProcessWithdrawal from '../Wallet/ProcessWithdrawal'
-import MobileTopHeader from './MobileTopHeader'
-import SidebarMobile from './SidebarMobile'
-import Subscriptions from '../Subscriptions/Subscriptions'
-import PageSkeleton from 'frontend/components/common/skeletons/PageSkeleton'
-import ProfilePage from './ProfilePage'
-import DintWallet from '../Wallet/DintWallet'
-import Withdrawal from '../Wallet/Withdrawal'
-import MyProfile from './MyProfile'
-import ViewPage from '../View-Page/ViewPage'
-import BuyToken from 'frontend/pages/BuyToken'
-import Messages from '../Messages/Messages'
-import HomeTab from './HomeTab'
-import Sidebar from './Sidebar'
-import AddPost from './AddPost'
-import Search from '../search/index'
+import _axios from 'frontend/api/axios';
+import { isMobile } from "frontend/utils";
+import { HOME_SIDE_MENU } from 'frontend/redux/slices/newHome';
+import { useLounge } from 'frontend/contexts/LoungeContext';
+import { dispatch, RootState } from 'frontend/redux/store';
+import { checkUsernameAvailability } from 'frontend/redux/actions/commonActions';
+
+import { commonSliceActions } from 'frontend/redux/slices/common';
+import PageSkeleton from 'frontend/components/common/skeletons/PageSkeleton';
+
+import BuyToken from 'frontend/pages/BuyToken';
+import HomeTab from './HomeTab';
+import MyProfile from './MyProfile';
+import Sidebar from './Sidebar';
+import SidebarMobile from './SidebarMobile';
+import Subscriptions from '../Subscriptions/Subscriptions';
+import ViewPage from '../View-Page/ViewPage';
+import AddPost from './AddPost';
+import Messages from '../Messages/Messages';
+import DintWallet from '../Wallet/DintWallet';
+import Withdrawal from '../Wallet/Withdrawal';
+import ProcessWithdrawal from '../Wallet/ProcessWithdrawal';
+import { Modal } from '@mui/material';
+import Search from "../search/index";
+import ProfilePage from "./ProfilePage";
+import MobileTopHeader from "./MobileTopHeader";
+import NotificationsContainer from '../Notifications';
 
 const NewHome = () => {
-  const mobileView = useMediaQuery('(max-width:899px)')
-  const userData = useSelector((state: RootState) => state?.user?.userData)
-  const { addNewPostToContext } = useLounge()
+  const userData = useSelector((state: RootState) => state?.user?.userData);
+  const { addNewPostToContext } = useLounge();
+  
+  const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
+  const [isLounge, setIsLounge] = useState<boolean>(false);
+  const [isViewPage, setIsViewPage] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [widthScreen, setWidthScreen] = useState<number>(window.screen.width)
-  const [isLounge, setIsLounge] = useState<boolean>(false)
-  const [isViewPage, setIsViewPage] = useState<boolean>(false)
-  const [openModal, setOpenModal] = useState<boolean>(false)
+  const isPrimaryLoader = useSelector((state: RootState) => state.common.isLoading);
 
-  const isPrimaryLoader = useSelector((state: RootState) => state.common.isLoading)
-
-  const params = useParams()
-  const location = useLocation()
-  const navigate = useNavigate()
+  const params = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const validPages = [
@@ -59,52 +61,52 @@ const NewHome = () => {
       HOME_SIDE_MENU.MESSAGES,
       HOME_SIDE_MENU.SUBSCRIPTIONS,
       HOME_SIDE_MENU.SEARCH,
-      HOME_SIDE_MENU.NOTIFICATIONS,
-    ]
+      HOME_SIDE_MENU.NOTIFICATIONS
+    ];
 
     if (params.page) {
       if (!params.username) {
         if (validPages.includes(params.page as string as HOME_SIDE_MENU)) {
-          setIsLounge(true)
+          setIsLounge(true);
         } else {
-          navigate('/404')
+          navigate('/404');
         }
       } else {
-        navigate('/404')
+        navigate('/404');
       }
     } else if (params.username) {
-      dispatch(commonSliceActions.startLoading())
+      dispatch(commonSliceActions.startLoading());
       dispatch(checkUsernameAvailability(params.username))
         .then((res: { user_id?: number; page_id?: number | null }) => {
           if (res) {
             if (res?.user_id) {
-              setIsLounge(true)
+              setIsLounge(true);
             } else {
-              setIsLounge(false)
-              setIsViewPage(true)
+              setIsLounge(false);
+              setIsViewPage(true);
             }
-            dispatch(commonSliceActions.stopLoading())
+            dispatch(commonSliceActions.stopLoading());
           } else {
-            dispatch(commonSliceActions.stopLoading())
-            navigate('/404')
+            dispatch(commonSliceActions.stopLoading());
+            navigate('/404');
           }
         })
         .catch((err: any) => {
-          console.error(err)
-        })
+          console.error(err);
+        });
     } else {
-      setIsLounge(true)
+      setIsLounge(true);
     }
-  }, [location, navigate, params, params.username])
+  }, [location, navigate, params, params.username]);
 
   useLayoutEffect(() => {
     function updateWidth() {
-      setWidthScreen(window.screen.width)
+      setWidthScreen(window.screen.width);
     }
-    window.addEventListener('resize', updateWidth)
-    updateWidth()
-    return () => window.removeEventListener('resize', updateWidth)
-  }, [])
+    window.addEventListener('resize', updateWidth);
+    updateWidth();
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
 
   // const isMobileScreen = useMemo(() => {
   //   return isMobile()
@@ -122,25 +124,26 @@ const NewHome = () => {
   const createPost = useCallback(
     async (toastId: string, data: any) => {
       try {
-        const result = await _axios.post('/api/posts/create/', data)
-        if (result?.data?.data) addNewPostToContext(result.data.data)
+        const result = await _axios.post('/api/posts/create/', data);
+        if (result?.data?.data) addNewPostToContext(result.data.data);
         setTimeout(() => {
           toast.update(toastId, {
             render: 'Post Added Successful!',
             type: 'success',
-            isLoading: false,
-          })
-        }, 1000)
+            isLoading: false
+          });
+        }, 1000);
 
         setTimeout(() => {
-          toast.dismiss()
-        }, 3000)
+          toast.dismiss();
+        }, 3000);
+        
       } catch (err: any) {
-        toast.error(err.toString())
+        toast.error(err.toString());
       }
     },
     [addNewPostToContext]
-  )
+  );
 
   const handleClose = () => {
     setOpenModal(false)
@@ -157,24 +160,27 @@ const NewHome = () => {
           <Grid item xs={12} md={12}>
             <HomeTab createPost={createPost} />
           </Grid>
+          {/* <Grid item xs={12} md={4} /> */}
         </Grid>
-      )
-    if (location.pathname.includes(HOME_SIDE_MENU.MESSAGES)) return <Messages />
-    if (location.pathname.includes(HOME_SIDE_MENU.TOKEN)) return <BuyToken />
-    if (location.pathname.includes(HOME_SIDE_MENU.WALLET)) return <DintWallet />
-    if (location.pathname.includes(HOME_SIDE_MENU.WITHDRAWAL)) return <Withdrawal />
-    if (location.pathname.includes(HOME_SIDE_MENU.PROCESSWITHDRAWAL)) return <ProcessWithdrawal />
-    if (location.pathname.includes(HOME_SIDE_MENU.NOTIFICATIONS)) return <NotificationsContainer />
+      );
+    if (location.pathname.includes(HOME_SIDE_MENU.MESSAGES)) return <Messages />;
+    if (location.pathname.includes(HOME_SIDE_MENU.TOKEN)) return <BuyToken />;
+    if (location.pathname.includes(HOME_SIDE_MENU.WALLET)) return <DintWallet />;
+    if (location.pathname.includes(HOME_SIDE_MENU.WITHDRAWAL)) return <Withdrawal />;
+    if (location.pathname.includes(HOME_SIDE_MENU.PROCESSWITHDRAWAL)) return <ProcessWithdrawal />;
+    if (location.pathname.includes(HOME_SIDE_MENU.NOTIFICATIONS)) return <NotificationsContainer />;
     if (location.pathname.includes(HOME_SIDE_MENU.ADD_POST))
-      return mobileView ? (
-        <AddPost createPost={createPost} />
-      ) : (
-        <Modal open={true} onClose={handleClose}>
-          <AddPost createPost={createPost} />
+      return (
+        <Modal
+          open={true}
+          onClose={handleClose}
+        >
+          <AddPost widthScreen={widthScreen} createPost={createPost}  />
         </Modal>
-      )
-    if (location.pathname.includes(HOME_SIDE_MENU.SEARCH)) return <Search />
-    if (location.pathname.includes(HOME_SIDE_MENU.SUBSCRIPTIONS)) return <Subscriptions />
+      );
+    if (location.pathname.includes(HOME_SIDE_MENU.SEARCH)) return <Search />;
+    if (location.pathname.includes(HOME_SIDE_MENU.SUBSCRIPTIONS))
+      return <Subscriptions />;
     return (
       <>
         <Grid container>
@@ -183,8 +189,8 @@ const NewHome = () => {
           </Grid>
         </Grid>
       </>
-    )
-  }, [createPost, location.pathname, params.username, widthScreen, mobileView])
+    );
+  }, [createPost, location.pathname, params.username, widthScreen]);
 
   return isPrimaryLoader ? (
     <PageSkeleton />
@@ -194,21 +200,26 @@ const NewHome = () => {
     <>
       <Helmet>
         <title>Lounge</title>
-        <meta name='' content='' />
+        <meta
+          name=""
+          content=""
+        />
       </Helmet>
       <Box style={{ margin: 0 }}>
         <Grid container>
-          <Grid item xs={0} md={1} className='desktop-nav'>
+          <Grid
+            item
+            xs={0}
+            md={1}
+            className="desktop-nav"
+          >
             {userData && !!userData.id && <Sidebar />}
           </Grid>
-          <Grid item className='mobile-nav'>
-            {userData && !!userData.id && (
+          <Grid item className="mobile-nav">
+            {userData && !!userData.id && ( 
               // isMobileScreen &&
               <>
-                <MobileTopHeader
-                  userName={userData.display_name || ''}
-                  avatar={userData.profile_image || ''}
-                />
+                <MobileTopHeader userName={userData.display_name || ""} avatar={userData.profile_image || ""} />
                 <SidebarMobile widthScreen={widthScreen} />
               </>
             )}
@@ -219,7 +230,7 @@ const NewHome = () => {
         </Grid>
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default NewHome
+export default NewHome;
