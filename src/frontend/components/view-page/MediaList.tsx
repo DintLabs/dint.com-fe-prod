@@ -2,6 +2,8 @@ import { PostInterface } from 'frontend/interfaces/reduxInterfaces';
 import React, { useEffect, useState } from 'react';
 import CustomInfiniteScrollForMedia from './CustomInfiniteScrollForMedia';
 import ViewMediaModal from './ViewMediaModal';
+import { useMediaQuery } from '@mui/material';
+import ViewMediaModalMobile from './ViewMediaModalMobile';
 
 type MediaListProps = {
   mediaList: any;
@@ -38,7 +40,7 @@ const MediaList = (props: MediaListProps) => {
     is_bookmarked: false,
     description: "",
   });
-
+  const isMobile = useMediaQuery("(max-width:600px)")
   useEffect(() => {
     setMediaList(props.mediaList);
   }, [props.mediaList]);
@@ -132,7 +134,7 @@ const MediaList = (props: MediaListProps) => {
         isModalOpen={isMediaViewModalOpen}
         selectedMedia={selectedMedia}
       />
-      {isMediaViewModalOpen && (
+      {(isMediaViewModalOpen && !isMobile) && (
         <ViewMediaModal
           selectedMedia={selectedMedia}
           isFirstPost={mediaList?.findIndex(
@@ -156,7 +158,30 @@ const MediaList = (props: MediaListProps) => {
           onBookmark={onBookMark}
           dataList={mediaList}
         />
-      )}
+      )} 
+      {(isMediaViewModalOpen && isMobile)  && <ViewMediaModalMobile 
+          selectedMedia={selectedMedia}
+          isFirstPost={mediaList?.findIndex(
+            (media: PostInterface) => media.id === selectedMedia.id
+          ) === 0}
+          isLastPost={mediaList?.findIndex(
+            (media: PostInterface) => media.id === selectedMedia.id
+          ) ===
+            mediaList.length - 1}
+          getUserPostCounts={props?.getUserPostCounts}
+          renderNextMedia={viewNextMedia}
+          renderPrevMedia={viewPrevMedia}
+          open={isMediaViewModalOpen}
+          handleClose={handleModalClose}
+          loading={props?.loader}
+          userDetails={props?.userDetails}
+          canDeletePost={true}
+          onDelete={props?.postDeleted}
+          isPage={props?.isPage}
+          onLikePost={onLikePost}
+          onBookmark={onBookMark}
+          dataList={mediaList}
+      />}
     </>
   );
 };

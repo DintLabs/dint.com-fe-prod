@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import ImageIcon from '@mui/icons-material/Image'
 import { Box, Button, Divider, IconButton, Input, Stack } from '@mui/material'
-import './post.css'
+import './post.scss'
 
 interface Props {
   createPost: Function

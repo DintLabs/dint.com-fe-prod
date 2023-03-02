@@ -54,8 +54,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { sendMessage } from "frontend/redux/slices/messages";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import TipPopUp from "frontend/components/tip/TipPopUp";
-import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
-import { FaHeart } from "react-icons/fa";
+import moment from "moment";
 
 interface Props {
   createPost: Function;
@@ -428,40 +427,6 @@ const HomeTab = ({ createPost }: Props) => {
     }
   }
 
-  const handleLike = async (story: any) => {
-    if (!userData || !userData.id) {
-      toast.error("Can't find User");
-      return;
-    }
-
-    if (alreadyLike) {
-      try {
-      const { data } = await _axios.post(`/user/unlike_stories/${story.id}/`);
-
-      if (data.code === 200) {
-        setAlreadyLike(false);
-        toast.success("You disliked the story!!")
-      } else {
-        toast.error("story is not availabe!!")
-      }
-    } catch (err) {
-      toast.error("story is not availabe!!")
-    }
-    } else {
-      try {
-      const { data } = await _axios.post(`/user/like_stories/${story.id}/`);
-      if (data.code === 200) {
-        setAlreadyLike(true);
-        toast.success("You liked the story!!")
-      } else {
-        toast.error("story is not availabe!!")
-      }
-    } catch (err) {
-      toast.error("story is not availabe!!")
-    }
-    }
-  };
-
   useEffect(() => {
     const data: any = []
     if (storyList.length > 0) {
@@ -473,10 +438,46 @@ const HomeTab = ({ createPost }: Props) => {
               sx={{
                 position: 'relative',
                 '@media screen and (max-width: 899px)': {
-                  height: '100%', width: '100%', display: 'flex', alignItems: 'center'
+                  height: '100vh', width: '100%', display: 'flex', alignItems: 'center',flex: 1,flexDirection: 'column',
+                  '> div ~ div': {
+                    '> div ~ div': {
+                      height: '100vh !important',
+                      'div': {
+                        width: '100%',
+                      },
+                    },
+                  },
                 }
               }}
             >
+              <div 
+                onClick={() => navigate(`/${story.custom_username}`)}
+                style={{
+                  display:'flex',
+                  gap: '15px',
+                  position: 'absolute',
+                  top: 20,
+                  left: 15,
+                  zIndex: 1000,
+                  alignItems: "center",
+                  cursor: "pointer"
+                }}
+              >
+                <Avatar
+                  className="story-avatar"
+                  src={story?.profile_image}
+                  sx={{
+                    width: 50,
+                    height: 50,
+                    borderWidth: "3px",
+                    borderStyle: "solid",
+                    borderColor: toggle ? "#4AA081" : "#4AA081",
+                    position: "relative",
+                  }}
+                />
+                <h4 style={{color: '#fff'}}>{story.display_name}</h4>
+                {/* {story.user_stories.map((user_story: any) => <h4>{moment(user_story.created_at).fromNow()}</h4> )} */}
+              </div>
               <Stories
                 stories={createUserStories(story)}
                 onStoryEnd={(s: any, st: any) => {
@@ -499,8 +500,8 @@ const HomeTab = ({ createPost }: Props) => {
                   }
                 }}
                 onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
-                width={widthScreen < 900 ? "100%" : undefined}
-                height={widthScreen < 900 ? "100%" : undefined}
+                width={window.innerWidth < 900 ? "100%" : undefined}
+                height={window.innerWidth < 900 ? "100%" : undefined}
               />
               <CloseIcon 
                 onClick={() => setOpenModal(false)} 
@@ -513,25 +514,26 @@ const HomeTab = ({ createPost }: Props) => {
                   right: '15px'
                 }} 
               />
-              <div style={{display:'flex', position: 'absolute', bottom: 10, left: 0, width: '100%', padding: '0 10px', zIndex: 999}}>
+              <Box sx={{display:'flex', 
+                  position: 'absolute', 
+                  bottom: 15, 
+                  left: 0, 
+                  width: '100%', 
+                  padding: '0 10px', 
+                  zIndex: 999,
+                  '@media screen and (max-width: 899px)': {
+                    position: 'sticky',
+                  },
+                }}
+              >
                 {renderData(story)}
-                <IconButton
-                className="d-flex align-items-center justify-content-center"
-                // onClick={() => handleLike(story)}
-                >
-                  {!alreadyLike ? (
-                    <FavoriteBorderRoundedIcon />
-                  ) : (
-                    <FaHeart color="red" />
-                  )}
-                </IconButton>
                 <IconButton
                   onClick={() => sendTip(story)}
                   sx={{ fontSize: "12px" }}
                 > 
                   <MonetizationOnIcon />
                 </IconButton>
-              </div>
+              </Box>
             </Box>
           ),
           
@@ -568,15 +570,21 @@ const HomeTab = ({ createPost }: Props) => {
 
   const image = {
     display: "block",
-    maxWidth: "100%",
-    borderRadius: 4
+    borderRadius: 4,
+    objectFit: "cover",
+    height: "100%",
+    width: "100%",
   };
 
   const contentStylestoryback = {
-    background: "black",
     width: "100%",
-    padding: 20,
-    color: "white"
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+   '@media screen and (max-width: 899px)': {
+      width: '100% !important',
+      height: '100% !important',
+   },
   };
 
   const handleTouchStart = (evt: any) => {

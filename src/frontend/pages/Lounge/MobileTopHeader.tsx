@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
@@ -14,21 +14,15 @@ import storyImage from "frontend/assets/img/web3/story-1.png";
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useContext } from "react";
 import { HOME_SIDE_MENU } from "frontend/redux/slices/newHome";
-import { useParams } from "react-router";
+import {  useParams } from 'react-router';
 import _axios from "frontend/api/axios";
 import { AccountBalanceWallet } from "@mui/icons-material";
 
-export default function MobileTopHeader({
-  userName,
-  avatar,
-}: {
-  userName: string;
-  avatar: string;
-}) {
+export default function MobileTopHeader({ userName, avatar}:{userName:string, avatar: string}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
-  const [notificationsLength, setNotificationsLength] = React.useState();
+  const [ notificationsLength , setNotificationsLength ] = React.useState();
   const navigate = useNavigate();
 
   const { toggle } = useContext(ThemeContext);
@@ -41,114 +35,96 @@ export default function MobileTopHeader({
     setMobileMoreAnchorEl(null);
   };
 
-  const routeurl = useParams();
+  const routeurl = useParams()
 
   const menuId = "primary-search-account-menu";
-  React.useEffect(() => {
-    const getUnseenMessagesLength = async () => {
-      await _axios
-        .get("/api/chat/get-unseen-message/")
-        .then((res: any) => {
-          setNotificationsLength(res.data.data.length);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
-    };
-    getUnseenMessagesLength();
-  }, []);
+  React.useEffect(()=>{
+    const getUnseenMessagesLength = async() => {
+      await _axios.get('/api/chat/get-unseen-message/').then((res:any)=>{
+        setNotificationsLength(res.data.data.length)
+       }).catch((err:any) =>{console.log(err)})
+    }
+    getUnseenMessagesLength()
+  },[])
   return (
-    <AppBar
-      className="mobile-menu"
-      sx={{
-        background: toggle ? "#151c24" : "#fff",
-      }}
-      position="sticky"
-    >
-      <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="open drawer"
-          sx={{ mr: 2 }}
-        >
-          <Link to="/lounge">
-            <h1>
-              <img
-                src={logo}
-                alt="logo"
-                id="logo_homepage"
-                style={{ maxHeight: "30px" }}
-              />{" "}
-            </h1>
-          </Link>
-        </IconButton>
-        <Typography
-          sx={{
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-          }}
-          color={toggle ? "#fff" : "#000"}
-        >
-          {routeurl.username && userName}
-        </Typography>
-        <Box sx={{ flexGrow: 1 }} />
-        <Box sx={{ display: { xs: "flex", md: "flex" } }}>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar
+        className="mobile-menu"
+        sx={{ background: toggle ? "#151c24" : "#fff" }}
+        position="fixed"
+      >
+        <Toolbar>
           <IconButton
             size="large"
-            aria-label="show 17 new notifications"
-            sx={{
-              color: toggle ? "#fff" : "#6E747A",
-              padding: "5px",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              navigate(`/dint-wallet/`);
-            }}
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            sx={{ mr: 2 }}
           >
-            <AccountBalanceWallet />
+            <Link to="/lounge">
+              <h1>
+                <img
+                  src={logo}
+                  alt="logo"
+                  id="logo_homepage"
+                  style={{ maxHeight: "30px" }}
+                />{" "}
+              </h1>
+            </Link>
           </IconButton>
+          <Typography sx={{textOverflow: 'ellipsis',whiteSpace:'nowrap', overflow:'hidden'}} color={toggle ? "#fff" : "#000"} >{routeurl.username && userName}</Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: "flex", md: "flex" } }}>
 
           <IconButton
-            size="large"
-            aria-label="show 17 new notifications"
-            sx={{
-              color: toggle ? "#fff" : "#6E747A",
-              padding: "5px",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              navigate(`/lounge/${HOME_SIDE_MENU.NOTIFICATIONS}`);
-            }}
-          >
-            <NotificationsOutlinedIcon />
-            <Badge badgeContent={notificationsLength} color="secondary" />
-          </IconButton>
-          <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-controls={menuId}
-            aria-haspopup="true"
-            onClick={handleProfileMenuOpen}
-            sx={{ color: toggle ? "#fff" : "#6E747A", padding: "5px" }}
-          >
-            <Avatar
-              className="story-avatar avtar-mobile-dev"
-              src={avatar}
-              sx={{
-                width: 92,
-                height: 92,
-                borderWidth: "3px",
-                borderStyle: "solid",
-                borderColor: toggle ? "#4AA081" : "#4AA081",
+              size="large"
+              aria-label="show 17 new notifications"
+              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px', cursor:"pointer" }}
+              onClick={() => {
+                navigate(`/dint-wallet/`);
               }}
-            />
-          </IconButton>
-        </Box>
-      </Toolbar>
-    </AppBar>
+            >
+             <AccountBalanceWallet />
+            </IconButton>
+       
+
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px', cursor:"pointer" }}
+              onClick={() => {
+                navigate(`/lounge/${HOME_SIDE_MENU.NOTIFICATIONS}`);
+              }}
+            >
+              <NotificationsOutlinedIcon />
+              <Badge badgeContent={notificationsLength} color="secondary"/>
+            </IconButton>
+         
+         
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px' }}
+            >
+              <Avatar
+                className="story-avatar avtar-mobile-dev"
+                src={avatar}
+                sx={{
+                  width: 92,
+                  height: 92,
+                  borderWidth: "3px",
+                  borderStyle: "solid",
+                  borderColor: toggle ? "#4AA081" : "#4AA081",
+                }}
+              />
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }

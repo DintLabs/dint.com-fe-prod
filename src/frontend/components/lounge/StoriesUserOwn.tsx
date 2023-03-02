@@ -7,13 +7,15 @@ import { useSelector } from "react-redux";
 import Stories from "react-insta-stories";
 import CloseIcon from '@mui/icons-material/Close';
 import { Box } from "@mui/material";
+import { useNavigate } from "react-router";
 
 const StoriesUserOwn = ({createUserStories}: any) => {
+  const navigate = useNavigate();
+
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { toggle } = useContext(ThemeContext);
   const { userOwnStories } = useSelector((state: RootState) => state.lounge);
   const { userData } = useSelector((state: RootState) => state.user);
-  const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
 
   const objStoriesItem = {
     custom_username: userData?.custom_username,
@@ -22,15 +24,6 @@ const StoriesUserOwn = ({createUserStories}: any) => {
     profile_image: userData?.profile_image,
     user_stories: userOwnStories,
   };
-
-   useLayoutEffect(() => {
-      function updateWidth() {
-          setWidthScreen(window.screen.width);
-      }
-      window.addEventListener('resize', updateWidth);
-      updateWidth();
-      return () => window.removeEventListener('resize', updateWidth);
-    }, []);
 
   if (!userOwnStories || userOwnStories.length === 0) return null;
 
@@ -86,20 +79,53 @@ const StoriesUserOwn = ({createUserStories}: any) => {
           <Box 
             sx={{
               position: 'relative',
-              outline: 'none',
               '@media screen and (max-width: 899px)': {
-                height: '100%', width: '100%', display: 'flex', alignItems: 'center'
-              },
+                height: '100vh', width: '100%', display: 'flex', alignItems: 'center',flex: 1,flexDirection: 'column',
+                '> div': {
+                  '> div ~ div': {
+                    'div': {
+                      width: '100%',
+                    },
+                  },
+                },
+              }
             }}
           >
+            <div 
+              onClick={() => navigate(`/${userData?.custom_username}`)}
+              style={{
+                display:'flex', 
+                gap: '15px', 
+                position: 'absolute', 
+                top: 20, 
+                left: 15, 
+                zIndex: 1000, 
+                alignItems: "center",
+                cursor: "pointer"
+              }}
+            >
+              <Avatar
+                className="story-avatar"
+                src={userData?.profile_image}
+                sx={{
+                  width: 50,
+                  height: 50,
+                  borderWidth: "3px",
+                  borderStyle: "solid",
+                  borderColor: toggle ? "#4AA081" : "#4AA081",
+                  position: "relative",
+                }}
+              />
+              <h4 style={{color: '#fff'}}>{userData?.display_name}</h4>
+            </div>
             <Stories
               keyboardNavigation
               stories={createUserStories(objStoriesItem)}
               onStoryEnd={(s: any, st: any) => console.log("story ended", s, st)}
               onAllStoriesEnd={(s: any, st: any) => setOpenModal(false)}
               onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
-              width={widthScreen < 900 ? "100%" : undefined}
-              height={widthScreen < 900 ? "100%" : undefined}
+              width={window.innerWidth < 900 ? "100%" : undefined}
+              height={window.innerWidth < 900 ? "100%" : undefined}
             />
             <CloseIcon
               onClick={() => setOpenModal(false)} 

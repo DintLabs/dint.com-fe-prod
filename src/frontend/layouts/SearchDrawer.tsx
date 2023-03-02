@@ -56,7 +56,7 @@ const SearchDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
     };
 
     return (
-        <Drawer className={toggle ? "searchDrawerDark" : "searchDrawer"} anchor={openFrom} open={open} onClose={onClose}>
+        <Drawer className={toggle ? "searchDrawerDark" : "searchDrawer"} sx={{left:"60px"}} anchor={openFrom} open={open} onClose={onClose}>
             <div className={toggle ? 'searchHeaderDark' : 'searchHeader'}>
                 <label>Search</label>
                 <TextField
