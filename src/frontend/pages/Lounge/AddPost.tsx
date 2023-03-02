@@ -7,7 +7,7 @@ import { postTypes } from 'frontend/data'
 import { toast } from 'react-toastify'
 
 import MultimediaIcon from '../../assets/img/icons/picture.png'
-import { Box, Button, Divider, Stack, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Button, Divider, Input, Stack, useMediaQuery, useTheme } from '@mui/material'
 import './navbarTab.css'
 
 interface Props {
@@ -31,6 +31,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
   const onCreatePost = async (e: any) => {
     e.stopPropagation()
     e.preventDefault()
+
     if (!loading) {
       setLoading(true)
       const toastId = toast.loading('Uploading File...')
@@ -136,10 +137,29 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
       <Box
         className={`compose-background ${toggle ? 'bg-dark' : 'bg-white'} ${!mobileView ? 'shadow' : ''}`}
       >
-        <Box className='d-flex justify-content-center align-items-center'>
+        <Box
+          className='d-flex justify-content-center align-items-center'
+          style={{ color: toggle ? '#ffffff' : '#161C24' }}
+        >
           <h4>Create New Post</h4>
         </Box>
+
         <Divider />
+        <div className='text-content-container'>
+          <Input
+            multiline
+            fullWidth
+            maxRows={5}
+            disableUnderline={true}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder='Compose new post...'
+            className='text-content-input'
+            style={{ color: toggle ? '#ffffff' : '#161C24' }}
+          />
+        </div>
+        <Divider />
+
         {image && (
           <div className='position-relative d-flex media-file-preview-container'>
             <img src={image} className='mb-3 media-file-preview' alt='imag' />

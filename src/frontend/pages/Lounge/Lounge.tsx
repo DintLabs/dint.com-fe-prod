@@ -165,7 +165,14 @@ const NewHome = () => {
     if (location.pathname.includes(HOME_SIDE_MENU.WITHDRAWAL)) return <Withdrawal />
     if (location.pathname.includes(HOME_SIDE_MENU.PROCESSWITHDRAWAL)) return <ProcessWithdrawal />
     if (location.pathname.includes(HOME_SIDE_MENU.NOTIFICATIONS)) return <NotificationsContainer />
-    if (location.pathname.includes(HOME_SIDE_MENU.ADD_POST)) return <AddPost createPost={createPost} />
+    if (location.pathname.includes(HOME_SIDE_MENU.ADD_POST))
+      return mobileView ? (
+        <AddPost createPost={createPost} />
+      ) : (
+        <Modal open={true} onClose={handleClose}>
+          <AddPost createPost={createPost} />
+        </Modal>
+      )
     if (location.pathname.includes(HOME_SIDE_MENU.SEARCH)) return <Search />
     if (location.pathname.includes(HOME_SIDE_MENU.SUBSCRIPTIONS)) return <Subscriptions />
     return (
@@ -177,7 +184,7 @@ const NewHome = () => {
         </Grid>
       </>
     )
-  }, [createPost, location.pathname, params.username, widthScreen])
+  }, [createPost, location.pathname, params.username, widthScreen, mobileView])
 
   return isPrimaryLoader ? (
     <PageSkeleton />

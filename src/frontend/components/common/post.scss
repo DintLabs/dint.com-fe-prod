@@ -34,7 +34,7 @@
 .custom-modal-mobile {
   margin-top: 65px;
   width: 100%;
-  height: calc(100vh - 55px);
+  height: calc(100vh - 10vh - 65px);
   display: flex;
   justify-content: center;
 
@@ -45,13 +45,21 @@
     flex: 1;
     padding: 16px;
     border-radius: 0;
+    overflow: scroll;
   }
 }
 
 .upload-img {
-  /* max-height: calc(100vh - 650px); */
   height: 100%;
   flex: 1;
+}
+
+.text-content-container {
+  padding: 15px 0;
+
+  .text-content-input {
+    color: inherit;
+  }
 }
 
 .confirm-buttons-block {
@@ -60,22 +68,19 @@
   align-items: center;
   width: 100%;
   margin-top: 10px;
-
-  @media screen and (max-width: 899px) {
-    margin-bottom: 90px;
-  }
 }
 
 .media-file-preview-container {
   width: 100%;
   height: auto;
   max-height: 70%;
+  padding: 15px 10px;
 
   .media-file-preview {
     max-width: 100%;
     height: 100%;
     max-height: 60vh;
-    margin: 10px auto;
+    margin: 0 auto;
   }
 }
 
