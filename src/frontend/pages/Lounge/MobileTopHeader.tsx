@@ -112,7 +112,7 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
       style={{
         color: toggle ? "white" : "#666666",
         textAlign: "center",
-        fontSize: "19px",
+        fontSize: "17px",
         padding: "5px",
       }}
     >
