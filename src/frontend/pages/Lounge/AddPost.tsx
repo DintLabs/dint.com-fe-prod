@@ -76,6 +76,29 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
         }
       }
 
+      if (content) {
+        try {
+          const result = await createPost(toastId, {
+            type: postTypes.text.value,
+            user: user.id,
+            content,
+          })
+
+          toast.update(toastId, {
+            render: 'Post Created Successful',
+            type: 'success',
+            isLoading: false,
+          })
+        } catch (exception: any) {
+          toast.update('Error adding...', {
+            render: exception.toString(),
+            type: 'error',
+          })
+
+          setTimeout(() => toast.dismiss(), 2000)
+        }
+      }
+
       setTimeout(() => {
         setContent('')
         setFile(null)
