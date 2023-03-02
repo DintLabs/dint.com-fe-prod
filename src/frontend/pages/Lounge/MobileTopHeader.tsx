@@ -1,6 +1,8 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import { getMaticBalance } from "frontend/redux/actions/wallet/getMaticBalance";
+import { getDintBalance } from "frontend/redux/actions/wallet/getDintBalance";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
@@ -17,6 +19,7 @@ import { HOME_SIDE_MENU } from "frontend/redux/slices/newHome";
 import {  useParams } from 'react-router';
 import _axios from "frontend/api/axios";
 import { AccountBalanceWallet } from "@mui/icons-material";
+import { RootState, useSelector } from "frontend/redux/store";
 
 export default function MobileTopHeader({ userName, avatar}:{userName:string, avatar: string}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -24,6 +27,15 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
     React.useState<null | HTMLElement>(null);
   const [ notificationsLength , setNotificationsLength ] = React.useState();
   const navigate = useNavigate();
+  const { address, balance } = useSelector(
+    (rootState: RootState) => rootState.wallet
+  );
+  const { maticWallet } = useSelector(
+    (rootState: RootState) => rootState.maticBalance
+  );
+  const { name, symbol } = useSelector(
+    (rootState: RootState) => rootState.dintBalance
+  );
 
   const { toggle } = useContext(ThemeContext);
 
@@ -75,19 +87,43 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
           <Typography sx={{textOverflow: 'ellipsis',whiteSpace:'nowrap', overflow:'hidden'}} color={toggle ? "#fff" : "#000"} >{routeurl.username && userName}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "flex", md: "flex" } }}>
+       
+         
 
           <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              sx={{ color: toggle ? "#fff" : "#6E747A", padding: '5px', cursor:"pointer" }}
-              onClick={() => {
-                navigate(`/dint-wallet/`);
-              }}
-            >
-             <AccountBalanceWallet />
-            </IconButton>
-       
+  size="large"
+  aria-label="show 17 new notifications"
+  sx={{
+    color: toggle ? "#fff" : "#6E747A",
+    padding: "5px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    position: "relative",
+  }}
+  onClick={() => {
+    navigate(`/dint-wallet/`);
+  }}
+>
+  <AccountBalanceWallet />
+  {balance ? (
+    <span
+      className="notranslate"
+      style={{
+        color: toggle ? "white" : "#666666",
+        textAlign: "center",
+        fontSize: "19px",
+        padding: "5px",
+      }}
+    >
+      ${balance}
+    </span>
+  ) : null}
+</IconButton>
 
+
+       
+           
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
