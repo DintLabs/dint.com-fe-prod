@@ -189,7 +189,7 @@ const DintWallet = () => {
               : { display: "flex", flexDirection: "column-reverse" }
           }
         >
-          {balance ? (
+          {balance >= 0 ? (
             <h1
               className="notranslate"
               style={{

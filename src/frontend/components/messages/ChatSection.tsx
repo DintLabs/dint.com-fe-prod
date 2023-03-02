@@ -51,7 +51,7 @@ function ChatSection(props: ChatSectionProps) {
 
   useEffect(() => {
     ws = new WebSocket(
-      `${process.env.WSS}/ws/chat/${props.selectedUser.chat_room}/`
+      `wss://${process.env.WSS}/ws/chat/${props.selectedUser.chat_room}/`
     );
   
     ws.onmessage = function (e: any) {
@@ -182,7 +182,8 @@ function ChatSection(props: ChatSectionProps) {
             messages={messagesList}
             loggedInUser={props.loggedInUser}
             userChats={userChats}
-            chatListLoader={chatListLoader} selectedUser={undefined}          />
+            chatListLoader={chatListLoader}
+          />
 
           {/* {/ footer /} */}
 
