@@ -113,6 +113,7 @@ const HomeTab = ({ createPost }: Props) => {
   const savedUser = JSON.parse(localStorage.getItem("userData") ?? "{}");
   const [showAddPageButton, setShowAddPageButton] = useState(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModalMobile, setOpenModalMobile] = useState<boolean>(false);
   const [openStoryModal, setOpenStoryModal] = useState<string>("");
   const [messageContent, setMessageContent] = useState<string>("test")
   const inputRef = useRef(null)
@@ -335,6 +336,7 @@ const HomeTab = ({ createPost }: Props) => {
         if (result?.data?.data) {
           dispatch(getUserOwnStories());
           setOpenModal(false);
+          setOpenModalMobile(false)
           handleStoryOnCreateStory(result?.data?.data);
           toast.update(toastId, {
             render: result?.data?.message,
@@ -375,6 +377,7 @@ const HomeTab = ({ createPost }: Props) => {
 
   const handleClose = () => {
     setOpenModal(false);
+    setOpenModalMobile(false)
   };
 
   const renderData = useCallback((story: any) => (
@@ -493,6 +496,7 @@ const HomeTab = ({ createPost }: Props) => {
                   console.log("all stories ended", s, st, state.goToSlide)
                   if(state.goToSlide === length) {
                     setOpenModal(false)
+                    setOpenModalMobile(false)
                   }
                   else {
                     setState({
@@ -506,7 +510,7 @@ const HomeTab = ({ createPost }: Props) => {
                 height={window.innerWidth < 900 ? "100%" : undefined}
               />
               <CloseIcon 
-                onClick={() => setOpenModal(false)} 
+                onClick={handleClose} 
                 style={{ 
                   cursor: 'pointer',
                   color: 'white',
@@ -659,6 +663,12 @@ const HomeTab = ({ createPost }: Props) => {
     setOpenPopUpTip(false);
   };
 
+  useEffect(() => {
+    openModalMobile
+      ? (document.body.style.overflow = 'hidden')
+      : (document.body.style.overflow = 'scroll')
+  }, [openModalMobile])
+
   return (
     <>
     <Box
@@ -679,7 +689,6 @@ const HomeTab = ({ createPost }: Props) => {
           // padding: "10px 0",
         }}
       >
-        {/* <MobileTopHeader /> */}
         <Box
           sx={{ width: { xs: "100%", md: "60%" } }}
           className="custom-padding"
@@ -701,7 +710,7 @@ const HomeTab = ({ createPost }: Props) => {
                 <div
                   style={{ position: "relative" }}
                   onClick={() => {
-                    setOpenModal(true);
+                    mobileView ? setOpenModalMobile(true) : setOpenModal(true);
                     setOpenStoryModal("User");
                   }}
                 >
@@ -735,7 +744,7 @@ const HomeTab = ({ createPost }: Props) => {
                       zIndex: "9",
                     }}
                     onClick={() => {
-                      setOpenModal(true);
+                      mobileView ? setOpenModalMobile(true) : setOpenModal(true);
                       setOpenStoryModal("User");
                     }}
                   >
@@ -798,6 +807,7 @@ const HomeTab = ({ createPost }: Props) => {
                   </div>
                 </>
               ))}
+
               <Modal open={openModal} onClose={handleClose}>
                 {openStoryModal === "Follower" ? (
                   <div 
@@ -825,6 +835,7 @@ const HomeTab = ({ createPost }: Props) => {
               </Modal>
             </ListItemAvatar>
           </Box>
+
           <Box className="custom-tab-wrapper">
             <Tabs
               value={value}
@@ -939,7 +950,6 @@ const HomeTab = ({ createPost }: Props) => {
               </>
             )}
           </TabPanel>
-
           <TabPanel value={value} index={3}>
             {videoPosts.map((item, i) => (
               <PostItem
@@ -966,6 +976,26 @@ const HomeTab = ({ createPost }: Props) => {
             )}
           </TabPanel>
         </Box>
+
+        {/* Mobile Create Stories Modal */}
+        {mobileView && openModalMobile && <Box style={{width: '100%', position: 'fixed', zIndex: 10}}>
+          <CloseIcon
+            onClick={handleClose}
+            style={{
+              color: 'black',
+              cursor: 'pointer',
+              position: 'absolute',
+              top: '80px',
+              right: '35px',
+              zIndex: 9999,
+            }}
+          />
+          <CreateStory
+            widthScreen={widthScreen}
+            createStory={createNewStory}
+          />
+        </Box>}
+
         <Box
           sx={{
             display: { xs: "none", md: "block" },
