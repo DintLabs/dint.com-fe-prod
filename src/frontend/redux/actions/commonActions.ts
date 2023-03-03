@@ -2,9 +2,12 @@ import FormData from 'form-data';
 import axios from '../../api/axios';
 import { AppDispatch } from '../store';
 
-export const uploadMedia = (file: any, folderName: string) => async (dispatch: AppDispatch) => {
+export const uploadMedia = (file: any, folderName: string, subscription?:Boolean, mediaType?:string) => async (dispatch: AppDispatch) => {
   const formData = new FormData();
   formData.append('media', file);
+  (subscription=== true || subscription=== false) &&formData.append('subscription', subscription);
+  mediaType?.length && formData.append('media_type', mediaType);
+
   if(file.type.includes('video')) {
     formData.append('folder', 'videos');
   } else {

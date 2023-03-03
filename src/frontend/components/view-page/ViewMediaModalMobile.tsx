@@ -17,7 +17,7 @@ import {
   import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
   import BookmarkIcon from "@mui/icons-material/Bookmark";
   import { FaHeart } from "react-icons/fa";
-  import { useContext, useEffect, useState } from "react";
+  import React, { useContext, useEffect, useRef, useState } from "react";
   import { toast } from "react-toastify";
   // import { useDetectScroll } from "@smakss/react-scroll-direction";
   import { dispatch, RootState, useSelector } from "frontend/redux/store";
@@ -46,48 +46,61 @@ import {
   import moment from "moment";
   import { useNavigate } from "react-router";
   import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import FullScreenModal from "./FullScreenModal";
+  import FullScreenModal from "./FullScreenModal";
+
   
   type ViewMediaModalProps = {
     open: boolean;
     handleClose: () => void;
-    isFirstPost: boolean;
-    isLastPost: boolean;
-    renderNextMedia: (mediaId: number) => void;
-    renderPrevMedia: (mediaId: number) => void;
     loading: boolean;
     userDetails?: any;
-    canDeletePost?: Boolean;
     getUserPostCounts?: (id: number) => void;
     onDelete?: (id: number) => void;
-    selectedMedia: any;
     isPage?: Boolean;
     onLikePost?: (post: any[], id: number) => void;
     onBookmark?: (isBookmark: Boolean, id: number) => void;
     dataList?: any;
+    selectedMedia: any;
   };
   
   const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const user: any = useSelector((state: RootState) => state.user.userData);
-    const [post, setPost] = useState(props.selectedMedia);
     const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false);
     const [fullScreenModal , setFullScreenModal] = useState<boolean>(false);
     const { toggle } = useContext(ThemeContext);
     const navigate = useNavigate();
-    const [videoPost , setVideoPost] = useState();
+    const [Post , setPost] = useState();
+    const [ postData , setPostData ] = useState(props.dataList);
 
-    useEffect(() => {
-      setPost(props?.selectedMedia);
-    }, [props?.selectedMedia]);
+    useEffect(()=>{
+      goToViolation()
+    },[])
+    
+
+    const onLikePost = (post: any[], postId: number) => {
+      setPost((prev: any) => ({ ...prev, like_post: post }));    
+      const newMediaList = postData.map((item: any) =>
+        item.id === postId ? { ...item, like_post: post } :item
+      )
+      setPostData(newMediaList);
+    };
+  
+    const onBookMark = (isBookmark: Boolean, postId: number) => {
+      setPost((prev: any) => ({ ...prev, is_bookmarked: isBookmark }));    
+      const newMediaList = postData.map((item: any) =>
+        item.id === postId ? { ...item, is_bookmarked: isBookmark } :item
+      );
+      postData(newMediaList);
+    }
   
     const handleLike = async (post:any) => {
       if (!props?.userDetails || !props?.userDetails?.id) {
         toast.error("Can't find User");
         return;
       }
-      if (post.like_post.map((ele:any)=>ele.user.id === props?.userDetails?.id )[0]) {
+      if ((post.like_post.filter((ele:any)=>ele?.user?.id === props?.userDetails?.id)[0])) {
         const unlikeResp: UnlikePostInterface = await dispatch(
           unlikeForPost(user?.id, post?.id)
         );
@@ -96,13 +109,14 @@ import FullScreenModal from "./FullScreenModal";
             ? item.user?.id !== user?.id
             : item.user !== user?.id
         );
-        props?.onLikePost && props.onLikePost(unlikePost, post?.id);
+        onLikePost(unlikePost, post?.id);
       } else {
         const likeResp: LikePostInterface = await dispatch(
-          addLikeForPost(user?.id, post?.id)
+        addLikeForPost(user?.id, post?.id)
         );
-        const likePost = [...post.like_post, likeResp];
-        props?.onLikePost && props.onLikePost(likePost, post?.id);
+        const likeRespWithUser = {...likeResp , user:{id:props.userDetails.id}}
+        const likePost = [...post.like_post, likeRespWithUser];
+        onLikePost(likePost, post?.id);
       }
     };
   
@@ -149,7 +163,7 @@ import FullScreenModal from "./FullScreenModal";
         addBookmarkForPost(post.id)
       );
       if (bookmarkResp) {
-        props?.onBookmark && props.onBookmark(true, post.id);
+        onBookMark(true, post.id);
       }
     };
   
@@ -162,55 +176,39 @@ import FullScreenModal from "./FullScreenModal";
       const deleteBookmark = await dispatch(deleteBookmarkForPost(post.id));
   
       if (deleteBookmark.code === 200) {
-        props?.onBookmark && props.onBookmark(false, post.id);
+        onBookMark(false, post.id);
       }
     };
   
-    // let touchendX:number, touchstartX:number ;
-    // const handleUserTouchStart = (event:any) => {
-    //     if (props.open) {
-    //       touchstartX = event.changedTouches[0].screenX;
-    //       handleGesture();
-    //     }
-    // };
-    // const handleUserTouchEnd = (event:any) => {
-    //   if (props.open) {
-    //     touchendX = event.changedTouches[0].screenX;
-    //     handleGesture();
-    //   }
-    // };
-  
-    // const  handleGesture = () => {
-    //   if (touchendX < touchstartX) {
-    //     if (props?.selectedMedia) {
-    //       if (post?.id) props?.renderPrevMedia(post?.id);
-    //     }
-    //   }
-    //   if (touchendX > touchstartX) {
-    //     if (props?.selectedMedia) {
-  
-    //     }
-    //   }
-    // };
-  
-    // const handleScroll = () => {
-    //   console.log("scrolling");
-  
-    //   if (scrollDir === "up") {
-    //     if (post?.id) props?.renderPrevMedia(post?.id);
-    //   } else {
-    //     if (post?.id) props?.renderNextMedia(post?.id);
-    //   }
-    // };
-    
-    const startFullScreenView = (vPost:any) => {
-      console.log("full screen view post" , vPost)
-      setVideoPost(vPost)
+    const startFullScreenView = (Post:any) => {
+      setPost(Post)
       setFullScreenModal(true)
     }
     const handleClose = () => {
       setFullScreenModal(false)
     }
+    const fetchNextPost = (postId: number) => {
+      const currentMediaIndex = postData?.findIndex((media:any) => media?.id === postId);
+      if (currentMediaIndex >= 0) {
+        const nextMedia = postData[currentMediaIndex + 1];
+        nextMedia && setPost(nextMedia) 
+      }
+    };
+  
+    //   to display the prev media in the open modal
+    const fetchPrevPost = (postId: number) => {
+      const currentMediaIndex = postData?.findIndex((media:any) => media?.id === postId);
+      if (currentMediaIndex >= 0) {
+        const nextMedia = postData[currentMediaIndex - 1];
+        nextMedia && setPost(nextMedia) 
+      }
+    };
+
+    const goToViolation=()=>{
+      setTimeout(()=>{
+        document.getElementById(`${props.selectedMedia.id}`)?.scrollIntoView()
+      },100)
+    };
 
     return (
       <>
@@ -224,13 +222,14 @@ import FullScreenModal from "./FullScreenModal";
         // onTouchEnd={handleUserTouchEnd}
         // onScroll={handleScroll}
         fullScreen={fullScreen}
+        sx={{"& .css-1vjcrt4-MuiPaper-root-MuiDialog-paper": {background : toggle ?"black" : "white"}}}
       >
         <div className="post-vertical">
           <div style={{height:"1.3%"}}>
             <Box sx={{
               position:"fixed" ,
               padding:"3%" ,
-              background: toggle ? "#212B36" :"white" , 
+              background: toggle ? "black" :"white" , 
               width:"100%" ,
               zIndex:"10",
               color:toggle? "white": "black" ,
@@ -238,13 +237,12 @@ import FullScreenModal from "./FullScreenModal";
               alignItems:"center"
             }}><ArrowBackIcon onClick={()=>props?.handleClose()}/><Typography mx={1} sx={{fontWeight:"bold"}}>Posts</Typography></Box>
           </div>
-          <DialogContent className="dialogContent" sx={{background: toggle ? "#212B36" :"white"}}>
-            {props?.dataList.map((post: any) => {
-                console.log("post- - -" , post)
+          <DialogContent className="dialogContent" sx={{background: toggle ? "black" :"white" , padding:"50px 24px" }}>
+            {postData.map((post: any) => {
               return (
                 <>
                 <Box
-                  key={post.id}
+                  id={post.id}
                   style={{
                     border: `1px solid ${theme.palette.grey[400]}`,
                     borderRadius: "10px",
@@ -300,19 +298,20 @@ import FullScreenModal from "./FullScreenModal";
                     </ListItem>
                   </List>
                   {post.type === 'image' ? (
-                    <Box onClick={()=>startFullScreenView(post)} sx={{ textAlign: "center" }}>
+                    <Box sx={{ textAlign: "center" }}>
                       <img
+                        onClick={()=>startFullScreenView(post)}
                         src={post?.media}
                         alt="post"
                         style={{ borderRadius: "18px", width: "100%" }}
                       />
                     </Box>
                   ):
-                    <Box onClick={()=>startFullScreenView(post)} sx={{ textAlign: "center" }}>
-                      <video width="100%" controls>
-                        <source src={post?.media} id="video_here" />
-                        Your browser does not support HTML5 video.
-                      </video>
+                    <Box  sx={{ textAlign: "center" }}>
+                        <video onClick={()=>startFullScreenView(post)} width="100%" height="250px" controls>
+                          <source src={post?.media} id="video_here" />
+                            Your browser does not support HTML5 video.
+                        </video>
                     </Box>
                     } 
                   
@@ -338,7 +337,7 @@ import FullScreenModal from "./FullScreenModal";
                           className="d-flex align-items-center justify-content-center"
                           onClick={()=>handleLike(post)}
                         >
-                          { post.like_post.map((ele:any)=>ele.user.id === props?.userDetails?.id )[0] ? (
+                          { (post.like_post.filter((ele:any)=>ele?.user?.id === props?.userDetails?.id)[0]) ? (
                               <FaHeart color="red" />
                               ) : (
                               <FavoriteBorderRoundedIcon />
@@ -410,10 +409,14 @@ import FullScreenModal from "./FullScreenModal";
         </div>
       </Dialog> : 
       <FullScreenModal 
-          post = {videoPost} 
+          post = {Post} 
           open = {fullScreenModal}
           handleClose = {handleClose}
           userDetails = {props?.userDetails}
+          fetchNextPost = {fetchNextPost}
+          fetchPrevPost = {fetchPrevPost}
+          onLikePost = {onLikePost}
+          onBookmark = {onBookMark}
       />} 
       </>
     );

@@ -29,6 +29,7 @@ import HomeTab from './HomeTab'
 import Sidebar from './Sidebar'
 import AddPost from './AddPost'
 import Search from '../search/index'
+import CloseIcon from '@mui/icons-material/Close';
 
 const NewHome = () => {
   const mobileView = useMediaQuery('(max-width:899px)')
@@ -167,7 +168,20 @@ const NewHome = () => {
     if (location.pathname.includes(HOME_SIDE_MENU.NOTIFICATIONS)) return <NotificationsContainer />
     if (location.pathname.includes(HOME_SIDE_MENU.ADD_POST))
       return mobileView ? (
-        <AddPost createPost={createPost} />
+        <Box style={{width: '100%',height: '100%', position: 'fixed', zIndex: 999, background: 'rgba(0,0,0,0.5)'}}>
+          <CloseIcon
+            onClick={handleClose}
+            style={{
+              color: 'black',
+              cursor: 'pointer',
+              position: 'absolute',
+              top: '80px',
+              right: '35px',
+              zIndex: 9999,
+            }}
+          />
+          <AddPost createPost={createPost} />
+        </Box>
       ) : (
         <Modal open={true} onClose={handleClose}>
           <AddPost createPost={createPost} />

@@ -1,5 +1,6 @@
 import { Avatar, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { useNavigate } from 'react-router';
 
 type MessageItemProps = {
   messageId: number;
@@ -8,9 +9,11 @@ type MessageItemProps = {
   time: string;
   receiverImage:string;
   senderImage:string;
+  messageSender:string
 };
 
 function MessageItem(props: MessageItemProps) {
+  const navigate = useNavigate();
   return (
     <Box
       className={`message-item ${
@@ -25,7 +28,7 @@ function MessageItem(props: MessageItemProps) {
         className="message-container"
       >
         <Box sx={{ display:"flex" , flexDirection:props.isSender?"row-reverse" :"" }}>
-          <Avatar component="span" sx={{margin:"0% 5px"}} src={props.isSender ? `${props.senderImage}` : `${props.senderImage}`} />
+          <Avatar onClick={()=>navigate(`/${props.messageSender}`)} component="span" sx={{margin:"0% 5px" , cursor:"pointer"}} src={props.isSender ? `${props.senderImage}` : `${props.senderImage}`} />
           <Box className="message">
             <Typography component="span">{`${props.message} `} </Typography>
             <Typography component="span" variant="caption" className="message-time">

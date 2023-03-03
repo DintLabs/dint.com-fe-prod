@@ -99,8 +99,6 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
   }, [post, user, alreadyLike, countLike]);
 
   useEffect(() => {
-    console.log("**test--", props.dataList);
-
     if (props?.userDetails?.id) {
       if (post?.is_bookmarked) {
         setAlreadyBookmark(true);

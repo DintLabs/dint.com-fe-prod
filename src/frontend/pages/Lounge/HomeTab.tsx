@@ -327,12 +327,19 @@ const HomeTab = ({ createPost }: Props) => {
   }, [value]);
 
   const createNewStory = useCallback(
-    async (toastId: string, userId: string, fileData: any) => {
-      const formData = new FormData();
-      formData.append("user", userId);
-      formData.append("story", fileData);
+    async (toastId: string, userId: string, storyUrl: any, fileType: any) => {
+      // const formData = new FormData();
+      // formData.append("user", userId);
+      // formData.append("story", storyUrl);
+      // formData.append("type", fileType);
+      const createStory = {
+        "user" : userId,
+	      "type" : fileType,
+	      "story" : storyUrl
+      }
+
       try {
-        const result = await _axios.post("/api/user/create-stories/", formData);
+        const result = await _axios.post("/api/user/create-stories/", createStory);
         if (result?.data?.data) {
           dispatch(getUserOwnStories());
           setOpenModal(false);
@@ -551,13 +558,12 @@ const HomeTab = ({ createPost }: Props) => {
 
   const createUserStories = (item: any) => {
     const { user_stories } = item;
-    const data = user_stories.map(({ story }: any) => {
-      const url = new URL(`${getApiURL()}${story}`);
-      const extension = url.href.substr(url.href.length - 3);
+    const data = user_stories.map((story: any) => {
+      const extension = story.story.substr(story.story.length - 3);
       switch (extension.toLowerCase()) {
         case "mp4":
           return {
-            url: url.href,
+            url: story.story,
             type: 'video',
           }
           
@@ -565,7 +571,7 @@ const HomeTab = ({ createPost }: Props) => {
             return {
               content: () => (
               <div style={contentStylestoryback}>
-                <img style={image} src={url.href}></img>
+                <img style={image} src={story.story}></img>
               </div>
             ),
           }
@@ -978,7 +984,7 @@ const HomeTab = ({ createPost }: Props) => {
         </Box>
 
         {/* Mobile Create Stories Modal */}
-        {mobileView && openModalMobile && <Box style={{width: '100%', position: 'fixed', zIndex: 10}}>
+        {mobileView && openModalMobile && <Box style={{width: '100%',height: '100%', position: 'fixed', zIndex: 999, background: 'rgba(0,0,0,0.5)'}}>
           <CloseIcon
             onClick={handleClose}
             style={{

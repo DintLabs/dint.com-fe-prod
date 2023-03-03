@@ -93,6 +93,7 @@ const MessageList = (props: MessageListProp) => {
           return (
             <MessageItem
               key={message.id}
+              messageSender = {message.sender.custom_username}
               senderImage={message.sender?.profile_image}
               receiverImage={message.reciever?.profile_image}
               message={message.content}

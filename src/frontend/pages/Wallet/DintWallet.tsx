@@ -189,7 +189,7 @@ const DintWallet = () => {
               : { display: "flex", flexDirection: "column-reverse" }
           }
         >
-          {balance ? (
+          {balance >= 0 ? (
             <h1
               className="notranslate"
               style={{
@@ -199,7 +199,7 @@ const DintWallet = () => {
             >
               ${balance}
             </h1>
-          ) : (
+            ) : (
             <p
               className="notranslate"
               style={{
@@ -209,7 +209,7 @@ const DintWallet = () => {
             >
               We are fetching your balance. Please wait...
             </p>
-          )}
+              )}
           <p
             className="notranslate"
             style={{ color: toggle ? "white" : "#666666", textAlign: "center" }}

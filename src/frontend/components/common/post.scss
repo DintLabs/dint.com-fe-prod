@@ -34,7 +34,7 @@
 .custom-modal-mobile {
   margin-top: 65px;
   width: 100%;
-  height: calc(90vh - 65px);
+  height: calc(100vh - 161px);
   display: flex;
   justify-content: center;
 
@@ -45,7 +45,9 @@
     flex-direction: column;
     padding: 16px;
     border-radius: 0;
-    overflow: scroll;
+    overflow: auto;
+    flex: 1;
+
   }
 }
 

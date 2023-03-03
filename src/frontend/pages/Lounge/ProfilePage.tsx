@@ -13,6 +13,7 @@ import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 import MediaList from 'frontend/components/view-page/MediaList';
 import NothingToShow from 'frontend/components/common/NothingToShow';
+import ShareProfileModal from 'frontend/components/common/ShareProfileModal'
 
 import {
   Avatar,
@@ -67,6 +68,9 @@ import { Select } from "@mui/material";
 import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
+import StoriesUserOwn from "frontend/components/lounge/StoriesUserOwn";
+import { getApiURL } from "frontend/config";
+import { getUserOwnStories } from "frontend/redux/slices/lounge";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -117,7 +121,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
     null
   );
   const [openPopUpTip, setOpenPopUpTip] = React.useState<boolean>(false);
-
+  const [showShareProfileModal, setShowShareProfileModal] = useState<boolean>(false);
   const [isLoadingUserDetails, setIsLoadingUserDetails] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
@@ -142,7 +146,10 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
   const [paginationPosts, setPaginationPosts] =
     useState<PaginationPostsInerface>(DEFAULT_POSTS_PAGINATION);
   const { follower, following } = useSelector((state: RootState) => state.user);
-  
+  const { userOwnStories } = useSelector((state: RootState) => state.lounge);
+  const {userData} = useSelector((state: any) => state.user);
+  const [isUserProfile , setIsUserProfile ] = useState<boolean>(false)
+  const [storyList , setStoryList] = useState()
   const [paginationPhotoPosts, setPaginationPhotoPosts] =
     useState<PaginationPostsInerface>({
       ...DEFAULT_POSTS_PAGINATION,
@@ -219,6 +226,18 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
     value,
     userDetails,
   ]);
+  useEffect(()=>{
+    setIsUserProfile(userData.id === userDetails?.id)
+    getStoryList()
+  },[userDetails])
+
+  const getStoryList = async () => {
+    dispatch(getUserOwnStories());
+    const result = await _axios.get("api/user/get-stories/", {});
+    if (result?.data?.code === 200) {
+      setStoryList(result?.data?.data);
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -488,6 +507,49 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
         Under Contruction
       </Typography>
     );
+    const createUserStories = (item: any) => {
+      const { user_stories } = item;
+      const data = user_stories.map(({ story }: any) => {
+        const url = new URL(`${getApiURL()}${story}`);
+        const extension = url.href.substr(url.href.length - 3);
+        switch (extension.toLowerCase()) {
+          case "mp4":
+            return {
+              url: url.href,
+              type: 'video',
+            }
+            
+            default:
+              return {
+                content: () => (
+                <div style={contentStylestoryback}>
+                  <img style={image} src={url.href}></img>
+                </div>
+              ),
+            }
+        }
+      })
+      return data
+    }
+    const image = {
+      display: "block",
+      borderRadius: 4,
+      objectFit: "cover",
+      height: "100%",
+      width: "100%",
+    };
+
+    const contentStylestoryback = {
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+     '@media screen and (max-width: 899px)': {
+        width: '100% !important',
+        height: '100% !important',
+     },
+    };
+  
   return (
     <>
       <Box
@@ -552,12 +614,15 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         badgeContent=" "
                         variant="dot"
                         invisible={!userDetails}
+                        sx={(userOwnStories.length > 0) && isUserProfile ? {"& .css-mcy1wh-MuiBadge-badge" : {display:"none"}} : {}}
                       >
-                        <Avatar
+                        { isUserProfile ? 
+                          <StoriesUserOwn createUserStories={createUserStories} /> :
+                          <Avatar
                           src={userDetails?.profile_image}
                           className="avatar-icon"
                           // sx={{ width: 120, height: 120 }}
-                        />
+                        />}
                       </Badge>
                     ) : (
                       <Badge
@@ -765,7 +830,6 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                     <Box className="btn-group-follow">
                       <Button
                         variant="contained"
-                        size="medium"
                         sx={{
                           color: "#353535",
                           backgroundColor: toggle ? "#fff" : "#EFEFEF",
@@ -774,10 +838,16 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                           ":hover": {
                             backgroundColor: toggle ? "#fff" : "#EFEFEF",
                           },
+                          whiteSpace: 'nowrap',
+                          px: 4
                         }}
+                        onClick={() => setShowShareProfileModal(true)}
                       >
-                        Following
+                        Share profile
                       </Button>
+                      
+                      <ShareProfileModal open={showShareProfileModal} onClose={() => setShowShareProfileModal(false)} />
+                      
                       {/* <Button
                         variant="contained"
                         size="medium"
@@ -794,42 +864,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         Message
                       </Button> */}
                 
-                      <Button
-                        variant="contained"
-                        size="medium"
-                        sx={{
-                          color: "#353535",
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          boxShadow: "none",
-                          display: { xs: "none", md: "flex" },
-                          ":hover": {
-                            backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          },
-                        }}
-                      >
-                        <KeyboardArrowDownOutlinedIcon />
-                      </Button>
-                      {/* <IconButton
-                        sx={{
-                          color: toggle ? "#fff" : "#000",
-                          display: { xs: "none", md: "flex" },
-                        }}
-                      >
-                        <MoreHorizIcon />
-                      </IconButton> */}
-                      <FormControl sx={{'& .css-17pnwyl-MuiSvgIcon-root-MuiSelect-icon' : {display:"none"} , width:isLargeScreen ? "100%" : "20%" , 
-                      '& .css-stmnjt-MuiFormLabel-root-MuiInputLabel-root' :{top:"50%"} }} >
-                      <InputLabel id="demo-simple-select-label"><MoreHorizIcon sx={{  color: toggle? "#fff" : "black"}} /></InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            label="Options"
-                            >
-                            <MenuItem>Unfollow</MenuItem>
-                            <MenuItem>Block</MenuItem>
-                            <MenuItem>Restrict</MenuItem>
-                          </Select>
-                        </FormControl>
+                  
                     </Box>
                   </div>
                 )}

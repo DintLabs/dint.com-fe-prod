@@ -161,21 +161,11 @@ const MediaList = (props: MediaListProps) => {
       )} 
       {(isMediaViewModalOpen && isMobile)  && <ViewMediaModalMobile 
           selectedMedia={selectedMedia}
-          isFirstPost={mediaList?.findIndex(
-            (media: PostInterface) => media.id === selectedMedia.id
-          ) === 0}
-          isLastPost={mediaList?.findIndex(
-            (media: PostInterface) => media.id === selectedMedia.id
-          ) ===
-            mediaList.length - 1}
           getUserPostCounts={props?.getUserPostCounts}
-          renderNextMedia={viewNextMedia}
-          renderPrevMedia={viewPrevMedia}
           open={isMediaViewModalOpen}
           handleClose={handleModalClose}
           loading={props?.loader}
           userDetails={props?.userDetails}
-          canDeletePost={true}
           onDelete={props?.postDeleted}
           isPage={props?.isPage}
           onLikePost={onLikePost}

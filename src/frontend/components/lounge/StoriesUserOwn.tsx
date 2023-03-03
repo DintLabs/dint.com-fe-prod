@@ -80,9 +80,10 @@ const StoriesUserOwn = ({createUserStories}: any) => {
             sx={{
               position: 'relative',
               '@media screen and (max-width: 899px)': {
-                height: '100vh', width: '100%', display: 'flex', alignItems: 'center',flex: 1,flexDirection: 'column',
+                height: '100%', width: '100%', display: 'flex', alignItems: 'center',flex: 1,flexDirection: 'column',
                 '> div': {
                   '> div ~ div': {
+                    flex:1,
                     'div': {
                       width: '100%',
                     },

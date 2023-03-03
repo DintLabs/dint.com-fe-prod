@@ -8,9 +8,12 @@ import _axios from 'frontend/api/axios';
 //   secretAccessKey: AWS_S3_CONFIG.secretAccessKey
 // };
 
-export const uploadMedia = async (file: any, folderName: string) => {
+export const uploadMedia = async (file: any, folderName: string, subscription?:Boolean, mediaType?:string) => {
   const formData = new FormData();
   formData.append('media', file);
+  (subscription === true || subscription=== false) && formData.append('subscription', new Boolean(subscription).toString());
+  mediaType?.length && formData.append('media_type', mediaType);
+
   if(file.type.includes('video')) {
     formData.append('folder', 'videos');
   } else {

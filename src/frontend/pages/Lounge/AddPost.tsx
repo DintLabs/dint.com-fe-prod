@@ -49,7 +49,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
 
       if (file) {
         try {
-          const uploadResult = await uploadMedia(file, 'photos')
+          const uploadResult = await uploadMedia(file, 'photos', false, 'post')
           toast.update(toastId, {
             render: 'File Uploaded Successful',
             type: 'success',
@@ -220,7 +220,6 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
           )}
         </Stack>
         <div className='confirm-buttons-block'>
-          {video.length > 0 || image.length > 0 || content.length > 0 ? (
             <>
               <Button
                 onClick={() => {
@@ -231,14 +230,14 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
                 }}
                 variant='contained'
                 color='secondary'
+                disabled={video.length > 0 || image.length > 0 || content.length > 0 ? false : true}
               >
                 Remove
               </Button>
-              <Button onClick={onCreatePost} variant='contained'>
+              <Button disabled={video.length > 0 || image.length > 0 || content.length > 0 ? false : true} onClick={onCreatePost} variant='contained'>
                 Publish
               </Button>
             </>
-          ) : null}
         </div>
       </Box>
     </Box>

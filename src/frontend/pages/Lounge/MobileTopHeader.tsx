@@ -19,7 +19,8 @@ import { HOME_SIDE_MENU } from "frontend/redux/slices/newHome";
 import {  useParams } from 'react-router';
 import _axios from "frontend/api/axios";
 import { AccountBalanceWallet } from "@mui/icons-material";
-import { RootState, useSelector } from "frontend/redux/store";
+import { dispatch, RootState, useSelector } from "frontend/redux/store";
+import { getKeys } from "frontend/redux/actions/createWallet";
 
 export default function MobileTopHeader({ userName, avatar}:{userName:string, avatar: string}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -50,6 +51,12 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
   const routeurl = useParams()
 
   const menuId = "primary-search-account-menu";
+
+  const walletBalance = async () => {
+      
+    await dispatch(getKeys());
+  }
+
   React.useEffect(()=>{
     const getUnseenMessagesLength = async() => {
       await _axios.get('/api/chat/get-unseen-message/').then((res:any)=>{
@@ -57,6 +64,8 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
        }).catch((err:any) =>{console.log(err)})
     }
     getUnseenMessagesLength()
+   walletBalance()
+
   },[])
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -105,9 +114,9 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
     navigate(`/dint-wallet/`);
   }}
 >
-  <AccountBalanceWallet />
-  {balance ? (
-    <span
+              <AccountBalanceWallet />
+              {balance >= 0 ? (
+       <span
       className="notranslate"
       style={{
         color: toggle ? "white" : "#666666",
@@ -116,9 +125,9 @@ export default function MobileTopHeader({ userName, avatar}:{userName:string, av
         padding: "5px",
       }}
     >
-      ${balance}
-    </span>
-  ) : null}
+                  ${balance}
+                </span>
+                ) : null}
 </IconButton>
 
 

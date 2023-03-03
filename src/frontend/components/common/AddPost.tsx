@@ -44,7 +44,7 @@ const AddPost = ({ createPost, pageId }: Props) => {
       if (pageId) {
         if (isFileUploaded && file) {
           try {
-            dispatch(uploadMedia(file, 'photos')).then((res: any) => {
+            dispatch(uploadMedia(file, 'photos',true)).then((res: any) => {
               if (res) {
                 toast.update(toastId, {
                   render: 'File Uploaded Successful',

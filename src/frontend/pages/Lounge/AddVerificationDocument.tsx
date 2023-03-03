@@ -4,15 +4,18 @@ import { toast } from "react-toastify";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import "./navbarTab.css";
 import MultimediaIcon from "../../assets/img/icons/picture.png";
+import CloseIcon from '@mui/icons-material/Close';
 
 interface Props {
   widthScreen: number;
   onAttachDocument: Function;
+  handleClose: Function;
 }
 
 const AddVerificationDocument = ({
   widthScreen,
   onAttachDocument,
+  handleClose
 }: Props) => {
   const [file, setFile] = useState<any>({});
   const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
@@ -99,6 +102,17 @@ const AddVerificationDocument = ({
         >
           <Box className="d-flex justify-content-center align-items-center">
             <h4>Attach you ID card</h4>
+            <CloseIcon
+              onClick={() => handleClose()} 
+              style={{ 
+                cursor: 'pointer',
+                color: 'black',
+                zIndex: 9999,
+                position: 'absolute',
+                top: '15px',
+                right: '20px'
+              }} 
+            />
           </Box>
           <div style={{ borderBottom: "1px solid grey" }} className="w-100" />
           {image && (
@@ -141,7 +155,6 @@ const AddVerificationDocument = ({
             )}
           </Stack>
           <div className="d-flex justify-content-between align-items-end mt-2 w-100">
-            {image.length > 0 ? (
               <>
                 <Button
                   onClick={() => {
@@ -150,14 +163,14 @@ const AddVerificationDocument = ({
                   }}
                   variant="contained"
                   color="secondary"
+                  disabled={image.length > 0 ? false : true}
                 >
                   Remove
                 </Button>
-                <Button onClick={onAttachIdDocument} variant="contained">
+                <Button disabled={image.length > 0 ? false : true} onClick={onAttachIdDocument} variant="contained">
                   Publish
                 </Button>
               </>
-            ) : null}
           </div>
         </Box>
       </Box>

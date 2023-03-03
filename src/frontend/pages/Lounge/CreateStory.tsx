@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import './navbarTab.css'
 import { Box, Button, Divider, Stack, useMediaQuery } from '@mui/material'
 import MultimediaIcon from '../../assets/img/icons/picture.png'
+import { uploadMedia } from 'frontend/services/mediaService'
 
 interface Props {
   widthScreen: number
@@ -40,9 +41,20 @@ const CreateStory = ({ widthScreen, createStory }: Props) => {
       }
       if (file) {
         try {
+          const uploadResult = await uploadMedia(file, 'photos', false, 'story')
+          toast.update(toastId, {
+            render: 'Story Uploaded Successful',
+            type: 'success',
+            isLoading: false,
+          })
+          
+          const storyUrl = uploadResult.data.data.data[0].media_file_url;
+          const fileType = uploadResult.data.data.data[0].file_type.split("/")[0];
+
           let userId = user.id
-          let fileData = file
-          const result = await createStory(toastId, userId, fileData)
+          // let fileData = file
+          const result = await createStory(toastId, userId, storyUrl, fileType)
+
         } catch (exception: any) {
           toast.update('Error adding...', {
             render: exception.toString(),
@@ -130,7 +142,7 @@ const CreateStory = ({ widthScreen, createStory }: Props) => {
             </div>
           )}
 
-          <Stack className='d-flex flex-column justify-content-between h-100 flex-1 align-items-center flex-row center-pos'>
+          <Stack className='d-flex flex-column justify-content-between h-100 flex-1 overflow-auto align-items-center flex-row center-pos'>
             {video.length > 0 || image.length > 0 ? null : (
               <Stack className='d-flex align-items-center justify-content-center w-100 upload-img flex-column'>
                 <img
@@ -156,25 +168,24 @@ const CreateStory = ({ widthScreen, createStory }: Props) => {
             )}
           </Stack>
           <div className='d-flex justify-content-between align-items-end mt-2 w-100'>
-            {video.length > 0 || image.length > 0 || content.length > 0 ? (
-              <>
-                <Button
-                  onClick={() => {
-                    setVideo('')
-                    setFile({})
-                    setImage('')
-                    setContent('')
-                  }}
-                  variant='contained'
-                  color='secondary'
-                >
-                  Remove
-                </Button>
-                <Button onClick={onCreateStory} variant='contained'>
-                  Publish
-                </Button>
-              </>
-            ) : null}
+            <Button
+              onClick={() => {
+                setVideo('')
+                setFile({})
+                setImage('')
+                setContent('')
+              }}
+              variant='contained'
+              color='secondary'
+              disabled={video.length > 0 || image.length > 0 || content.length > 0 ? false : true}
+            >
+              Remove
+            </Button>
+            <Button onClick={onCreateStory} variant='contained'
+              disabled={video.length > 0 || image.length > 0 || content.length > 0 ? false : true}
+            >
+              Publish
+            </Button>
           </div>
         </Box>
       </Box>

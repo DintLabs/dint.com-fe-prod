@@ -364,6 +364,7 @@ const BankContainer = () => {
             <AddVerificationDocument
               widthScreen={widthScreen}
               onAttachDocument={onAttachDocument}
+              handleClose={handleClose}
             />
           </Modal>
           <Modal open={openModal} onClose={handleClose}>
