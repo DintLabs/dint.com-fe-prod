@@ -63,7 +63,7 @@ const MainReferrals = () => {
       const response = await _axios.get('api/user/get_referral_id/');
       if (response.data && response.data.data && response.data.data.length > 0) { // Check that data exists and has length > 0
         const code = response.data.data[0];
-        setRefLink(`https://dint.com/?ref=${code}`);
+        setRefLink(`https://dint.com/auth/refer?ref=${code}`);
         setRefCode(code);
       }
     } catch (error) {

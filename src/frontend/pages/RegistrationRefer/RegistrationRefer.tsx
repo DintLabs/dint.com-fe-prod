@@ -42,6 +42,14 @@ const RegistrationRefer = () =>{
       })
     }
 
+    const { search } = location;
+    const referCodeFromUrl = new URLSearchParams(search).get("ref");
+    useEffect(() => {
+      if (referCodeFromUrl) {
+        setReferCode(referCodeFromUrl );
+      }
+    }, [referCode]);
+
     const validateReferralCode = async()=>{
       const data = { "referred_code" : referCode }
       await _axios.post(`api/user/validate_referral_code/`, data)
@@ -73,6 +81,9 @@ const RegistrationRefer = () =>{
           setErrMsg('Please Enter code!')
         }
     }
+
+
+
     return (
       <>
       {/* <MainNavbar /> */}
