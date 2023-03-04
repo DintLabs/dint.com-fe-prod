@@ -227,7 +227,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
     userDetails,
   ]);
   useEffect(()=>{
-    setIsUserProfile(userData.id === userDetails?.id)
+    setIsUserProfile(userData?.id === userDetails?.id)
     getStoryList()
   },[userDetails])
 
@@ -617,7 +617,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         sx={(userOwnStories.length > 0) && isUserProfile ? {"& .css-mcy1wh-MuiBadge-badge" : {display:"none"}} : {}}
                       >
                         { isUserProfile ? 
-                          <StoriesUserOwn createUserStories={createUserStories} /> :
+                          <StoriesUserOwn createUserStories={createUserStories} hideName={true} /> :
                           <Avatar
                           src={userDetails?.profile_image}
                           className="avatar-icon"

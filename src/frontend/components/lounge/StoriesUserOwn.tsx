@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router";
 
-const StoriesUserOwn = ({createUserStories}: any) => {
+const StoriesUserOwn = ({createUserStories, hideName}: any) => {
   const navigate = useNavigate();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -47,16 +47,18 @@ const StoriesUserOwn = ({createUserStories}: any) => {
             borderColor: toggle ? "#4AA081" : "#4AA081",
           }}
         />
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: "600",
-            marginTop: "10px",
-            color: toggle ? "text.primary" : "#161C24",
-          }}
-        >
-          {userData?.display_name}
-        </Typography>
+        {!hideName && (
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: "600",
+              marginTop: "10px",
+              color: toggle ? "text.primary" : "#161C24",
+            }}
+            >
+            {userData?.display_name}
+          </Typography>
+        )}
       </div>
       {openModal && (
         <Modal
