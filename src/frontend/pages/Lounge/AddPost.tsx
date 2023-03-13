@@ -56,7 +56,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
             isLoading: false,
           })
 
-          const result = await createPost(toastId, {
+          const result = createPost && await createPost(toastId, {
             type: image
               ? postTypes.image.value
               : video
@@ -78,7 +78,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
 
       if (content) {
         try {
-          const result = await createPost(toastId, {
+          const result = createPost && await createPost(toastId, {
             type: postTypes.text.value,
             user: user.id,
             content,

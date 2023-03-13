@@ -5,17 +5,19 @@ import Webcam from "react-webcam";
 import Loader from './common/Loader';
 // import "./media.css";
 
-const CaptureImageComponent = ({ handleClose, handleSubmit }: { handleClose: () => void, handleSubmit: () => void }) => {
-  const webcamRef = useRef(null);
-  const [imgSrc, setImgSrc] = useState();
+const CaptureImageComponent = ({ handleClose, handleSubmit }: { handleClose: () => void, handleSubmit: (img:string) => void }) => {
+  const webcamRef = useRef<Webcam>(null);
+  const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const handleUserMedia = () => {
     setTimeout(() => setLoading(false), 1000);
   };
   const capture = useCallback(() => {
+    if (webcamRef.current) {
     const imageSrc = webcamRef?.current?.getScreenshot();
-    setImgSrc(imageSrc);
+      setImgSrc(imageSrc);
+    }
   }, [webcamRef, setImgSrc]);
 
   return (
@@ -44,14 +46,14 @@ const CaptureImageComponent = ({ handleClose, handleSubmit }: { handleClose: () 
               justifyContent: 'center'
             }}
           >
-            <Button onClick={() => setImgSrc()} variant="contained">Retake</Button>
+            <Button onClick={() => setImgSrc("")} variant="contained">Retake</Button>
             <Button variant="contained" onClick={() => {
               handleSubmit(imgSrc);
               handleClose();
             }}>Submit</Button>
             <Button variant="outlined" onClick={() => {
               handleUserMedia();
-              setImgSrc();
+              setImgSrc("");
               handleClose();
             }}>Close</Button>
           </Stack>
@@ -69,7 +71,7 @@ const CaptureImageComponent = ({ handleClose, handleSubmit }: { handleClose: () 
             <Button onClick={capture} variant="contained">Capture</Button>
             <Button variant="outlined" onClick={() => {
               handleUserMedia();
-              setImgSrc();
+              setImgSrc("");
               handleClose();
             }}>Close</Button>
           </Stack>

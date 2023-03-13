@@ -97,6 +97,7 @@ const MessageList = (props: MessageListProp) => {
               senderImage={message.sender?.profile_image}
               receiverImage={message.reciever?.profile_image}
               message={message.content}
+              media = {message.media}
               messageId={message.id}
               isSender={props.loggedInUser.id === message.sender.id}
               time={getLocalTime(message.created_at).format('hh:mm a')}

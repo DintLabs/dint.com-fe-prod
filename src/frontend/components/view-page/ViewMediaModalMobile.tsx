@@ -72,7 +72,7 @@ import {
     const { toggle } = useContext(ThemeContext);
     const navigate = useNavigate();
     const [Post , setPost] = useState();
-    const [ postData , setPostData ] = useState(props.dataList);
+    const [postData, setPostData] = useState(props.dataList);
 
     useEffect(()=>{
       goToViolation()
@@ -343,13 +343,14 @@ import {
                               <FavoriteBorderRoundedIcon />
                           )}
                         </IconButton>
-                        <IconButton
+                          {!post.can_delete &&
+                            <IconButton
                           onClick={() => setOpenPopUpTip(true)}
                           sx={{ fontSize: "12px" }}
                         >
                           <MonetizationOnIcon />
                           SEND TIP
-                        </IconButton>
+                        </IconButton>}
                       </Box>
                       {!post.is_bookmarked ? (
                         <IconButton

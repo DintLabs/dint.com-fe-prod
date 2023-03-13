@@ -102,7 +102,7 @@ const BankContainer = () => {
     setOpenMenu(null);
   };
 
-  const handleNextStep = (item: null | any) => {
+  const handleNextStep = (item?: null | any) => {
     if (state.active !== 2) {
       setShowBankDetails(false);
       const bankDetails1 = Object.assign(state, item)
@@ -228,10 +228,10 @@ const BankContainer = () => {
     updateWidth();
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
-  const [attachId, setAttchId] = useState();
+  const [attachId, setAttchId] = useState<any>();
   const [openModal, setOpenModal] = useState(false);
   const onAttachDocument = (document: any) => {
-    console.log(("onAttachDocument----",document))
+    console.log("onAttachDocument----",document)
     setAttchId(document);
     toggleVerificationModal(false);
     setOpenModal(true);

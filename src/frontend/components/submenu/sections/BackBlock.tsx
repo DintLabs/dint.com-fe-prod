@@ -9,8 +9,8 @@ import AddIcon from '@mui/icons-material/Add';
 interface BackBlockProps {
   title: string;
   isPlusIco?: boolean;
-  handleOpen: any;
-  handleClose: any;
+  handleOpen?: any;
+  handleClose?: any;
 }
 
 const BackBlock = ({ title, isPlusIco, handleOpen, handleClose }: BackBlockProps) => {

@@ -70,6 +70,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
   const { toggle } = useContext(ThemeContext);
   const [canHeDeletePost, setCanHeDeletePost] = useState(false);
   const [alreadyBookmark, setAlreadyBookmark] = useState(false);
+  const [showSendTip, setShowSendTip] = useState(true);
 
   useEffect(() => {
     setPost(props?.selectedMedia);
@@ -94,6 +95,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       }
       if (post?.userId === user?.id) {
         setCanHeDeletePost(true);
+        setShowSendTip(false);
       }
     }
   }, [post, user, alreadyLike, countLike]);
@@ -282,7 +284,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
               src={post?.media}
               alt="Not Displayed"
               className="responsiveimg"
-              style={{ width: "100%", height: "70%", minHeight: "70%" }}
+              style={{ width: "100%", height: "100%" }}
             />
           ) : post?.type === "video" ? (
             <video
@@ -328,13 +330,15 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
                         <FaHeart color="red" />
                       )}
                     </IconButton>
-                    <IconButton
-                      onClick={() => setOpenPopUpTip(true)}
-                      sx={{ fontSize: "12px" }}
-                    >
-                      <MonetizationOnIcon />
-                      SEND TIP
-                    </IconButton>
+                    {showSendTip && (
+                      <IconButton
+                        onClick={() => setOpenPopUpTip(true)}
+                        sx={{ fontSize: "12px" }}
+                      >
+                        <MonetizationOnIcon />
+                        SEND TIP
+                      </IconButton>
+                    )}
                   </Box>
                   {!alreadyBookmark ? (
                     <IconButton
@@ -536,7 +540,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
                 <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
                   <p className="like-comm">
                     {/* {post?.like_post?.length ?? "0"} */}
-                    {/* {+post?.like_post?.length -
+      {/* {+post?.like_post?.length -
                       (+post?.unlike_post?.length ? post?.unlike_post?.length : 0) ??
                       post?.like_post?.length}{" "}
                     Likes
@@ -566,8 +570,8 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
             </>
             );
           })} */}
-        {/* </DialogContent> */}
-      {/* </div> */} 
+      {/* </DialogContent> */}
+      {/* </div> */}
     </Dialog>
   );
 };

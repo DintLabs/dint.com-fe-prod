@@ -67,12 +67,12 @@ const FullScreenModal = (props: fullScreenModalProps) => {
   const handleGesture = () => {
     if (touchendY > touchstartY) {
       if (props?.post) {
-        if (props?.post?.id) props.fetchPrevPost(id)
+        if (props?.post?.id) props?.fetchPrevPost && props.fetchPrevPost(id)
       }
     }
     if (touchendY < touchstartY) {
       if (props?.post) {
-        if (props?.post?.id) props.fetchNextPost(id)
+        if (props?.post?.id) props?.fetchNextPost && props.fetchNextPost(id)
       }
     }
   }

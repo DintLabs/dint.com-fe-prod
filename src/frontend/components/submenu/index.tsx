@@ -15,8 +15,8 @@ interface ISubmenuProps {
   topDiv?: boolean;
   isLink?: boolean;
   isPlusIco?: boolean;
-  handleOpen: any;
-  handleClose: any;
+  handleOpen?: any;
+  handleClose?: any;
 }
 
 const Submenu = ({

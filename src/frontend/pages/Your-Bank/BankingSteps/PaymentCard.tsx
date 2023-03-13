@@ -64,7 +64,7 @@ export default function PaymentCard() {
   const [cardData, setCardData] = useState<any | []>([]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [curentElemnt, setCurentElemnt] = React.useState<object | null>(null);
-  const [paymentsData , setPaymentsData] = React.useState()
+  const [paymentsData , setPaymentsData] = React.useState<any>();
   const open = Boolean(anchorEl);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 

@@ -51,11 +51,12 @@ import { getApiURL } from "frontend/config";
 import Carousel from "./Carousel";
 import Stories from "react-insta-stories";
 import { config } from "react-spring";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import { sendMessage } from "frontend/redux/slices/messages";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import TipPopUp from "frontend/components/tip/TipPopUp";
 import moment from "moment";
+import React from "react";
 
 interface Props {
   createPost: Function;
@@ -115,20 +116,20 @@ const HomeTab = ({ createPost }: Props) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openModalMobile, setOpenModalMobile] = useState<boolean>(false);
   const [openStoryModal, setOpenStoryModal] = useState<string>("");
-  const [messageContent, setMessageContent] = useState<string>("test")
-  const inputRef = useRef(null)
+  const [messageContent, setMessageContent] = useState<string>("test");
+  const inputRef = useRef<any>(null);
 
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
   const [selectedStory, setSelectedStory] = useState<any>();
   const userData = useSelector((state: RootState) => state.user.userData);
-  const [userStories, setUserStories] = useState<any[]>([])
+  const [userStories, setUserStories] = useState<any[]>([]);
   const [state, setState] = useState<any>({
     goToSlide: 0,
     offsetRadius: 2,
     showNavigation: true,
     enableSwipe: true,
-    config: config.gentle
-  })
+    config: config.gentle,
+  });
   const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false);
   const [profileByUsername, setProfileByUsername] = useState<any>();
   const [alreadyLike, setAlreadyLike] = useState(false);
@@ -219,11 +220,11 @@ const HomeTab = ({ createPost }: Props) => {
 
   useLayoutEffect(() => {
     function updateWidth() {
-        setWidthScreen(window.screen.width);
+      setWidthScreen(window.screen.width);
     }
-    window.addEventListener('resize', updateWidth);
+    window.addEventListener("resize", updateWidth);
     updateWidth();
-    return () => window.removeEventListener('resize', updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
   }, []);
 
   const getSuggestionList = async () => {
@@ -333,17 +334,20 @@ const HomeTab = ({ createPost }: Props) => {
       // formData.append("story", storyUrl);
       // formData.append("type", fileType);
       const createStory = {
-        "user" : userId,
-	      "type" : fileType,
-	      "story" : storyUrl
-      }
+        user: userId,
+        type: fileType,
+        story: storyUrl,
+      };
 
       try {
-        const result = await _axios.post("/api/user/create-stories/", createStory);
+        const result = await _axios.post(
+          "/api/user/create-stories/",
+          createStory
+        );
         if (result?.data?.data) {
           dispatch(getUserOwnStories());
           setOpenModal(false);
-          setOpenModalMobile(false)
+          setOpenModalMobile(false);
           handleStoryOnCreateStory(result?.data?.data);
           toast.update(toastId, {
             render: result?.data?.message,
@@ -384,95 +388,105 @@ const HomeTab = ({ createPost }: Props) => {
 
   const handleClose = () => {
     setOpenModal(false);
-    setOpenModalMobile(false)
+    setOpenModalMobile(false);
   };
 
-  const renderData = useCallback((story: any) => (
-    <TextField
-      inputRef={inputRef}
-      fullWidth
-      color="secondary"
-      onChange={(e) => setMessageContent(e.target.value)}
-      onKeyPress={(e) => {
-        if (e.key === "Enter") {
-          sendMessageHandler(story.id.toString(), userData);
-        }
-      }}
-      placeholder="Send Message"
-      sx={{color: toggle ? 'white' : '#161C24', height: 40,
-      '.MuiInputBase-root': {
-        borderRadius: '25px',
-        '.MuiInputBase-input': {
-          height: '40px !important',
-          padding: '0 14px',
-          outline: 'none',
-          boxShadow: 'none',
-        '&:hover': {
-            borderColor: 'transparent',
-            boxShadow: 'none',
-          },
-          '&:focus': {
-            boxShadow: 'none',
-            outline: 'none',
-            borderColor: 'red',
+  const renderData = useCallback(
+    (story: any) => (
+      <TextField
+        inputRef={inputRef}
+        fullWidth
+        color="secondary"
+        onChange={(e) => setMessageContent(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            sendMessageHandler(story.id.toString(), userData);
           }
-        },
-      },
-    }}
-    />
-  ), [messageContent, userData])
+        }}
+        placeholder="Send Message"
+        sx={{
+          color: toggle ? "white" : "#161C24",
+          height: 40,
+          ".MuiInputBase-root": {
+            borderRadius: "25px",
+            ".MuiInputBase-input": {
+              height: "40px !important",
+              padding: "0 14px",
+              outline: "none",
+              boxShadow: "none",
+              "&:hover": {
+                borderColor: "transparent",
+                boxShadow: "none",
+              },
+              "&:focus": {
+                boxShadow: "none",
+                outline: "none",
+                borderColor: "red",
+              },
+            },
+          },
+        }}
+      />
+    ),
+    [messageContent, userData]
+  );
 
   const sendTip = async (story: any) => {
     try {
-      const { data } = await _axios.post('/api/user/get-profile-by-username/', {
-        custom_username: story.custom_username
+      const { data } = await _axios.post("/api/user/get-profile-by-username/", {
+        custom_username: story.custom_username,
       });
 
       if (data.code === 200) {
-        setProfileByUsername(data.data)
-        setOpenPopUpTip(true)
+        setProfileByUsername(data.data);
+        setOpenPopUpTip(true);
       } else {
-        toast.error("User is not availabe for tip!!")
+        toast.error("User is not availabe for tip!!");
       }
     } catch (err) {
-      toast.error("User is not availabe!!")
+      toast.error("User is not availabe!!");
     }
-  }
+  };
 
   useEffect(() => {
-    const data: any = []
+    const data: any = [];
     if (storyList.length > 0) {
-      storyList?.map((story: any, index: number, {length}: any) => {
+      storyList?.map((story: any, index: number, { length }: any) => {
         data.push({
           key: story?.id,
           content: (
-            <Box 
+            <Box
               sx={{
-                position: 'relative',
-                '@media screen and (max-width: 899px)': {
-                  height: '100vh', width: '100%', display: 'flex', alignItems: 'center',flex: 1,flexDirection: 'column',
-                  '> div ~ div': {
-                    '> div ~ div': {
-                      height: '100vh !important',
-                      'div': {
-                        width: '100%',
+                position: "relative",
+                "@media screen and (max-width: 899px)": {
+                  height: "100vh",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  flex: 1,
+                  flexDirection: "column",
+                  "> div ~ div": {
+                    "> div ~ div": {
+                      height: "100vh !important",
+                      div: {
+                        width: "100%",
                       },
                     },
                   },
-                }
+                },
               }}
             >
-              <div 
+              <div
                 onClick={() => navigate(`/${story.custom_username}`)}
                 style={{
-                  display:'flex',
-                  gap: '15px',
-                  position: 'absolute',
+                  display: "flex",
+                  gap: "15px",
+                  position: "absolute",
                   top: 20,
                   left: 15,
                   zIndex: 1000,
                   alignItems: "center",
-                  cursor: "pointer"
+                  cursor: "pointer",
                 }}
               >
                 <Avatar
@@ -487,55 +501,58 @@ const HomeTab = ({ createPost }: Props) => {
                     position: "relative",
                   }}
                 />
-                <h4 style={{color: '#fff'}}>{story.display_name}</h4>
+                <h4 style={{ color: "#fff" }}>{story.display_name}</h4>
                 {/* {story.user_stories.map((user_story: any) => <h4>{moment(user_story.created_at).fromNow()}</h4> )} */}
               </div>
               <Stories
                 stories={createUserStories(story)}
                 onStoryEnd={(s: any, st: any) => {
-                  console.log("story ended===", s, st, state.goToSlide)
+                  console.log("story ended===", s, st, state.goToSlide);
                   // setState({
                   //   ...state,
                   //   goToSlide: index + 1
                   // })
                 }}
                 onAllStoriesEnd={(s: any, st: any) => {
-                  console.log("all stories ended", s, st, state.goToSlide)
-                  if(state.goToSlide === length) {
-                    setOpenModal(false)
-                    setOpenModalMobile(false)
-                  }
-                  else {
+                  console.log("all stories ended", s, st, state.goToSlide);
+                  if (state.goToSlide === length) {
+                    setOpenModal(false);
+                    setOpenModalMobile(false);
+                  } else {
                     setState({
                       ...state,
-                      goToSlide: index + 1
-                    })
+                      goToSlide: index + 1,
+                    });
                   }
                 }}
-                onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
+                onStoryStart={(s: any, st: any) =>
+                  console.log("story started", s, st)
+                }
                 width={window.innerWidth < 900 ? "100%" : undefined}
                 height={window.innerWidth < 900 ? "100%" : undefined}
               />
-              <CloseIcon 
-                onClick={handleClose} 
-                style={{ 
-                  cursor: 'pointer',
-                  color: 'white',
+              <CloseIcon
+                onClick={handleClose}
+                style={{
+                  cursor: "pointer",
+                  color: "white",
                   zIndex: 9999,
-                  position: 'absolute',
-                  top: '25px',
-                  right: '15px'
-                }} 
+                  position: "absolute",
+                  top: "25px",
+                  right: "15px",
+                }}
               />
-              <Box sx={{display:'flex', 
-                  position: 'absolute', 
-                  bottom: 15, 
-                  left: 0, 
-                  width: '100%', 
-                  padding: '0 10px', 
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  bottom: 15,
+                  left: 0,
+                  width: "100%",
+                  padding: "0 10px",
                   zIndex: 999,
-                  '@media screen and (max-width: 899px)': {
-                    position: 'sticky',
+                  "@media screen and (max-width: 899px)": {
+                    position: "sticky",
                   },
                 }}
               >
@@ -543,18 +560,17 @@ const HomeTab = ({ createPost }: Props) => {
                 <IconButton
                   onClick={() => sendTip(story)}
                   sx={{ fontSize: "12px" }}
-                > 
+                >
                   <MonetizationOnIcon />
                 </IconButton>
               </Box>
             </Box>
           ),
-          
-        })
-      })
-      setUserStories(data)
+        });
+      });
+      setUserStories(data);
     }
-  }, [storyList, userData, alreadyLike, state.goToSlide])
+  }, [storyList, userData, alreadyLike, state.goToSlide]);
 
   const createUserStories = (item: any) => {
     const { user_stories } = item;
@@ -564,26 +580,26 @@ const HomeTab = ({ createPost }: Props) => {
         case "mp4":
           return {
             url: story.story,
-            type: 'video',
-          }
-          
-          default:
-            return {
-              content: () => (
+            type: "video",
+          };
+
+        default:
+          return {
+            content: () => (
               <div style={contentStylestoryback}>
                 <img style={image} src={story.story}></img>
               </div>
             ),
-          }
+          };
       }
-    })
-    return data
-  }
+    });
+    return data;
+  };
 
   const image = {
     display: "block",
     borderRadius: 4,
-    objectFit: "cover",
+    // objectFit: "cover",
     height: "100%",
     width: "100%",
   };
@@ -593,10 +609,10 @@ const HomeTab = ({ createPost }: Props) => {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-   '@media screen and (max-width: 899px)': {
-      width: '100% !important',
-      height: '100% !important',
-   },
+    "@media screen and (max-width: 899px)": {
+      width: "100% !important",
+      height: "100% !important",
+    },
   };
 
   const handleTouchStart = (evt: any) => {
@@ -608,7 +624,7 @@ const HomeTab = ({ createPost }: Props) => {
     setState({
       ...state,
       xDown: firstTouch.clientX,
-      yDown: firstTouch.clientY
+      yDown: firstTouch.clientY,
     });
   };
 
@@ -628,37 +644,39 @@ const HomeTab = ({ createPost }: Props) => {
         setState({
           goToSlide: state.goToSlide + 1,
           xDown: null,
-          yDown: null
+          yDown: null,
         });
       } else {
         /* right swipe */
         setState({
           goToSlide: state.goToSlide - 1,
           xDown: null,
-          yDown: null
+          yDown: null,
         });
       }
     }
   };
 
-  const sendMessageHandler = useCallback(async (receiverId:string, userData: any) => {
-    const messageContent = inputRef?.current?.value
-    if (
-      messageContent.trim().length > 0
-    ) {
-      const res = await dispatch(
-        sendMessage({
-          reciever: receiverId,
-          sender: userData?.id?.toString(),
-          content: messageContent.trim(),
-        })
-      );
-      if (res) {
-        toast.success("Message sent successful!!")
+  const sendMessageHandler = useCallback(
+    async (receiverId: string, userData: any) => {
+      const messageContent = inputRef?.current?.value;
+      if (messageContent.trim().length > 0) {
+        const res = await dispatch(
+          sendMessage({
+            reciever: receiverId,
+            sender: userData?.id?.toString(),
+            content: messageContent.trim(),
+            media: "" // Add a default value for the media property
+          })
+        );
+        if (res) {
+          toast.success("Message sent successful!!");
+        }
       }
-    }
-    setMessageContent("");
-  }, [messageContent, userData]);
+      setMessageContent("");
+    },
+    [messageContent, userData]
+  );
 
   // for popup tip
   const handleClickOpen = () => {
@@ -671,135 +689,97 @@ const HomeTab = ({ createPost }: Props) => {
 
   useEffect(() => {
     openModalMobile
-      ? (document.body.style.overflow = 'hidden')
-      : (document.body.style.overflow = 'scroll')
-  }, [openModalMobile])
+      ? (document.body.style.overflow = "hidden")
+      : (document.body.style.overflow = "scroll");
+  }, [openModalMobile]);
 
   return (
     <>
-    <Box
-      id="postsListScrollableDiv"
-      style={
-        {
-          // borderLeft: `1px solid ${theme.palette.grey[700]}`,
-          // borderRight: `1px solid ${theme.palette.grey[700]}`
-        }
-      }
-    >
-      {/* <AddPost createPost={createPost} widthScreen={0} /> */}
       <Box
-        sx={{
-          display: "flex",
-          width: "100%",
-          // margin: "10px 0",
-          // padding: "10px 0",
-        }}
+        id="postsListScrollableDiv"
+        style={
+          {
+            // borderLeft: `1px solid ${theme.palette.grey[700]}`,
+            // borderRight: `1px solid ${theme.palette.grey[700]}`
+          }
+        }
       >
+        {/* <AddPost createPost={createPost} widthScreen={0} /> */}
         <Box
-          sx={{ width: { xs: "100%", md: "60%" } }}
-          className="custom-padding"
+          sx={{
+            display: "flex",
+            width: "100%",
+            // margin: "10px 0",
+            // padding: "10px 0",
+          }}
         >
           <Box
-            sx={{
-              padding: { xs: "8px 24px", md: "0" },
-              overflow: "auto",
-              scrollBehavior: "smooth",
-            }}
+            sx={{ width: { xs: "100%", md: "60%" } }}
+            className="custom-padding"
           >
-            <ListItemAvatar
-              style={{ cursor: "pointer", display: "flex", gap: "35px" }}
+            <Box
+              sx={{
+                padding: { xs: "8px 24px", md: "0" },
+                overflow: "auto",
+                scrollBehavior: "smooth",
+              }}
             >
-              {mobileView && <div
-                style={{ textAlign: "center", width: "fit-content" }}
-                className="user-story"
+              <ListItemAvatar
+                style={{ cursor: "pointer", display: "flex", gap: "35px" }}
               >
-                <div
-                  style={{ position: "relative" }}
-                  onClick={() => {
-                    mobileView ? setOpenModalMobile(true) : setOpenModal(true);
-                    setOpenStoryModal("User");
-                  }}
-                >
-                  <Avatar
-                    className="story-avatar"
-                    src={savedUser?.profile_image}
-                    sx={{
-                      width: 92,
-                      height: 92,
-                      borderWidth: "3px",
-                      borderStyle: "solid",
-                      borderColor: toggle ? "#4AA081" : "#4AA081",
-                      position: "relative",
-                    }}
-                  />
-
-                  {/* Create Story Button */}
-                  <Fab
-                    disableFocusRipple
-                    disableRipple
-                    disableTouchRipple
-                    sx={{
-                      "&:hover": { background: "#979797" },
-                      background: "#979797",
-                    }}
-                    size="small"
-                    style={{
-                      position: "absolute",
-                      bottom: "-4px",
-                      right: "-8px",
-                      zIndex: "9",
-                    }}
-                    onClick={() => {
-                      mobileView ? setOpenModalMobile(true) : setOpenModal(true);
-                      setOpenStoryModal("User");
-                    }}
-                  >
-                    <AddIcon fontSize="small" sx={{ color: "#fff" }} />
-                  </Fab>
-                </div>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontWeight: "600",
-                    marginTop: "10px",
-                    color: toggle ? "text.primary" : "#161C24",
-                  }}
-                >
-                  {"Your Story"}
-                </Typography>
-              </div>}
-              <StoriesUserOwn createUserStories={createUserStories} />
-
-              {storyList?.map((item: any, i: number) => (
-                <>
+                {mobileView && (
                   <div
-                    key={i}
                     style={{ textAlign: "center", width: "fit-content" }}
                     className="user-story"
-                    onClick={() => {
-                      if (item?.user_stories?.length > 0) {
-                        setOpenModal(true);
-                        setOpenStoryModal("Follower");
-                        setSelectedStory(item);
-                        createUserStories(item);
-                        setState({
-                          ...state,
-                          goToSlide: i
-                        })
-                      }
-                    }}
                   >
-                    <Avatar
-                      className="story-avatar"
-                      src={item?.profile_image}
-                      sx={{
-                        width: 92,
-                        height: 92,
-                        borderWidth: "3px",
-                        borderStyle: "solid",
-                        borderColor: toggle ? "#4AA081" : "#4AA081",
+                    <div
+                      style={{ position: "relative" }}
+                      onClick={() => {
+                        mobileView
+                          ? setOpenModalMobile(true)
+                          : setOpenModal(true);
+                        setOpenStoryModal("User");
                       }}
-                    />
+                    >
+                      <Avatar
+                        className="story-avatar"
+                        src={savedUser?.profile_image}
+                        sx={{
+                          width: 92,
+                          height: 92,
+                          borderWidth: "3px",
+                          borderStyle: "solid",
+                          borderColor: toggle ? "#4AA081" : "#4AA081",
+                          position: "relative",
+                        }}
+                      />
+
+                      {/* Create Story Button */}
+                      <Fab
+                        disableFocusRipple
+                        disableRipple
+                        disableTouchRipple
+                        sx={{
+                          "&:hover": { background: "#979797" },
+                          background: "#979797",
+                        }}
+                        size="small"
+                        style={{
+                          position: "absolute",
+                          bottom: "-4px",
+                          right: "-8px",
+                          zIndex: "9",
+                        }}
+                        onClick={() => {
+                          mobileView
+                            ? setOpenModalMobile(true)
+                            : setOpenModal(true);
+                          setOpenStoryModal("User");
+                        }}
+                      >
+                        <AddIcon fontSize="small" sx={{ color: "#fff" }} />
+                      </Fab>
+                    </div>
                     <Typography
                       variant="h5"
                       sx={{
@@ -808,363 +788,427 @@ const HomeTab = ({ createPost }: Props) => {
                         color: toggle ? "text.primary" : "#161C24",
                       }}
                     >
-                      {item?.display_name}
+                      {"Your Story"}
                     </Typography>
                   </div>
-                </>
+                )}
+                <StoriesUserOwn createUserStories={createUserStories} />
+
+                {storyList?.map((item: any, i: number) => (
+                  <React.Fragment key={i}>
+                    <div
+                      
+                      style={{ textAlign: "center", width: "fit-content" }}
+                      className="user-story"
+                      onClick={() => {
+                        if (item?.user_stories?.length > 0) {
+                          setOpenModal(true);
+                          setOpenStoryModal("Follower");
+                          setSelectedStory(item);
+                          createUserStories(item);
+                          setState({
+                            ...state,
+                            goToSlide: i,
+                          });
+                        }
+                      }}
+                    >
+                      <Avatar
+                        className="story-avatar"
+                        src={item?.profile_image}
+                        sx={{
+                          width: 92,
+                          height: 92,
+                          borderWidth: "3px",
+                          borderStyle: "solid",
+                          borderColor: toggle ? "#4AA081" : "#4AA081",
+                        }}
+                      />
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          fontWeight: "600",
+                          marginTop: "10px",
+                          color: toggle ? "text.primary" : "#161C24",
+                        }}
+                      >
+                        {item?.display_name}
+                      </Typography>
+                    </div>
+                  </React.Fragment>
+                ))}
+
+                <Modal open={openModal} onClose={handleClose}>
+                  {openStoryModal === "Follower" ? (
+                    <div
+                      className="App"
+                      onTouchStart={handleTouchStart}
+                      onTouchMove={handleTouchMove}
+                    >
+                      <Carousel
+                        height="100%"
+                        width="100%"
+                        margin="0 200px 0 200px"
+                        // offset={2}
+                        showNavigation={true}
+                        goToSlide={state.goToSlide}
+                        animationConfig={state.config}
+                        cards={userStories || []}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <CreateStory
+                        widthScreen={widthScreen}
+                        createStory={createNewStory}
+                      />
+                    </div>
+                  )}
+                </Modal>
+              </ListItemAvatar>
+            </Box>
+
+            <Box className="custom-tab-wrapper">
+              <Tabs
+                value={value}
+                variant="fullWidth"
+                onChange={handleChange}
+                sx={{
+                  borderBottom: `0 solid ${theme.palette.grey[700]}`,
+                  display: "inline-flex",
+                }}
+                className="custom-tabs-root"
+              >
+                <Tab
+                  className={`${
+                    toggle && value === 0 && "active-tab"
+                  } custom-tab-list`}
+                  label={`All  (${counts?.all_posts ?? 0})`}
+                />
+                <Tab
+                  className={`${
+                    toggle && value === 1 && "active-tab"
+                  } custom-tab-list`}
+                  label={`Text (${counts?.text_posts ?? 0})`}
+                />
+                <Tab
+                  className={`${
+                    toggle && value === 2 && "active-tab"
+                  } custom-tab-list`}
+                  label={`Photos  (${counts?.image_posts ?? 0})`}
+                />
+                <Tab
+                  className={`${
+                    toggle && value === 3 && "active-tab"
+                  } custom-tab-list`}
+                  label={`Videos  (${counts?.video_posts ?? 0})`}
+                />
+              </Tabs>
+            </Box>
+
+            <TabPanel value={value} index={0}>
+              {posts.map((item) => (
+                <PostItem
+                  fetchPosts={fetchPosts}
+                  canDeletePost={true}
+                  key={item?.id}
+                  description={item?.content}
+                  createdAt={item?.created_at}
+                  userName={
+                    item?.user
+                      ? item?.user?.display_name ||
+                        item?.user?.first_name ||
+                        item?.user?.custom_username
+                      : ""
+                  }
+                  custom_username={
+                    item?.user ? item?.user?.custom_username : ""
+                  }
+                  image={item?.media || null}
+                  post={item}
+                  onDelete={postDeleted}
+                />
               ))}
 
-              <Modal open={openModal} onClose={handleClose}>
-                {openStoryModal === "Follower" ? (
-                  <div 
-                    className="App" 
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                  >
-                    <Carousel
-                      height="100%"
-                      width="100%"
-                      margin="0 200px 0 200px"
-                      // offset={2}
-                      showNavigation={true}
-                      goToSlide={state.goToSlide}
-                      animationConfig={state.config}
-                      cards={userStories || []}
-                    />
-                  </div>
-                ) : (
-                  <CreateStory
-                    widthScreen={widthScreen}
-                    createStory={createNewStory}
-                  />
-                )}
-              </Modal>
-            </ListItemAvatar>
+              {isLoading && (
+                <>
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                </>
+              )}
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              {textPosts.map((item, i) => (
+                <PostItem
+                  fetchPosts={fetchPosts}
+                  canDeletePost={true}
+                  key={`textPosts_${i}`}
+                  description={item?.content}
+                  createdAt={item?.created_at}
+                  userName={
+                    item?.user?.display_name || item?.user?.custom_username
+                  }
+                  custom_username={item?.user?.custom_username}
+                  image={item?.media || null}
+                  post={item}
+                  onDelete={postDeleted}
+                />
+              ))}
+              {isLoading && (
+                <>
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                </>
+              )}
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              {photoPosts.map((item, i) => (
+                <PostItem
+                  fetchPosts={fetchPosts}
+                  canDeletePost={true}
+                  key={`photoPosts_${i}`}
+                  description={item?.content}
+                  createdAt={item?.created_at}
+                  userName={
+                    item?.user?.display_name || item?.user?.custom_username
+                  }
+                  custom_username={item?.user?.custom_username}
+                  image={item?.media || null}
+                  post={item}
+                  onDelete={postDeleted}
+                />
+              ))}
+              {isLoading && (
+                <>
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                </>
+              )}
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              {videoPosts.map((item, i) => (
+                <PostItem
+                  fetchPosts={fetchPosts}
+                  canDeletePost={true}
+                  key={`videoPosts_${i}`}
+                  description={item?.content}
+                  createdAt={item?.created_at}
+                  userName={
+                    item?.user?.display_name || item?.user?.custom_username
+                  }
+                  custom_username={item?.user?.custom_username}
+                  image={item?.media || null}
+                  post={item}
+                  onDelete={postDeleted}
+                />
+              ))}
+              {isLoading && (
+                <>
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                </>
+              )}
+            </TabPanel>
           </Box>
 
-          <Box className="custom-tab-wrapper">
-            <Tabs
-              value={value}
-              variant="fullWidth"
-              onChange={handleChange}
-              sx={{
-                borderBottom: `0 solid ${theme.palette.grey[700]}`,
-                display: "inline-flex",
+          {/* Mobile Create Stories Modal */}
+          {mobileView && openModalMobile && (
+            <Box
+              style={{
+                width: "100%",
+                height: "100%",
+                position: "fixed",
+                zIndex: 999,
+                background: "rgba(0,0,0,0.5)",
               }}
-              className="custom-tabs-root"
             >
-              <Tab
-                className={`${toggle && value === 0 && "active-tab"
-                  } custom-tab-list`}
-                label={`All  (${counts?.all_posts ?? 0})`}
+              <CloseIcon
+                onClick={handleClose}
+                style={{
+                  color: "black",
+                  cursor: "pointer",
+                  position: "absolute",
+                  top: "80px",
+                  right: "35px",
+                  zIndex: 9999,
+                }}
               />
-              <Tab
-                className={`${toggle && value === 1 && "active-tab"
-                  } custom-tab-list`}
-                label={`Text (${counts?.text_posts ?? 0})`}
+              <CreateStory
+                widthScreen={widthScreen}
+                createStory={createNewStory}
               />
-              <Tab
-                className={`${toggle && value === 2 && "active-tab"
-                  } custom-tab-list`}
-                label={`Photos  (${counts?.image_posts ?? 0})`}
-              />
-              <Tab
-                className={`${toggle && value === 3 && "active-tab"
-                  } custom-tab-list`}
-                label={`Videos  (${counts?.video_posts ?? 0})`}
-              />
-            </Tabs>
-          </Box>
+            </Box>
+          )}
 
-          <TabPanel value={value} index={0}>
-            {posts.map((item) => (
-              <PostItem
-                fetchPosts={fetchPosts}
-                canDeletePost={true}
-                key={item?.id}
-                description={item?.content}
-                createdAt={item?.created_at}
-                userName={
-                  item?.user
-                    ? item?.user?.display_name ||
-                    item?.user?.first_name ||
-                    item?.user?.custom_username
-                    : ""
-                }
-                custom_username={item?.user ? item?.user?.custom_username : ""}
-                image={item?.media || null}
-                post={item}
-                onDelete={postDeleted}
-              />
-            ))}
-
-            {isLoading && (
-              <>
-                <PostItemSkeleton />
-                <PostItemSkeleton />
-                <PostItemSkeleton />
-              </>
-            )}
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            {textPosts.map((item, i) => (
-              <PostItem
-                fetchPosts={fetchPosts}
-                canDeletePost={true}
-                key={`textPosts_${i}`}
-                description={item?.content}
-                createdAt={item?.created_at}
-                userName={
-                  item?.user?.display_name || item?.user?.custom_username
-                }
-                custom_username={item?.user?.custom_username}
-                image={item?.media || null}
-                post={item}
-                onDelete={postDeleted}
-              />
-            ))}
-            {isLoading && (
-              <>
-                <PostItemSkeleton />
-                <PostItemSkeleton />
-                <PostItemSkeleton />
-              </>
-            )}
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            {photoPosts.map((item, i) => (
-              <PostItem
-                fetchPosts={fetchPosts}
-                canDeletePost={true}
-                key={`photoPosts_${i}`}
-                description={item?.content}
-                createdAt={item?.created_at}
-                userName={
-                  item?.user?.display_name || item?.user?.custom_username
-                }
-                custom_username={item?.user?.custom_username}
-                image={item?.media || null}
-                post={item}
-                onDelete={postDeleted}
-              />
-            ))}
-            {isLoading && (
-              <>
-                <PostItemSkeleton />
-                <PostItemSkeleton />
-                <PostItemSkeleton />
-              </>
-            )}
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            {videoPosts.map((item, i) => (
-              <PostItem
-                fetchPosts={fetchPosts}
-                canDeletePost={true}
-                key={`videoPosts_${i}`}
-                description={item?.content}
-                createdAt={item?.created_at}
-                userName={
-                  item?.user?.display_name || item?.user?.custom_username
-                }
-                custom_username={item?.user?.custom_username}
-                image={item?.media || null}
-                post={item}
-                onDelete={postDeleted}
-              />
-            ))}
-            {isLoading && (
-              <>
-                <PostItemSkeleton />
-                <PostItemSkeleton />
-                <PostItemSkeleton />
-              </>
-            )}
-          </TabPanel>
-        </Box>
-
-        {/* Mobile Create Stories Modal */}
-        {mobileView && openModalMobile && <Box style={{width: '100%',height: '100%', position: 'fixed', zIndex: 999, background: 'rgba(0,0,0,0.5)'}}>
-          <CloseIcon
-            onClick={handleClose}
-            style={{
-              color: 'black',
-              cursor: 'pointer',
-              position: 'absolute',
-              top: '80px',
-              right: '35px',
-              zIndex: 9999,
-            }}
-          />
-          <CreateStory
-            widthScreen={widthScreen}
-            createStory={createNewStory}
-          />
-        </Box>}
-
-        <Box
-          sx={{
-            display: { xs: "none", md: "block" },
-            marginLeft: "5rem",
-            marginTop: "26px",
-            width: "30%",
-          }}
-        >
           <Box
             sx={{
-              display: "flex",
-              width: "100%",
-              alignItems: "center",
-              gap: "12px",
+              display: { xs: "none", md: "block" },
+              marginLeft: "5rem",
+              marginTop: "26px",
+              width: "30%",
             }}
           >
-            <Button
-              onClick={() => navigate("/page/creation")}
+            <Box
               sx={{
-                "&:hover": { background: "grey" },
-                display: showAddPageButton ? "block" : "none",
-                position: "absolute",
-                top: "8%",
-                right: "33%",
-                background: "black",
-                color: "white",
-                padding: "10px",
-                borderRadius: "12px",
-                borderTopRightRadius: "0px",
+                display: "flex",
+                width: "100%",
+                alignItems: "center",
+                gap: "12px",
               }}
             >
-              + Add Page
-            </Button>
-            <Button onClick={() => ShowAddPage()}>
-              <Avatar
-                src={savedUser?.profile_image}
-                sx={{ width: 50, height: 50 }}
-              />
-            </Button>
-            <div>
+              <Button
+                onClick={() => navigate("/page/creation")}
+                sx={{
+                  "&:hover": { background: "grey" },
+                  display: showAddPageButton ? "block" : "none",
+                  position: "absolute",
+                  top: "8%",
+                  right: "33%",
+                  background: "black",
+                  color: "white",
+                  padding: "10px",
+                  borderRadius: "12px",
+                  borderTopRightRadius: "0px",
+                }}
+              >
+                + Add Page
+              </Button>
+              <Button onClick={() => ShowAddPage()}>
+                <Avatar
+                  src={savedUser?.profile_image}
+                  sx={{ width: 50, height: 50 }}
+                />
+              </Button>
+              <div>
+                <Typography
+                  variant="h4"
+                  sx={{ color: toggle ? "text.primary" : "#161C24" }}
+                >
+                  {savedUser.display_name}
+                </Typography>
+                <Typography variant="h5" sx={{ color: "text.secondary" }}>
+                  @{savedUser.custom_username}
+                </Typography>
+              </div>
+            </Box>
+            <Box
+              sx={{
+                marginTop: "2rem",
+                marginLeft: "10px",
+              }}
+            >
               <Typography
                 variant="h4"
                 sx={{ color: toggle ? "text.primary" : "#161C24" }}
               >
-                {savedUser.display_name}
+                Suggestions
               </Typography>
-              <Typography variant="h5" sx={{ color: "text.secondary" }}>
-                @{savedUser.custom_username}
-              </Typography>
-            </div>
-          </Box>
-          <Box
-            sx={{
-              marginTop: "2rem",
-              marginLeft: "10px",
-            }}
-          >
-            <Typography
-              variant="h4"
-              sx={{ color: toggle ? "text.primary" : "#161C24" }}
-            >
-              Suggestions
-            </Typography>
-            {suggestionList?.map((item: any, i: number) => (
-              <div onClick={() => navigate(`/${item?.custom_username}`)}>
-                <Box
-                  key={i}
-                  sx={{
-                    display: "flex",
-                    width: "100%",
-                    alignItems: "center",
-                    gap: "12px",
-                    marginTop: "12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <Avatar
-                    src={item?.profile_image}
-                    sx={{ width: 35, height: 35 }}
-                  />
-                  <div>
-                    <Typography
-                      variant="h5"
-                      sx={{ color: toggle ? "text.primary" : "#161C24" }}
-                    >
-                      {item?.display_name}
-                    </Typography>
-                    <Typography variant="h6" sx={{ color: "text.secondary" }}>
-                      {item?.custom_username}
-                    </Typography>
-                  </div>
-                </Box>
-              </div>
-            ))}
-            <Grid
-              direction="row"
-              gap={2}
-              sx={{ display: "flex", marginTop: "30px" }}
-            >
-              <div onClick={() => navigate("/terms")}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#4AA081", cursor: "pointer" }}
-                >
-                  Terms of Service
-                </Typography>
-              </div>
-              <div onClick={() => navigate("/privacy")}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#4AA081", cursor: "pointer" }}
-                >
-                  Privacy Policy
-                </Typography>
-              </div>
-              <div onClick={() => navigate("/cookies")}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#4AA081", cursor: "pointer" }}
-                >
-                  Cookie Policy
-                </Typography>
-              </div>
-            </Grid>
-            <Grid
-              direction="row"
-              gap={2}
-              sx={{ display: "flex", marginTop: "30px" }}
-            >
-              <div onClick={() => navigate("/help")}>
+              {suggestionList?.map((item: any, i: number) => (
+                <div onClick={() => navigate(`/${item?.custom_username}`)} key={i}>
+                  <Box
+                    
+                    sx={{
+                      display: "flex",
+                      width: "100%",
+                      alignItems: "center",
+                      gap: "12px",
+                      marginTop: "12px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Avatar
+                      src={item?.profile_image}
+                      sx={{ width: 35, height: 35 }}
+                    />
+                    <div>
+                      <Typography
+                        variant="h5"
+                        sx={{ color: toggle ? "text.primary" : "#161C24" }}
+                      >
+                        {item?.display_name}
+                      </Typography>
+                      <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                        {item?.custom_username}
+                      </Typography>
+                    </div>
+                  </Box>
+                </div>
+              ))}
+              <Grid
+                container
+                direction="row"
+                gap={2}
+                sx={{ display: "flex", marginTop: "30px" }}
+              >
+                <div onClick={() => navigate("/terms")}>
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "#4AA081", cursor: "pointer" }}
+                  >
+                    Terms of Service
+                  </Typography>
+                </div>
+                <div onClick={() => navigate("/privacy")}>
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "#4AA081", cursor: "pointer" }}
+                  >
+                    Privacy Policy
+                  </Typography>
+                </div>
+                <div onClick={() => navigate("/cookies")}>
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "#4AA081", cursor: "pointer" }}
+                  >
+                    Cookie Policy
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid
+                container
+                direction="row"
+                gap={2}
+                sx={{ display: "flex", marginTop: "30px" }}
+              >
+                <div onClick={() => navigate("/help")}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: "400",
+                      color: toggle ? "text.primary" : "#536471",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Help
+                  </Typography>
+                </div>
+
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: "400",
                     color: toggle ? "text.primary" : "#536471",
-                    cursor: "pointer",
                   }}
                 >
-                  Help
+                  Dint © 2023
                 </Typography>
-              </div>
-
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "400",
-                  color: toggle ? "text.primary" : "#536471",
-                }}
-              >
-                Dint © 2023
-              </Typography>
-            </Grid>
+              </Grid>
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
-    <TipPopUp
-      user={profileByUsername}
-      onClose={handleCloseTipModal}
-      setOpenPopUpTip={setOpenPopUpTip}
-      onOpen={handleClickOpen}
-      openPopUpTip={openPopUpTip}
-    />
+      <TipPopUp
+        user={profileByUsername}
+        onClose={handleCloseTipModal}
+        setOpenPopUpTip={setOpenPopUpTip}
+        onOpen={handleClickOpen}
+        openPopUpTip={openPopUpTip}
+      />
     </>
   );
 };

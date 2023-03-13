@@ -85,6 +85,7 @@ const PostItem = ({
   const [showAllComments, setShowAllComments] = React.useState<boolean>(false);
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
   const [emoji, setEmoji] = React.useState("");
+  const [showSendTip,setShowSendTip] = React.useState(true)
 
   const images = ["jpg", "gif", "png", "svg", "webp", "ico", "jpeg"];
   const videos = ["MP4", "mp4", "MOV", "mov", "3gp", "ogg", "quicktime"];
@@ -152,6 +153,7 @@ const PostItem = ({
 
       if (post.user.id === user.id) {
         setCanHeDeletePost(true);
+        setShowSendTip(false);
       }
     }
   }, [post.like_post, post.user.id, user]);
@@ -400,13 +402,13 @@ const PostItem = ({
                   <FaHeart color="red" />
                 )}
               </IconButton>
-              <IconButton
+             {showSendTip && <IconButton
                 onClick={() => setOpenPopUpTip(true)}
                 sx={{ fontSize: "12px" }}
               >
                 <MonetizationOnIcon />
                 SEND TIP
-              </IconButton>
+              </IconButton>}
             </Box>
             {!alreadyBookmark ? (
               <IconButton

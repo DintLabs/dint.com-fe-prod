@@ -25,13 +25,14 @@ const ShareProfileModal: React.FC<Props> = ({ open, onClose }) => {
   }
 
   const saveQRCode = async () => {
-    document.getElementById('qr-code-profile')?.toBlob(function (blob: string | Blob) {
+    const canvas = document.getElementById('qr-code-profile') as HTMLCanvasElement;
+    canvas?.toBlob && (canvas.toBlob = (blob: any) => {
       saveAs(blob, 'qr_code_profile.png')
     })
   }
 
   const shareQRCode = async () => {
-    const canvas = document.getElementById('qr-code-profile')
+    const canvas = document.getElementById('qr-code-profile') as HTMLCanvasElement;
     const qrCodeUrl = canvas?.toDataURL('image/png')
     const file = new File([await (await fetch(qrCodeUrl)).blob()], 'qr_code_profile.png', {
       type: 'image/png',

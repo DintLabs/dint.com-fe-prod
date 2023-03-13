@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router';
 
 type MessageItemProps = {
   messageId: number;
-  message: string;
+  message?: string;
   isSender: boolean;
   time: string;
   receiverImage:string;
   senderImage:string;
-  messageSender:string
+  messageSender: string
+  media? : string
 };
 
 function MessageItem(props: MessageItemProps) {
@@ -30,7 +31,9 @@ function MessageItem(props: MessageItemProps) {
         <Box sx={{ display:"flex" , flexDirection:props.isSender?"row-reverse" :"" }}>
           <Avatar onClick={()=>navigate(`/${props.messageSender}`)} component="span" sx={{margin:"0% 5px" , cursor:"pointer"}} src={props.isSender ? `${props.senderImage}` : `${props.senderImage}`} />
           <Box className="message">
-            <Typography component="span">{`${props.message} `} </Typography>
+            {props?.media ?
+           <img src={props.media} alt="Media...." />
+           : <Typography component="span">{`${props.message} `} </Typography>}
             <Typography component="span" variant="caption" className="message-time">
               {props.time}
             </Typography>

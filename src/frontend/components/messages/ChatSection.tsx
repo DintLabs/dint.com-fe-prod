@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, memo } from "react";
+import { useState, useContext, useEffect, memo, useCallback } from "react";
 import _axios from "frontend/api/axios";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import {
@@ -22,9 +22,12 @@ import MessageList from "./MessageList";
 import TipPopUp from "../tip/TipPopUp";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { fetchAllChatsList } from "../../redux/slices/messages";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 import { Button } from "@mui/material";
 import NewMessage from "frontend/components/messages/NewMessage";
+import PermMediaIcon from "@mui/icons-material/PermMedia";
+import AddChatMedia from "frontend/pages/Lounge/AddChatMedia";
+import { toast } from "react-toastify";
 
 let ws: any;
 
@@ -48,6 +51,8 @@ function ChatSection(props: ChatSectionProps) {
   const [userChats, setUserChats] = useState<any>([]);
   const [messageContent, setMessageContent] = useState("");
   const [isAddNewModalOpen, setIsAddNewModalOpen] = useState(false);
+  const [openMedia, setOpenMedia] = useState(false);
+  const [media,setMedia] = useState()
 
   useEffect(() => {
     ws = new WebSocket(
@@ -81,23 +86,24 @@ function ChatSection(props: ChatSectionProps) {
     }
   };
 
-  const sendMessageHandler = async () => {
+  const sendMessageHandler = async (data?: any) => {
     if (
-      messageContent.trim().length > 0 &&
+      (messageContent.trim().length > 0  || data.length )&&
       props.selectedUser.id !== -1 &&
       props.loggedInUser.id
-    ) {
+      ) {
       const res = await dispatch(
         sendMessage({
           reciever: props.selectedUser.id.toString(),
           sender: props.loggedInUser.id.toString(),
           content: messageContent.trim(),
+          media : data
         })
       );
       if (res) {
-        console.log('res --->' , res)
+        console.log("res --->", res);
         ws.send(JSON.stringify(res));
-        fetchUserChat()
+        fetchUserChat();
       }
     }
     setMessageContent("");
@@ -108,6 +114,7 @@ function ChatSection(props: ChatSectionProps) {
   };
 
   const handleClose = () => {
+    console.log("modal close")
     setOpenPopUpTip(false);
   };
 
@@ -121,6 +128,42 @@ function ChatSection(props: ChatSectionProps) {
     navigate("/lounge/messages");
   };
 
+  const onOpenMedia = () => {
+    setOpenMedia(!openMedia);
+  };
+
+  const addNewMedia = (media: any) => {
+    // if (media.type === 'image') {
+    //   setPhotoMedia((prev) => (prev.length ? [media, ...prev] : prev));
+    // }
+    // if (media.type === 'video' && videoPosts.length) {
+    //   setVideoMedia ((prev) => (prev.length ? [media, ...prev] : prev));
+    // }
+    setMedia(media);
+  };
+
+  const sendMedia = useCallback(
+    async (toastId: string, data: any) => {
+      try {
+        const result = await _axios.post('/api/posts/create/', data)
+        if (result?.data?.data) addNewMedia(result.data.data)
+        setTimeout(() => {
+          toast.update(toastId, {
+            render: 'Media send successful!',
+            type: 'success',
+            isLoading: false,
+          })
+        }, 1000)
+
+        setTimeout(() => {
+          toast.dismiss()
+        }, 3000)
+      } catch (err: any) {
+        toast.error(err.toString())
+      }
+    },
+    [addNewMedia]
+  )
 
   return (
     <>
@@ -131,6 +174,8 @@ function ChatSection(props: ChatSectionProps) {
         onOpen={handleClickOpen}
         openPopUpTip={openPopUpTip}
       />
+      
+      <AddChatMedia openMedia={openMedia} onOpenMedia={onOpenMedia} sendMessageHandler={sendMessageHandler} />
       {props?.selectedUser?.id !== -1 ? (
         <Box
           className="chat-section chat-container"
@@ -217,6 +262,9 @@ function ChatSection(props: ChatSectionProps) {
                 },
               }}
             />
+            <IconButton onClick={onOpenMedia}>
+              <PermMediaIcon />
+            </IconButton>
             <FlexRow
               p="8px 0 8px 8px"
               onClick={() => handleClickOpen()}

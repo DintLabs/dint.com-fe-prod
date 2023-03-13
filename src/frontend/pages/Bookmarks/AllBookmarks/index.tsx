@@ -52,7 +52,7 @@ const HomeTab = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingBookmarks , setIsLoadingBookmarks] = useState(false)
   // const [bookmarkups, setBookmarkups] = useState([])
-  const [bookmarkedPosts, setBookmarkedPosts] = useState([])
+  const [bookmarkedPosts, setBookmarkedPosts] = useState<any[]>([])
 
 
   const {

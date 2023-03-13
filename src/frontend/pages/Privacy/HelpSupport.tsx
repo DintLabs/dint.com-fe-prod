@@ -16,7 +16,7 @@ const HelpSupport = () => {
     const { toggle } = useContext(ThemeContext);
     const [expanded, setExpanded] = React.useState<string | false>('');
 
-    const Accordion = styled((props) => (
+    const Accordion = styled((props:any) => (
         <MuiAccordion children={''} disableGutters elevation={0} square {...props} />
     ))(({ theme }) => ({
         '&:not(:last-child)': {
@@ -33,7 +33,7 @@ const HelpSupport = () => {
         }
     }));
 
-    const AccordionSummary = styled((props) => (
+    const AccordionSummary = styled((props:any) => (
         <MuiAccordionSummary
             expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
             {...props}

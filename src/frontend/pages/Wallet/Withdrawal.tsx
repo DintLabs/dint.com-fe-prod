@@ -69,7 +69,7 @@ export default function SellToken() {
 
   const { toggle } = useContext(ThemeContext)
 
-  const id = JSON.parse(localStorage.getItem('userData')).id
+  const id = JSON.parse(localStorage.getItem('userData') || '').id
 
   const onSubmit = async (data: any) => {
     if (!cardSelect) {

@@ -75,7 +75,7 @@ export const fetchMessageList = (userId: number) => async (dispatch: any) => {
 };
 
 export const sendMessage =
-  (payload: { reciever: string; sender: string; content: string }) => async (dispatch: any) => {
+  (payload: { reciever: string; sender: string; content: string, media:string }) => async (dispatch: any) => {
     try {
       return axios.post('api/chat/create-message/', payload).then((res: any) => {
         if (res.status === 200) {

@@ -10,10 +10,10 @@ type UserListItemProps = {
   name: string;
   caption: string;
   isSelected?: boolean;
-  newMessage: any;
-  chatRoom: any;
+  newMessage?: any;
+  chatRoom?: any;
   onClickHandler?: () => void;
-  unseenMessages:any;
+  unseenMessages?:any;
 };
 
 function UserListItem(props: UserListItemProps) {

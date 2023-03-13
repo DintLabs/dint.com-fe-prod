@@ -509,32 +509,31 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
     );
     const createUserStories = (item: any) => {
       const { user_stories } = item;
-      const data = user_stories.map(({ story }: any) => {
-        const url = new URL(`${getApiURL()}${story}`);
-        const extension = url.href.substr(url.href.length - 3);
+      const data = user_stories.map((story: any) => {
+        const extension = story.story.substr(story.story.length - 3);
         switch (extension.toLowerCase()) {
           case "mp4":
             return {
-              url: url.href,
-              type: 'video',
-            }
-            
-            default:
-              return {
-                content: () => (
+              url: story.story,
+              type: "video",
+            };
+
+          default:
+            return {
+              content: () => (
                 <div style={contentStylestoryback}>
-                  <img style={image} src={url.href}></img>
+                  <img style={image} src={story.story}></img>
                 </div>
               ),
-            }
+            };
         }
-      })
-      return data
-    }
+      });
+      return data;
+    };
     const image = {
       display: "block",
       borderRadius: 4,
-      objectFit: "cover",
+      // objectFit: "cover",
       height: "100%",
       width: "100%",
     };
@@ -614,15 +613,28 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         badgeContent=" "
                         variant="dot"
                         invisible={!userDetails}
-                        sx={(userOwnStories.length > 0) && isUserProfile ? {"& .css-mcy1wh-MuiBadge-badge" : {display:"none"}} : {}}
+                        sx={
+                          userOwnStories.length > 0 && isUserProfile
+                            ? {
+                                "& .css-mcy1wh-MuiBadge-badge": {
+                                  display: "none",
+                                },
+                              }
+                            : {}
+                        }
                       >
-                        { isUserProfile ? 
-                          <StoriesUserOwn createUserStories={createUserStories} hideName={true} /> :
+                        {isUserProfile ? (
+                          <StoriesUserOwn
+                            createUserStories={createUserStories}
+                            hideName={true}
+                          />
+                        ) : (
                           <Avatar
-                          src={userDetails?.profile_image}
-                          className="avatar-icon"
-                          // sx={{ width: 120, height: 120 }}
-                        />}
+                            src={userDetails?.profile_image}
+                            className="avatar-icon"
+                            // sx={{ width: 120, height: 120 }}
+                          />
+                        )}
                       </Badge>
                     ) : (
                       <Badge
@@ -652,13 +664,13 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         color={toggle ? "#fff" : "#000"}
                       
                         >
-                        {(Array.isArray(follower) && follower.length) || 0} Followers
+                        {userDetails?.user_follower.length || 0} Followers
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                        {(Array.isArray(following) && following.length) || 0} Following
+                        {userDetails?.user_follower.length || 0} Following
                       </Typography>
 
 
@@ -741,7 +753,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                           },
                         }}
                       >
-                          {isFollowLoading ? `Loading...` : `Following`}
+                    {isFollowLoading ? `Loading...` : `Following`}
                       </Button>
                     )}
                     {userDetails?.is_followed === false && (
@@ -801,7 +813,31 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                     >
                       Message
                     </Button>
-                    <Button
+                    {!userDetails?.is_private && userDetails?.is_followed !== "Request Sent" && <Box className="btn-group-follow">
+                      <Button
+                        variant="contained"
+                        sx={{
+                          color: "#353535",
+                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
+                          boxShadow: "none",
+                          width: "100%",
+                          ":hover": {
+                            backgroundColor: toggle ? "#fff" : "#EFEFEF",
+                          },
+                          whiteSpace: "nowrap",
+                          px: 4,
+                        }}
+                        onClick={() => setShowShareProfileModal(true)}
+                      >
+                        Share profile
+                      </Button>
+
+{showShareProfileModal && <ShareProfileModal
+                        open={showShareProfileModal}
+                        onClose={() => setShowShareProfileModal(false)}
+                      />}
+                    </Box>}
+                    {/* <Button
                       variant="contained"
                       size="medium"
                       sx={{
@@ -815,15 +851,15 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                       }}
                     >
                       <PersonAddOutlinedIcon />
-                    </Button>
-                    <IconButton
+                    </Button> */}
+                    {/* <IconButton
                       sx={{
                         color: toggle ? "#fff" : "#000",
                         display: { xs: "none", md: "flex" },
                       }}
                     >
                       <MoreHorizIcon />
-                    </IconButton>
+                    </IconButton> */}
                   </Box>
                 ) : (
                   <div className="btn-group-follow-wrapper">
@@ -845,9 +881,12 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                       >
                         Share profile
                       </Button>
-                      
-                      <ShareProfileModal open={showShareProfileModal} onClose={() => setShowShareProfileModal(false)} />
-                      
+
+                     {showShareProfileModal && <ShareProfileModal
+                        open={showShareProfileModal}
+                        onClose={() => setShowShareProfileModal(false)}
+                      />}
+
                       {/* <Button
                         variant="contained"
                         size="medium"
@@ -864,7 +903,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         Message
                       </Button> */}
                 
-                  
+
                     </Box>
                   </div>
                 )}
@@ -874,10 +913,10 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                 {counts?.all_posts ?? 0} Post
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}  >
-                {(Array.isArray(follower) && follower.length) || 0} Followers
+                {userDetails?.user_follower.length || 0} Followers
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}  >
-                {(Array.isArray(following) && following.length) || 0} Following
+                {userDetails?.user_following.length || 0} Following
                 </Typography>
               </div>
               {/* <input type="hidden" id="dummy" /> */}
@@ -1053,9 +1092,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
               overflow: "auto",
               scrollBehavior: "smooth",
             }}
-          >
-           
-          </Box>
+          ></Box>
         </div>
         {isEligibleForFetchingPost && (
           <>
@@ -1115,7 +1152,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                     </div>
                   }
                 />
-                <Tab
+                {/* <Tab
                   className={`profile-tab ${
                     toggle && value === 4 && "active-tab"
                   } profile-tab-list`}
@@ -1126,81 +1163,70 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                       Subscription ({counts?.subscriptions ?? 0})
                     </div>
                   }
-                />
+                /> */}
               </Tabs>
             </Box>
 
             <TabPanel value={value} index={0}>
-              {
-                 posts?.length > 0 ? (
-                  <MediaList
-                    mediaList={posts}
-                    totalMedia={counts.all_posts}
-                    fetchMoreMedia={fetchImageHandler}
-                    loader={isLoading}
-                    userDetails={userDetails}
-                    getUserPostCounts={getUserPostCounts}
-                    postDeleted={postDeleted}
-                  />
-                ) : (
-                  <NothingToShow padding={14} />
-                )
-              }
+              {posts?.length > 0 ? (
+                <MediaList
+                  mediaList={posts}
+                  totalMedia={counts.all_posts}
+                  fetchMoreMedia={fetchImageHandler}
+                  loader={isLoading}
+                  userDetails={userDetails}
+                  getUserPostCounts={getUserPostCounts}
+                  postDeleted={postDeleted}
+                />
+              ) : (
+                <NothingToShow padding={14} color={toggle ? "#fff" : "#000"} />
+              )}
             </TabPanel>
             <TabPanel value={value} index={1}>
-            {
-                 textPosts?.length > 0 ? (
-                  <MediaList
-                    mediaList={textPosts}
-                    totalMedia={counts.text_posts}
-                    fetchMoreMedia={fetchImageHandler}
-                    loader={isLoading}
-                    userDetails={userDetails}
-                    getUserPostCounts={getUserPostCounts}
-                    postDeleted={postDeleted}
-                  />
-                ) : (
-                  <NothingToShow padding={14} />
-                )
-              }
-             
+              {textPosts?.length > 0 ? (
+                <MediaList
+                  mediaList={textPosts}
+                  totalMedia={counts.text_posts}
+                  fetchMoreMedia={fetchImageHandler}
+                  loader={isLoading}
+                  userDetails={userDetails}
+                  getUserPostCounts={getUserPostCounts}
+                  postDeleted={postDeleted}
+                />
+              ) : (
+                <NothingToShow padding={14} color={toggle ? "#fff" : "#000"} />
+              )}
             </TabPanel>
             <TabPanel value={value} index={2}>
-            {
-                 photoPosts?.length > 0 ? (
-                  <MediaList
-                    mediaList={photoPosts}
-                    totalMedia={counts.image_posts}
-                    fetchMoreMedia={fetchImageHandler}
-                    loader={isLoading}
-                    userDetails={userDetails}
-                    getUserPostCounts={getUserPostCounts}
-                    postDeleted={postDeleted}
-                  />
-                ) : (
-                  <NothingToShow padding={14} />
-                )
-              }
-             
+              {photoPosts?.length > 0 ? (
+                <MediaList
+                  mediaList={photoPosts}
+                  totalMedia={counts.image_posts}
+                  fetchMoreMedia={fetchImageHandler}
+                  loader={isLoading}
+                  userDetails={userDetails}
+                  getUserPostCounts={getUserPostCounts}
+                  postDeleted={postDeleted}
+                />
+              ) : (
+                <NothingToShow padding={14} color={toggle ? "#fff" : "#000"} />
+              )}
             </TabPanel>
 
             <TabPanel value={value} index={3}>
-            {
-                 videoPosts?.length > 0 ? (
-                  <MediaList
-                    mediaList={videoPosts}
-                    totalMedia={counts.video_posts}
-                    fetchMoreMedia={fetchImageHandler}
-                    loader={isLoading}
-                    userDetails={userDetails}
-                    getUserPostCounts={getUserPostCounts}
-                    postDeleted={postDeleted}
-                  />
-                ) : (
-                  <NothingToShow padding={14} />
-                )
-              }
-            
+              {videoPosts?.length > 0 ? (
+                <MediaList
+                  mediaList={videoPosts}
+                  totalMedia={counts.video_posts}
+                  fetchMoreMedia={fetchImageHandler}
+                  loader={isLoading}
+                  userDetails={userDetails}
+                  getUserPostCounts={getUserPostCounts}
+                  postDeleted={postDeleted}
+                />
+              ) : (
+                <NothingToShow padding={14} color={toggle ? "#fff" : "#000"} />
+              )}
             </TabPanel>
             <TabPanel value={value} index={4}>
               <div className="image-wrapper">
@@ -1219,7 +1245,13 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                     );
                   })
                 ) : (
-                  <Typography variant="h4" sx={{ textAlign: "center" }}>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      textAlign: "center",
+                      color: toggle ? "#fff" : "#000",
+                    }}
+                  >
                     No Subscriptions added!
                   </Typography>
                 )}
@@ -1245,7 +1277,11 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
           }}
         >
           <Typography
-            sx={{ fontSize: "12px", color: "black", textAlign: "center" }}
+            sx={{
+              fontSize: "12px",
+              color: toggle ? "#fff" : "#000",
+              textAlign: "center",
+            }}
           >
             This account is private
           </Typography>

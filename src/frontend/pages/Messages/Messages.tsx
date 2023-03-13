@@ -408,7 +408,7 @@ const Messages = () => {
               placeholder="Search"
               InputProps={{
                 endAdornment: (
-                  <InputAdornment>
+                  <InputAdornment position="start">
                     <IconButton>
                       <SearchIcon />
                     </IconButton>

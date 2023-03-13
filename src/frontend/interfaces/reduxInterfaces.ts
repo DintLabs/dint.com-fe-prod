@@ -78,6 +78,8 @@ export interface UserDataInterface {
   phone_no?: string | null;
   photoURL?: string | null;
   uid?: string | null;
+  user_follower:any ;
+  user_following:any;
 }
 export interface ConfineUserInterface {
   id: number;

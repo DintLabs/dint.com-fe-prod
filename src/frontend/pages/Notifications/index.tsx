@@ -10,7 +10,8 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 const NotificationsContainer = () => {
   const [ notifications , setNotifications ] = useState([]);
   const { toggle } = useContext(ThemeContext);
-  let userId: any = JSON.parse(localStorage.getItem("userData"));
+  const jsonuserData = localStorage.getItem("userData")
+  let userId: any = jsonuserData &&  JSON.parse(jsonuserData);
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(()=>{
@@ -34,7 +35,7 @@ const NotificationsContainer = () => {
           <Typography variant="h4"  style={{color: toggle ? "white" :"#666666"}}>Latest</Typography>
           <Divider />
           <Box>
-            {notifications.length > 0 ? notifications.map((notif) => {
+            {notifications.length > 0 ? notifications.map((notif: any) => {
               return (<Box sx={{display:"flex" , margin:"1% 0%" , alignItems:"center" ,  color: toggle ? "white" : "black", }}>
               <Avatar/>
               <Typography sx={{margin:"0% 1%",  color: toggle ? "white" : "black",}}>{notif.sender?.display_name} has send you a message</Typography>

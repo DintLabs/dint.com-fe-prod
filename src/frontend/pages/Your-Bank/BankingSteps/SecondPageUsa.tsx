@@ -56,7 +56,7 @@ function a11yProps(index: number) {
 }
 
 type StepPayload = {
-  nextStep: () => void;
+  nextStep: (item?: any) => void;
 };
 export default function SecondPageUsa(props:StepPayload) {
   const [value, setValue] = React.useState(0);

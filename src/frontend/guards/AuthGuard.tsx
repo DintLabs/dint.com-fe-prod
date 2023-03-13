@@ -16,8 +16,9 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkReferCode = async()=>{
-        let data = JSON.parse(localStorage.getItem('userData'));
+    const checkReferCode = async () => {
+      const jsonUserData = localStorage.getItem('userData')
+        let data = jsonUserData && JSON.parse(jsonUserData);
         await _axios.get('api/user/referral_code/').then((res:any)=>{
           if(res.data.code === 405){
             navigate('/auth/refer', {state : {for : 'login' , email : data.email}})

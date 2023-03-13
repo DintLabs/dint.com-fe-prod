@@ -150,7 +150,7 @@ const ProcessWithdrawal = () => {
                       <InputAdornment position="end">
                         <Stack sx={{ flexDirection: "row" }}>
                           <Typography
-                            variant="subtitle4"
+                            variant="subtitle1"
                             style={{
                               marginRight: "5px",
                               color: toggle ? "white" : "#161C24",
@@ -159,7 +159,7 @@ const ProcessWithdrawal = () => {
                             Balance:
                           </Typography>
                           <Typography
-                            variant="subtitle5"
+                            variant="subtitle1"
                             style={{
                               color: toggle ? "white" : "#161C24",
                             }}

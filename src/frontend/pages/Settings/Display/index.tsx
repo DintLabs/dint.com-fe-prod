@@ -42,7 +42,7 @@ const Display = () => {
                 color="secondary"
                 sx={{
                   '& .MuiSwitch-track': {
-                    backgroundColor: !toggle && 'black'
+                    backgroundColor: `${!toggle && 'black'}`
                   }
                 }}
                 inputProps={{ 'aria-label': 'controlled' }}

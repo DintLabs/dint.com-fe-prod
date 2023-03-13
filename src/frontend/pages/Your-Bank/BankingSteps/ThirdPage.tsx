@@ -8,7 +8,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useNavigate } from 'react-router-dom';
 
 type FirstStepPayload = {
-  nextStep: () => void;
+  nextStep: (item?: any) => void;
 };
 const SubmitButton = styled(LoadingButton)(({ theme }) => ({
   borderRadius: 20

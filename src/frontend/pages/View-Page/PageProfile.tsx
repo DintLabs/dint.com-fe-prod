@@ -262,7 +262,10 @@ const PageProfile = (props: PageProfileProps) => {
                 isPage={true}
               />
             ) : (
-              <NothingToShow padding={14} />
+              <NothingToShow 
+              padding={14} 
+              color={toggle ? "#fff" : "#000"} 
+              />
             )
           ) : (
             <PrivateCard padding={14} />
@@ -280,7 +283,10 @@ const PageProfile = (props: PageProfileProps) => {
                 isPage={true}
               />
             ) : (
-              <NothingToShow padding={14} />
+              <NothingToShow 
+              padding={14} 
+              color={toggle ? "#fff" : "#000"} 
+              />
             )
           ) : (
             <PrivateCard padding={14} />
