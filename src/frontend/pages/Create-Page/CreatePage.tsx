@@ -78,7 +78,7 @@ const CreatePage = () => {
   useEffect(() => {
     if (uploadedProfilePicture.length !== 0) {
       setProfilePictureLoader(true);
-      dispatch(uploadMedia(uploadedProfilePicture[0], 'main-photo'))
+      dispatch(uploadMedia(uploadedProfilePicture[0], 'main-photo' ,true))
         .then((res) => {
           if (res) {
             setUploadedProfilePictureUrl(res);
@@ -97,7 +97,7 @@ const CreatePage = () => {
   useEffect(() => {
     if (uploadedCoverPicture.length !== 0) {
       setCoverPictureLoader(true);
-      dispatch(uploadMedia(uploadedCoverPicture[0], 'photos'))
+      dispatch(uploadMedia(uploadedCoverPicture[0], 'photos', true))
         .then((res) => {
           if (res) {
             setUploadedCoverPictureUrl(res);
@@ -135,7 +135,7 @@ const CreatePage = () => {
       profile_picture: uploadedProfilePictureUrl,
       cover_picture: uploadedCoverPictureUrl
     });
-    const payload = {
+    const payload = { 
       ...data,
       profile_picture: uploadedProfilePictureUrl,
       cover_picture: uploadedCoverPictureUrl,

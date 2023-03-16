@@ -25,7 +25,7 @@ import {
 import { toast } from "react-toastify";
 
 import { MdDelete, MdSend } from "react-icons/md";
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import TipPopUp from "frontend/components/tip/TipPopUp";
@@ -76,6 +76,7 @@ const PostItem = ({
   isBookmarksPage?: Boolean;
 }) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false)
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -85,7 +86,7 @@ const PostItem = ({
   const [showAllComments, setShowAllComments] = React.useState<boolean>(false);
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
   const [emoji, setEmoji] = React.useState("");
-  const [showSendTip,setShowSendTip] = React.useState(true)
+  const [showSendTip, setShowSendTip] = React.useState(true)
 
   const images = ["jpg", "gif", "png", "svg", "webp", "ico", "jpeg"];
   const videos = ["MP4", "mp4", "MOV", "mov", "3gp", "ogg", "quicktime"];
@@ -184,25 +185,29 @@ const PostItem = ({
     }
 
     if (alreadyLike) {
+      setLoading(true)
+      setAlreadyLike(false);
       const unlikeResp: UnlikePostInterface = await dispatch(
         unlikeForPost(user.id, post.id)
       );
 
-      setAlreadyLike(false);
 
       setPost((prevState) => ({
         ...prevState,
         unlike_post: [...(prevState?.unlike_post || []), unlikeResp],
       }));
+      setLoading(false)
     } else {
+      setLoading(true)
+      setAlreadyLike(true);
       const likeResp: LikePostInterface = await dispatch(
         addLikeForPost(user.id, post.id)
       );
-      setAlreadyLike(true);
       setPost((prevState) => ({
         ...prevState,
         like_post: [...(prevState?.like_post || []), likeResp],
       }));
+      setLoading(false)
     }
   };
 
@@ -394,7 +399,7 @@ const PostItem = ({
               </IconButton>
               <IconButton
                 className="d-flex align-items-center justify-content-center"
-                onClick={handleLike}
+                onClick={()=>{!loading && handleLike()}}
               >
                 {!alreadyLike ? (
                   <FavoriteBorderRoundedIcon />
@@ -402,7 +407,17 @@ const PostItem = ({
                   <FaHeart color="red" />
                 )}
               </IconButton>
-             {showSendTip && <IconButton
+              {/* {loading && <IconButton
+                className="d-flex align-items-center justify-content-center"
+
+              >
+                {!alreadyLike ? (
+                  <FavoriteBorderRoundedIcon />
+                ) : (
+                  <FaHeart color="red" />
+                )}
+              </IconButton>} */}
+              {showSendTip && <IconButton
                 onClick={() => setOpenPopUpTip(true)}
                 sx={{ fontSize: "12px" }}
               >
@@ -443,7 +458,7 @@ const PostItem = ({
             Likes
           </p>
         </Box>
-        {image && (images.includes(extension)  || videos.includes(extension)) && (
+        {image && (images.includes(extension) || videos.includes(extension)) && (
           <Box sx={{ px: 2 }}>
             <Typography
               component="span"
@@ -467,7 +482,7 @@ const PostItem = ({
                 !showAllComments
                   ? `View all ${post?.post_comment?.length} Comments`
                   : // <h6 style={{ color: toggle ? "white" : "#161C24" }}>
-                    `Comments (${comments?.length})`
+                  `Comments (${comments?.length})`
                 // </h6>
               }
             </div>
@@ -475,11 +490,11 @@ const PostItem = ({
           <div className="custom-wrapper">
             {showAllComments
               ? comments?.map((item, i) => {
-                  return displayComment(item, i);
-                })
+                return displayComment(item, i);
+              })
               : comments?.slice(0, 1).map((item, i) => {
-                  return displayComment(item, i);
-                })}
+                return displayComment(item, i);
+              })}
           </div>
 
           <div

@@ -60,17 +60,20 @@ const ProfileSettings = () => {
     }
   };
 
-  const handleProPicChange =  (e: any) => {
+  const handleProPicChange = (e: any) => {
     if (e.target.files && e.target.files.length) {
       UploadProfilePicture(e.target.files[0]).then(result => {
         if (result?.success && user) {
+          // Update the user object with the new profile image
           userHook.setCurrentUser({ ...user, profile_image: result?.data?.profile_image || '' });
-          // setUser({ ...user, profile_image: result?.data?.profile_image || '' });
+          // Set the image URL to display the uploaded profile image
+          setImage(URL.createObjectURL(e.target.files[0]));
         }
       });
       toast.dismiss();
     }
   };
+  
 
   const onSubmit = async (data: any) => {
     const id = toast.loading('Loading...');
@@ -497,3 +500,7 @@ const ProfileSettings = () => {
 };
 
 export default ProfileSettings;
+function setImage(arg0: string) {
+  throw new Error('Function not implemented.');
+}
+

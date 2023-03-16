@@ -284,7 +284,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
               src={post?.media}
               alt="Not Displayed"
               className="responsiveimg"
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "100%", height: "100%", objectFit: 'contain' }}
             />
           ) : post?.type === "video" ? (
             <video

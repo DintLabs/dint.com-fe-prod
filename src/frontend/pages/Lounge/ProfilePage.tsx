@@ -41,7 +41,7 @@ import {
 } from "frontend/interfaces/contextInterface";
 import { PostInterface } from "frontend/interfaces/postInterface";
 import { UserDataInterface } from "frontend/interfaces/reduxInterfaces";
-import { UploadCoverPhoto } from "frontend/services/profileService";
+import {  UploadProfilePicture } from "frontend/services/profileService";
 import React, {
   useCallback,
   useContext,
@@ -105,8 +105,11 @@ type PostPaginationPayload = {
   post_type: string;
 };
 
-
-const ProfilePage = ({ username }: { username: string | null | undefined }) => {
+type ProfilePageProps = {
+  username: string | null | undefined;
+  avatar?: string;
+}
+function ProfilePage({ username, avatar }: ProfilePageProps) {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -384,13 +387,13 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
     window.open(url, "_blank");
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProPicChange  = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length) {
-      const result = await UploadCoverPhoto(e.target.files[0]);
-      if (userDetails && result.success) {
+      const result = await UploadProfilePicture(e.target.files[0]);
+      if (userDetails && result?.success) {
         setUserDetails({
           ...userDetails,
-          banner_image: result?.data?.banner_image || "",
+          profile_image: result?.data?.profile_image  || "",
         });
       }
       toast.dismiss();
@@ -548,7 +551,9 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
         height: '100% !important',
      },
     };
-  
+ 
+
+      
   return (
     <>
       <Box
@@ -557,101 +562,56 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
       //   borderRight: `1px solid ${theme.palette.grey[700]}`,
       // }}
       >
-        <div className="profile-wrapper-wrapper">
-          <Box
-            className="main-profile-wrapper"
-            // style={{
-            //   borderBottom: `8px solid ${theme.palette.grey[700]}`,
-            // }}
-            sx={{ pb: 2 }}
-          >
-            <Box sx={{ position: "relative" }}>
-              {/* <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                width: "100%",
-                height: 250,
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-                backgroundImage: `url(${userDetails?.banner_image || ""})`,
-              }}
-            >
-              {username === savedUser?.custom_username && (
-                <MUIButton variant="contained" component="label" sx={{ m: 1 }}>
-                  <input
-                    hidden
-                    accept="image/*"
-                    type="file"
-                    onChange={handleFileChange}
-                  />
-                  Edit cover photo
-                </MUIButton>
-              )}
-            </div> */}
-
-              <Stack
-                direction={{ xs: "column", sm: "row" }}
-                justifyContent="space-between"
+     <div className="profile-wrapper-wrapper">
+  <Box
+    className="main-profile-wrapper"
+    sx={{ pb: 2 }}
+  >
+    <Box sx={{ position: "relative" }}>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+      >
+        <Box sx={{ width: "100%" }}>
+          <div className="profile-menu">
+            {isEligibleForFetchingPost === true ? (
+             <Badge
+             anchorOrigin={{
+               vertical: "bottom",
+               horizontal: "right",
+             }}
+             overlap="circular"
+             badgeContent=" "
+           >
+             {isUserProfile ? (
+               <StoriesUserOwn
+                 createUserStories={createUserStories}
+                 hideName={true}
+               />
+             ) : (
+               <Avatar
+               src={userDetails?.profile_image ?? avatar}
+                 sx={{ width: 70, height: 70 }}
+               />
+             )}
+           </Badge>
+            ) : (
+              <Badge
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                overlap="circular"
+                badgeContent=" "
+                invisible={!userDetails}
               >
-                <Box sx={{ width: "100%" }}>
-                  <div className="profile-menu">
-                    {isEligibleForFetchingPost === true ? (
-                      <Badge
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        color={`${
-                          userDetails?.is_online === true
-                            ? "success"
-                            : "warning"
-                        }`}
-                        overlap="circular"
-                        badgeContent=" "
-                        variant="dot"
-                        invisible={!userDetails}
-                        sx={
-                          userOwnStories.length > 0 && isUserProfile
-                            ? {
-                                "& .css-mcy1wh-MuiBadge-badge": {
-                                  display: "none",
-                                },
-                              }
-                            : {}
-                        }
-                      >
-                        {isUserProfile ? (
-                          <StoriesUserOwn
-                            createUserStories={createUserStories}
-                            hideName={true}
-                          />
-                        ) : (
-                          <Avatar
-                            src={userDetails?.profile_image}
-                            className="avatar-icon"
-                            // sx={{ width: 120, height: 120 }}
-                          />
-                        )}
-                      </Badge>
-                    ) : (
-                      <Badge
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        overlap="circular"
-                        badgeContent=" "
-                        invisible={!userDetails}
-                      >
-                        <Avatar
-                          src={userDetails?.profile_image}
-                          sx={{ width: 75, height: 75 }}
-                        />
-                      </Badge>
-                    )}
+                <Avatar
+                  src={userDetails?.profile_image ?? avatar}
+                  sx={{ width: 175, height: 175 }}
+                />
+              </Badge>
+            )}
+                    
                     <div className="post-wrapper-mobile">
                       <Typography
                         className="followers-tab-wrap"
@@ -670,7 +630,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                        {userDetails?.user_follower.length || 0} Following
+                        {userDetails?.user_following.length || 0} Following
                       </Typography>
 
 
@@ -678,39 +638,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                     </div>
                   </div>
                 </Box>
-                {/* <Box>
-                {savedUser?.id !== userDetails?.id ? (
-                  <>
-                    <IconButton onClick={() => setOpenPopUpTip(true)}>
-                      <MonetizationOnOutlinedIcon sx={{ fontSize: "32px" }} />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        dispatch(messagesActions.addNewUserInChat(userDetails));
-                        navigate(
-                          `/lounge/messages/user/${
-                            userDetails && userDetails.id
-                          }`
-                        );
-                      }}
-                    >
-                      <ChatOutlinedIcon sx={{ fontSize: "32px" }} />
-                    </IconButton>
-                    <IconButton>
-                      <StarOutlinedIcon sx={{ fontSize: "32px" }} />
-                    </IconButton>
-                    <IconButton onClick={copyToClipBoard}>
-                      <LaunchRoundedIcon sx={{ fontSize: "32px" }} />
-                    </IconButton>
-                  </>
-                ) : (
-                  <>
-                    <IconButton onClick={copyToClipBoard}>
-                      <LaunchRoundedIcon sx={{ fontSize: "32px" }} />
-                    </IconButton>
-                  </>
-                )}
-              </Box> */}
+          
               </Stack>
             </Box>
             <Box
@@ -837,29 +765,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         onClose={() => setShowShareProfileModal(false)}
                       />}
                     </Box>}
-                    {/* <Button
-                      variant="contained"
-                      size="medium"
-                      sx={{
-                        color: "#353535",
-                        backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                        boxShadow: "none",
-                        width: "100%",
-                        ":hover": {
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                        },
-                      }}
-                    >
-                      <PersonAddOutlinedIcon />
-                    </Button> */}
-                    {/* <IconButton
-                      sx={{
-                        color: toggle ? "#fff" : "#000",
-                        display: { xs: "none", md: "flex" },
-                      }}
-                    >
-                      <MoreHorizIcon />
-                    </IconButton> */}
+              
                   </Box>
                 ) : (
                   <div className="btn-group-follow-wrapper">
@@ -886,22 +792,6 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                         open={showShareProfileModal}
                         onClose={() => setShowShareProfileModal(false)}
                       />}
-
-                      {/* <Button
-                        variant="contained"
-                        size="medium"
-                        sx={{
-                          color: "#353535",
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          boxShadow: "none",
-                          width: "100%",
-                          ":hover": {
-                            backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          },
-                        }}
-                      >
-                        Message
-                      </Button> */}
                 
 
                     </Box>
@@ -919,7 +809,7 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
                 {userDetails?.user_following.length || 0} Following
                 </Typography>
               </div>
-              {/* <input type="hidden" id="dummy" /> */}
+ 
 
               <Box sx={{ pt: 1 }} order={{ xs: "0", md: "3" }}>
                 <Box className="username">
@@ -1325,3 +1215,11 @@ const ProfilePage = ({ username }: { username: string | null | undefined }) => {
 };
 
 export default ProfilePage;
+function setImage(imageURL: string) {
+  throw new Error("Function not implemented.");
+}
+
+  function html2canvas(avatarElement: Element | null) {
+    throw new Error("Function not implemented.");
+  }
+

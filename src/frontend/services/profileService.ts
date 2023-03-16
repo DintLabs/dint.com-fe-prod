@@ -66,12 +66,18 @@ export const UploadCoverPhoto = async (file: any): Promise<ResultInterface> => {
 };
 
 export const UploadProfilePicture = async (file: any) => {
+  const payload = {
+    subscription: false,
+    folder: 'main-photo/',
+    media: ''
+  };
 
   const id = toast.loading('Loading...', {
     autoClose: 6000
   });
 
-  const uploadResult = await uploadMedia(file, 'main-photo');
+  const uploadResult = await uploadMedia(file, 'main-photo', false, '');
+
 
   if (uploadResult.success) {
     try {
@@ -112,3 +118,4 @@ export const UploadProfilePicture = async (file: any) => {
     });
   }
 };
+

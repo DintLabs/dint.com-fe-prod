@@ -25,7 +25,7 @@ import {
 } from "frontend/interfaces/contextInterface";
 import { PostInterface } from "frontend/interfaces/postInterface";
 import { UserDataInterface } from "frontend/interfaces/reduxInterfaces";
-import { UploadCoverPhoto } from "frontend/services/profileService";
+import { UploadCoverPhoto, UploadProfilePicture } from "frontend/services/profileService";
 import React, {
   useCallback,
   useContext,
@@ -83,9 +83,13 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
   const theme = useTheme();
 
   const [value, setValue] = useState(0);
+  
   const [userDetails, setUserDetails] = useState<UserDataInterface | null>(
     null
   );
+
+
+
   const [openPopUpTip, setOpenPopUpTip] = React.useState<boolean>(false);
 
   const [isLoadingUserDetails, setIsLoadingUserDetails] = useState(true);
@@ -255,6 +259,7 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
 
   const fetchUserDetails = async (onlyDetails = false) => {
     setValue(0);
+    let isError = false;
     try {
       const { data } = await _axios.post("/api/user/get-profile-by-username/", {
         custom_username: username,
@@ -266,14 +271,17 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
           fetchPosts(data.data?.id, paginationPosts);
         }
       } else {
-        navigate("/404");
+        isError = true;
       }
     } catch (err: any) {
-      navigate("/404");
+      isError = true;
       console.error(err);
     }
     setIsLoadingUserDetails(false);
+    return isError;
   };
+  
+  
 
   React.useEffect(() => {
     if (username) {
@@ -421,6 +429,8 @@ const MyProfile = ({ username }: { username: string | null | undefined }) => {
       </Typography>
     );
 console.log("userdetails----", userDetails)
+
+
   return (
     <>
       <Box
@@ -862,3 +872,7 @@ console.log("userdetails----", userDetails)
 };
 
 export default MyProfile;
+function setImage(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+

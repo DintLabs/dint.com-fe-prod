@@ -11,6 +11,7 @@ import useUser from 'frontend/hooks/useUser';
 import { fetchUserData } from 'frontend/redux/slices/user';
 import { AppDispatch } from 'frontend/redux/store';
 import { uploadMedia } from 'frontend/services/mediaService';
+import { UploadProfilePicture } from 'frontend/services/profileService';
 import { AuthUser } from 'frontend/types/authentication';
 import * as React from 'react';
 import { Button, Form, InputGroup, Tab, Tabs } from 'react-bootstrap';
@@ -156,13 +157,20 @@ const Profile = () => {
     }, 2000);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const file: any = e.target.files[0];
-      setFile(file);
-      setImage(URL.createObjectURL(file));
+  const handleFileChange = (e: any) => {
+    if (e.target.files && e.target.files.length) {
+      UploadProfilePicture(e.target.files[0]).then(result => {
+        if (result?.success && user) {
+          // Update the user object with the new profile image
+          userHook.setCurrentUser({ ...user, profile_image: result?.data?.profile_image || '' });
+          // Set the image URL to display the uploaded profile image
+          setImage(URL.createObjectURL(e.target.files[0]));
+        }
+      });
+      toast.dismiss();
     }
   };
+  
 
   const onChangeProfilePrivacyStatus = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsLoadingPrivacyStatus(true);
@@ -304,7 +312,8 @@ const Profile = () => {
                   <img
                     id="profile_image_edit"
                     alt="profile_image_edit"
-                    src={image || user?.profile_image}
+                    src={user?.profile_image}
+                   
                   />
                 </div>
                 <MUIButton variant="contained" component="label">
