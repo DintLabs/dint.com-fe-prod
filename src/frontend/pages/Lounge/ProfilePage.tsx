@@ -339,14 +339,15 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
           fetchPosts(data.data?.id, paginationPosts);
         }
       } else {
-        navigate("/404");
+        setError("An error occurred while fetching user details.");
       }
-    } catch (err: any) {
-      navigate("/404");
+    } catch (err) {
+      setError("An error occurred while fetching user details.");
       console.error(err);
     }
     setIsLoadingUserDetails(false);
   };
+  
 
   React.useEffect(() => {
     if (username) {
@@ -1222,4 +1223,8 @@ function setImage(imageURL: string) {
   function html2canvas(avatarElement: Element | null) {
     throw new Error("Function not implemented.");
   }
+
+function setError(arg0: string) {
+  throw new Error("Function not implemented.");
+}
 
