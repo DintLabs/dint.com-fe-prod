@@ -368,7 +368,7 @@ import {
                         </IconButton>
                       )}
                     </Stack>
-                    {post.can_delete ? (
+                    {post.user?.id == user.id ? (
                       <IconButton onClick={()=>deletePost(post)}>
                         <MdDelete />
                       </IconButton>
