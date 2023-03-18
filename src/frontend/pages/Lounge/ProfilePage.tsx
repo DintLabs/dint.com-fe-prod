@@ -592,7 +592,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
              ) : (
                <Avatar
                src={userDetails?.profile_image ?? avatar}
-                 sx={{ width: 70, height: 70 }}
+                 sx={{ width: 80, height: 80 }}
                />
              )}
            </Badge>
@@ -608,7 +608,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
               >
                 <Avatar
                   src={userDetails?.profile_image ?? avatar}
-                  sx={{ width: 175, height: 175 }}
+                  sx={{ width: 80, height: 80 }}
                 />
               </Badge>
             )}
