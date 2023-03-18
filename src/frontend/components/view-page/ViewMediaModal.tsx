@@ -297,16 +297,23 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
               Your browser does not support HTML5 video.
             </video>
           ) : (
-            <Typography
-              component="span"
-              className="like-comm"
-              variant="body2"
-              align="center"
-              sx={{ color: "#fff" }}
-              padding="50px"
-            >
-              {post?.description}
-            </Typography>
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              height: 250,
+            }}>
+              <Typography
+                component="span"
+                className="like-comm"
+                variant="body2"
+                align="center"
+                sx={{ color: "#fff" }}
+              >
+                {post?.description}
+              </Typography>
+            </Box>
           )}
           {!props?.isPage && (
             <>
@@ -392,7 +399,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
           <Box sx={{
             position:"fixed" ,
             padding:"3%" ,
-            background: toggle ? "#212B36" :"white" , 
+            background: toggle ? "#212B36" :"white" ,
             width:"100%" ,
             zIndex:"10",
             color:toggle? "white": "black" ,
@@ -454,7 +461,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
                       >
                         {moment(post?.createdAt).fromNow()}
                       </Typography>
-        
+
                       <IconButton>
                         <MoreHoriz />
                       </IconButton>
@@ -470,15 +477,15 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
                     />
                   </Box>
                 ):
-        
+
                   <Box sx={{ textAlign: "center" }}>
                     <video width="100%" controls>
                       <source src={post?.media} id="video_here" />
                       Your browser does not support HTML5 video.
                     </video>
                   </Box>
-                  } 
-                
+                  }
+
                 {post.type !== "text" && (
                   <Box sx={{ px: 2 }}>
                     <Typography
@@ -559,7 +566,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
                   </Box>
                 )}
               </Box>
-        
+
               <TipPopUp
                 user={post.user}
                 onClose={handleCloseTip}

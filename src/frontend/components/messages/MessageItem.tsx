@@ -1,6 +1,7 @@
 import { Avatar, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router';
+import useRichMessage from 'frontend/hooks/useRichMessage';
 
 type MessageItemProps = {
   messageId: number;
@@ -15,6 +16,11 @@ type MessageItemProps = {
 
 function MessageItem(props: MessageItemProps) {
   const navigate = useNavigate();
+
+  const messageContent = useRichMessage({
+    text: props.media ? '' : props?.message ?? '',
+  })
+
   return (
     <Box
       className={`message-item ${
@@ -31,9 +37,10 @@ function MessageItem(props: MessageItemProps) {
         <Box sx={{ display:"flex" , flexDirection:props.isSender?"row-reverse" :"" }}>
           <Avatar onClick={()=>navigate(`/${props.messageSender}`)} component="span" sx={{margin:"0% 5px" , cursor:"pointer"}} src={props.isSender ? `${props.senderImage}` : `${props.senderImage}`} />
           <Box className="message">
-            {props?.media ?
-           <img src={props.media} alt="Media...." />
-           : <Typography component="span">{`${props.message} `} </Typography>}
+            {
+              props?.media
+                ? <img src={props.media} alt="Media...." />
+                : messageContent}
             <Typography component="span" variant="caption" className="message-time">
               {props.time}
             </Typography>

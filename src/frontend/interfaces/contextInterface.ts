@@ -1,5 +1,5 @@
-import { SetStateAction } from 'react';
-import { PostInterface } from './postInterface';
+import { SetStateAction } from "react";
+import { PostInterface } from "./postInterface";
 
 export interface CountInerface {
   all_posts: number;
@@ -54,5 +54,6 @@ export interface ContextInterface {
   paginationVideoPosts: PaginationPostsInerface;
   setPaginationVideoPosts: React.Dispatch<PaginationPostsInerface>;
   addNewPostToContext: (post: PostInterface) => void;
+  updatePost: (post: PostInterface) => void;
   getUserPostCounts: () => void;
 }

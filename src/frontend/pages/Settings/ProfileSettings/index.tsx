@@ -20,10 +20,14 @@ import { UploadCoverPhoto, UploadProfilePicture } from 'frontend/services/profil
 import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BiCloudUpload } from 'react-icons/bi';
-import { BsDiscord, BsInstagram, BsTwitch } from 'react-icons/bs';
+import { BsDiscord, BsInstagram, BsTwitter } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
 import { ThemeContext } from '../../../contexts/ThemeContext';
+
+const TWITTER_PROFILE_URL = 'https://twitter.com/';
+const INSTAGRAM_PROFILE_URL = 'https://instagram.com/';
+const DISCORD_PROFILE_URL = 'https://discordapp.com/users/';
 
 const ProfileSettings = () => {
   const theme = useTheme();
@@ -73,13 +77,19 @@ const ProfileSettings = () => {
       toast.dismiss();
     }
   };
-  
 
   const onSubmit = async (data: any) => {
     const id = toast.loading('Loading...');
 
+    const dataWithSocials = {
+      ...data,
+      twitter: data.twitter ? TWITTER_PROFILE_URL + data.twitter : '',
+      instagram: data.instagram ? INSTAGRAM_PROFILE_URL + data.instagram : '',
+      discord: data.discord ? DISCORD_PROFILE_URL + data.discord : '',
+    };
+
     try {
-      const result = await _axios.put('api/user/update-profile-by-token/', data);
+      const result = await _axios.put('api/user/update-profile-by-token/', dataWithSocials);
 
       if (result.data.data) {
         // const savedUser = JSON.parse(localStorage.getItem('userData') ?? '{}');
@@ -91,9 +101,9 @@ const ProfileSettings = () => {
         setValue('display_name', result?.data?.data?.display_name);
         setValue('bio', result?.data?.data?.bio);
         setValue('city', result?.data?.data?.city);
-        setValue('twitter', result?.data?.data?.twitter);
-        setValue('instagram', result?.data?.data?.instagram);
-        setValue('discord', result?.data?.data?.discord);
+        setValue('twitter', result?.data?.data?.twitter?.replace(TWITTER_PROFILE_URL, ''));
+        setValue('instagram', result?.data?.data?.instagram?.replace(INSTAGRAM_PROFILE_URL, ''));
+        setValue('discord', result?.data?.data?.discord?.replace(DISCORD_PROFILE_URL, ''));
       }
       setTimeout(() => {
         toast.update(id, {
@@ -321,7 +331,7 @@ const ProfileSettings = () => {
             <Controller
               control={control}
               name="twitter"
-              defaultValue={user?.twitter || ''}
+              defaultValue={user?.twitter?.replace(TWITTER_PROFILE_URL, '') || ''}
               rules={{
                 maxLength: 100
               }}
@@ -335,7 +345,7 @@ const ProfileSettings = () => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <BsTwitch />
+                        <BsTwitter />
                       </InputAdornment>
                     )
                   }}
@@ -365,7 +375,7 @@ const ProfileSettings = () => {
             <Controller
               control={control}
               name="instagram"
-              defaultValue={user?.instagram || ''}
+              defaultValue={user?.instagram?.replace(INSTAGRAM_PROFILE_URL, '') || ''}
               rules={{
                 maxLength: 100
               }}
@@ -409,7 +419,7 @@ const ProfileSettings = () => {
             <Controller
               control={control}
               name="discord"
-              defaultValue={user?.discord || ''}
+              defaultValue={user?.discord?.replace(DISCORD_PROFILE_URL, '') || ''}
               rules={{
                 maxLength: 100
               }}

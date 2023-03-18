@@ -28,6 +28,7 @@ import NewMessage from "frontend/components/messages/NewMessage";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import AddChatMedia from "frontend/pages/Lounge/AddChatMedia";
 import { toast } from "react-toastify";
+import { HOME_SIDE_MENU, setNewHomeSliceChanges } from '../../redux/slices/newHome';
 
 let ws: any;
 
@@ -58,7 +59,7 @@ function ChatSection(props: ChatSectionProps) {
     ws = new WebSocket(
       `${process.env.REACT_APP_WSS}/ws/chat/${props.selectedUser.chat_room}/`
     );
-  
+
     ws.onmessage = function (e: any) {
       const newdata = JSON.parse(e.data);
       setUserChats((prev: any) => [newdata.message, ...prev]);
@@ -67,7 +68,7 @@ function ChatSection(props: ChatSectionProps) {
     fetchUserChat();
 
     return () => {
-      ws.close(); 
+      ws.close();
     };
   }, [props.selectedUser]);
 
@@ -174,7 +175,7 @@ function ChatSection(props: ChatSectionProps) {
         onOpen={handleClickOpen}
         openPopUpTip={openPopUpTip}
       />
-      
+
       <AddChatMedia openMedia={openMedia} onOpenMedia={onOpenMedia} sendMessageHandler={sendMessageHandler} />
       {props?.selectedUser?.id !== -1 ? (
         <Box
@@ -205,7 +206,14 @@ function ChatSection(props: ChatSectionProps) {
               ) : null}
               <Avatar src={props.selectedUser?.profile_image} />
               <Stack direction="column">
-                <Typography className="primary-text-color">
+                <Typography
+                  className={props.selectedUser?.display_name ? 'primary-text-color' : ''}
+                  sx={{ cursor: 'pointer', color: '#4AA081' }}
+                  onClick={() => {
+                    dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.HOME }));
+                    navigate(`/${props.selectedUser?.custom_username}`);
+                  }}
+                >
                   {props.selectedUser?.display_name ||
                     props.selectedUser?.custom_username}
                 </Typography>
@@ -295,7 +303,7 @@ function ChatSection(props: ChatSectionProps) {
           <Typography className="secondary-text-color">
             Send private message or phots to your friends
           </Typography>
-          <Button 
+          <Button
           onClick={handleModalOpen}
           sx={{
             background: '#EFEFEF',

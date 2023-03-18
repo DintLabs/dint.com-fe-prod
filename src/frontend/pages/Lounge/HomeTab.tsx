@@ -666,7 +666,7 @@ const HomeTab = ({ createPost }: Props) => {
             reciever: receiverId,
             sender: userData?.id?.toString(),
             content: messageContent.trim(),
-            media: "" // Add a default value for the media property
+            media: "", // Add a default value for the media property
           })
         );
         if (res) {
@@ -797,7 +797,6 @@ const HomeTab = ({ createPost }: Props) => {
                 {storyList?.map((item: any, i: number) => (
                   <React.Fragment key={i}>
                     <div
-                      
                       style={{ textAlign: "center", width: "fit-content" }}
                       className="user-story"
                       onClick={() => {
@@ -1090,7 +1089,14 @@ const HomeTab = ({ createPost }: Props) => {
                 >
                   {savedUser.display_name}
                 </Typography>
-                <Typography variant="h5" sx={{ color: "text.secondary" }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    color: "text.secondary",
+                    cursor: 'pointer',
+                }}
+                  onClick={() => navigate(`/${savedUser.custom_username}`)}
+                >
                   @{savedUser.custom_username}
                 </Typography>
               </div>
@@ -1108,9 +1114,11 @@ const HomeTab = ({ createPost }: Props) => {
                 Suggestions
               </Typography>
               {suggestionList?.map((item: any, i: number) => (
-                <div onClick={() => navigate(`/${item?.custom_username}`)} key={i}>
+                <div
+                  onClick={() => navigate(`/${item?.custom_username}`)}
+                  key={i}
+                >
                   <Box
-                    
                     sx={{
                       display: "flex",
                       width: "100%",
@@ -1131,7 +1139,11 @@ const HomeTab = ({ createPost }: Props) => {
                       >
                         {item?.display_name}
                       </Typography>
-                      <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                      <Typography
+                        variant="h6"
+                        sx={{ color: "text.secondary" }}
+                        onClick={() => navigate(`/${item?.custom_username}`)}
+                      >
                         {item?.custom_username}
                       </Typography>
                     </div>

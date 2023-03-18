@@ -137,7 +137,7 @@ const Lists = () => {
         console.log(error);
       });
   };
-  
+
   const getUserList = async () => {
     _axios
       .get(`${process.env.REACT_APP_API_URL}api/user-list/`)
@@ -178,7 +178,7 @@ const Lists = () => {
   // React.useEffect(() => {
   //   fetchConfineData();
   // }, [newList]);
-  
+
   const fetchFollowingData = async () => {
     setAllFollowing(userData?.following);
   };
@@ -190,7 +190,7 @@ const Lists = () => {
 
 
   const filteredBlockedUser = useMemo(()=> confineUser?.filter((confineUser: any) => confineUser.user_block_type === "block"),[confineUser])
-  
+
   const fetchCloseFriend = async () => {
     try {
       const { data } = await _axios.get(`api/user/get-close-friends/`);
@@ -199,7 +199,7 @@ const Lists = () => {
     } catch (err: any) {
       console.error("err ===>", err.message);
     }
-  };  
+  };
   useEffect(() =>{
     fetchCloseFriend();
   },[]);
@@ -287,7 +287,7 @@ console.log("Close friends", closeFriend);
                 className="primary-text-color typo-label"
                 variant="caption"
               >
-                {closeFriend?.length || 0} person 
+                {closeFriend?.length || 0} person
               </Typography>
             </FlexCol>
             <Box sx={FollowingAvatarListWrapper}>
@@ -342,7 +342,7 @@ console.log("Close friends", closeFriend);
                 className="primary-text-color typo-label"
                 variant="caption"
               >
-                {userData?.following?.length} person 
+                {userData?.following?.length} person
               </Typography>
             </FlexCol>
             <Box sx={FollowingAvatarListWrapper}>
@@ -380,7 +380,7 @@ console.log("Close friends", closeFriend);
                 className="primary-text-color typo-label"
                 variant="caption"
               >
-                {userData?.follower?.length} person 
+                {userData?.follower?.length} person
               </Typography>
             </FlexCol>
           </GridWithBoxConteiner>
@@ -449,7 +449,7 @@ console.log("Close friends", closeFriend);
           </GridWithBoxConteiner>
           {userList.map((user: any, ind) => {
             return (
-              <> 
+              <>
                 <GridWithBoxConteiner key={ind}>
                   <FlexCol
                     className="custom_list"

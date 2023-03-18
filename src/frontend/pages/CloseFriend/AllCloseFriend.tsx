@@ -1,6 +1,7 @@
 import React from 'react'
 import { Avatar, Box, Typography } from "@mui/material";
-import { Stack, useTheme } from "@mui/system";
+import { Stack } from "@mui/system";
+import { useNavigate } from 'react-router';
 
 const pageDetailCard = {
     color: "#121212",
@@ -15,12 +16,13 @@ const pageDetailCard = {
         "& .MuiCardHeader-content > span": { color: "#ffffff" },
       },
     },
-  
+
     "& .page-detail-body": { p: "10px 10px" },
   };
 
 const AllCloseFriend = ({listedUsers}: any) => {
-    console.log("listedUSerss", listedUsers)
+  const navigate = useNavigate();
+
   return (
     <>
      <Box
@@ -32,7 +34,7 @@ const AllCloseFriend = ({listedUsers}: any) => {
         <Stack direction="row" spacing={1}>
           <Avatar
             className="page-profile-container"
-            src={listedUsers.profile_image} 
+            src={listedUsers.profile_image}
           />
           <Stack direction="column">
             <Typography
@@ -45,6 +47,7 @@ const AllCloseFriend = ({listedUsers}: any) => {
               variant="caption"
               className="link-text-color cursor-pointer"
               component={"p"}
+              onClick={() => navigate(`/${listedUsers.custom_username}`)}
               // onClick={() => {
               //   navigateOnPage(subscription?.page?.page_name);
               // }}

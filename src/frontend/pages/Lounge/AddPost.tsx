@@ -76,7 +76,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
         }
       }
 
-      if (content) {
+      if (content && !file) {
         try {
           const result = createPost && await createPost(toastId, {
             type: postTypes.text.value,

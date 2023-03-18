@@ -51,6 +51,8 @@ import {
 } from "frontend/redux/actions/postActions";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import Picker from "@emoji-mart/react";
+import { useLounge } from "frontend/contexts/LoungeContext";
+import Comment from './Comment';
 const PostItem = ({
   userName,
   custom_username,
@@ -62,6 +64,7 @@ const PostItem = ({
   onDelete,
   isBookmarked,
   isBookmarksPage,
+  fetchPosts,
 }: {
   image?: string | null;
   userName: string;
@@ -76,7 +79,7 @@ const PostItem = ({
   isBookmarksPage?: Boolean;
 }) => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -86,7 +89,7 @@ const PostItem = ({
   const [showAllComments, setShowAllComments] = React.useState<boolean>(false);
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
   const [emoji, setEmoji] = React.useState("");
-  const [showSendTip, setShowSendTip] = React.useState(true)
+  const [showSendTip, setShowSendTip] = React.useState(true);
 
   const images = ["jpg", "gif", "png", "svg", "webp", "ico", "jpeg"];
   const videos = ["MP4", "mp4", "MOV", "mov", "3gp", "ogg", "quicktime"];
@@ -105,7 +108,9 @@ const PostItem = ({
 
   const user = useSelector((state: RootState) => state.user.userData);
   const { toggle } = useContext(ThemeContext);
+  const { updatePost } = useLounge();
   let inputRef = useRef<HTMLInputElement>(null);
+
   React.useEffect(() => {
     setComments(post.post_comment.slice(0).reverse());
   }, [post]);
@@ -137,6 +142,7 @@ const PostItem = ({
   React.useEffect(() => {
     if (user) {
       if (
+        post?.like_post?.length > 0 &&
         post?.like_post?.find((item) =>
           typeof item.user !== "number"
             ? item.user?.id === user.id
@@ -183,31 +189,41 @@ const PostItem = ({
       toast.error("Can't find User");
       return;
     }
+    const currentTotalLikes =
+      post?.total_likes && post?.total_likes ? post?.total_likes : 0;
 
     if (alreadyLike) {
-      setLoading(true)
+      setLoading(true);
       setAlreadyLike(false);
       const unlikeResp: UnlikePostInterface = await dispatch(
         unlikeForPost(user.id, post.id)
       );
 
-
-      setPost((prevState) => ({
-        ...prevState,
-        unlike_post: [...(prevState?.unlike_post || []), unlikeResp],
-      }));
-      setLoading(false)
+      const updatedPost = {
+        ...post,
+        unlike_post: [...(post?.unlike_post || []), unlikeResp],
+        total_likes: currentTotalLikes - 1,
+      };
+      setPost(updatedPost);
+      updatePost(updatedPost);
+      fetchPosts();
+      setLoading(false);
     } else {
-      setLoading(true)
+      setLoading(true);
       setAlreadyLike(true);
       const likeResp: LikePostInterface = await dispatch(
         addLikeForPost(user.id, post.id)
       );
-      setPost((prevState) => ({
-        ...prevState,
-        like_post: [...(prevState?.like_post || []), likeResp],
-      }));
-      setLoading(false)
+
+      const updatedPost = {
+        ...post,
+        like_post: [...(post?.like_post || []), likeResp],
+        total_likes: currentTotalLikes + 1,
+      };
+      setPost(updatedPost);
+      updatePost(updatedPost);
+      fetchPosts();
+      setLoading(false);
     }
   };
 
@@ -266,32 +282,6 @@ const PostItem = ({
     }
   };
 
-  const displayComment = (item: any, i: any) => {
-    return (
-      <div
-        className=""
-        style={{ background: "transparent" }}
-        key={`comments_${item?.created_at}_${i}`}
-      >
-        <div className="d-flex flex-column">
-          <div className="user d-flex flex-row justify-content-between w-100 align-items-center">
-            <span
-              className="like-comm mb-0"
-              style={{ color: toggle ? "white" : "#161C24" }}
-            >
-              {item?.comment}
-            </span>
-            <IconButton sx={{ padding: 0, color: toggle ? "#fff" : "#000" }}>
-              <FavoriteBorderRoundedIcon fontSize="small" />
-            </IconButton>
-          </div>
-
-          <div className="view-comm">{moment(item?.created_at).fromNow()}</div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <>
       <Box
@@ -326,7 +316,8 @@ const PostItem = ({
                 <Typography
                   component="span"
                   variant="caption"
-                  sx={{ color: "text.secondary" }}
+                  sx={{ color: "text.secondary", cursor: 'pointer' }}
+                  onClick={() => navigate(`/${custom_username}`, { replace: true })}
                 >
                   @{custom_username}
                 </Typography>
@@ -399,7 +390,9 @@ const PostItem = ({
               </IconButton>
               <IconButton
                 className="d-flex align-items-center justify-content-center"
-                onClick={()=>{!loading && handleLike()}}
+                onClick={() => {
+                  !loading && handleLike();
+                }}
               >
                 {!alreadyLike ? (
                   <FavoriteBorderRoundedIcon />
@@ -417,13 +410,15 @@ const PostItem = ({
                   <FaHeart color="red" />
                 )}
               </IconButton>} */}
-              {showSendTip && <IconButton
-                onClick={() => setOpenPopUpTip(true)}
-                sx={{ fontSize: "12px" }}
-              >
-                <MonetizationOnIcon />
-                SEND TIP
-              </IconButton>}
+              {showSendTip && (
+                <IconButton
+                  onClick={() => setOpenPopUpTip(true)}
+                  sx={{ fontSize: "12px" }}
+                >
+                  <MonetizationOnIcon />
+                  SEND TIP
+                </IconButton>
+              )}
             </Box>
             {!alreadyBookmark ? (
               <IconButton
@@ -451,25 +446,25 @@ const PostItem = ({
         </Box>
         <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
           <p className="like-comm">
-            {/* {post?.like_post?.length ?? "0"} */}
-            {+post?.like_post?.length -
-              (+post?.unlike_post?.length ? post?.unlike_post?.length : 0) ??
-              post?.like_post?.length}{" "}
+            {post?.total_likes && post.total_likes > 0
+              ? post?.total_likes
+              : "0"}{" "}
             Likes
           </p>
         </Box>
-        {image && (images.includes(extension) || videos.includes(extension)) && (
-          <Box sx={{ px: 2 }}>
-            <Typography
-              component="span"
-              className="like-comm"
-              variant="body2"
-              sx={{ color: toggle ? "#fff" : "#000" }}
-            >
-              {description}
-            </Typography>
-          </Box>
-        )}
+        {image &&
+          (images.includes(extension) || videos.includes(extension)) && (
+            <Box sx={{ px: 2 }}>
+              <Typography
+                component="span"
+                className="like-comm"
+                variant="body2"
+                sx={{ color: toggle ? "#fff" : "#000" }}
+              >
+                {description}
+              </Typography>
+            </Box>
+          )}
 
         <Box sx={{ px: 2 }}>
           {comments?.length > 0 ? (
@@ -482,7 +477,7 @@ const PostItem = ({
                 !showAllComments
                   ? `View all ${post?.post_comment?.length} Comments`
                   : // <h6 style={{ color: toggle ? "white" : "#161C24" }}>
-                  `Comments (${comments?.length})`
+                    `Comments (${comments?.length})`
                 // </h6>
               }
             </div>
@@ -490,10 +485,22 @@ const PostItem = ({
           <div className="custom-wrapper">
             {showAllComments
               ? comments?.map((item, i) => {
-                return displayComment(item, i);
+                  return (
+                  <Comment
+                    key={`comments_${item?.created_at}_${i}`}
+                    text={item.comment}
+                    createdAt={item.created_at}
+                  />
+                );
               })
               : comments?.slice(0, 1).map((item, i) => {
-                return displayComment(item, i);
+                  return (
+                  <Comment
+                    key={`comments_${item?.created_at}_${i}`}
+                    text={item.comment}
+                    createdAt={item.created_at}
+                  />
+                );
               })}
           </div>
 

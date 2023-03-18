@@ -37,6 +37,9 @@ const FollowingPageCard = ({ following }: any) => {
               variant="caption"
               className="link-text-color cursor-pointer"
               component="div"
+              onClick={() => {
+                navigate(`/${following?.custom_username}`);
+              }}
               //   onClick={() => {
               //     navigateOnPage(subscription?.page?.page_name);
               //   }}

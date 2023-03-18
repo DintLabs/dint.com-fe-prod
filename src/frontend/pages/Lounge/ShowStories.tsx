@@ -140,6 +140,11 @@ const ShowStories = ({ widthScreen, item, image, setOpenModal }: Props) => {
                     component="span"
                     variant="caption"
                     sx={{ color: "text.secondary" }}
+                    onClick={() => {
+                      if (item.custom_username) {
+                        navigate(`/${item.custom_username}`);
+                      }
+                    }}
                   >
                     @{item?.custom_username}
                   </Typography>
