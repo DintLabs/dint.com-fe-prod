@@ -5,8 +5,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import Favourite from "../../assets/img/web3/comment.svg";
-import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
-
 import {
   Avatar,
   Box,
@@ -24,8 +22,8 @@ import {
 
 import { toast } from "react-toastify";
 
-import { MdDelete, MdSend } from "react-icons/md";
-import React, { useContext, useRef, useState } from "react";
+import { MdDelete } from "react-icons/md";
+import React, { useContext, useRef, useState } from 'react';
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import TipPopUp from "frontend/components/tip/TipPopUp";
@@ -50,9 +48,10 @@ import {
   unlikeForPost,
 } from "frontend/redux/actions/postActions";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import Picker from "@emoji-mart/react";
 import { useLounge } from "frontend/contexts/LoungeContext";
 import Comment from './Comment';
+import { UserDataInterface } from '../../interfaces/reduxInterfaces';
+import AddCommentForm from './AddCommentForm';
 const PostItem = ({
   userName,
   custom_username,
@@ -87,8 +86,6 @@ const PostItem = ({
   const [canHeDeletePost, setCanHeDeletePost] = React.useState(false);
   const [openPopUpTip, setOpenPopUpTip] = React.useState<boolean>(false);
   const [showAllComments, setShowAllComments] = React.useState<boolean>(false);
-  const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
-  const [emoji, setEmoji] = React.useState("");
   const [showSendTip, setShowSendTip] = React.useState(true);
 
   const images = ["jpg", "gif", "png", "svg", "webp", "ico", "jpeg"];
@@ -102,52 +99,26 @@ const PostItem = ({
   const alreadyBookmarkVal = isBookmarked ?? post?.is_bookmarked ?? false;
   const [alreadyBookmark, setAlreadyBookmark] =
     React.useState(alreadyBookmarkVal);
-  const [commentText, setCommentText] = React.useState("");
   const [comments, setComments] = React.useState<PostCommentInterface[]>([]);
-  const [showComments, setShowComments] = React.useState(false);
 
   const user = useSelector((state: RootState) => state.user.userData);
   const { toggle } = useContext(ThemeContext);
   const { updatePost } = useLounge();
-  let inputRef = useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     setComments(post.post_comment.slice(0).reverse());
   }, [post]);
 
-  const sendComment = async () => {
-    if (commentText.length < 1) {
-      toast.error("Comment is Required!");
-      return;
-    }
-
-    if (!user) return;
-
-    const commentResp: PostCommentInterface = await dispatch(
-      addCommentForPost(user.id, post.id, commentText)
-    );
-
-    setPost((prevState) => ({
-      ...prevState,
-      post_comment: [
-        ...(prevState.post_comment || []),
-        { ...commentResp, user },
-      ],
-    }));
-
-    setCommentText("");
-    setShowEmoji(false);
-  };
-
   React.useEffect(() => {
     if (user) {
       if (
         post?.like_post?.length > 0 &&
-        post?.like_post?.find((item) =>
-          typeof item.user !== "number"
+        post?.like_post?.find((item) => {
+          if (!item) return false;
+          return typeof item.user !== 'number'
             ? item.user?.id === user.id
             : item.user === user.id
-        )
+        })
       ) {
         setAlreadyLike(true);
       }
@@ -270,18 +241,6 @@ const PostItem = ({
     setOpenPopUpTip(false);
   };
 
-  const handleEmojiPickup = (emoji: any) => {
-    if (inputRef) {
-      const cursorPosition = inputRef.current?.selectionStart || 0;
-      const text =
-        commentText.slice(0, cursorPosition) +
-        commentText.slice(cursorPosition) +
-        emoji.native;
-      setEmoji(emoji);
-      setCommentText(text);
-    }
-  };
-
   return (
     <>
       <Box
@@ -348,7 +307,7 @@ const PostItem = ({
             <img
               src={image}
               alt="post"
-              style={{ borderRadius: "18px", width: "100%" }}
+              style={{ width: '100%' }}
             />
           </Box>
         )}
@@ -364,7 +323,18 @@ const PostItem = ({
           </Box>
         )}
         {!image && !videos.includes(extension) && (
-          <Box sx={{ px: 2 }}>
+          <Box
+            sx={{
+              px: 2,
+              backgroundColor: toggle
+                ? theme.palette.grey['800']
+                : (theme.palette.primary as any).lighter,
+              height: 250,
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+          }}>
             <Typography
               component="span"
               className="like-comm"
@@ -489,6 +459,7 @@ const PostItem = ({
                   <Comment
                     key={`comments_${item?.created_at}_${i}`}
                     text={item.comment}
+                    author={item.user as UserDataInterface}
                     createdAt={item.created_at}
                   />
                 );
@@ -498,66 +469,26 @@ const PostItem = ({
                   <Comment
                     key={`comments_${item?.created_at}_${i}`}
                     text={item.comment}
+                    author={item.user as UserDataInterface}
                     createdAt={item.created_at}
                   />
                 );
               })}
           </div>
 
-          <div
+          <AddCommentForm
+            postId={post.id}
             className="mt-3 border-color pt-2"
-            style={{ color: toggle ? "#fff" : "#000" }}
-          >
-            <IconButton
-              className="d-flex align-items-center justify-content-center"
-              sx={{ color: toggle ? "#fff" : "#000" }}
-              onClick={() => setShowEmoji(!showEmoji)}
-            >
-              <SentimentSatisfiedOutlinedIcon />
-            </IconButton>
-            <div className="emoji-wrapper">
-              {showEmoji && (
-                <Picker
-                  onEmojiSelect={(e: any) => handleEmojiPickup(e)}
-                  emoji="point_up"
-                  title="Pick your emoji"
-                  theme={toggle ? "dark" : "light"}
-                  style={{
-                    position: "absolute",
-                    top: "50px",
-                    left: 0,
-                    zIndex: 9999,
-                  }}
-                />
-              )}
-            </div>
-            <input
-              style={{
-                border: "none",
-                outline: "none",
-                boxShadow: "none",
-                borderRadius: 0,
-                background: "transparent",
-                color: toggle ? "#fff" : "#000",
-              }}
-              className="form-control w-100"
-              placeholder="Add a Comment"
-              type="text"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-            />
-            <IconButton
-              sx={{
-                fontWeight: 500,
-                fontSize: 15,
-                color: toggle ? "#fff" : "#000000",
-              }}
-              onClick={sendComment}
-            >
-              Post
-              {/* <MdSend /> */}
-            </IconButton>
-          </div>
+            onAfterSaveComment={({ comment }) => {
+              setPost((prevState) => ({
+                ...prevState,
+                post_comment: [
+                  ...(prevState.post_comment || []),
+                  { ...comment, user: user as any },
+                ],
+              }));
+            }}
+          />
         </Box>
       </Box>
 

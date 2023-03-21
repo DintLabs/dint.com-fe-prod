@@ -85,7 +85,7 @@ export default function SendDialog(props: any) {
                       }
                     }}
                   >
-                    <MenuItem value='dint'>Dint</MenuItem>
+                    <MenuItem className="notranslate" value='dint'>Dint</MenuItem>
                     <MenuItem value='matic'>Matic</MenuItem>
                   </Select>
                 )}

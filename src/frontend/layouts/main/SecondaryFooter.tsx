@@ -102,7 +102,7 @@ const SecondaryFooter = () => {
                 <div className="row main-footer m-auto">
                     {/* <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12 left-footer" > */}
                     <div className="col left-footer">
-                        <p className={colorStyle}>@2023 Dint</p>
+                        <p className={colorStyle}>@2023 <span className="notranslate">Dint</span></p>
 
                         <div className="d-flex">
                             <a target="_blank" href="https://twitter.com/dint"><img className="social-logos" src={require("../../assets/img/socialmedia/twitter.png")} /></a>

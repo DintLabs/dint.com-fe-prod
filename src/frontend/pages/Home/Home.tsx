@@ -50,7 +50,7 @@ const Home = () => {
             )}
             <div className="overlay" />
             <div className="caption-video">
-              <h1>Dint Club</h1>{' '}
+              <h1 className="notranslate">Dint Club</h1>{' '}
               <p style={{ textAlign: 'center' }}>
                 Revolutionizing Creator and Fan Connections Through NFTs and Membership Tokens
               </p>
@@ -74,7 +74,7 @@ const Home = () => {
                 <strong>
                   <br />
                   <br />
-                  Ownership of a Dint Clubber Key Collection NFT grants you lifetime access to Dint
+                  Ownership of a <span className="notranslate">Dint</span> Clubber Key Collection NFT grants you lifetime access to <span className="notranslate">Dint</span>
                   Music Festival as well as member-only benefits. Each key can be bought, sold, or
                   traded.
                 </strong>
@@ -103,7 +103,7 @@ const Home = () => {
             {/* Modal body */}
             <div className="modal-body">
               <p>
-                The Dint Card lets you spend crypto, fiat, gold and more at nearly 50 million
+                The <span className="notranslate">Dint</span> Card lets you spend crypto, fiat, gold and more at nearly 50 million
                 merchants worldwide. Join our waitlist today.
               </p>
               <div className="form-group">

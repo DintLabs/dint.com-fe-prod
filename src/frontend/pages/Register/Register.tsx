@@ -330,7 +330,7 @@ const Register = () => {
             src={require("../../assets/img/bg/bg_login.png")}
             alt="responsive image"
           />
-          <p className="left-head position-absolute">Dint</p>
+          <p className="left-head position-absolute notranslate">Dint</p>
           <div className="bg-left-content d-flex justify-content-center">
             <div className="left-text">
               <p>Sign up to start earning</p>

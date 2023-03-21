@@ -34,7 +34,7 @@ const CookieNotice = () => {
 <b>Effective: Feb 2023</b> 
  <br />
 <br />
-Dint (collectively referred to as "Dint," "we," "us," "our") values your privacy and is dedicated to protecting the personal data we hold about you. By using our website located at www.dint.com (the "Services") with your browser set to accept cookies, you consent to our use of cookies and other technologies as described in this notice and in our Privacy Notice. For more information regarding cookies and pixel tags, including their purpose, how to opt out, manage, or delete them, please review this Cookie Notice.
+<span className="notranslate">Dint</span> (collectively referred to as "<span className="notranslate">Dint</span>," "we," "us," "our") values your privacy and is dedicated to protecting the personal data we hold about you. By using our website located at www.dint.com (the "Services") with your browser set to accept cookies, you consent to our use of cookies and other technologies as described in this notice and in our Privacy Notice. For more information regarding cookies and pixel tags, including their purpose, how to opt out, manage, or delete them, please review this Cookie Notice.
 <br /><br />
 <b>WHAT ARE COOKIES?</b>
 <br /><br />

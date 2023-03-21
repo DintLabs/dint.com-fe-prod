@@ -1,16 +1,8 @@
-import LaunchRoundedIcon from "@mui/icons-material/LaunchRounded";
-import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
-import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
-import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
-import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import storyImage from "frontend/assets/img/web3/story-1.png";
 import PlayCircleOutlineOutlinedIcon from "@mui/icons-material/PlayCircleOutlineOutlined";
 import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import BrokenImageOutlinedIcon from "@mui/icons-material/BrokenImageOutlined";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
-import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 import MediaList from 'frontend/components/view-page/MediaList';
 import NothingToShow from 'frontend/components/common/NothingToShow';
 import ShareProfileModal from 'frontend/components/common/ShareProfileModal'
@@ -20,9 +12,6 @@ import {
   AvatarGroup,
   Badge,
   Box,
-  Button as MUIButton,
-  IconButton,
-  ListItemAvatar,
   Stack,
   Tabs,
   Typography,
@@ -41,7 +30,6 @@ import {
 } from "frontend/interfaces/contextInterface";
 import { PostInterface } from "frontend/interfaces/postInterface";
 import { UserDataInterface } from "frontend/interfaces/reduxInterfaces";
-import {  UploadProfilePicture } from "frontend/services/profileService";
 import React, {
   useCallback,
   useContext,
@@ -49,28 +37,22 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { useNavigate, useRouteLoaderData } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import TipPopUp from "frontend/components/tip/TipPopUp";
 import DiscordIcon from "../../assets/img/socialmedia/discord.png";
 import InstagramIcon from "../../assets/img/socialmedia/instagram.png";
 import TwitterIcon from "../../assets/img/socialmedia/twitter.png";
-import PostItem from "./PostItem";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import moment from "moment";
 import { RootState, useDispatch } from "frontend/redux/store";
 import { messagesActions } from "frontend/redux/slices/messages";
-import { display } from "@mui/system";
-import { Flex } from "../../reusable/reusableStyled";
 import { useSelector } from "react-redux";
-import { MenuItem } from "@mui/material";
-import { Select } from "@mui/material";
-import { FormControl } from "@mui/material";
-import { InputLabel } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 import StoriesUserOwn from "frontend/components/lounge/StoriesUserOwn";
-import { getApiURL } from "frontend/config";
 import { getUserOwnStories } from "frontend/redux/slices/lounge";
+import ProfileAvatar from './ProfileAvatar';
+import { convertPostDates } from '../../utils/date';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -141,7 +123,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
 
   let url, splits, extension;
 
-  const [posts, setPosts] = useState<PostInterface[]>([]);
+  const [posts, setPostsLocal] = useState<PostInterface[]>([]);
   const [photoPosts, setPhotoPosts] = useState<PostInterface[]>([]);
   const [textPosts, setTextPosts] = useState<PostInterface[]>([]);
   const [videoPosts, setVideoPosts] = useState<PostInterface[]>([]);
@@ -152,7 +134,18 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
   const { userOwnStories } = useSelector((state: RootState) => state.lounge);
   const {userData} = useSelector((state: any) => state.user);
   const [isUserProfile , setIsUserProfile ] = useState<boolean>(false)
-  const [storyList , setStoryList] = useState()
+  const [storyList , setStoryList] = useState();
+
+  const setPosts = (
+    setPostsPayload: ((prevPosts: PostInterface[]) => PostInterface[]) | PostInterface[],
+  ) => {
+    const postsToUpdate = typeof setPostsPayload === 'function'
+      ? setPostsPayload(posts)
+      : setPostsPayload;
+
+    setPostsLocal(convertPostDates(postsToUpdate));
+  };
+
   const [paginationPhotoPosts, setPaginationPhotoPosts] =
     useState<PaginationPostsInerface>({
       ...DEFAULT_POSTS_PAGINATION,
@@ -170,14 +163,14 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
       ...DEFAULT_POSTS_PAGINATION,
       post_type: postTypes.video.value,
     });
-  
+
     const [fetchImagePostPayload, setFetchImagePostPayload] = useState<PostPaginationPayload>({
       page: null,
       post_type: "",
       start: 0,
       length: 5
     });
-  
+
     const [fetchVideoPostPayload, setFetchVideoPostPayload] = useState<PostPaginationPayload>({
       page: null,
       post_type: 'video',
@@ -347,7 +340,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     }
     setIsLoadingUserDetails(false);
   };
-  
+
 
   React.useEffect(() => {
     if (username) {
@@ -379,26 +372,8 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     }
   }, [value]);
 
-  const copyToClipBoard = () => {
-    const profileUrl = `${window.location.origin}/${username}`;
-    navigator.clipboard.writeText(profileUrl);
-  };
-
   const handleSocialIconClick = (url: string) => {
     window.open(url, "_blank");
-  };
-
-  const handleProPicChange  = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length) {
-      const result = await UploadProfilePicture(e.target.files[0]);
-      if (userDetails && result?.success) {
-        setUserDetails({
-          ...userDetails,
-          profile_image: result?.data?.profile_image  || "",
-        });
-      }
-      toast.dismiss();
-    }
   };
 
   const postDeleted = (postId: number) => {
@@ -457,6 +432,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     }
     setIsFollowLoading(false);
   };
+
   const cancelRequest = async () => {
     setIsFollowLoading(true);
     try {
@@ -505,56 +481,14 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     });
   };
 
-  if (!user)
+  if (!user) {
     return (
-      <Typography variant="h2" sx={{ textAlign: "center" }}>
-        Under Contruction
+      <Typography variant="h2" sx={{ textAlign: 'center' }}>
+        Under Construction
       </Typography>
     );
-    const createUserStories = (item: any) => {
-      const { user_stories } = item;
-      const data = user_stories.map((story: any) => {
-        const extension = story.story.substr(story.story.length - 3);
-        switch (extension.toLowerCase()) {
-          case "mp4":
-            return {
-              url: story.story,
-              type: "video",
-            };
+  }
 
-          default:
-            return {
-              content: () => (
-                <div style={contentStylestoryback}>
-                  <img style={image} src={story.story}></img>
-                </div>
-              ),
-            };
-        }
-      });
-      return data;
-    };
-    const image = {
-      display: "block",
-      borderRadius: 4,
-      // objectFit: "cover",
-      height: "100%",
-      width: "100%",
-    };
-
-    const contentStylestoryback = {
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-     '@media screen and (max-width: 899px)': {
-        width: '100% !important',
-        height: '100% !important',
-     },
-    };
- 
-
-      
   return (
     <>
       <Box
@@ -575,44 +509,12 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
       >
         <Box sx={{ width: "100%" }}>
           <div className="profile-menu">
-            {isEligibleForFetchingPost === true ? (
-             <Badge
-             anchorOrigin={{
-               vertical: "bottom",
-               horizontal: "right",
-             }}
-             overlap="circular"
-             badgeContent=" "
-           >
-             {isUserProfile ? (
-               <StoriesUserOwn
-                 createUserStories={createUserStories}
-                 hideName={true}
-               />
-             ) : (
-               <Avatar
-               src={userDetails?.profile_image ?? avatar}
-                 sx={{ width: 80, height: 80 }}
-               />
-             )}
-           </Badge>
-            ) : (
-              <Badge
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                overlap="circular"
-                badgeContent=" "
-                invisible={!userDetails}
-              >
-                <Avatar
-                  src={userDetails?.profile_image ?? avatar}
-                  sx={{ width: 80, height: 80 }}
-                />
-              </Badge>
-            )}
-                    
+            <ProfileAvatar
+              isEligibleForFetchingPost={isEligibleForFetchingPost}
+              userProfileImage={userDetails?.profile_image}
+              avatar={avatar}
+            />
+
                     <div className="post-wrapper-mobile">
                       <Typography
                         className="followers-tab-wrap"
@@ -623,7 +525,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
-                      
+
                         >
                         {userDetails?.user_follower.length || 0} Followers
                       </Typography>
@@ -633,13 +535,9 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         >
                         {userDetails?.user_following.length || 0} Following
                       </Typography>
-
-
-
                     </div>
                   </div>
                 </Box>
-          
               </Stack>
             </Box>
             <Box
@@ -660,12 +558,14 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                 <Typography
                   variant="h3"
                   display={{ xs: "none", md: "flex" }}
-                  sx={{ color: toggle ? "text.primary" : "#161C24" }}
+                  sx={{
+                    color: toggle ? "text.primary" : "#161C24",
+                    whiteSpace: 'nowrap',
+                  }}
                 >
                   {userDetails && userDetails.display_name}
                 </Typography>
-                {!!savedUser?.custom_username &&
-                savedUser?.custom_username !== userDetails?.custom_username &&
+                {!!savedUser?.custom_username && savedUser?.custom_username !== userDetails?.custom_username &&
                 !isLoadingUserDetails ? (
                   <Box className="btn-group-follow">
                     {userDetails?.is_followed === true && (
@@ -766,7 +666,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         onClose={() => setShowShareProfileModal(false)}
                       />}
                     </Box>}
-              
+
                   </Box>
                 ) : (
                   <div className="btn-group-follow-wrapper">
@@ -793,7 +693,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         open={showShareProfileModal}
                         onClose={() => setShowShareProfileModal(false)}
                       />}
-                
+
 
                     </Box>
                   </div>
@@ -810,7 +710,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                 {userDetails?.user_following.length || 0} Following
                 </Typography>
               </div>
- 
+
 
               <Box sx={{ pt: 1 }} order={{ xs: "0", md: "3" }}>
                 <Box className="username">
@@ -872,7 +772,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                       src={storyImage}
                     />
                   </AvatarGroup>
-                
+
                 </Box>
                 <Box display="flex" gap={1} sx={{ padding: "15px 0" }}>
                   {!!userDetails?.instagram && (

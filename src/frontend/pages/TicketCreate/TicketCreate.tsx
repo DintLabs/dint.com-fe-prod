@@ -48,7 +48,7 @@ const TicketCreate = () => {
     <>
       <div style={{ textAlign: 'center' }}>
         <div id="ticket_parent_div">
-          <h1>Use Dint Scanner</h1>
+          <h1>Use <span className="notranslate">Dint</span> Scanner</h1>
           <br />
           <QRCode
             value={`Eventid :${location.state?.eventid || ''}, Userid:${

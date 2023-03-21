@@ -1,24 +1,27 @@
-import { IconButton } from '@mui/material';
+import { Avatar, IconButton } from '@mui/material';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import moment from 'moment/moment';
 import React, { useContext } from 'react';
 import useRichMessage from 'frontend/hooks/useRichMessage';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
+import { UserDataInterface } from '../../interfaces/reduxInterfaces';
+import { useNavigate } from 'react-router';
+import { convertDateToLocal } from 'frontend/utils/date';
 
 type CommentProps = {
   text: string;
   createdAt: string | Date;
+  author: UserDataInterface;
+  hideActions?: boolean;
 };
 
-const Comment = ({
-  text,
-  createdAt,
-}: CommentProps) => {
+const Comment = ({ text, author, createdAt, hideActions }: CommentProps) => {
   const { toggle } = useContext(ThemeContext);
+  const navigate = useNavigate();
   const messageContent = useRichMessage({
     text,
     className: 'like-comm mb-0',
-    style: { color: toggle ? "white" : "#161C24" },
+    style: { color: toggle ? "white" : "#161C24", fontWeight: '400 !important' },
   });
 
   return (
@@ -26,17 +29,44 @@ const Comment = ({
       className=""
       style={{ background: "transparent" }}
     >
-      <div className="d-flex flex-column">
-        <div className="user d-flex flex-row justify-content-between w-100 align-items-center">
+      <div
+        className="d-flex flex-row align-items-start"
+        style={{ gap: '8px', marginBottom: '5px' }}
+      >
+        <Avatar
+          src={author.profile_image}
+          sx={{
+            height: 35,
+            width: 35,
+            marginTop: '5px',
+            cursor: 'pointer',
+          }}
+          onClick={() => navigate(`/${author.custom_username}`)}
+        />
+        <div className="d-flex flex-column flex-grow-1">
           <span>
+            <span
+              style={{ cursor: 'pointer', fontWeight: 600 }}
+              onClick={() => navigate(`/${author.custom_username}`)}
+            >
+              {`${author.custom_username} `}
+            </span>
             {messageContent}
           </span>
-          <IconButton sx={{ padding: 0, color: toggle ? "#fff" : "#000" }}>
-            <FavoriteBorderRoundedIcon fontSize="small" />
-          </IconButton>
+          <div className="view-comm">
+            {moment(convertDateToLocal(createdAt)).fromNow()}
+          </div>
         </div>
-
-        <div className="view-comm">{moment(createdAt).fromNow()}</div>
+        <IconButton
+          sx={{
+            padding: 0,
+            marginTop: '5px',
+            color: toggle ? "#fff" : "#000",
+            visibility: hideActions ? 'hidden' : 'initial',
+        }}
+        >
+          <FavoriteBorderRoundedIcon fontSize="small" />
+        </IconButton>
       </div>
     </div>
   );

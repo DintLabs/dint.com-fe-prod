@@ -59,6 +59,7 @@ export interface PostInterface {
   post_comment: PostCommentInterface[];
   type: string;
   content: string;
+  description?: string;
   media: string | null;
   total_likes: number | null;
   total_comments: number | null;

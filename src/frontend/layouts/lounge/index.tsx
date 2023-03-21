@@ -61,7 +61,7 @@ export default function LoungeLayout({ isSearchPage = false }) {
         >
           <Container style={{ margin: 'auto', padding: '0', minWidth:'100%', width:'100%' }}>
             <Helmet>
-              <title>Lounge</title>
+              <title>{'Lounge'}</title>
               <meta
                 name="description"
                 content="Dint Events, buy event tickets. Use your digital assets to create event tickets"

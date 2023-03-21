@@ -450,8 +450,8 @@ const DintWallet = () => {
                           className="mx-4"
                           style={{ display: "flex", flexDirection: "column" }}
                         >
-                          <span style={{ fontWeight: "700" }}>Dint</span>
-                          <span style={{ color: "#A0A0A0", fontWeight: "500" }}>
+                          <span style={{ fontWeight: "700" }} className="notranslate">Dint</span>
+                          <span style={{ color: "#A0A0A0", fontWeight: "500" }} className="notranslate">
                             DINT
                           </span>
                           {/* <Typography style={{ display: isLargeScreen ? '' : 'none' }} variant="caption" display="block" color="text.secondary">

@@ -246,7 +246,7 @@ export default function PaymentCard() {
           </Typography>
           <Stack my={2}>
             <Alert severity="info" className="primary-text-color" style={{ fontSize: '16px' }}>
-              The charge on your credit card statement will appear as Dint Club
+              The charge on your credit card statement will appear as <span className="notranslate">Dint</span> Club
             </Alert>
           </Stack>
           <Stack direction="row" gap={2} justifyContent="center">
@@ -258,7 +258,7 @@ export default function PaymentCard() {
           </Stack>
           <Stack my={2}>
             <Typography className="secondary-text-color" style={{ fontSize: '10px' }} mt={1} pb={4} align="center">
-              Dint Club, Avenue Louise 54, Room S52, Brussels, 1050, Belgium
+              <span className="notranslate">Dint</span> Club, Avenue Louise 54, Room S52, Brussels, 1050, Belgium
             </Typography>
           </Stack>
         </TabPanel>

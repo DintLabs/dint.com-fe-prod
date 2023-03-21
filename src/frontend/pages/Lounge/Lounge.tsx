@@ -21,7 +21,6 @@ import PageSkeleton from 'frontend/components/common/skeletons/PageSkeleton'
 import ProfilePage from './ProfilePage'
 import DintWallet from '../Wallet/DintWallet'
 import Withdrawal from '../Wallet/Withdrawal'
-import MyProfile from './MyProfile'
 import ViewPage from '../View-Page/ViewPage'
 import BuyToken from 'frontend/pages/BuyToken'
 import Messages from '../Messages/Messages'
@@ -154,7 +153,7 @@ const NewHome = () => {
       location.pathname === `/${HOME_SIDE_MENU.LOUNGE}`
     )
       return (
-        <Grid container>
+        <Grid container sx={{ paddingBottom: '55px' }}>
           <Grid item xs={12} md={12}>
             <HomeTab createPost={createPost} />
           </Grid>

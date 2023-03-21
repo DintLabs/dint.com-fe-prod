@@ -376,7 +376,7 @@ const Messages = () => {
               ) : (
                 <Typography
                   sx={{width:"100%" , textAlign:'center' , color:toggle ? "white" : ""}}
-                  className="capitalize-text"
+                  className="capitalize-text notranslate"
                   variant="subtitle1">
                   Dint 
                   {/* <ExpandMoreIcon /> */}

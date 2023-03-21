@@ -88,7 +88,7 @@ const RegistrationRefer = () =>{
       <>
       {/* <MainNavbar /> */}
       <Helmet>
-        <title>Reference</title>
+        <title>{'Reference'}</title>
         <meta name="description" content="Reference for registration" />
       </Helmet>
       {/* <NavbarHome /> */}

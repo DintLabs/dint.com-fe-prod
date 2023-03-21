@@ -1,26 +1,8 @@
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
-import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import {
-  Avatar,
-  Box,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  Stack,
-  Grid,
-  Typography,
-  useTheme
-} from '@mui/material';
-
+import { Box, Grid, useTheme } from '@mui/material';
+import { convertDateToLocal } from 'frontend/utils/date';
 import Submenu from 'frontend/components/submenu';
 import { postTypes } from "../../../data";
-import PostItem from "../../Lounge/PostItem";
+import PostItem from 'frontend/pages/Lounge/PostItem/PostItem';
 import PostItemSkeleton from "../../../components/common/skeletons/PostItemSkeleton";
 import { FlexRow } from "../../../reusable/reusableStyled";
 import { GetUserBookmark } from "../../../hooks/bookmark";
@@ -31,34 +13,19 @@ const Other = () => {
 
   return (
     <Grid container
-          sx={{
-            borderLeft: `1px solid ${theme.palette.grey[700]}`,
-            borderRight: `1px solid ${theme.palette.grey[700]}`
-          }}
+      sx={{
+        borderLeft: `1px solid ${theme.palette.grey[700]}`,
+        borderRight: `1px solid ${theme.palette.grey[700]}`
+      }}
     >
       <Submenu title="OTHER" username="" routes={[]} noTag md={12} />
       <FlexRow gap="5px" fWrap="wrap" style={{ width: "100%"}}>
-        <Box style={{width: "100%"}}>
+        <Box style={{ width: '100%', paddingTop: '10px' }}>
           {bookmarkedPosts && bookmarkedPosts.map((post: any) => (
             <PostItem
-              fetchPosts={()=>{}}
-              canDeletePost={true}
               key={post?.id}
-              isBookmarked={true}
-              isBookmarksPage={true}
-              description={post?.content}
-              createdAt={post?.created_at}
-              userName={
-                  post?.user
-                  ? post?.user?.display_name ||
-                  post?.user?.first_name ||
-                  post?.user?.custom_username
-                  : ''
-              }
-              custom_username={post?.user ? post?.user?.custom_username : ''}
-              image={post?.media || null}
               post={post}
-              onDelete={()=>{}}
+              // isBookmarked
             />
           ))}
 

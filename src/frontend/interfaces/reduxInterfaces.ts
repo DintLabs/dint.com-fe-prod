@@ -74,7 +74,7 @@ export interface UserDataInterface {
   first_name?: string | null;
   last_name?: string | null;
   is_active?: boolean;
-  is_deleted?: boolean; 
+  is_deleted?: boolean;
   phone_no?: string | null;
   photoURL?: string | null;
   uid?: string | null;
@@ -206,9 +206,9 @@ export interface PostInterface {
   media: string | null;
   total_likes: string | number | null;
   total_comments: string | number | null;
-  created_at: string;
-  updated_at: string | null;
-  deleted_at: string | null;
+  created_at: string | Date;
+  updated_at: string | Date | null;
+  deleted_at: string | Date | null;
   is_active: boolean;
   is_deleted: boolean;
   can_delete: boolean;

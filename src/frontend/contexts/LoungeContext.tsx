@@ -7,6 +7,8 @@ import {
   ContextInterface,
   PaginationPostsInerface,
 } from "frontend/interfaces/contextInterface";
+import moment from 'moment-timezone';
+import { convertPostDates } from 'frontend/utils/date';
 
 const useLoungeController = (): ContextInterface => {
   const [counts, setCounts] = useState({
@@ -16,11 +18,10 @@ const useLoungeController = (): ContextInterface => {
     video_posts: 0,
   });
 
-  const [posts, setPosts] = useState<PostInterface[]>([]);
-  const [textPosts, setTextPosts] = useState<PostInterface[]>([]);
-  const [photoPosts, setPhotoPosts] = useState<PostInterface[]>([]);
-
-  const [videoPosts, setVideoPosts] = useState<PostInterface[]>([]);
+  const [posts, setPostsLocal] = useState<PostInterface[]>([]);
+  const [textPosts, setTextPostsLocal] = useState<PostInterface[]>([]);
+  const [photoPosts, setPhotoPostsLocal] = useState<PostInterface[]>([]);
+  const [videoPosts, setVideoPostsLocal] = useState<PostInterface[]>([]);
 
   const [paginationPosts, setPaginationPosts] =
     useState<PaginationPostsInerface>({
@@ -44,6 +45,32 @@ const useLoungeController = (): ContextInterface => {
       ...DEFAULT_POSTS_PAGINATION,
       post_type: postTypes.video.value,
     });
+
+  const setPosts = (
+    setPostsPayload: ((prevPosts: PostInterface[]) => PostInterface[]) | PostInterface[],
+  ) => {
+    const postsToUpdate = typeof setPostsPayload === 'function'
+      ? setPostsPayload(posts)
+      : setPostsPayload;
+
+    setPostsLocal(convertPostDates(postsToUpdate));
+  };
+
+  const createPostsSetter = (
+    localSetter: React.Dispatch<React.SetStateAction<PostInterface[]>>,
+  ) => (
+    setPostsPayload: ((prevPosts: PostInterface[]) => PostInterface[]) | PostInterface[],
+  ) => {
+    const postsToUpdate = typeof setPostsPayload === 'function'
+      ? setPostsPayload(posts)
+      : setPostsPayload;
+
+    localSetter(convertPostDates(postsToUpdate));
+  }
+
+  const setTextPosts = createPostsSetter(setTextPostsLocal);
+  const setPhotoPosts = createPostsSetter(setPhotoPostsLocal);
+  const setVideoPosts = createPostsSetter(setVideoPostsLocal);
 
   const getUserPostCounts = async () => {
     const { data } = await _axios.get(`/api/lounge/fetch-post-counts/`);

@@ -19,7 +19,7 @@ const MarketPlaceNavbar = () => {
         <Link to="/">
           <Navbar.Brand>
             <img src={mainlogo} width="40" height="40" className="" alt="" />
-            &nbsp; Dint Marketplace
+            &nbsp; <span className="notranslate">Dint</span> Marketplace
           </Navbar.Brand>
         </Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />

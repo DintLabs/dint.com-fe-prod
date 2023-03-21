@@ -98,11 +98,11 @@ const HelpSupport = () => {
                     <Divider />
                     <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" expandIcon={expanded === 'panel1' ? <RemoveIcon /> : <AddIcon />}>
-                            <Typography>Who can use Dint?</Typography>
+                            <Typography>Who can use <span className="notranslate">Dint</span>?</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography variant='h5' style={{ fontWeight: 'normal' }}>
-                            To use Dint, you must first create an account by registering with your valid email address and a password. Your password should be unique and strong to protect your account security. Dint also allow you to authenticate using your Google account.
+                            To use <span className="notranslate">Dint</span>, you must first create an account by registering with your valid email address and a password. Your password should be unique and strong to protect your account security. <span className="notranslate">Dint</span> also allow you to authenticate using your Google account.
                             </Typography>
                             <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>To register as a user, you must:</Typography>
                             <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
@@ -110,7 +110,7 @@ const HelpSupport = () => {
 
                                 </Typography>
                                 <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>2.</span> Be permitted by the laws of the country or State/province where you are located to use Dint and to view any content available on it and to use any functionality provided by it.
+                                    <span style={{ fontWeight: 'bold' }}>2.</span> Be permitted by the laws of the country or State/province where you are located to use <span className="notranslate">Dint</span> and to view any content available on it and to use any functionality provided by it.
 
                                 </Typography>
                                 <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
@@ -122,7 +122,7 @@ const HelpSupport = () => {
 
                                 </Typography>
                                 <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>5.</span> If you do not meet the above requirements, you must not access or use Dint.
+                                    <span style={{ fontWeight: 'bold' }}>5.</span> If you do not meet the above requirements, you must not access or use <span className="notranslate">Dint</span>.
 
                                 </Typography>
                               
@@ -197,12 +197,12 @@ const HelpSupport = () => {
                     </Accordion>
                     <Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
                         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header" expandIcon={expanded === 'panel5' ? <RemoveIcon /> : <AddIcon />}>
-                            <Typography>How do I start earning on Dint?
+                            <Typography>How do I start earning on <span className="notranslate">Dint</span>?
 </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography variant='h5' style={{ fontWeight: 'normal' }}>
-                            To start earning on Dint, follow these steps:
+                            To start earning on <span className="notranslate">Dint</span>, follow these steps:
 
 
                             <Typography variant='h5' style={{ fontWeight: 'normal', marginTop: '10px' }}>

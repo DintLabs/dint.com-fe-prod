@@ -15,7 +15,7 @@ const Events = () => {
   return (
     <>
       <Helmet>
-        <title>Events</title>
+        <title>{'Events'}</title>
         <meta
           name="description"
           content="Dint Events, buy event tickets. Use your digital assets to create event tickets"

@@ -29,25 +29,19 @@ import {
   useRef,
   useLayoutEffect,
 } from "react";
-import BuyToken from "frontend/pages/BuyToken";
-import storyImage from "frontend/assets/img/web3/story-1.png";
 
-import AddPost from "./AddPost";
 import "./navbarTab.css";
 import PostItem from "./PostItem";
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useNavigate } from "react-router";
-import MobileTopHeader from "./MobileTopHeader";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import CreateStory from "./CreateStory";
 import { toast } from "react-toastify";
-import ShowStories from "./ShowStories";
 import { getUserOwnStories } from "frontend/redux/slices/lounge";
 import { useSelector } from "react-redux";
 import { RootState, useDispatch } from "frontend/redux/store";
 import StoriesUserOwn from "frontend/components/lounge/StoriesUserOwn";
-import { getApiURL } from "frontend/config";
 import Carousel from "./Carousel";
 import Stories from "react-insta-stories";
 import { config } from "react-spring";
@@ -55,8 +49,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { sendMessage } from "frontend/redux/slices/messages";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import TipPopUp from "frontend/components/tip/TipPopUp";
-import moment from "moment";
 import React from "react";
+import { createUserStories } from 'frontend/utils/stories';
+import PostItemNew from 'frontend/pages/Lounge/PostItem/PostItem';
 
 interface Props {
   createPost: Function;
@@ -266,8 +261,8 @@ const HomeTab = ({ createPost }: Props) => {
     }
   };
 
-  const fetchPosts = async (pagination: PaginationPostsInerface) => {
-    if (isLoading || !pagination.hasNext) return;
+  const fetchPosts = async (pagination?: PaginationPostsInerface) => {
+    if (isLoading || !pagination?.hasNext) return;
 
     try {
       setIsLoading(true);
@@ -572,49 +567,6 @@ const HomeTab = ({ createPost }: Props) => {
     }
   }, [storyList, userData, alreadyLike, state.goToSlide]);
 
-  const createUserStories = (item: any) => {
-    const { user_stories } = item;
-    const data = user_stories.map((story: any) => {
-      const extension = story.story.substr(story.story.length - 3);
-      switch (extension.toLowerCase()) {
-        case "mp4":
-          return {
-            url: story.story,
-            type: "video",
-          };
-
-        default:
-          return {
-            content: () => (
-              <div style={contentStylestoryback}>
-                <img style={image} src={story.story}></img>
-              </div>
-            ),
-          };
-      }
-    });
-    return data;
-  };
-
-  const image = {
-    display: "block",
-    borderRadius: 4,
-    // objectFit: "cover",
-    height: "100%",
-    width: "100%",
-  };
-
-  const contentStylestoryback = {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    "@media screen and (max-width: 899px)": {
-      width: "100% !important",
-      height: "100% !important",
-    },
-  };
-
   const handleTouchStart = (evt: any) => {
     if (!state.enableSwipe) {
       return;
@@ -697,20 +649,11 @@ const HomeTab = ({ createPost }: Props) => {
     <>
       <Box
         id="postsListScrollableDiv"
-        style={
-          {
-            // borderLeft: `1px solid ${theme.palette.grey[700]}`,
-            // borderRight: `1px solid ${theme.palette.grey[700]}`
-          }
-        }
       >
-        {/* <AddPost createPost={createPost} widthScreen={0} /> */}
         <Box
           sx={{
             display: "flex",
             width: "100%",
-            // margin: "10px 0",
-            // padding: "10px 0",
           }}
         >
           <Box
@@ -792,7 +735,7 @@ const HomeTab = ({ createPost }: Props) => {
                     </Typography>
                   </div>
                 )}
-                <StoriesUserOwn createUserStories={createUserStories} />
+                <StoriesUserOwn />
 
                 {storyList?.map((item: any, i: number) => (
                   <React.Fragment key={i}>
@@ -882,7 +825,7 @@ const HomeTab = ({ createPost }: Props) => {
                   className={`${
                     toggle && value === 0 && "active-tab"
                   } custom-tab-list`}
-                  label={`All  (${counts?.all_posts ?? 0})`}
+                  label={`All (${counts?.all_posts ?? 0})`}
                 />
                 <Tab
                   className={`${
@@ -894,41 +837,26 @@ const HomeTab = ({ createPost }: Props) => {
                   className={`${
                     toggle && value === 2 && "active-tab"
                   } custom-tab-list`}
-                  label={`Photos  (${counts?.image_posts ?? 0})`}
+                  label={`Photos (${counts?.image_posts ?? 0})`}
                 />
                 <Tab
                   className={`${
                     toggle && value === 3 && "active-tab"
                   } custom-tab-list`}
-                  label={`Videos  (${counts?.video_posts ?? 0})`}
+                  label={`Videos (${counts?.video_posts ?? 0})`}
                 />
               </Tabs>
             </Box>
 
             <TabPanel value={value} index={0}>
               {posts.map((item) => (
-                <PostItem
-                  fetchPosts={fetchPosts}
-                  canDeletePost={true}
-                  key={item?.id}
-                  description={item?.content}
-                  createdAt={item?.created_at}
-                  userName={
-                    item?.user
-                      ? item?.user?.display_name ||
-                        item?.user?.first_name ||
-                        item?.user?.custom_username
-                      : ""
-                  }
-                  custom_username={
-                    item?.user ? item?.user?.custom_username : ""
-                  }
-                  image={item?.media || null}
+                <PostItemNew
+                  key={item.id}
                   post={item}
-                  onDelete={postDeleted}
+                  onPostChange={fetchPosts}
+                  onPostDelete={postDeleted}
                 />
               ))}
-
               {isLoading && (
                 <>
                   <PostItemSkeleton />
@@ -939,19 +867,11 @@ const HomeTab = ({ createPost }: Props) => {
             </TabPanel>
             <TabPanel value={value} index={1}>
               {textPosts.map((item, i) => (
-                <PostItem
-                  fetchPosts={fetchPosts}
-                  canDeletePost={true}
-                  key={`textPosts_${i}`}
-                  description={item?.content}
-                  createdAt={item?.created_at}
-                  userName={
-                    item?.user?.display_name || item?.user?.custom_username
-                  }
-                  custom_username={item?.user?.custom_username}
-                  image={item?.media || null}
+                <PostItemNew
+                  key={`textPosts_${i}_${item.id}`}
                   post={item}
-                  onDelete={postDeleted}
+                  onPostChange={fetchPosts}
+                  onPostDelete={postDeleted}
                 />
               ))}
               {isLoading && (
@@ -964,19 +884,11 @@ const HomeTab = ({ createPost }: Props) => {
             </TabPanel>
             <TabPanel value={value} index={2}>
               {photoPosts.map((item, i) => (
-                <PostItem
-                  fetchPosts={fetchPosts}
-                  canDeletePost={true}
-                  key={`photoPosts_${i}`}
-                  description={item?.content}
-                  createdAt={item?.created_at}
-                  userName={
-                    item?.user?.display_name || item?.user?.custom_username
-                  }
-                  custom_username={item?.user?.custom_username}
-                  image={item?.media || null}
+                <PostItemNew
+                  key={`photoPosts_${i}_${item.id}`}
                   post={item}
-                  onDelete={postDeleted}
+                  onPostChange={fetchPosts}
+                  onPostDelete={postDeleted}
                 />
               ))}
               {isLoading && (
@@ -989,19 +901,11 @@ const HomeTab = ({ createPost }: Props) => {
             </TabPanel>
             <TabPanel value={value} index={3}>
               {videoPosts.map((item, i) => (
-                <PostItem
-                  fetchPosts={fetchPosts}
-                  canDeletePost={true}
-                  key={`videoPosts_${i}`}
-                  description={item?.content}
-                  createdAt={item?.created_at}
-                  userName={
-                    item?.user?.display_name || item?.user?.custom_username
-                  }
-                  custom_username={item?.user?.custom_username}
-                  image={item?.media || null}
+                <PostItemNew
+                  key={`videoPosts_${i}_${item.id}`}
                   post={item}
-                  onDelete={postDeleted}
+                  onPostChange={fetchPosts}
+                  onPostDelete={postDeleted}
                 />
               ))}
               {isLoading && (
@@ -1206,6 +1110,7 @@ const HomeTab = ({ createPost }: Props) => {
                     fontWeight: "400",
                     color: toggle ? "text.primary" : "#536471",
                   }}
+                  className="notranslate"
                 >
                   Dint © 2023
                 </Typography>

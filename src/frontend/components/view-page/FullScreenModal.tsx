@@ -23,6 +23,7 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useNavigate } from 'react-router-dom';
 
 type fullScreenModalProps = {
   post: any
@@ -35,6 +36,7 @@ type fullScreenModalProps = {
   onBookmark?: (isBookmark: Boolean, id: number) => void
 }
 const FullScreenModal = (props: fullScreenModalProps) => {
+  const navigate = useNavigate();
   const user: any = useSelector((state: RootState) => state.user.userData)
   const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false)
   const { toggle } = useContext(ThemeContext)
@@ -178,7 +180,10 @@ const FullScreenModal = (props: fullScreenModalProps) => {
             <video
               onTouchStart={handleUserTouchStart}
               onTouchEnd={handleUserTouchEnd}
-              style={{ width: '100%', height: '100vh' }}
+              style={{
+                width: '100%',
+                height: 'auto'
+              }}
               controls
               autoPlay
             >
@@ -196,11 +201,23 @@ const FullScreenModal = (props: fullScreenModalProps) => {
                   justifyContent: 'center',
                 }}
               >
-                <Typography variant='subtitle1' color='white' fontWeight='bold'>
-                  {props.userDetails.display_name}
+                <Typography
+                  variant='subtitle1'
+                  color='white'
+                  fontWeight='bold'
+                  onClick={() => navigate(`/${props.post.user.custom_username}`)}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  {props.post.user.display_name}
                 </Typography>
-                <Typography variant='body1' color='white' fontWeight='bold'>
-                  @{props.userDetails.custom_username}
+                <Typography
+                  variant='body1'
+                  color='white'
+                  fontWeight='bold'
+                  onClick={() => navigate(`/${props.post.user.custom_username}`)}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  @{props.post.user.custom_username}
                 </Typography>
                 <Typography color='black'>.......</Typography>
               </Box>
@@ -214,7 +231,7 @@ const FullScreenModal = (props: fullScreenModalProps) => {
                   )[0] ? (
                     <FaHeart color='red' />
                   ) : (
-                    <FavoriteBorderRoundedIcon />
+                    <FavoriteBorderRoundedIcon sx={{ color: '#fff' }} />
                   )}
                   <Box sx={{ px: 2, color: toggle ? '#fff' : '#000' }}>
                     <p className='like-comm' style={{ color: 'white', fontWeight: 'bold' }}>
@@ -224,22 +241,26 @@ const FullScreenModal = (props: fullScreenModalProps) => {
                     </p>
                   </Box>
                 </IconButton>
-                <IconButton onClick={() => setOpenPopUpTip(true)} sx={{ fontSize: '12px' }}>
-                  <MonetizationOnIcon />
-                </IconButton>
+                {user?.id !== props?.post?.user?.id && (
+                  <IconButton
+                    onClick={() => setOpenPopUpTip(true)}
+                    sx={{ fontSize: '12px', color: '#fff' }}>
+                    <MonetizationOnIcon />
+                  </IconButton>
+                )}
                 {!props.post.is_bookmarked ? (
                   <IconButton
                     className='d-flex align-items-center justify-content-center'
                     onClick={() => sendBookmark(props.post)}
                   >
-                    <BookmarkBorderIcon />
+                    <BookmarkBorderIcon sx={{ color: '#fff' }} />
                   </IconButton>
                 ) : (
                   <IconButton
                     className='d-flex align-items-center justify-content-center'
                     onClick={() => deleteBookmark(props.post)}
                   >
-                    <BookmarkIcon />
+                    <BookmarkIcon sx={{ color: '#fff' }} />
                   </IconButton>
                 )}
               </Box>

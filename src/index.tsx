@@ -31,6 +31,7 @@ render(
       <LoungeProvider>
         <ThemeProvider>
           <App />
+          <div id="emoji-picker-portal" />
         </ThemeProvider>
       </LoungeProvider>
     </AuthProvider>

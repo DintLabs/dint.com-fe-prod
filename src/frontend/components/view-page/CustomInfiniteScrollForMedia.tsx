@@ -4,16 +4,16 @@ import { Box, Card, CircularProgress, Grid, IconButton, Stack,
   Typography, } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { SelectedMediaType } from './MediaList';
+import { PostInterface } from '../../interfaces/postInterface';
 
 interface CustomInfiniteScrollForMediaProps {
-  dataList: Array<Object>;
+  dataList: PostInterface[];
   totalData: number;
   fetchMoreData: () => void;
-  onClickHandler: (media: SelectedMediaType) => void;
+  onClickHandler: (media: PostInterface) => void;
   loader: boolean;
   isModalOpen: boolean;
-  selectedMedia: SelectedMediaType;
+  selectedMedia?: PostInterface;
 }
 
 const CustomInfiniteScrollForMedia = ({
@@ -41,23 +41,13 @@ const CustomInfiniteScrollForMedia = ({
             spacing={0.5}
             className="page-media-container"
           >
-            {dataList.map((data: any, i: number) => (
+            {dataList.map((data: PostInterface, i: number) => (
               <React.Fragment key={i}>
                 {data.type === "image" ? (
                   <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                     <Card
                       className="image-cards card-container"
-                      onClick={() =>
-                        onClickHandler({
-                          id: data.id,  
-                          media: data?.media,
-                          type: data?.type,
-                          userId: data?.user.id,
-                          like_post: data?.like_post,
-                          is_bookmarked: data?.is_bookmarked,
-                          description: data?.content,
-                        })
-                      }
+                      onClick={() => onClickHandler(data)}
                     >
                       <Box
                         className="full-image-container"
@@ -70,17 +60,7 @@ const CustomInfiniteScrollForMedia = ({
                   <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                     <Card
                       className="video-cards card-container"
-                      onClick={() =>
-                        onClickHandler({
-                          id: data.id,
-                          media: data?.media,
-                          type: data?.type,
-                          userId: data?.user.id,
-                          like_post: data?.like_post,
-                          is_bookmarked: data?.is_bookmarked,
-                          description: data?.content,
-                        })
-                      }
+                      onClick={() => onClickHandler(data)}
                     >
                       {isModalOpen && selectedMedia?.id === data?.id ? null : (
                         <IconButton className="floating-play-icon">
@@ -88,7 +68,7 @@ const CustomInfiniteScrollForMedia = ({
                         </IconButton>
                       )}
                       <video width="100%" height="100%" autoPlay={false}>
-                        <source src={data.media} id="video_here" />
+                        <source src={data.media as string} id="video_here" />
                         Your browser does not support HTML5 video.
                       </video>
                     </Card>
@@ -97,26 +77,16 @@ const CustomInfiniteScrollForMedia = ({
                   <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                     <Card
                       className="image-cards card-container"
-                      onClick={() =>
-                        onClickHandler({
-                          id: data.id,
-                          media: null,
-                          type: data?.type,
-                          userId: data?.user.id,
-                          like_post: data?.like_post,
-                          is_bookmarked: data?.is_bookmarked,
-                          description: data?.content,
-                        })
-                      }
+                      onClick={() => onClickHandler(data)}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
                     >
                       <Box
                         className="full-image-container"
-                        height={285}
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
                         sx={{ p: 2 }}
-                        // sx={{ backgroundImage: `url(${data.media})` }}
                       >
                         <Typography
                           component="span"

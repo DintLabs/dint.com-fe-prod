@@ -7,6 +7,8 @@ import {
   IconButton,
   Stack,
   Typography,
+  Divider,
+  Avatar,
 } from "@mui/material";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -15,9 +17,8 @@ import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { FaHeart } from "react-icons/fa";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-// import { useDetectScroll } from "@smakss/react-scroll-direction";
 import { dispatch, RootState, useSelector } from "frontend/redux/store";
 import { MdDelete } from "react-icons/md";
 import { ThemeContext } from "../../contexts/ThemeContext";
@@ -28,16 +29,21 @@ import {
   LikePostInterface,
   BookmarkPostInterface,
   UnlikePostInterface,
-} from "frontend/interfaces/postInterface";
+  PostCommentInterface,
+  PostInterface,
+} from 'frontend/interfaces/postInterface';
 import {
   addLikeForPost,
   addBookmarkForPost,
   deleteBookmarkForPost,
   postDelete,
-  unlikeForPost,
-} from "frontend/redux/actions/postActions";
+  unlikeForPost, addCommentForPost,
+} from 'frontend/redux/actions/postActions';
 import { useTheme } from "@mui/material";
-import { PowerInputSharp } from "@mui/icons-material";
+import { useNavigate } from 'react-router';
+import Comment from '../../pages/Lounge/Comment';
+import { UserDataInterface } from '../../interfaces/reduxInterfaces';
+import AddCommentForm from '../../pages/Lounge/AddCommentForm';
 
 type ViewMediaModalProps = {
   open: boolean;
@@ -47,11 +53,11 @@ type ViewMediaModalProps = {
   renderNextMedia: (mediaId: number) => void;
   renderPrevMedia: (mediaId: number) => void;
   loading: boolean;
-  userDetails?: any;
+  author: any;
   canDeletePost?: Boolean;
   getUserPostCounts?: (id: number) => void;
   onDelete?: (id: number) => void;
-  selectedMedia: any;
+  selectedMedia: PostInterface;
   isPage?: Boolean;
   onLikePost?: (post: any[], id: number) => void;
   onBookmark?: (isBookmark: Boolean, id: number) => void;
@@ -60,6 +66,7 @@ type ViewMediaModalProps = {
 
 const ViewMediaModal = (props: ViewMediaModalProps) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   // const [scrollDir] = useDetectScroll({});
   const user: any = useSelector((state: RootState) => state.user.userData);
@@ -71,6 +78,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
   const [canHeDeletePost, setCanHeDeletePost] = useState(false);
   const [alreadyBookmark, setAlreadyBookmark] = useState(false);
   const [showSendTip, setShowSendTip] = useState(true);
+  const postCreator = React.useMemo(() => props.author ?? post.user, [props.author, post]);
 
   useEffect(() => {
     setPost(props?.selectedMedia);
@@ -78,7 +86,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
   }, [props?.selectedMedia]);
 
   useEffect(() => {
-    if (props?.userDetails?.id) {
+    if (postCreator?.id) {
       if (
         post.like_post.length &&
         post?.like_post?.find((item: any) =>
@@ -93,25 +101,25 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
         setCountLike(post.like_post?.length);
         setAlreadyLike(false);
       }
-      if (post?.userId === user?.id) {
+      if (postCreator.id === user?.id) {
         setCanHeDeletePost(true);
         setShowSendTip(false);
       }
     }
-  }, [post, user, alreadyLike, countLike]);
+  }, [post, user, alreadyLike, countLike, postCreator?.id]);
 
   useEffect(() => {
-    if (props?.userDetails?.id) {
+    if (postCreator?.id) {
       if (post?.is_bookmarked) {
         setAlreadyBookmark(true);
       } else {
         setAlreadyBookmark(false);
       }
     }
-  }, [post, user, alreadyBookmark]);
+  }, [post, user, alreadyBookmark, postCreator?.id]);
 
   const handleLike = async () => {
-    if (!props?.userDetails || !props?.userDetails?.id) {
+    if (!postCreator || !postCreator?.id) {
       toast.error("Can't find User");
       return;
     }
@@ -172,7 +180,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       return;
     }
 
-    if (!props?.userDetails || !props?.userDetails?.id) {
+    if (!postCreator || !postCreator?.id) {
       toast.error("Can't find User");
       return;
     }
@@ -199,43 +207,6 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
     }
   };
 
-  // let touchendX:number, touchstartX:number ;
-  // const handleUserTouchStart = (event:any) => {
-  //     if (props.open) {
-  //       touchstartX = event.changedTouches[0].screenX;
-  //       handleGesture();
-  //     }
-  // };
-  // const handleUserTouchEnd = (event:any) => {
-  //   if (props.open) {
-  //     touchendX = event.changedTouches[0].screenX;
-  //     handleGesture();
-  //   }
-  // };
-
-  // const  handleGesture = () => {
-  //   if (touchendX < touchstartX) {
-  //     if (props?.selectedMedia) {
-  //       if (post?.id) props?.renderPrevMedia(post?.id);
-  //     }
-  //   }
-  //   if (touchendX > touchstartX) {
-  //     if (props?.selectedMedia) {
-
-  //     }
-  //   }
-  // };
-
-  // const handleScroll = () => {
-  //   console.log("scrolling");
-
-  //   if (scrollDir === "up") {
-  //     if (post?.id) props?.renderPrevMedia(post?.id);
-  //   } else {
-  //     if (post?.id) props?.renderNextMedia(post?.id);
-  //   }
-  // };
-
   return (
     <Dialog
       open={props?.open}
@@ -243,13 +214,21 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       className="view-media-modal"
-      // onTouchStart={handleUserTouchStart}
-      // onTouchEnd={handleUserTouchEnd}
-      // onScroll={handleScroll}
       fullScreen={fullScreen}
+      maxWidth={false}
     >
-      <div className="post-horizontal">
-        <DialogContent className="dialogContent">
+      <div
+        className={`post-horizontal ${toggle ? '' : 'white-content'}`}
+        style={{ width: '80vw', height: '90vh' }}
+      >
+        <DialogContent
+          style={{
+            display: 'flex',
+            height: 'inherit',
+            minHeight: 'inherit',
+            padding: 0,
+        }}
+        >
           {!props?.isFirstPost ? (
             <IconButton
               className="media-dialog-left-navigation-icon"
@@ -271,7 +250,8 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
               <ArrowRightIcon />
             </IconButton>
           ) : null}
-          {props?.loading ? (
+
+          {props.loading && (
             <Stack
               justifyContent="center"
               alignItems="center"
@@ -279,306 +259,234 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
             >
               <CircularProgress />
             </Stack>
-          ) : post?.type === "image" ? (
-            <img
-              src={post?.media}
-              alt="Not Displayed"
-              className="responsiveimg"
-              style={{ width: "100%", height: "100%", objectFit: 'contain' }}
-            />
-          ) : post?.type === "video" ? (
-            <video
-              key={post?.id}
-              style={{ width: "100%", height: "70%", minHeight: "70%" }}
-              controls
-              autoPlay
-            >
-              <source src={post?.media} id="video_here" />
-              Your browser does not support HTML5 video.
-            </video>
-          ) : (
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              height: 250,
-            }}>
-              <Typography
-                component="span"
-                className="like-comm"
-                variant="body2"
-                align="center"
-                sx={{ color: "#fff" }}
-              >
-                {post?.description}
-              </Typography>
-            </Box>
           )}
-          {!props?.isPage && (
+
+          {!props.loading && (
             <>
-              <Box
-                sx={{ padding: "16px 5px" }}
-                className="d-flex align-items-center justify-content-between"
+              <div
+                className="mediaContainer"
+                style={{
+                  maxWidth: '60%',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
               >
-                <Stack
-                  width="100%"
-                  direction="row"
-                  justifyContent="space-between"
-                >
-                  <Box sx={{ display: "flex" }}>
-                    <IconButton
-                      className="d-flex align-items-center justify-content-center"
-                      onClick={handleLike}
+                {post?.type === 'image' && (
+                  <div
+                    style={{
+                      backgroundColor: '#000',
+                      height: '-webkit-fill-available',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <img
+                      src={post?.media as string}
+                      alt="Not Displayed"
+                      className="responsiveimg"
+                      style={{
+                        width: '100%',
+                        height: 'fit-content',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </div>
+                )}
+
+                {post?.type === 'video' && (
+                  <video
+                    key={post?.id}
+                    style={{ width: "100%", height: "100%", minHeight: "100%" }}
+                    controls
+                    autoPlay
+                  >
+                    <source src={post?.media as string} id="video_here" />
+                    Your browser does not support HTML5 video.
+                  </video>
+                )}
+
+                {post?.type === 'text' && (
+                  <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%',
+                    minHeight: 500,
+                    backgroundColor: toggle
+                      ? theme.palette.grey['800']
+                      : (theme.palette.primary as any).lighter,
+                  }}>
+                    <Typography
+                      component="span"
+                      className="like-comm"
+                      variant="body2"
+                      align="center"
+                      sx={{
+                        color: toggle ? '#fff' : '#000',
+                      }}
                     >
-                      {!alreadyLike ? (
-                        <FavoriteBorderRoundedIcon />
-                      ) : (
-                        <FaHeart color="red" />
-                      )}
-                    </IconButton>
-                    {showSendTip && (
-                      <IconButton
-                        onClick={() => setOpenPopUpTip(true)}
-                        sx={{ fontSize: "12px" }}
-                      >
-                        <MonetizationOnIcon />
-                        SEND TIP
-                      </IconButton>
-                    )}
+                      {post?.content}
+                    </Typography>
                   </Box>
-                  {!alreadyBookmark ? (
-                    <IconButton
-                      className="d-flex align-items-center justify-content-center"
-                      onClick={sendBookmark}
+                )}
+              </div>
+
+              <Stack
+                className="postDetailsContainer"
+                direction="column"
+                minWidth="40%"
+                maxHeight="90vh"
+                flexGrow={1}
+              >
+                <Stack direction="row" gap="8px" margin="8px">
+                  <Avatar
+                    src={postCreator.profile_image}
+                    sx={{ width: 35, height: 35, cursor: 'pointer' }}
+                    onClick={() => navigate(`/${postCreator.custom_username}`)}
+                  />
+                  <div>
+                    <Typography
+                      variant="h5"
+                      sx={{ color: toggle ? "text.primary" : "#161C24" }}
                     >
-                      <BookmarkBorderIcon />
-                    </IconButton>
-                  ) : (
-                    <IconButton
-                      className="d-flex align-items-center justify-content-center"
-                      onClick={deleteBookmark}
+                      {postCreator.display_name}
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{ color: 'text.secondary', cursor: 'pointer' }}
+                      onClick={() => navigate(`/${postCreator.custom_username}`)}
                     >
-                      <BookmarkIcon />
-                    </IconButton>
-                  )}
+                      @{postCreator.custom_username}
+                    </Typography>
+                  </div>
                 </Stack>
-                {props?.canDeletePost && canHeDeletePost ? (
-                  <IconButton onClick={deletePost}>
-                    <MdDelete />
-                  </IconButton>
-                ) : null}
-              </Box>
-              <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
-                <p className="like-comm">{countLike} Likes</p>
-              </Box>
-              <Box sx={{ px: 2 }}>
-                <Typography
-                  component="span"
-                  className="like-comm"
-                  variant="body2"
-                  sx={{ color: toggle ? "#fff" : "#000" }}
+
+                <Divider />
+
+                <Box
+                  flexGrow={1}
+                  flexShrink={1}
+                  sx={{ overflowY: 'auto', minHeight: '325px', padding: '8px' }}
                 >
-                  {post.type !== "text" && post?.description}
-                </Typography>
-              </Box>
-              <TipPopUp
-                user={post?.user}
-                onClose={handleCloseTip}
-                setOpenPopUpTip={setOpenPopUpTip}
-                onOpen={handleClickOpen}
-                openPopUpTip={openPopUpTip}
-              />
+                  {post.content && post.type !== 'text' && (
+                    <Comment
+                      text={post.content}
+                      createdAt={post.created_at}
+                      author={postCreator}
+                      hideActions
+                    />
+                  )}
+                  {post.post_comment?.length > 0 && [...post.post_comment]
+                    .reverse()
+                    .map((item: PostCommentInterface, i: number) => (
+                      <Comment
+                        key={`comments_${item?.created_at}_${i}`}
+                        text={item.comment}
+                        author={item.user as UserDataInterface}
+                        createdAt={item.created_at}
+                      />
+                    ))
+                  }
+                  {(!post.content || post.type === 'text') && !post.post_comment?.length && (
+                    <Typography variant="h5" sx={{ color: 'text.secondary' }}>
+                      Not commented yet
+                    </Typography>
+                  )}
+                </Box>
+
+                <Divider />
+
+                <Box>
+                  {!props?.isPage && (
+                    <>
+                      <Box
+                        className="d-flex align-items-center justify-content-between"
+                      >
+                        <Stack
+                          width="100%"
+                          direction="row"
+                          justifyContent="space-between"
+                        >
+                          <Box sx={{ display: "flex" }}>
+                            <IconButton
+                              className="d-flex align-items-center justify-content-center"
+                              onClick={handleLike}
+                            >
+                              {!alreadyLike ? (
+                                <FavoriteBorderRoundedIcon />
+                              ) : (
+                                <FaHeart color="red" />
+                              )}
+                            </IconButton>
+                            {showSendTip && (
+                              <IconButton
+                                onClick={() => setOpenPopUpTip(true)}
+                                sx={{ fontSize: "12px" }}
+                              >
+                                <MonetizationOnIcon />
+                                SEND TIP
+                              </IconButton>
+                            )}
+                          </Box>
+                          {!alreadyBookmark ? (
+                            <IconButton
+                              className="d-flex align-items-center justify-content-center"
+                              onClick={sendBookmark}
+                            >
+                              <BookmarkBorderIcon />
+                            </IconButton>
+                          ) : (
+                            <IconButton
+                              className="d-flex align-items-center justify-content-center"
+                              onClick={deleteBookmark}
+                            >
+                              <BookmarkIcon />
+                            </IconButton>
+                          )}
+                        </Stack>
+                        {props?.canDeletePost && canHeDeletePost ? (
+                          <IconButton onClick={deletePost}>
+                            <MdDelete />
+                          </IconButton>
+                        ) : null}
+                      </Box>
+                      <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
+                        <p className="like-comm">{countLike} Likes</p>
+                      </Box>
+
+                      <Divider />
+
+                      <Box paddingY="8px">
+                        <AddCommentForm
+                          postId={post.id}
+                          emojiPickerPlacement="top"
+                          onAfterSaveComment={({ comment }) => {
+                            setPost((prevState) => ({
+                              ...prevState,
+                              post_comment: [
+                                ...(prevState.post_comment || []),
+                                { ...comment, user },
+                              ],
+                            }));
+                          }}
+                        />
+                      </Box>
+                      <TipPopUp
+                        user={post?.user}
+                        onClose={handleCloseTip}
+                        setOpenPopUpTip={setOpenPopUpTip}
+                        onOpen={handleClickOpen}
+                        openPopUpTip={openPopUpTip}
+                      />
+                    </>
+                  )}
+                </Box>
+              </Stack>
             </>
           )}
         </DialogContent>
       </div>
-
-      {/* <div className="post-vertical">
-        <div style={{height:"1%"}}>
-          <Box sx={{
-            position:"fixed" ,
-            padding:"3%" ,
-            background: toggle ? "#212B36" :"white" ,
-            width:"100%" ,
-            zIndex:"10",
-            color:toggle? "white": "black" ,
-            display:"flex",
-            alignItems:"center"
-          }}><ArrowBackIcon onClick={()=>props?.handleClose()}/><Typography mx={1} sx={{fontWeight:"bold"}}>Posts</Typography></Box>
-        </div>
-        <DialogContent className="dialogContent" sx={{background: toggle ? "#212B36" :"white"}}>
-          {props?.dataList.map((post: any) => {
-
-            return (
-              <>
-              <Box
-                key={post.id}
-                style={{
-                  border: `1px solid ${theme.palette.grey[400]}`,
-                  borderRadius: "10px",
-                  marginBottom: "30px",
-                }}
-              >
-                <List>
-                  <ListItem>
-                    <ListItemAvatar
-                      style={{ cursor: "pointer" }}
-                      onClick={() => navigate(`/${post.user.custom_username}`, { replace: true })}
-                    >
-                      <Avatar src={post.user.profile_image} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Typography
-                          style={{ cursor: "pointer" }}
-                          variant="subtitle1"
-                          sx={{ color: toggle ? "text.primary" : "#161C24" }}
-                        >
-                          {post?.user?.display_name}
-                        </Typography>
-                      }
-                      secondary={
-                        <Typography
-                          component="span"
-                          variant="caption"
-                          sx={{ color: "text.secondary" }}
-                        >
-                          @{post.user.custom_username}
-                        </Typography>
-                      }
-                    />
-                    <Stack
-                      direction="column"
-                      alignItems="flex-end"
-                      justifyContent="center"
-                      gap={1}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        sx={{ color: "text.secondary" }}
-                      >
-                        {moment(post?.createdAt).fromNow()}
-                      </Typography>
-
-                      <IconButton>
-                        <MoreHoriz />
-                      </IconButton>
-                    </Stack>
-                  </ListItem>
-                </List>
-                {post.type === 'image' ? (
-                  <Box sx={{ textAlign: "center" }}>
-                    <img
-                      src={post?.media}
-                      alt="post"
-                      style={{ borderRadius: "18px", width: "100%" }}
-                    />
-                  </Box>
-                ):
-
-                  <Box sx={{ textAlign: "center" }}>
-                    <video width="100%" controls>
-                      <source src={post?.media} id="video_here" />
-                      Your browser does not support HTML5 video.
-                    </video>
-                  </Box>
-                  }
-
-                {post.type !== "text" && (
-                  <Box sx={{ px: 2 }}>
-                    <Typography
-                      component="span"
-                      className="like-comm"
-                      variant="body2"
-                      sx={{ color: toggle ? "#fff" : "#000" }}
-                    >
-                      {post?.description}
-                    </Typography>
-                  </Box>
-                )}
-                <Box
-                  sx={{ p: 2 }}
-                  className="d-flex align-items-center justify-content-between"
-                >
-                  <Stack width="100%" direction="row" justifyContent="space-between">
-                    <Box sx={{ display: "flex" }}>
-                      <IconButton
-                        className="d-flex align-items-center justify-content-center"
-                        onClick={handleLike}
-                      >
-                        { !alreadyLike ? (
-                          <FavoriteBorderRoundedIcon />
-                        ) : (
-                          <FaHeart color="red" />
-                        )}
-                      </IconButton>
-                      <IconButton
-                        onClick={() => setOpenPopUpTip(true)}
-                        sx={{ fontSize: "12px" }}
-                      >
-                        <MonetizationOnIcon />
-                        SEND TIP
-                      </IconButton>
-                    </Box>
-                    {!alreadyBookmark ? (
-                      <IconButton
-                        className="d-flex align-items-center justify-content-center"
-                        onClick={sendBookmark}
-                      >
-                        <BookmarkBorderIcon />
-                      </IconButton>
-                    ) : (
-                      <IconButton
-                        className="d-flex align-items-center justify-content-center"
-                        onClick={deleteBookmark}
-                      >
-                        <BookmarkIcon />
-                      </IconButton>
-                    )}
-                  </Stack>
-                  {props?.canDeletePost && canHeDeletePost  ? (
-                    <IconButton onClick={deletePost}>
-                      <MdDelete />
-                    </IconButton>
-                  ) : null}
-                </Box>
-                <Box sx={{ px: 2, color: toggle ? "#fff" : "#000" }}>
-                  <p className="like-comm">
-                    {/* {post?.like_post?.length ?? "0"} */}
-      {/* {+post?.like_post?.length -
-                      (+post?.unlike_post?.length ? post?.unlike_post?.length : 0) ??
-                      post?.like_post?.length}{" "}
-                    Likes
-                  </p>
-                </Box>
-                {post.type !== "text" && (
-                  <Box sx={{ px: 2 }}>
-                    <Typography
-                      component="span"
-                      className="like-comm"
-                      variant="body2"
-                      sx={{ color: toggle ? "#fff" : "#000" }}
-                    >
-                      {post?.description}
-                    </Typography>
-                  </Box>
-                )}
-              </Box>
-
-              <TipPopUp
-                user={post.user}
-                onClose={handleCloseTip}
-                setOpenPopUpTip={setOpenPopUpTip}
-                onOpen={handleClickOpen}
-                openPopUpTip={openPopUpTip}
-              />
-            </>
-            );
-          })} */}
-      {/* </DialogContent> */}
-      {/* </div> */}
     </Dialog>
   );
 };

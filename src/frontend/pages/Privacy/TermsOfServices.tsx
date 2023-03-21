@@ -59,7 +59,7 @@ const TermsOfServices = () => {
             </li>
             <li className="terms_page_listitem">
               <a href={`#registration-with-dint`} className={"header__link"}>
-                Registration with dint
+                Registration with <span className="notranslate">dint</span>
               </a>
             </li>
             <li className="terms_page_listitem">
@@ -92,7 +92,7 @@ const TermsOfServices = () => {
             </li>
             <li className="terms_page_listitem">
               <a href={`#linking-to-and-from-dint`} className={"header__link"}>
-                Linking to and from dint
+                Linking to and from <span className="notranslate">dint</span>
               </a>
             </li>
             <li className="terms_page_listitem">
@@ -125,12 +125,12 @@ const TermsOfServices = () => {
             </li>
             <li className="terms_page_listitem">
               <a href={`#dint-wallet`} className={"header__link"}>
-                Dint Wallet
+                <span className="notranslate">Dint</span> Wallet
               </a>
             </li>
             <li className="terms_page_listitem">
               <a href={`#dint-token`} className={"header__link"}>
-                Dint Token
+                <span className="notranslate">Dint</span> Token
               </a>
             </li>
           </ol>
@@ -157,7 +157,7 @@ const TermsOfServices = () => {
               id="introduction"
             />
             1. <b>Introduction:</b> <br />
-            These Terms of Use for all Users govern your use of Dint and your
+            These Terms of Use for all Users govern your use of <span className="notranslate">Dint</span> and your
             agreement with us.
             <br />
             <br />
@@ -175,22 +175,22 @@ const TermsOfServices = () => {
             2. <b id="interpretation">Interpretation:</b> <br />
             In the Terms of Service:
             <br />
-            a. we refer to our website as <b>"Dint"</b>, including when accessed
+            a. we refer to our website as <b className="notranslate">"Dint"</b>, including when accessed
             via the URL www.dint.com;
             <br />
-            b. references to <b>"we", "our", "us"</b> are references to Dint,
-            the operator of Dint;
+            b. references to <b>"we", "our", "us"</b> are references to <span className="notranslate">Dint</span>,
+            the operator of <span className="notranslate">Dint</span>;
             <br />
-            c. <b>"Content"</b> means any material uploaded to Dint by any User,
+            c. <b>"Content"</b> means any material uploaded to <span className="notranslate">Dint</span> by any User,
             including any photos, videos, audio (for example music and other
             sounds), livestream material, data, text (such as comments and
             hashtags), metadata, images, interactive features, emojis, GIFs,
             memes, and any other material whatsoever;
             <br />
-            d. <b>"User"</b> means a User who has set up their Dint account to
-            post Content on Dint to be viewed by other other Users;
+            d. <b>"User"</b> means a User who has set up their <span className="notranslate">Dint</span> account to
+            post Content on <span className="notranslate">Dint</span> to be viewed by other other Users;
             <br />
-            e. <b>"Referring User"</b> means a User who participates in the Dint
+            e. <b>"Referring User"</b> means a User who participates in the <span className="notranslate">Dint</span>
             Referral Program;
             <br />
             f. <b>"Subscription"</b> means a User's subscription to a User's
@@ -212,9 +212,9 @@ const TermsOfServices = () => {
             />
             3. <b id="how-to-contact-us">Who we are and how to contact us:</b>{" "}
             <br />
-            Dint.com is operated by Dint.
+            Dint.com is operated by <span className="notranslate">Dint</span>.
             <br />
-            To contact us with any questions about Dint, please email our
+            To contact us with any questions about <span className="notranslate">Dint</span>, please email our
             support team at support@dint.com.
             <br />
             <br />
@@ -236,21 +236,21 @@ const TermsOfServices = () => {
             circumstances:
             <br />
             a. to reflect changes in laws and regulatory requirements which
-            apply to Dint and the services, features and programs of Dint where
-            such changes require Dint to change its terms and conditions in a
+            apply to <span className="notranslate">Dint</span> and the services, features and programs of Dint where
+            such changes require <span className="notranslate">Dint</span> to change its terms and conditions in a
             manner which does not allow us to give reasonable notice to you; and
             <br />
             b. to address an unforeseen and imminent danger related to defending
-            Dint or Users from fraud, malware, spam, data breaches or other
+            <span className="notranslate">Dint</span> or Users from fraud, malware, spam, data breaches or other
             cybersecurity risks.
             <br />
             <br />
             We may also make other changes to any part of the Terms of Service,
             and we will give you reasonable notice of such changes by email or
-            through Dint, and you may contact us to end your agreement with us
+            through <span className="notranslate">Dint</span>, and you may contact us to end your agreement with us
             before the changes take effect. Once any updated Terms of Service
             are in effect, you will be bound by them if you continue to use
-            Dint.
+            <span className="notranslate">Dint</span>.
             <br />
             <br />
           </div>
@@ -264,15 +264,15 @@ const TermsOfServices = () => {
               }}
               id="how-we-withdraw-dints"
             />
-            5. <b>We may make changes to or suspend or withdraw Dint:</b> <br />
-            We may update and change Dint from time to time for any reason,
+            5. <b>We may make changes to or suspend or withdraw <span className="notranslate">Dint</span>:</b> <br />
+            We may update and change <span className="notranslate">Dint</span> from time to time for any reason,
             including to reflect changes to our services, Users' needs and our
             business practices or to improve performance, enhance functionality
             or address security issues. We will try to give you reasonable
-            notice of any major changes. We do not guarantee that Dint, or any
+            notice of any major changes. We do not guarantee that <span className="notranslate">Dint</span>, or any
             Content on it, will always be available or accessible without
             interruption. We may suspend or withdraw or restrict the
-            availability of all or any part of Dint for business or operational
+            availability of all or any part of <span className="notranslate">Dint</span> for business or operational
             reasons. We will try to give you reasonable notice of any suspension
             or withdrawal if it affects you.
             <br />
@@ -288,13 +288,13 @@ const TermsOfServices = () => {
               }}
               id="registration-with-dint"
             />
-            6. <b>Registering with Dint:</b> <br />
-            To use Dint you must have a referral code in order to register and
-            create a User account on Dint. You must provide a valid email
+            6. <b>Registering with <span className="notranslate">Dint</span>:</b> <br />
+            To use <span className="notranslate">Dint</span> you must have a referral code in order to register and
+            create a User account on <span className="notranslate">Dint</span>. You must provide a valid email
             address, a username, and a password or authenticate using a valid
             Twitter or Google account. Your password should be unique (meaning
             that it is different to those you use for other websites) and must
-            comply with the technical requirements of the Dint site for the
+            comply with the technical requirements of the <span className="notranslate">Dint</span> site for the
             composition of passwords. To register as a User:
             <br />
             a. you must be at least 18 years old, and you will be required to
@@ -307,7 +307,7 @@ const TermsOfServices = () => {
             the country or State/province where you live; and
             <br />
             c. you must be permitted by the laws of the country or
-            State/province where you are located to join Dint and to view any
+            State/province where you are located to join <span className="notranslate">Dint</span> and to view any
             Content available on it and to use any functionality provided by it.
             <br />
             d. you must provide such other information or verification records
@@ -315,7 +315,7 @@ const TermsOfServices = () => {
             <br />
             <br />
             If you do not meet the above requirements, you must not access or
-            use Dint.
+            use <span className="notranslate">Dint</span>.
             <br />
             <br />
           </div>
@@ -330,10 +330,10 @@ const TermsOfServices = () => {
               id="your-commitments"
             />
             7. <b>Your commitments to us:</b> <br />
-            When you register with and use Dint, you make the following
+            When you register with and use <span className="notranslate">Dint</span>, you make the following
             commitments to us:
             <br />
-            a. If you previously had an account with Dint, you confirm that your
+            a. If you previously had an account with <span className="notranslate">Dint</span>, you confirm that your
             old account was not terminated or suspended by us because you
             violated any of our terms or policies.
             <br />
@@ -344,7 +344,7 @@ const TermsOfServices = () => {
             submitted to us as and when it changes.
             <br />
             d. You consent to receiving communications from us electronically,
-            including by emails and messages posted to your Dint account, and to
+            including by emails and messages posted to your <span className="notranslate">Dint</span> account, and to
             the processing of your personal data as more fully detailed in our
             Privacy Policy.
             <br />
@@ -385,7 +385,7 @@ const TermsOfServices = () => {
             applicable law.
             <br />
             b. It is our policy to suspend access to any Content you post on
-            Dint which we become aware may not comply with the Terms of Service
+            <span className="notranslate">Dint</span> which we become aware may not comply with the Terms of Service
             and/or any applicable law whilst we investigate the suspected
             non-compliance or unlawfulness of such Content. If we suspend access
             to any of your Content, you may request a review of our decision to
@@ -404,7 +404,7 @@ const TermsOfServices = () => {
             non-compliance or unlawfulness of your Content under this section.
             <br />
             c. If we suspend access to or delete any of your Content, we will
-            notify you via email or electronic message to your Dint account, but
+            notify you via email or electronic message to your <span className="notranslate">Dint</span> account, but
             we are not obligated to give you prior notice of such removal or
             suspension.
             <br />
@@ -425,53 +425,53 @@ const TermsOfServices = () => {
               What we are not responsible for:
             </b>{" "}
             <br />
-            We will use reasonable care and skill in providing Dint to you, but
+            We will use reasonable care and skill in providing <span className="notranslate">Dint</span> to you, but
             there are certain things which we are not responsible for, as
             follows:
             <br />
-            a. We do not authorize or approve Content on Dint, and views
-            expressed by Users on Dint do not necessarily represent our views.
+            a. We do not authorize or approve Content on <span className="notranslate">Dint</span>, and views
+            expressed by Users on <span className="notranslate">Dint</span> do not necessarily represent our views.
             b. We do not grant you any rights in relation to Content. Any such
             rights may only be granted to you by Users. c. Your Content may be
             viewed by individuals that recognise your identity. We will not in
             any way be responsible to you if you are identified from your
             Content. While we may, from time to time and in our sole discretion,
-            offer certain geofencing or geolocation technology on Dint, you
+            offer certain geofencing or geolocation technology on <span className="notranslate">Dint</span>, you
             understand and agree that we do not guarantee the accuracy or
             effectiveness of such technology, and you will have no claim against
             us arising from your use of or reliance upon any geofencing or
-            geolocation technology on Dint.
+            geolocation technology on <span className="notranslate">Dint</span>.
             <br />
             d. All Content is created, selected, and provided by Users and not
             by us. We are not responsible for reviewing or moderating Content,
             and we do not select or modify the Content that is stored or
-            transmitted via Dint. We are under no obligation to monitor Content
+            transmitted via <span className="notranslate">Dint</span>. We are under no obligation to monitor Content
             or to detect breaches of the Terms of Service.
             <br />
             e. You agree that you have no obligation to follow any suggestions,
             comments, reviews, or instructions received from another User of
-            Dint and that if you choose to do so, you do so entirely at your own
+            <span className="notranslate">Dint</span> and that if you choose to do so, you do so entirely at your own
             risk.
             <br />
             f. We make no promises or guarantees of any kind that Users or
             Referring Users will make a particular sum of money (or any money)
-            from their use of Dint (including the Dint Referral Program).
+            from their use of <span className="notranslate">Dint</span> (including the <span className="notranslate">Dint</span> Referral Program).
             <br />
-            g. The materials which we make accessible on Dint for Users are for
+            g. The materials which we make accessible on <span className="notranslate">Dint</span> for Users are for
             general information only. We make no promises or guarantees about
             the accuracy or otherwise of such materials, or that Users will
             achieve any particular result or outcome from using such materials.
             <br />
-            h. We do not promise that Dint is compatible with all devices and
+            h. We do not promise that <span className="notranslate">Dint</span> is compatible with all devices and
             operating systems. You are responsible for configuring your
             information technology, device, and computer programs to access
-            Dint. You should use your own virus protection software.
+            <span className="notranslate">Dint</span>. You should use your own virus protection software.
             <br />
             i. We are not responsible for the availability of the internet, or
             any errors in your connections, device or other equipment, or
-            software that may occur in relation to your use of Dint.
+            software that may occur in relation to your use of <span className="notranslate">Dint</span>.
             <br />
-            j. While we try to make sure that Dint is secure and free from bugs
+            j. While we try to make sure that <span className="notranslate">Dint</span> is secure and free from bugs
             and viruses, we cannot promise that it will be and have no control
             over the Content that is supplied by Users.
             <br />
@@ -480,7 +480,7 @@ const TermsOfServices = () => {
             activities or resulting unauthorized payments or withdrawals of
             funds.
             <br />
-            L. You acknowledge that once your Content is posted on Dint, we
+            L. You acknowledge that once your Content is posted on <span className="notranslate">Dint</span>, we
             cannot control and will not be responsible to you for the use which
             other Users or third parties make of such Content. You can delete
             your account at any time, but you acknowledge that deleting your
@@ -509,13 +509,13 @@ const TermsOfServices = () => {
             are required to grant licenses in respect of your Content to us and
             to other Users. This includes any rights required to engage in the
             acts covered by sub-section 10(b) below in any territory in which
-            Dint is accessible and, in particular, in the United States of
+            <span className="notranslate">Dint</span> is accessible and, in particular, in the United States of
             America, the United Kingdom and the European Union.
             <br />
             b. You agree to grant us a license under all your Content to perform
             any act restricted by any intellectual property right (including
             copyright) in such Content, for any purpose reasonably related to
-            the provision and operation of Dint. Such acts include to reproduce,
+            the provision and operation of <span className="notranslate">Dint</span>. Such acts include to reproduce,
             make available and communicate to the public, display, perform,
             distribute, translate, and create adaptations or derivative works of
             your Content, and otherwise deal in your Content.
@@ -524,12 +524,12 @@ const TermsOfServices = () => {
             is perpetual, non-exclusive, worldwide, royalty-free, sublicensable,
             assignable and transferable by us. This means that the license will
             continue even after your agreement with us ends and you stop using
-            Dint, that we do not have to pay you for the license, and that we
+            <span className="notranslate">Dint</span>, that we do not have to pay you for the license, and that we
             can grant a sub-license of your Content to someone else or assign or
             transfer the license to someone else. This license will allow us,
             for example, to add stickers, text, and watermarks to your Content,
-            to make your Content available to other Users of Dint, as well as to
-            use your Content for other normal operations of Dint. We will never
+            to make your Content available to other Users of <span className="notranslate">Dint</span>, as well as to
+            use your Content for other normal operations of <span className="notranslate">Dint</span>. We will never
             sell your Content to other platforms, though we may sell or transfer
             any license you grant to us in the Terms of Service in the event of
             a sale of our company or its assets to a third party.
@@ -548,7 +548,7 @@ const TermsOfServices = () => {
             your behalf. <br />
             e. You waive any moral rights which you may have under any
             applicable law to object to derogatory treatment of any Content
-            posted by you on Dint. This waiver does not affect in any way your
+            posted by you on <span className="notranslate">Dint</span>. This waiver does not affect in any way your
             ownership of any intellectual property rights in your Content or the
             rights which you have to prevent your Content from being copied
             without your permission. The waiver is intended to allow us when
@@ -570,7 +570,7 @@ const TermsOfServices = () => {
             />
             11. <b>Twitter:</b> <br />
             Users have the facility to connect an active Twitter account to
-            their Dint account and to share certain Content in the form of Dint
+            their <span className="notranslate">Dint</span> account and to share certain Content in the form of <span className="notranslate">Dint</span>
             posts to Twitter using the share feature. If you use this feature,
             you must fully comply with Twitter's terms of service from time to
             time in respect of any Content shared in this way. 
@@ -587,52 +587,52 @@ const TermsOfServices = () => {
               }}
               id="linking-to-and-from-dint"
             />
-            12. <b>Linking to and from Dint:</b>
+            12. <b>Linking to and from <span className="notranslate">Dint</span>:</b>
             <br />
-            a. Links to Dint:
+            a. Links to <span className="notranslate">Dint</span>:
             <br />
-            &#8226; You may link to the Dint homepage, provided you do so in a
+            &#8226; You may link to the <span className="notranslate">Dint</span> homepage, provided you do so in a
             way that is fair and legal and does not damage our reputation or
             take advantage of it, but you must not establish a link in such a
             way as to suggest any form of association, approval, or endorsement
             on our part. &#8226; When promoting your Content you must comply
             with our Terms of Service and the terms of service of any other
             website where you place a link to or otherwise promote your User
-            account. When promoting your content, you must not impersonate Dint
+            account. When promoting your content, you must not impersonate <span className="notranslate">Dint</span>
             or give the impression that your User account is being promoted by
-            us if this is not the case. You must not promote your Dint account
+            us if this is not the case. You must not promote your <span className="notranslate">Dint</span> account
             by using Google Ads or any similar advertising platform or search
             engine advertising service.
             <br />
-            b. Links from Dint: <br />
-            &#8226; If Dint contains links to other sites and resources provided
+            b. Links from <span className="notranslate">Dint</span>: <br />
+            &#8226; If <span className="notranslate">Dint</span> contains links to other sites and resources provided
             by third parties, these links are provided for your convenience
             only. Such links should not be interpreted as approval by us of
             those linked websites or information you may obtain from them. We
             have no control over the contents of those sites or resources and
             accept no responsibility for them or for any loss or damage that may
             arise from your use of them. If you decide to access any of the
-            third-party websites linked to Dint, you do so entirely at your own
+            third-party websites linked to <span className="notranslate">Dint</span>, you do so entirely at your own
             risk and subject to the terms and conditions of use for such
-            websites. Domain Names: In some instances, Dint may allow Users to
-            register or use domain names that contain the Dint trademark or a
+            websites. Domain Names: In some instances, <span className="notranslate">Dint</span> may allow Users to
+            register or use domain names that contain the <span className="notranslate">Dint</span> trademark or a
             confusingly similar term. However, you will not register such a
             domain name, unless:
             <br />
             <br />
             &#8226; The domain name is registered by the User. &#8226; The
-            domain name redirects to the Users’s Dint profile or page. Domain
-            names containing the Dint trademark or a confusingly similar term
+            domain name redirects to the Users’s <span className="notranslate">Dint</span> profile or page. Domain
+            names containing the <span className="notranslate">Dint</span> trademark or a confusingly similar term
             must not direct to any other website, including link aggregators.
             &#8226; The User obtains prior written permission from Dint and
             signs a licensing agreement.
             <br />
             <br />
-            If you would like to register a domain name containing the Dint
+            If you would like to register a domain name containing the <span className="notranslate">Dint</span>
             trademark or a confusingly similar term, please contact
             support@dint.com. Failing to comply with these provisions or the
             licensing agreement will be considered a violation of the licensing
-            agreement and may result in Dint filing a domain dispute against the
+            agreement and may result in <span className="notranslate">Dint</span> filing a domain dispute against the
             registrant.
             <br />
             <br />
@@ -648,20 +648,20 @@ const TermsOfServices = () => {
               id="how-to-delete-account"
             />
             13. <b>How do I delete my account?</b> <br />
-            If you want to delete your Dint account then you may do so in the
-            'User Account' section of your Dint account.
+            If you want to delete your <span className="notranslate">Dint</span> account then you may do so in the
+            'User Account' section of your <span className="notranslate">Dint</span> account.
             <br />
             a. The deletion of your account will take place within a reasonable
             time following your request. <br />
             b. Once your account has been deleted you won't be charged any
-            further amounts or have access to your former Dint account or its
+            further amounts or have access to your former <span className="notranslate">Dint</span> account or its
             Content, and any subscriptions will be deleted and cannot be
             subsequently renewed. You will receive an email confirmation upon
             the successful deletion of your account. Once your account has been
             deleted, we may deal with your Content in any appropriate manner in
             accordance with our Privacy Policy (including by deleting it) and
             you will no longer be entitled to access your Content. There is no
-            technical facility on Dint for you to be able to access your Content
+            technical facility on <span className="notranslate">Dint</span> for you to be able to access your Content
             following termination of your account.
             <br />
             <br />
@@ -693,7 +693,7 @@ const TermsOfServices = () => {
             and agents will not be liable to you for any loss of profit, loss of
             business or revenue, business interruption, loss of business
             opportunity, or loss of anticipated savings suffered by you arising
-            from or in connection with your use of Dint.
+            from or in connection with your use of <span className="notranslate">Dint</span>.
             <br />
             <br />
           </div>
@@ -735,9 +735,9 @@ const TermsOfServices = () => {
             b. If you have chosen the Stripe Payout Option, Stripe will collect
             the User Payment and pay the User Earnings to your bank account.
             <br />
-            c. To make a withdrawal of User Earnings from your Dint Wallet, you
-            must have at least the minimum balance amount in your Dint Wallet.
-            Please click on withdrawal on your Dint Wallet page to see what the
+            c. To make a withdrawal of User Earnings from your <span className="notranslate">Dint</span> Wallet, you
+            must have at least the minimum balance amount in your <span className="notranslate">Dint</span> Wallet.
+            Please click on withdrawal on your <span className="notranslate">Dint</span> Wallet page to see what the
             minimum payout amount is and Payout Option. <br />
             d. Users can click the withdrawal button on their wallet to
             automatically sell the tokens and have the funds deposited directly
@@ -756,22 +756,22 @@ const TermsOfServices = () => {
               id="referral-payments"
             />
             17. <b>Referral payments:</b> <br />
-            a. How are referral payments calculated? The Dint Referral Program
-            is a referral program offered by Dint, allowing existing users to
+            a. How are referral payments calculated? The <span className="notranslate">Dint</span> Referral Program
+            is a referral program offered by <span className="notranslate">Dint</span>, allowing existing users to
             earn referral payments by introducing new users to the platform.
-            Only active users with a User account on Dint are eligible to
+            Only active users with a User account on <span className="notranslate">Dint</span> are eligible to
             participate in the program. The user must have a bank account or
             payment method linked to their account in order to receive referral
             payments. The user has a unique referral link that can be shared
             with others. The referred user must register via the referral link
-            and not have previously been a user of Dint. Referral payments are
+            and not have previously been a user of <span className="notranslate">Dint</span>. Referral payments are
             calculated at 8% divided into 4 tiers, with a cap of $500,000 or ten
             years, whichever comes first, per referred user. Payments are
-            transferred to the referring user's Dint Wallet immediately.
+            transferred to the referring user's <span className="notranslate">Dint</span> Wallet immediately.
             <br />
             b. Choosing a payout method to receive referral payments: In order
             to be able to receive referral payments you must first choose one of
-            the payout methods provided by Dint in your country of residence.
+            the payout methods provided by <span className="notranslate">Dint</span> in your country of residence.
             These methods are called "Payout Options".
             <br />
             c. Who bears the cost of the referral payment? The cost of the
@@ -788,22 +788,22 @@ const TermsOfServices = () => {
               }}
               id="dint-wallet"
             />
-            18. <b>Dint Wallet:</b>
+            18. <b><span className="notranslate">Dint</span> Wallet:</b>
             <br />
-            Dint provides every User with their own crypto wallet to store and manage their tokens.
+            <span className="notranslate">Dint</span> provides every User with their own crypto wallet to store and manage their tokens.
             <br />   <br />
 <b>Ownership and Control</b>   <br />
-You own and control digital assets in your account. As the sole owner, you bear all risk of loss of these assets. Dint will not be held liable for any fluctuations or loss associated with your use of the app. You may withdraw your digital assets at any time, subject to outages, downtime, and other policies, by sending them to a different blockchain address.
+You own and control digital assets in your account. As the sole owner, you bear all risk of loss of these assets. <span className="notranslate">Dint</span> will not be held liable for any fluctuations or loss associated with your use of the app. You may withdraw your digital assets at any time, subject to outages, downtime, and other policies, by sending them to a different blockchain address.
 <br />   <br />
 <b>Warranty Disclaimer </b>  <br />
-You acknowledge and agree that the use of the services (including any private key storage service offered as part of the services, whether cloud or hardware-based) and content is at your own risk and that the entire risk of quality, performance, accuracy and effort lies with you. The app, site, and services are provided "as is" and "as available" without any representation or warranty, whether express, implied, or statutory. To the maximum extent permitted by law, Dint specifically disclaims any express or implied warranties of title, merchantability, fitness for a particular purpose, and/or non-infringement. Dint makes no representations or warranties that access to the services or any of the materials contained within will be continuous, uninterrupted, timely, or error-free. Service interruptions may cause you to be signed out of your account and require you to re-enter your recovery phrase to regain access.
+You acknowledge and agree that the use of the services (including any private key storage service offered as part of the services, whether cloud or hardware-based) and content is at your own risk and that the entire risk of quality, performance, accuracy and effort lies with you. The app, site, and services are provided "as is" and "as available" without any representation or warranty, whether express, implied, or statutory. To the maximum extent permitted by law, <span className="notranslate">Dint</span> specifically disclaims any express or implied warranties of title, merchantability, fitness for a particular purpose, and/or non-infringement. <span className="notranslate">Dint</span> makes no representations or warranties that access to the services or any of the materials contained within will be continuous, uninterrupted, timely, or error-free. Service interruptions may cause you to be signed out of your account and require you to re-enter your recovery phrase to regain access.
 <br />   <br />
 Use of any private key storage service included as part of the services is offered to you as a convenience, subject to the limitations above. You are solely responsible for storing and securing your private key and recovery phrase for the app. Dint does not store a backup of, or have the ability to recover, your private key or recovery phrase. If you lose your recovery phrase, you will lose access to all assets stored in your wallet. You should always backup your private access key via secondary means.
 
             <br />
             <br />
-            19. <b id="dint-token">Dint Token:</b> <br />
-            The Dint Token is a digital asset with a total supply of 11 billion, issued on the Polygon network. Users can purchase the tokens for $1 each through the Dint app, which is required for using the tokens for purposes such as sending tips and paying for subscriptions. Users can also sell their tokens for $1 each on the Dint app. The issuer of the Dint Token, Dint, offers no representations or warranties, and users bear all associated risks. Users are responsible for securely storing their tokens, and Dint cannot recover any lost tokens. Dint reserves the right to make changes to these terms and conditions at any time and will notify users of any changes.
+            19. <b id="dint-token"><span className="notranslate">Dint</span> Token:</b> <br />
+            The <span className="notranslate">Dint</span> Token is a digital asset with a total supply of 11 billion, issued on the Polygon network. Users can purchase the tokens for $1 each through the <span className="notranslate">Dint</span> app, which is required for using the tokens for purposes such as sending tips and paying for subscriptions. Users can also sell their tokens for $1 each on the <span className="notranslate">Dint</span> app. The issuer of the <span className="notranslate">Dint</span> Token, <span className="notranslate">Dint</span>, offers no representations or warranties, and users bear all associated risks. Users are responsible for securely storing their tokens, and <span className="notranslate">Dint</span> cannot recover any lost tokens. <span className="notranslate">Dint</span> reserves the right to make changes to these terms and conditions at any time and will notify users of any changes.
           </div>
         </p>
       </main>

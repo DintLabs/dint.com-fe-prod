@@ -31,7 +31,7 @@ const MainFooter = () => {
           <div className="footer">
             <section>
               <h4 className="footer_link_title notranslate" style={{ marginBottom: '30px' }}>
-                <img src={mainlogo} id="footer_logo" alt="footer_logo" /> Dint{' '}
+                <img src={mainlogo} id="footer_logo" alt="footer_logo" /> <span className="notranslate">Dint</span>{' '}
               </h4>
               <p id="company_desc_footer">
                 Revolutionizing The World of Entertainment Through NFTs and Membership Tokens

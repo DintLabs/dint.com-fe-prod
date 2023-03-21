@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone'
 import { useNavigate } from 'react-router'
 import { postTypes } from 'frontend/data'
 import { toast } from 'react-toastify'
+import isEmpty from 'lodash/isEmpty';
 
 import MultimediaIcon from '../../assets/img/icons/picture.png'
 import { Box, Button, Divider, Input, Stack, useMediaQuery, useTheme } from '@mui/material'
@@ -76,9 +77,9 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
         }
       }
 
-      if (content && !file) {
+      if (content && isEmpty(file) && createPost) {
         try {
-          const result = createPost && await createPost(toastId, {
+          await createPost(toastId, {
             type: postTypes.text.value,
             user: user.id,
             content,

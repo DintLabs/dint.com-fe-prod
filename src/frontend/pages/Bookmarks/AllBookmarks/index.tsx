@@ -10,7 +10,8 @@ import { ReactNode, SyntheticEvent, useCallback, useEffect, useState } from 'rea
 import BuyToken from 'frontend/pages/BuyToken';
 import Submenu from 'frontend/components/submenu';
 
-import PostItem from 'frontend/pages/Lounge/PostItem';
+import PostItem from 'frontend/pages/Lounge/PostItem/PostItem';
+import { convertDateToLocal } from 'frontend/utils/date';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -117,8 +118,8 @@ const HomeTab = () => {
     }
   }
 
-  const fetchPosts = async (pagination: PaginationPostsInerface) => {
-    if (isLoading || !pagination.hasNext) return;
+  const fetchPosts = async (pagination?: PaginationPostsInerface) => {
+    if (isLoading || !pagination?.hasNext) return;
 
     try {
       setIsLoading(true);
@@ -187,47 +188,18 @@ const HomeTab = () => {
 
   return (
     <>
-    <Grid container>
-      <Submenu title="ALL BOOKMARKS" username="" routes={[]} noTag md={12} handleOpen={undefined} handleClose={undefined} />
-      <FlexRow gap="5px" fWrap="wrap" style={{ width: "100%"}}>
-
-        {/* <Box>
-          <Tabs
-            value={value}
-            variant="fullWidth"
-            onChange={handleChange}
-            sx={{ borderBottom: `1px solid ${theme.palette.grey[700]}` }}
-          >
-            <Tab label={`All Posts (${counts?.all_posts ?? 0})`} />
-            <Tab label={`Text Posts (${counts?.text_posts ?? 0})`} />
-            <Tab label={`Photo Posts (${counts?.image_posts ?? 0})`} />
-            <Tab label={`Video Posts (${counts?.video_posts ?? 0})`} />
-          </Tabs>
-        </Box> */}
-        <Box style={{width: "100%"}}>
+      <Grid container>
+        <Submenu title="ALL BOOKMARKS" username="" routes={[]} noTag md={12} handleOpen={undefined} handleClose={undefined} />
+        <FlexRow gap="5px" fWrap="wrap" style={{ width: "100%"}}>
+          <Box style={{ width: '100%', paddingTop: '10px' }}>
             {bookmarkedPosts.map((item: any) => (
               <PostItem
-                fetchPosts={fetchPosts}
-                canDeletePost={true}
-                key={item?.id}
-                isBookmarked={true}
-                isBookmarksPage={true}
-                description={item?.post?.content}
-                createdAt={item?.post?.created_at}
-                userName={
-                  item?.post?.user
-                    ? item?.post?.user?.display_name ||
-                      item?.post?.user?.first_name ||
-                      item?.post?.user?.custom_username
-                    : ''
-                }
-                custom_username={item?.post?.user ? item?.post?.user?.custom_username : ''}
-                image={item?.post?.media || null}
-                post={item?.post}
-                onDelete={postDeleted}
+                key={`all_bookmarks-${item?.id}`}
+                post={item.post}
+                onPostChange={fetchPosts}
+                onPostDelete={postDeleted}
               />
             ))}
-
             {isLoading && (
               <>
                 <PostItemSkeleton />
@@ -236,7 +208,7 @@ const HomeTab = () => {
               </>
             )}
           </Box>
-      </FlexRow>
+        </FlexRow>
       </Grid>
     </>
   );

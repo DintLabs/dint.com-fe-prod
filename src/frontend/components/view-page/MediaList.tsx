@@ -1,4 +1,4 @@
-import { PostInterface } from 'frontend/interfaces/reduxInterfaces';
+import { PostInterface } from 'frontend/interfaces/postInterface';
 import React, { useEffect, useState } from 'react';
 import CustomInfiniteScrollForMedia from './CustomInfiniteScrollForMedia';
 import ViewMediaModal from './ViewMediaModal';
@@ -31,15 +31,7 @@ const MediaList = (props: MediaListProps) => {
   const [mediaList, setMediaList] = useState(props.mediaList);
   const [isMediaViewModalOpen, setIsMediaViewModalOpen] =
     useState<boolean>(false);
-  const [selectedMedia, setSelectedMedia] = useState<SelectedMediaType>({
-    id: null,
-    media: null,
-    type: null,
-    userId: null,
-    like_post: null,
-    is_bookmarked: false,
-    description: "",
-  });
+  const [selectedMedia, setSelectedMedia] = useState<PostInterface | undefined>(undefined);
   const isMobile = useMediaQuery("(max-width:600px)")
   useEffect(() => {
     setMediaList(props.mediaList);
@@ -47,17 +39,9 @@ const MediaList = (props: MediaListProps) => {
 
   const handleModalClose = () => {
     setIsMediaViewModalOpen(false);
-    setSelectedMedia({
-      id: null,
-      media: null,
-      type: null,
-      userId: null,
-      like_post: null,
-      is_bookmarked: false,
-      description: "",
-    });
+    setSelectedMedia(undefined);
   };
-  const handleMediaView = (media: SelectedMediaType) => {
+  const handleMediaView = (media: PostInterface) => {
     setSelectedMedia(media);
     setIsMediaViewModalOpen(true);
   };
@@ -77,15 +61,7 @@ const MediaList = (props: MediaListProps) => {
       const nextMedia = mediaList[currentMediaIndex + 1];
       console.log("nextMedia--", nextMedia);
       nextMedia &&
-        setSelectedMedia({
-          id: nextMedia?.id,
-          media: nextMedia.media,
-          type: nextMedia?.type,
-          userId: nextMedia?.user?.id,
-          like_post: nextMedia?.like_post,
-          is_bookmarked: nextMedia?.is_bookmarked,
-          description: nextMedia?.content,
-        });
+        setSelectedMedia(nextMedia);
     }
   };
 
@@ -95,20 +71,12 @@ const MediaList = (props: MediaListProps) => {
       (media: SelectedMediaType) => media?.id === mediaId
     );
     if (currentMediaIndex > 0) {
-      const nextMedia = mediaList[currentMediaIndex - 1];
-      setSelectedMedia({
-        id: nextMedia?.id,
-        media: nextMedia.media,
-        type: nextMedia?.type,
-        userId: nextMedia?.user?.id,
-        like_post: nextMedia?.like_post,
-        is_bookmarked: nextMedia?.is_bookmarked,
-        description: nextMedia?.content,
-      });
+      const prevMedia = mediaList[currentMediaIndex - 1];
+      setSelectedMedia(prevMedia);
     }
   };
   const onLikePost = (post: any[], postId: number) => {
-    setSelectedMedia((prev: any) => ({ ...prev, like_post: post }));    
+    setSelectedMedia((prev: any) => ({ ...prev, like_post: post }));
     const newMediaList = mediaList.map((item: any) =>
       item.id === postId ? { ...item, like_post: post } :item
     );
@@ -116,7 +84,7 @@ const MediaList = (props: MediaListProps) => {
   };
 
   const onBookMark = (isBookmark: Boolean, postId: number) => {
-    setSelectedMedia((prev: any) => ({ ...prev, is_bookmarked: isBookmark }));    
+    setSelectedMedia((prev: any) => ({ ...prev, is_bookmarked: isBookmark }));
     const newMediaList = mediaList.map((item: any) =>
       item.id === postId ? { ...item, is_bookmarked: isBookmark } :item
     );
@@ -126,7 +94,7 @@ const MediaList = (props: MediaListProps) => {
   return (
     <>
       <CustomInfiniteScrollForMedia
-        onClickHandler={(media: SelectedMediaType) => handleMediaView(media)}
+        onClickHandler={handleMediaView}
         dataList={mediaList}
         totalData={props?.totalMedia}
         fetchMoreData={props.fetchMoreMedia}
@@ -136,12 +104,12 @@ const MediaList = (props: MediaListProps) => {
       />
       {(isMediaViewModalOpen && !isMobile) && (
         <ViewMediaModal
-          selectedMedia={selectedMedia}
+          selectedMedia={selectedMedia as PostInterface}
           isFirstPost={mediaList?.findIndex(
-            (media: PostInterface) => media.id === selectedMedia.id
+            (media: PostInterface) => media.id === selectedMedia?.id
           ) === 0}
           isLastPost={mediaList?.findIndex(
-            (media: PostInterface) => media.id === selectedMedia.id
+            (media: PostInterface) => media.id === selectedMedia?.id
           ) ===
             mediaList.length - 1}
           getUserPostCounts={props?.getUserPostCounts}
@@ -150,7 +118,7 @@ const MediaList = (props: MediaListProps) => {
           open={isMediaViewModalOpen}
           handleClose={handleModalClose}
           loading={props?.loader}
-          userDetails={props?.userDetails}
+          author={props?.userDetails}
           canDeletePost={true}
           onDelete={props?.postDeleted}
           isPage={props?.isPage}
@@ -158,8 +126,9 @@ const MediaList = (props: MediaListProps) => {
           onBookmark={onBookMark}
           dataList={mediaList}
         />
-      )} 
-      {(isMediaViewModalOpen && isMobile)  && <ViewMediaModalMobile 
+      )}
+      {(isMediaViewModalOpen && isMobile) && (
+        <ViewMediaModalMobile
           selectedMedia={selectedMedia}
           getUserPostCounts={props?.getUserPostCounts}
           open={isMediaViewModalOpen}
@@ -171,7 +140,8 @@ const MediaList = (props: MediaListProps) => {
           onLikePost={onLikePost}
           onBookmark={onBookMark}
           dataList={mediaList}
-      />}
+        />
+      )}
     </>
   );
 };

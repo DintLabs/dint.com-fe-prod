@@ -272,3 +272,16 @@ export const getPostOrderingColumnPayload = (columnIndex: number, direction: str
     dir: direction
   };
 };
+
+const IMAGE_EXTENSIONS = ['jpg', 'gif', 'png', 'svg', 'webp', 'ico', 'jpeg'];
+const VIDEO_EXTENSIONS = ['MP4', 'mp4', 'MOV', 'mov', '3gp', 'ogg', 'quicktime'];
+
+export const isImage = (mediaUrl: string = ''): boolean => {
+  const extension = mediaUrl.split('.').at(-1) ?? '';
+  return IMAGE_EXTENSIONS.includes(extension);
+}
+
+export const isVideo = (mediaUrl: string = ''): boolean => {
+  const extension = mediaUrl.split('.').at(-1) ?? '';
+  return VIDEO_EXTENSIONS.includes(extension);
+};
