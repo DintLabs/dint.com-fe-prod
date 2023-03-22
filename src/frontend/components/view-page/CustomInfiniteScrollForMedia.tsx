@@ -51,7 +51,7 @@ const CustomInfiniteScrollForMedia = ({
                     >
                       <Box
                         className="full-image-container"
-                        height={285}
+                        height="inherit"
                         sx={{ backgroundImage: `url(${data.media})` }}
                       />
                     </Card>

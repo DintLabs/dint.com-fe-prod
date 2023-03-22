@@ -46,16 +46,6 @@ const useLoungeController = (): ContextInterface => {
       post_type: postTypes.video.value,
     });
 
-  const setPosts = (
-    setPostsPayload: ((prevPosts: PostInterface[]) => PostInterface[]) | PostInterface[],
-  ) => {
-    const postsToUpdate = typeof setPostsPayload === 'function'
-      ? setPostsPayload(posts)
-      : setPostsPayload;
-
-    setPostsLocal(convertPostDates(postsToUpdate));
-  };
-
   const createPostsSetter = (
     localSetter: React.Dispatch<React.SetStateAction<PostInterface[]>>,
   ) => (
@@ -68,6 +58,7 @@ const useLoungeController = (): ContextInterface => {
     localSetter(convertPostDates(postsToUpdate));
   }
 
+  const setPosts = createPostsSetter(setPostsLocal);
   const setTextPosts = createPostsSetter(setTextPostsLocal);
   const setPhotoPosts = createPostsSetter(setPhotoPostsLocal);
   const setVideoPosts = createPostsSetter(setVideoPostsLocal);

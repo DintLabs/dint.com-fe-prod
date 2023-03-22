@@ -37,7 +37,7 @@ import {
   addBookmarkForPost,
   deleteBookmarkForPost,
   postDelete,
-  unlikeForPost, addCommentForPost,
+  unlikeForPost,
 } from 'frontend/redux/actions/postActions';
 import { useTheme } from "@mui/material";
 import { useNavigate } from 'react-router';
@@ -219,7 +219,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
     >
       <div
         className={`post-horizontal ${toggle ? '' : 'white-content'}`}
-        style={{ width: '80vw', height: '90vh' }}
+        style={{ maxWidth: '80vw', height: '90vh' }}
       >
         <DialogContent
           style={{
@@ -286,7 +286,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
                       className="responsiveimg"
                       style={{
                         width: '100%',
-                        height: 'fit-content',
+                        height: 'inherit',
                         objectFit: 'contain',
                       }}
                     />
@@ -307,12 +307,13 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
 
                 {post?.type === 'text' && (
                   <Box sx={{
+                    p: 2,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '100%',
                     height: '100%',
                     minHeight: 500,
+                    width: '30vw',
                     backgroundColor: toggle
                       ? theme.palette.grey['800']
                       : (theme.palette.primary as any).lighter,
@@ -335,7 +336,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
               <Stack
                 className="postDetailsContainer"
                 direction="column"
-                minWidth="40%"
+                width="400px"
                 maxHeight="90vh"
                 flexGrow={1}
               >

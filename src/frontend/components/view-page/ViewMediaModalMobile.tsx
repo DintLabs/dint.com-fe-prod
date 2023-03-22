@@ -30,10 +30,16 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
   useEffect(() => goToViolation(),[]);
 
 
-  const onLikePost = (post: any[], postId: number) => {
-    setPost((prev: any) => ({ ...prev, like_post: post }));
+  const handlePostLike = (likes: any[], postId: number) => {
+    const getUpdatedPost = (prev: any) => ({
+      ...prev,
+      like_post: likes,
+      total_likes: likes.length,
+    })
+
+    setPost(getUpdatedPost);
     const newMediaList = postData.map((item: any) =>
-      item.id === postId ? { ...item, like_post: post } :item
+      item.id === postId ? getUpdatedPost(item) : item
     );
 
     setPostData(newMediaList);
@@ -86,7 +92,7 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
         userDetails={props?.userDetails}
         fetchNextPost={fetchNextPost}
         fetchPrevPost={fetchPrevPost}
-        onLikePost={onLikePost}
+        onLikePost={handlePostLike}
         onBookmark={onBookMark}
       />
     );
@@ -147,6 +153,7 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
               }
               props.handleClose();
             }}
+            onPostLike={handlePostLike}
           />
         ))}
       </div>

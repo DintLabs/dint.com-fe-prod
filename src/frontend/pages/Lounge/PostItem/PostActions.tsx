@@ -32,6 +32,7 @@ type PostActionsProps = {
   setPost:  React.Dispatch<React.SetStateAction<PostInterface>>;
   onPostChange?: () => void;
   onPostDelete?: (postId: number) => void;
+  onPostLike?: (likes: LikePostInterface[], postId: number) => void;
   isBookmarked?: boolean;
 };
 
@@ -40,6 +41,7 @@ function PostActions({
   setPost,
   onPostChange,
   onPostDelete,
+  onPostLike,
   isBookmarked,
 }: PostActionsProps) {
   const loggedInUser = useSelector((state: RootState) => state.user.userData);
@@ -64,6 +66,22 @@ function PostActions({
       setCanDeletePost(true);
     }
   }, [loggedInUser, post.user.id]);
+
+  React.useEffect(() => {
+    if (loggedInUser) {
+      if (
+        post?.like_post?.length > 0 &&
+        post?.like_post?.find((item) => {
+          if (!item) return false;
+          return typeof item.user !== 'number'
+            ? item.user?.id === loggedInUser.id
+            : item.user === loggedInUser.id
+        })
+      ) {
+        setLiked(true);
+      }
+    }
+  }, [loggedInUser, post?.like_post]);
 
   React.useEffect(() => {
     const unsubscribe = toast.onChange((payload) => {
@@ -93,21 +111,28 @@ function PostActions({
 
     if (liked) {
       setLikeInProgress(true);
-      const unlikePost: UnlikePostInterface = await dispatch(
+      await dispatch(
         unlikeForPost(loggedInUser.id, post.id),
       );
 
+      const newLikes = post.like_post.filter((item) => {
+        if (typeof item.user === 'number') {
+          return item.user !== loggedInUser.id;
+        }
+
+        return item.user.id !== loggedInUser.id;
+      })
       const updatedPost = {
         ...post,
-        unlike_post: [...(post?.unlike_post || []), unlikePost],
+        like_post: newLikes,
         total_likes: currentTotalLikes - 1,
       };
+
       setLiked(false);
       setPost(updatedPost);
       updatePost(updatedPost);
-      if (onPostChange) {
-        onPostChange();
-      }
+      if (onPostChange) onPostChange();
+      if (onPostLike) onPostLike(newLikes, updatedPost.id)
       setLikeInProgress(false);
     } else {
       setLikeInProgress(true);

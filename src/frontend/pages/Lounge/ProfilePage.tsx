@@ -40,9 +40,6 @@ import React, {
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import TipPopUp from "frontend/components/tip/TipPopUp";
-import DiscordIcon from "../../assets/img/socialmedia/discord.png";
-import InstagramIcon from "../../assets/img/socialmedia/instagram.png";
-import TwitterIcon from "../../assets/img/socialmedia/twitter.png";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import moment from "moment";
 import { RootState, useDispatch } from "frontend/redux/store";
@@ -773,106 +770,6 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                     />
                   </AvatarGroup>
 
-                </Box>
-                <Box display="flex" gap={1} sx={{ padding: "15px 0" }}>
-                  {!!userDetails?.instagram && (
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      py="5px"
-                      px="10px"
-                      bgcolor={toggle ? "#fff" : "#EFEFEF"}
-                      borderRadius="12px"
-                      gap="4px"
-                      sx={{ cursor: "pointer" }}
-                      onClick={() =>
-                        handleSocialIconClick(userDetails?.instagram || "")
-                      }
-                    >
-                      <img
-                        src={InstagramIcon}
-                        height="20"
-                        width="20"
-                        alt="img"
-                      />
-                      <Typography
-                        sx={{
-                          fontSize: "14px",
-                          display: { sx: "none", md: "flex" },
-                          color: "#000",
-                        }}
-                      >
-                        Instagram
-                      </Typography>
-                    </Box>
-                  )}
-                  {!!userDetails?.twitter && (
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      py="5px"
-                      px="10px"
-                      bgcolor={toggle ? "#fff" : "#EFEFEF"}
-                      borderRadius="12px"
-                      gap="4px"
-                      sx={{ cursor: "pointer" }}
-                      onClick={() =>
-                        handleSocialIconClick(userDetails?.twitter || "")
-                      }
-                    >
-                      <img
-                        src={TwitterIcon}
-                        height="20"
-                        width="20"
-                        style={{ borderRadius: 10 }}
-                        alt="img"
-                      />
-                      <Typography
-                        sx={{
-                          fontSize: "14px",
-                          display: { sx: "none", md: "flex" },
-                          color: "#000",
-                        }}
-                      >
-                        Twitter
-                      </Typography>
-                    </Box>
-                  )}
-                  {!!userDetails?.discord && (
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      py="5px"
-                      px="10px"
-                      bgcolor={toggle ? "#fff" : "#EFEFEF"}
-                      borderRadius="12px"
-                      gap="4px"
-                      sx={{ cursor: "pointer" }}
-                      onClick={() =>
-                        handleSocialIconClick(userDetails?.discord || "")
-                      }
-                    >
-                      <img
-                        src={DiscordIcon}
-                        height="20"
-                        width="20"
-                        style={{ borderRadius: 10 }}
-                        alt="img"
-                      />
-                      <Typography
-                        sx={{
-                          fontSize: "14px",
-                          display: { sx: "none", md: "flex" },
-                          color: "#000",
-                        }}
-                      >
-                        Discord
-                      </Typography>
-                    </Box>
-                  )}
                 </Box>
               </Box>
             </Box>

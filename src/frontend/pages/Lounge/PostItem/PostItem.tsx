@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTheme, Stack, Box, Divider } from '@mui/material';
-import { PostInterface } from 'frontend/interfaces/postInterface';
+import { LikePostInterface, PostInterface } from 'frontend/interfaces/postInterface';
 import { RootState } from 'frontend/redux/store';
 import { isImage, isVideo } from 'frontend/utils';
 import PostHeader from './PostHeader';
@@ -17,6 +17,7 @@ type PostItemProps = {
   post: PostInterface;
   onPostChange?: () => void;
   onPostDelete?: (postId: number) => void;
+  onPostLike?: (likes: LikePostInterface[], postId: number) => void;
   onClickMedia?: (post: PostInterface) => void;
   isBookmarked?: boolean;
 };
@@ -26,6 +27,7 @@ function PostItem({
   onPostChange,
   onPostDelete,
   isBookmarked,
+  onPostLike,
   onClickMedia = () => {},
 }: PostItemProps) {
   const theme = useTheme();
@@ -77,6 +79,7 @@ function PostItem({
         onPostChange={onPostChange}
         onPostDelete={onPostDelete}
         isBookmarked={isBookmarked}
+        onPostLike={onPostLike}
       />
       <PostDescription
         likesCount={post.total_likes ?? 0}

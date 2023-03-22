@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs, Typography, useTheme , Grid} from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import _axios from 'frontend/api/axios';
 import PostItemSkeleton from 'frontend/components/common/skeletons/PostItemSkeleton';
 import { useLounge } from 'frontend/contexts/LoungeContext';
@@ -6,18 +6,12 @@ import { postTypes } from 'frontend/data';
 import { PaginationPostsInerface } from 'frontend/interfaces/contextInterface';
 import { PostInterface } from 'frontend/interfaces/postInterface';
 import { FlexRow } from 'frontend/reusable/reusableStyled';
-import { ReactNode, SyntheticEvent, useCallback, useEffect, useState } from 'react';
-import BuyToken from 'frontend/pages/BuyToken';
+import { useEffect, useState } from 'react';
 import Submenu from 'frontend/components/submenu';
 
 import PostItem from 'frontend/pages/Lounge/PostItem/PostItem';
 import { convertDateToLocal } from 'frontend/utils/date';
 
-interface TabPanelProps {
-  children?: ReactNode;
-  index: number;
-  value: number;
-}
 interface RespPost {
   data: { data: PostInterface[] };
   code: number;
@@ -26,38 +20,14 @@ interface RespPost {
   recordsTotal: number;
 }
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography component="span">{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
 const HomeTab = () => {
-  const theme = useTheme();
-
   const [value, setValue] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingBookmarks , setIsLoadingBookmarks] = useState(false)
-  // const [bookmarkups, setBookmarkups] = useState([])
   const [bookmarkedPosts, setBookmarkedPosts] = useState<any[]>([])
 
 
   const {
-    counts,
     getUserPostCounts,
     posts,
     setPosts,
@@ -77,14 +47,8 @@ const HomeTab = () => {
     setPaginationVideoPosts
   } = useLounge();
 
-
-
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
   const postDeleted = (postId: number) => {
-    setBookmarkedPosts( bookmarkedPosts.filter((prev) => prev.id !== postId) );
+    setBookmarkedPosts(bookmarkedPosts.filter((prev) => prev.id !== postId));
   };
 
   const setHasNextFalse = (postType: string) => {
@@ -107,9 +71,15 @@ const HomeTab = () => {
       if(data?.data?.length){
         const bookmarksData = data?.data || []
         const bookMarkedPost = bookmarksData.map((bookmarkRow: any) => {
-          return bookmarkRow
+          return {
+            ...bookmarkRow,
+            post: {
+              ...bookmarkRow?.post ?? {},
+              created_at: convertDateToLocal(bookmarkRow?.post?.created_at),
+            },
+          };
         })
-        // setBookmarkups(bookMarkedPost)
+
         setBookmarkedPosts(bookMarkedPost)
       }
       setIsLoadingBookmarks(false);
@@ -151,15 +121,6 @@ const HomeTab = () => {
     }
   };
 
-  // useEffect(()=> {
-  //   const bookmarkedPostsData = posts.filter((post) => {
-  //     if(bookmarkups.includes(post?.id)){
-  //       return post;
-  //     }
-  //   });
-  //   setBookmarkedPosts(bookmarkups)
-  // }, [posts , bookmarkups])
-
   useEffect(() => {
     getUserPostCounts();
   }, []);
@@ -197,7 +158,8 @@ const HomeTab = () => {
                 key={`all_bookmarks-${item?.id}`}
                 post={item.post}
                 onPostChange={fetchPosts}
-                onPostDelete={postDeleted}
+                onPostDelete={() => postDeleted(item.id)}
+                isBookmarked
               />
             ))}
             {isLoading && (

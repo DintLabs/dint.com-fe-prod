@@ -226,9 +226,10 @@ const FullScreenModal = (props: fullScreenModalProps) => {
                   className='d-flex flex-column align-items-center justify-content-center'
                   onClick={() => handleLike(props.post)}
                 >
-                  {props.post.like_post.filter(
-                    (ele: any) => ele?.user?.id === props?.userDetails?.id
-                  )[0] ? (
+                  {props.post.like_post.some((ele: any) => {
+                    if (!ele?.user) return false;
+                    return ele?.user === props?.userDetails?.id || ele?.user?.id === props?.userDetails?.id;
+                  }) ? (
                     <FaHeart color='red' />
                   ) : (
                     <FavoriteBorderRoundedIcon sx={{ color: '#fff' }} />
