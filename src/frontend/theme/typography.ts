@@ -19,7 +19,7 @@ function responsiveFontSizes({ sm, md, lg }: { sm: number; md: number; lg: numbe
   };
 }
 
-const FONT_PRIMARY = 'Noto Sans, sans-serif'; // Google Font
+const FONT_PRIMARY = 'Roboto, sans-serif'; // Google Font
 
 const typography = {
   fontFamily: FONT_PRIMARY,

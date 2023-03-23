@@ -33,7 +33,7 @@ function PostDescription({
           marginBottom: showDescription && descriptionText ? 1 : 2,
       }}
       >
-        <Typography>
+        <Typography sx={{ color: 'text.secondary' }}>
           {pluralize(likesCount, 'like', 'likes')}
         </Typography>
       </Box>

@@ -148,6 +148,7 @@ const HomeTab = ({ createPost }: Props) => {
     setPaginationPhotoPosts,
     paginationVideoPosts,
     setPaginationVideoPosts,
+    resetPosts,
   } = useLounge();
 
   const postDeleted = (postId: number) => {
@@ -211,6 +212,10 @@ const HomeTab = ({ createPost }: Props) => {
   useEffect(() => {
     getSuggestionList();
     getStoryList();
+
+    return () => {
+      resetPosts();
+    };
   }, []);
 
   useLayoutEffect(() => {

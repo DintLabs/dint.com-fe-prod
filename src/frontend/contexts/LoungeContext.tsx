@@ -7,7 +7,6 @@ import {
   ContextInterface,
   PaginationPostsInerface,
 } from "frontend/interfaces/contextInterface";
-import moment from 'moment-timezone';
 import { convertPostDates } from 'frontend/utils/date';
 
 const useLoungeController = (): ContextInterface => {
@@ -94,6 +93,23 @@ const useLoungeController = (): ContextInterface => {
     }
   };
 
+  const resetPosts = () => {
+    setPosts([]);
+    setTextPosts([]);
+    setPhotoPosts([]);
+    setVideoPosts([]);
+
+    const defaultPagination = (type: string): PaginationPostsInerface => ({
+      ...DEFAULT_POSTS_PAGINATION,
+      post_type: type,
+    });
+
+    setPaginationPosts(defaultPagination(postTypes.all.value));
+    setPaginationTextPosts(defaultPagination(postTypes.text.value));
+    setPaginationPhotoPosts(defaultPagination(postTypes.image.value));
+    setPaginationVideoPosts(defaultPagination(postTypes.video.value));
+  };
+
   return {
     counts,
     setCounts,
@@ -116,6 +132,7 @@ const useLoungeController = (): ContextInterface => {
     addNewPostToContext,
     getUserPostCounts,
     updatePost,
+    resetPosts,
   };
 };
 

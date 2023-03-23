@@ -1,4 +1,4 @@
-import { Avatar, IconButton } from '@mui/material';
+import { Avatar, IconButton, useTheme } from '@mui/material';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import moment from 'moment/moment';
 import React, { useContext } from 'react';
@@ -17,11 +17,16 @@ type CommentProps = {
 
 const Comment = ({ text, author, createdAt, hideActions }: CommentProps) => {
   const { toggle } = useContext(ThemeContext);
+  const theme = useTheme();
   const navigate = useNavigate();
   const messageContent = useRichMessage({
     text,
     className: 'like-comm mb-0',
-    style: { color: toggle ? "white" : "#161C24", fontWeight: '400 !important' },
+    style: {
+      color: toggle ? "white" : "#161C24",
+      fontWeight: '400 !important',
+      fontFamily: theme.typography.fontFamily,
+    },
   });
 
   return (
@@ -46,7 +51,12 @@ const Comment = ({ text, author, createdAt, hideActions }: CommentProps) => {
         <div className="d-flex flex-column flex-grow-1">
           <span>
             <span
-              style={{ cursor: 'pointer', fontWeight: 600 }}
+              style={{
+                cursor: 'pointer',
+                fontWeight: 600,
+                color: toggle ? "white" : "#161C24",
+                fontFamily: theme.typography.fontFamily,
+            }}
               onClick={() => navigate(`/${author.custom_username}`)}
             >
               {`${author.custom_username} `}

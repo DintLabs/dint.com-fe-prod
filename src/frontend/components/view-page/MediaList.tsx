@@ -4,6 +4,10 @@ import CustomInfiniteScrollForMedia from './CustomInfiniteScrollForMedia';
 import ViewMediaModal from './ViewMediaModal';
 import { useMediaQuery } from '@mui/material';
 import ViewMediaModalMobile from './ViewMediaModalMobile';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import Swal from 'sweetalert2';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type MediaListProps = {
   mediaList: any;
@@ -28,6 +32,9 @@ export type SelectedMediaType = {
 };
 
 const MediaList = (props: MediaListProps) => {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const loggedInUser = useSelector((state: RootState) => state.user.userData);
   const [mediaList, setMediaList] = useState(props.mediaList);
   const [isMediaViewModalOpen, setIsMediaViewModalOpen] =
     useState<boolean>(false);
@@ -42,6 +49,28 @@ const MediaList = (props: MediaListProps) => {
     setSelectedMedia(undefined);
   };
   const handleMediaView = (media: PostInterface) => {
+    if (!loggedInUser) {
+      Swal.fire({
+        title: 'You are not logged in',
+        text: 'Click login button to Login',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#CBC9C9',
+        confirmButtonText: 'Login',
+        cancelButtonText: 'Dismiss'
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          navigate(`/auth/login`, {
+            state: {
+              redirectUrl: pathname
+            }
+          });
+        }
+      });
+      return;
+    }
+
     setSelectedMedia(media);
     setIsMediaViewModalOpen(true);
   };

@@ -1,4 +1,4 @@
-import { SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { PostInterface } from "./postInterface";
 
 export interface CountInerface {
@@ -36,24 +36,25 @@ export interface PaginationPostsInerface {
 
 export interface ContextInterface {
   counts: CountInerface;
-  setCounts: React.Dispatch<SetStateAction<CountInerface>>;
+  setCounts: Dispatch<SetStateAction<CountInerface>>;
   posts: PostInterface[];
-  setPosts: React.Dispatch<PostInterface[]>;
+  setPosts: Dispatch<SetStateAction<PostInterface[]>>;
   photoPosts: PostInterface[];
-  setPhotoPosts: React.Dispatch<PostInterface[]>;
+  setPhotoPosts: Dispatch<SetStateAction<PostInterface[]>>;
   textPosts: PostInterface[];
-  setTextPosts: React.Dispatch<PostInterface[]>;
+  setTextPosts: Dispatch<SetStateAction<PostInterface[]>>;
   videoPosts: PostInterface[];
-  setVideoPosts: React.Dispatch<PostInterface[]>;
+  setVideoPosts: Dispatch<SetStateAction<PostInterface[]>>;
   paginationPosts: PaginationPostsInerface;
-  setPaginationPosts: React.Dispatch<PaginationPostsInerface>;
+  setPaginationPosts: Dispatch<PaginationPostsInerface>;
   paginationTextPosts: PaginationPostsInerface;
-  setPaginationTextPosts: React.Dispatch<PaginationPostsInerface>;
+  setPaginationTextPosts: Dispatch<PaginationPostsInerface>;
   paginationPhotoPosts: PaginationPostsInerface;
-  setPaginationPhotoPosts: React.Dispatch<PaginationPostsInerface>;
+  setPaginationPhotoPosts: Dispatch<PaginationPostsInerface>;
   paginationVideoPosts: PaginationPostsInerface;
-  setPaginationVideoPosts: React.Dispatch<PaginationPostsInerface>;
+  setPaginationVideoPosts: Dispatch<PaginationPostsInerface>;
   addNewPostToContext: (post: PostInterface) => void;
   updatePost: (post: PostInterface) => void;
   getUserPostCounts: () => void;
+  resetPosts: () => void;
 }

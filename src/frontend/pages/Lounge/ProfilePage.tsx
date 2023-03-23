@@ -5,12 +5,11 @@ import BrokenImageOutlinedIcon from "@mui/icons-material/BrokenImageOutlined";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import MediaList from 'frontend/components/view-page/MediaList';
 import NothingToShow from 'frontend/components/common/NothingToShow';
-import ShareProfileModal from 'frontend/components/common/ShareProfileModal'
+import ShareProfileModal from 'frontend/components/common/ShareProfileModal';
 
 import {
   Avatar,
   AvatarGroup,
-  Badge,
   Box,
   Stack,
   Tabs,
@@ -42,14 +41,15 @@ import { toast } from "react-toastify";
 import TipPopUp from "frontend/components/tip/TipPopUp";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import moment from "moment";
-import { RootState, useDispatch } from "frontend/redux/store";
+import { RootState, useDispatch } from 'frontend/redux/store';
 import { messagesActions } from "frontend/redux/slices/messages";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "@mui/material";
-import StoriesUserOwn from "frontend/components/lounge/StoriesUserOwn";
 import { getUserOwnStories } from "frontend/redux/slices/lounge";
 import ProfileAvatar from './ProfileAvatar';
 import { convertPostDates } from '../../utils/date';
+import Swal from 'sweetalert2';
+import { useLocation } from 'react-router-dom';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -92,8 +92,10 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { user } = useAuth();
   const { toggle } = useContext(ThemeContext);
+  const loggedInUser = useSelector((state: RootState) => state.user.userData);
 
   const userHook = useUser();
   const theme = useTheme();
@@ -115,10 +117,6 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     video_posts: 0,
     subscriptions: 0,
   });
-  const images = ["jpg", "gif", "png", "svg", "webp", "ico", "jpeg"];
-  const videos = ["MP4", "mp4", "MOV", "mov", "3gp", "ogg", "quicktime"];
-
-  let url, splits, extension;
 
   const [posts, setPostsLocal] = useState<PostInterface[]>([]);
   const [photoPosts, setPhotoPosts] = useState<PostInterface[]>([]);
@@ -127,8 +125,6 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
   const [subscriptions, setSubscriptions] = useState<PostInterface[]>([]);
   const [paginationPosts, setPaginationPosts] =
     useState<PaginationPostsInerface>(DEFAULT_POSTS_PAGINATION);
-  const { follower, following } = useSelector((state: RootState) => state.user);
-  const { userOwnStories } = useSelector((state: RootState) => state.lounge);
   const {userData} = useSelector((state: any) => state.user);
   const [isUserProfile , setIsUserProfile ] = useState<boolean>(false)
   const [storyList , setStoryList] = useState();
@@ -240,6 +236,27 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
   }, [handleScroll]);
 
   const savedUser = userHook.reduxUser;
+
+  const openLoginPopup = () => {
+    Swal.fire({
+      title: 'You are not logged in',
+      text: 'Click login button to Login',
+      icon: 'error',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#CBC9C9',
+      confirmButtonText: 'Login',
+      cancelButtonText: 'Dismiss'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`/auth/login`, {
+          state: {
+            redirectUrl: pathname
+          }
+        });
+      }
+    });
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -369,10 +386,6 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     }
   }, [value]);
 
-  const handleSocialIconClick = (url: string) => {
-    window.open(url, "_blank");
-  };
-
   const postDeleted = (postId: number) => {
     setPosts((p) => p.filter((prev) => prev.id !== postId));
     setTextPosts((p) => p.filter((prev) => prev.id !== postId));
@@ -385,6 +398,10 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
   };
 
   const follow = async () => {
+    if (!loggedInUser) {
+      return openLoginPopup();
+    }
+
     setIsFollowLoading(true);
     try {
       const { data } = await _axios.post(
@@ -554,7 +571,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
               >
                 <Typography
                   variant="h3"
-                  display={{ xs: "none", md: "flex" }}
+                  display={{ md: "flex", xs: 'none' }}
                   sx={{
                     color: toggle ? "text.primary" : "#161C24",
                     whiteSpace: 'nowrap',
@@ -562,8 +579,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                 >
                   {userDetails && userDetails.display_name}
                 </Typography>
-                {!!savedUser?.custom_username && savedUser?.custom_username !== userDetails?.custom_username &&
-                !isLoadingUserDetails ? (
+                {!loggedInUser || (loggedInUser.custom_username !== userDetails?.custom_username && !isLoadingUserDetails) ? (
                   <Box className="btn-group-follow">
                     {userDetails?.is_followed === true && (
                       <Button
@@ -629,6 +645,9 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         },
                       }}
                       onClick={() => {
+                        if (!loggedInUser) {
+                          return openLoginPopup();
+                        }
                         dispatch(messagesActions.addNewUserInChat(userDetails));
                         navigate(
                           `/lounge/messages/user/${
@@ -658,12 +677,13 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         Share profile
                       </Button>
 
-{showShareProfileModal && <ShareProfileModal
-                        open={showShareProfileModal}
-                        onClose={() => setShowShareProfileModal(false)}
-                      />}
+                      {showShareProfileModal && (
+                        <ShareProfileModal
+                          open={showShareProfileModal}
+                          onClose={() => setShowShareProfileModal(false)}
+                        />
+                      )}
                     </Box>}
-
                   </Box>
                 ) : (
                   <div className="btn-group-follow-wrapper">
@@ -686,12 +706,12 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         Share profile
                       </Button>
 
-                     {showShareProfileModal && <ShareProfileModal
-                        open={showShareProfileModal}
-                        onClose={() => setShowShareProfileModal(false)}
-                      />}
-
-
+                     {showShareProfileModal && (
+                       <ShareProfileModal
+                         open={showShareProfileModal}
+                         onClose={() => setShowShareProfileModal(false)}
+                       />
+                     )}
                     </Box>
                   </div>
                 )}
@@ -708,8 +728,17 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                 </Typography>
               </div>
 
-
               <Box sx={{ pt: 1 }} order={{ xs: "0", md: "3" }}>
+                <Typography
+                  variant="h3"
+                  display={{ md: "none", xs: 'flex' }}
+                  sx={{
+                    color: toggle ? "text.primary" : "#161C24",
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {userDetails && userDetails.display_name}
+                </Typography>
                 <Box className="username">
                   <Typography
                     variant="body1"
