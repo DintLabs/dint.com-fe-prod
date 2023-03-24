@@ -1,16 +1,25 @@
 import React from 'react';
-import { PostCommentInterface } from 'frontend/interfaces/postInterface';
-import Comment from '../Comment';
-import { UserDataInterface } from 'frontend/interfaces/reduxInterfaces';
 import { Box } from '@mui/material';
+import { toast } from 'react-toastify';
+import flattenDeep from 'lodash/flattenDeep';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from 'frontend/redux/store';
+import { PostCommentInterface } from 'frontend/interfaces/postInterface';
+import { UserDataInterface } from 'frontend/interfaces/reduxInterfaces';
+import { toggleLikeForComment } from 'frontend/redux/actions/postActions';
+import Comment from '../Comment';
 
 type PostCommentsSectionProps = {
   comments: PostCommentInterface[];
+  onAfterLike: (commentId: number, likedBy: number[]) => void;
 };
 
 function PostCommentsSection({
   comments,
+  onAfterLike,
 }: PostCommentsSectionProps) {
+  const dispatch = useDispatch<AppDispatch>();
+  const loggedInUser = useSelector((state: RootState) => state.user.userData);
   const [showAllComments, setShowAllComments] = React.useState<boolean>(false);
   const [visibleComments, setVisibleComments] = React.useState<PostCommentInterface[]>(
     [...comments].reverse().slice(0, 1),
@@ -23,6 +32,25 @@ function PostCommentsSection({
       setVisibleComments([...comments].reverse().slice(0, 1));
     }
   }, [comments, showAllComments]);
+
+  const handleLikeAction = async (commentId: number) => {
+    try {
+      if (!loggedInUser) return;
+
+      const { liked } = await dispatch(toggleLikeForComment(commentId));
+
+      const likedComment = comments.find((comment) => comment.id === commentId);
+      const currentLikedBy = flattenDeep(likedComment?.liked_by ?? []);
+
+      const likedBy = liked
+        ? [...currentLikedBy, loggedInUser.id]
+        : currentLikedBy.filter((userId) => userId !== loggedInUser.id);
+
+      onAfterLike(commentId, likedBy);
+    } catch (error) {
+      toast.error('Cannot process like action. Try again.')
+    }
+  };
 
   return (
     <Box sx={{ px: 2 }}>
@@ -46,6 +74,9 @@ function PostCommentsSection({
             text={item.comment}
             createdAt={item.created_at}
             author={item.user as UserDataInterface}
+            liked={!!loggedInUser && flattenDeep(item.liked_by).includes(loggedInUser.id)}
+            likesCount={flattenDeep(item.liked_by).length}
+            onLikeClick={() => handleLikeAction(item.id)}
           />
         ))}
       </div>

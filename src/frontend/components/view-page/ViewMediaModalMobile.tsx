@@ -5,6 +5,7 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FullScreenModal from "./FullScreenModal";
 import PostItem from '../../pages/Lounge/PostItem/PostItem';
+import { PostInterface } from '../../interfaces/postInterface';
 
 
 type ViewMediaModalProps = {
@@ -19,6 +20,7 @@ type ViewMediaModalProps = {
   onBookmark?: (isBookmark: Boolean, id: number) => void;
   dataList?: any[];
   selectedMedia: any;
+  onPostUpdate: (post: PostInterface) => void;
 };
 
 const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
@@ -26,6 +28,10 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
   const { toggle } = useContext(ThemeContext);
   const [Post , setPost] = useState();
   const [postData, setPostData] = useState(props.dataList ?? []);
+
+  useEffect(() => {
+    setPostData(props?.dataList || []);
+  }, [props.dataList]);
 
   useEffect(() => goToViolation(),[]);
 
@@ -154,6 +160,7 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
               props.handleClose();
             }}
             onPostLike={handlePostLike}
+            onPostUpdate={props.onPostUpdate}
           />
         ))}
       </div>

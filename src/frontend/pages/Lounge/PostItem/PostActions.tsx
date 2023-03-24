@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, IconButton, Stack } from '@mui/material';
-import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import { FaHeart } from 'react-icons/fa';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
@@ -10,7 +9,6 @@ import { MdDelete } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import {
   LikePostInterface,
-  UnlikePostInterface,
   PostInterface,
   BookmarkPostInterface,
 } from '../../../interfaces/postInterface';

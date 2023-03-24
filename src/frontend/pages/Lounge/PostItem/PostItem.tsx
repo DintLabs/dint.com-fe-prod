@@ -16,6 +16,7 @@ import AddCommentForm from '../AddCommentForm';
 type PostItemProps = {
   post: PostInterface;
   onPostChange?: () => void;
+  onPostUpdate?: (post: PostInterface) => void;
   onPostDelete?: (postId: number) => void;
   onPostLike?: (likes: LikePostInterface[], postId: number) => void;
   onClickMedia?: (post: PostInterface) => void;
@@ -25,6 +26,7 @@ type PostItemProps = {
 function PostItem({
   post: data,
   onPostChange,
+  onPostUpdate,
   onPostDelete,
   isBookmarked,
   onPostLike,
@@ -34,6 +36,10 @@ function PostItem({
   const loggedInUser = useSelector((state: RootState) => state.user.userData);
 
   const [post, setPost] = React.useState<PostInterface>(data);
+
+  React.useEffect(() => {
+    setPost(data);
+  }, [data]);
 
   const renderPostContent = () => {
     if (post.type === 'text') {
@@ -88,7 +94,23 @@ function PostItem({
         descriptionText={post.content}
       />
 
-      <PostCommentsSection comments={post.post_comment ?? []} />
+      <PostCommentsSection
+        comments={post.post_comment ?? []}
+        onAfterLike={(commentId, likedBy) => {
+          const newPost = {
+            ...post,
+            post_comment: post.post_comment.map((comment) => {
+              if (comment.id !== commentId) return comment;
+              return { ...comment, liked_by: likedBy };
+            })
+          };
+          setPost(newPost);
+
+          if (onPostUpdate) {
+            onPostUpdate(post);
+          }
+        }}
+      />
       <Divider sx={{ mx: 2 }} />
       <Box sx={{ px: 2, py: 1 }}>
         <AddCommentForm

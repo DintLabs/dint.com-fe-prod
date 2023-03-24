@@ -13,6 +13,7 @@ export interface PostCommentInterface {
   can_delete: boolean;
   post: number;
   page: any; // will add interface once BE will send response
+  liked_by: number[];
 }
 
 export interface LikePostInterface {

@@ -22,7 +22,7 @@ export const unlikeForPost =
         .post(`api/posts/unlike/`, { user: userID, post: postID })
         .then((res: any) => {
           return res.data.data;
-          
+
         });
     } catch (error) {
       console.error(error);
@@ -78,3 +78,15 @@ export const addCommentForPost =
       console.error(error);
     }
   };
+
+export const toggleLikeForComment = (commentId: number) => {
+  return async () => {
+    try {
+      return axios
+        .post('api/posts/comment-like/', { comment: commentId })
+        .then((res: any) => res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+}

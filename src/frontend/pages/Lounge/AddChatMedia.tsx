@@ -63,15 +63,18 @@ const AddChatMedia = ({
       if (file) {
         try {
           const uploadResult = await uploadMedia(file, "photos", false, "post");
+          const mediaUrl = uploadResult?.data?.data?.data[0]?.media_file_url;
+
+          if (!mediaUrl) {
+            throw new Error('The file has not been uploaded.');
+          }
+
           toast.update(toastId, {
             render: "File Uploaded Successful",
             type: "success",
             isLoading: false,
           });
-          const result = await sendMessageHandler(
-            toastId,
-            uploadResult?.data?.data?.data[0]?.media_file_url || ""
-          );
+          await sendMessageHandler(mediaUrl);
         } catch (exception: any) {
           toast.update("Error adding...", {
             render: exception.toString(),

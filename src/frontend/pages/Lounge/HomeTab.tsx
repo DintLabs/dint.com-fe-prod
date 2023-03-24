@@ -31,7 +31,6 @@ import {
 } from "react";
 
 import "./navbarTab.css";
-import PostItem from "./PostItem";
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useNavigate } from "react-router";
 import Fab from "@mui/material/Fab";

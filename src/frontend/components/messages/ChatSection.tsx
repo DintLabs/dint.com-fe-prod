@@ -87,9 +87,9 @@ function ChatSection(props: ChatSectionProps) {
     }
   };
 
-  const sendMessageHandler = async (data?: any) => {
+  const sendMessageHandler = async (attachedMediaUrl?: string) => {
     if (
-      (messageContent.trim().length > 0  || data.length )&&
+      (messageContent.trim().length > 0 || attachedMediaUrl?.length)&&
       props.selectedUser.id !== -1 &&
       props.loggedInUser.id
       ) {
@@ -98,7 +98,7 @@ function ChatSection(props: ChatSectionProps) {
           reciever: props.selectedUser.id.toString(),
           sender: props.loggedInUser.id.toString(),
           content: messageContent.trim(),
-          media : data
+          media: attachedMediaUrl || '',
         })
       );
       if (res) {
@@ -280,7 +280,7 @@ function ChatSection(props: ChatSectionProps) {
               cursor="pointer">
               <MonetizationOnIcon />
             </FlexRow>
-            <IconButton onClick={sendMessageHandler}>
+            <IconButton onClick={() => sendMessageHandler()}>
               <MdSend />
             </IconButton>
           </Stack>

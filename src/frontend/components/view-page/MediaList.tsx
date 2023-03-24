@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 type MediaListProps = {
-  mediaList: any;
+  mediaList: any[];
   totalMedia: number;
   mediaType?: string | null;
   fetchMoreMedia: () => void;
@@ -120,6 +120,13 @@ const MediaList = (props: MediaListProps) => {
     setMediaList(newMediaList);
   }
 
+  const handlePostUpdate = (post: PostInterface) => {
+    setSelectedMedia(post);
+    setMediaList((prevState) => prevState
+      .map((p: PostInterface) => p.id === post.id ? post : p),
+    );
+  };
+
   return (
     <>
       <CustomInfiniteScrollForMedia
@@ -154,6 +161,7 @@ const MediaList = (props: MediaListProps) => {
           onLikePost={onLikePost}
           onBookmark={onBookMark}
           dataList={mediaList}
+          onPostUpdate={handlePostUpdate}
         />
       )}
       {(isMediaViewModalOpen && isMobile) && (
@@ -169,6 +177,7 @@ const MediaList = (props: MediaListProps) => {
           onLikePost={onLikePost}
           onBookmark={onBookMark}
           dataList={mediaList}
+          onPostUpdate={handlePostUpdate}
         />
       )}
     </>

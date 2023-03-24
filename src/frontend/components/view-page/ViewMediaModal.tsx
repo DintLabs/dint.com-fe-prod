@@ -24,6 +24,7 @@ import { MdDelete } from "react-icons/md";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import TipPopUp from "../tip/TipPopUp";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import flattenDeep from 'lodash/flattenDeep';
 
 import {
   LikePostInterface,
@@ -37,7 +38,7 @@ import {
   addBookmarkForPost,
   deleteBookmarkForPost,
   postDelete,
-  unlikeForPost,
+  unlikeForPost, toggleLikeForComment,
 } from 'frontend/redux/actions/postActions';
 import { useTheme } from "@mui/material";
 import { useNavigate } from 'react-router';
@@ -62,6 +63,7 @@ type ViewMediaModalProps = {
   onLikePost?: (post: any[], id: number) => void;
   onBookmark?: (isBookmark: Boolean, id: number) => void;
   dataList?: any;
+  onPostUpdate: (post: PostInterface) => void;
 };
 
 const ViewMediaModal = (props: ViewMediaModalProps) => {
@@ -204,6 +206,31 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
     if (deleteBookmark.code === 200) {
       setAlreadyBookmark(false);
       props?.onBookmark && props.onBookmark(false, post.id);
+    }
+  };
+
+  const handleCommentLike = async (commentId: number) => {
+    try {
+      if (!user) return;
+
+      const { liked } = await dispatch(toggleLikeForComment(commentId));
+
+      const likedComment = post.post_comment.find((comment) => comment.id === commentId);
+      const currentLikedBy = flattenDeep(likedComment?.liked_by ?? []);
+
+      const likedBy = liked
+        ? [...currentLikedBy, user.id]
+        : currentLikedBy.filter((userId) => userId !== user.id);
+
+      props.onPostUpdate({
+        ...post,
+        post_comment: post.post_comment.map((comment) => {
+          if (comment.id !== commentId) return comment;
+          return { ...comment, liked_by: likedBy };
+        }),
+      });
+    } catch (error) {
+      toast.error('Cannot process like action. Try again.')
     }
   };
 
@@ -375,6 +402,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
                       text={post.content}
                       createdAt={post.created_at}
                       author={postCreator}
+                      liked={false}
                       hideActions
                     />
                   )}
@@ -386,6 +414,9 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
                         text={item.comment}
                         author={item.user as UserDataInterface}
                         createdAt={item.created_at}
+                        liked={!!user && flattenDeep(item.liked_by).includes(user.id)}
+                        likesCount={flattenDeep(item.liked_by).length}
+                        onLikeClick={() => handleCommentLike(item.id)}
                       />
                     ))
                   }
