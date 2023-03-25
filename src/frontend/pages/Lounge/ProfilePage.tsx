@@ -539,15 +539,14 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
-
                         >
-                        {userDetails?.user_follower.length || 0} Followers
+                        {userDetails?.user_follower?.length || 0} Followers
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                        {userDetails?.user_following.length || 0} Following
+                        {userDetails?.user_following?.length || 0} Following
                       </Typography>
                     </div>
                   </div>

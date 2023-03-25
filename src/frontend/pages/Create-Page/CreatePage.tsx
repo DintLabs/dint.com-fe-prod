@@ -25,12 +25,11 @@ import TogglingText from 'frontend/components/common/TogglingText';
 
 import { createPage, updatePage } from 'frontend/redux/slices/page';
 import { useSelector } from 'react-redux';
-import { categoriesConfigObject } from '../../utils/index';
+import { categoriesConfigObject } from '../../utils';
 import coverPhoto from '../../material/images/create-page-cover-photo.png';
 import { ThemeContext } from '../../contexts/ThemeContext';
-
-// const dummyDescription =
-//   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+import logo from 'frontend/assets/img/logos/logo.png'
+import { Link } from 'react-router-dom';
 
 const CreatePage = () => {
   const theme = useTheme();
@@ -135,7 +134,7 @@ const CreatePage = () => {
       profile_picture: uploadedProfilePictureUrl,
       cover_picture: uploadedCoverPictureUrl
     });
-    const payload = { 
+    const payload = {
       ...data,
       profile_picture: uploadedProfilePictureUrl,
       cover_picture: uploadedCoverPictureUrl,
@@ -200,30 +199,36 @@ const CreatePage = () => {
       >
         {/* header */}
         <Stack direction="row" justifyContent="space-between" className="header-container">
-          <Stack>
-            {/* navigation text */}
-            <Stack className="secondary-text-color" direction="row" spacing={0.5}>
-              <Typography
-                variant="body2"
-                className="cursor-pointer"
-                component="div"
-                onClick={navigateOnEditPage}
-                sx={{
-                  '&:hover': {
-                    color: '#fff'
-                  }
-                }}
-              >
-                Page
-              </Typography>
-              <Typography variant="body2">{'>'}</Typography>
-              <Typography variant="body2" className="cursor-pointer">
+          <Stack direction="row" gap="8px" alignItems="center">
+            <Link to="/lounge">
+              <h1>
+                <img src={logo} alt="logo" id="logo_homepage" style={{ maxHeight: '30px' }} />{" "}
+              </h1>
+            </Link>
+            <Stack>
+              <Stack className="secondary-text-color" direction="row" spacing={0.5}>
+                <Typography
+                  variant="body2"
+                  className="cursor-pointer"
+                  component="div"
+                  onClick={navigateOnEditPage}
+                  sx={{
+                    '&:hover': {
+                      color: '#fff'
+                    }
+                  }}
+                >
+                  Page
+                </Typography>
+                <Typography variant="body2">{'>'}</Typography>
+                <Typography variant="body2" className="cursor-pointer">
+                  {isPageCreated ? 'Set up your Page' : 'Create a Page'}
+                </Typography>
+              </Stack>
+              <Typography className="primary-text-color" variant="h3">
                 {isPageCreated ? 'Set up your Page' : 'Create a Page'}
               </Typography>
             </Stack>
-            <Typography className="primary-text-color" variant="h3">
-              {isPageCreated ? 'Set up your Page' : 'Create a Page'}
-            </Typography>
           </Stack>
           <IconButton>
             <HiInformationCircle />

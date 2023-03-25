@@ -84,10 +84,6 @@ const MainNavBar = () => {
     }
   };
 
-  const navigateOnCreatePage = () => {
-    navigate("/page/creation");
-  };
-
   const navigateOnViewPage = () => {
     dispatch(commonSliceActions.startLoading());
     navigate(`/${pageData?.page_name}`);
@@ -105,54 +101,6 @@ const MainNavBar = () => {
     }
     setIsLoadingSearch(false);
   };
-
-  // navigation array
-
-  const arrNavList = [
-    {
-      onChange: navigateOnCreatePage,
-      title: pageData?.page_name ? "" : "Create Page",
-    },
-    {
-      onChange: navigateOnViewPage,
-      title: pageData?.page_name ? "Page" : "",
-    },
-    {
-      onChange: onLogout,
-      title: "Logout",
-    },
-  ];
-
-  const arrNavListMobile = [
-    {
-      onChange: navigateOnCreatePage,
-      title: pageData?.page_name ? "" : "Create Page",
-    },
-    {
-      onChange: navigateOnViewPage,
-      title: pageData?.page_name ? "Page" : "",
-    },
-    {
-      onChange: onLogout,
-      title: "Logout",
-    },
-  ];
-
-  const arrNavListMobileNotAuth = [
-    {
-      onChange: () => navigate(isAuthenticated ? "/events" : "/public/events"),
-      title: "Events",
-    },
-    {
-      onChange: () =>
-        navigate(
-          window.location.href.includes("/auth/login")
-            ? "/auth/signup"
-            : "/auth/login"
-        ),
-      title: window.location.href.includes("/auth/login") ? "Sign Up" : "Login",
-    },
-  ];
 
   return (
     <div id="event_nav" style={{ marginTop: "80px" }}>
@@ -316,14 +264,6 @@ const MainNavBar = () => {
 
               {isAuthenticated ? (
                 <>
-                  <Dropdown
-                    title={<CgProfile style={{ color: "white" }} size={37} />}
-                    arrChanges={
-                      window.innerWidth < 980 ? arrNavListMobile : arrNavList
-                    }
-                    mobile={window.innerWidth < 980}
-                  />
-
                   {window.innerWidth > 980 && (
                     <>
                       {/* wallet */}

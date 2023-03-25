@@ -3,6 +3,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import {
   Avatar,
   Badge,
@@ -155,6 +156,7 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
 
   const savedUser = JSON.parse(localStorage.getItem('userData') ?? '{}');
+  const pageData = useSelector((state: RootState) => state?.page?.pageData);
 
   const currentLanguage = localStorage.getItem('selectedLanguage') ? localStorage.getItem('selectedLanguage') :  'en';
 
@@ -445,6 +447,19 @@ onClick={() => navigate('/dint-wallet')}
               <ListItemText primary={ toggle ? 'Light Mode' : 'Dark Mode'} />
             </ListItemButton>
           </ListItem>
+
+          <ListItem
+            sx={itemSelectionStyle}
+            disablePadding
+            onClick={() => navigate(pageData?.page_name ? `/${pageData?.page_name}` : '/page/creation')}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <AccountCircleOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary={pageData?.page_name ? 'View Page' : 'Create Page'} />
+            </ListItemButton>
+          </ListItem>
           <div id="test-div" />
           <ListItem
             sx={{
@@ -465,7 +480,7 @@ onClick={() => navigate('/dint-wallet')}
                 },
               },
               '.MuiButtonBase-root':{
-                background : toggle ? '#161c24' : "white" 
+                background : toggle ? '#161c24' : "white"
               },
               '&:hover': {
                 color: 'white',
