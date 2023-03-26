@@ -273,7 +273,7 @@ export const getPostOrderingColumnPayload = (columnIndex: number, direction: str
   };
 };
 
-const IMAGE_EXTENSIONS = ['jpg', 'gif', 'png', 'svg', 'webp', 'ico', 'jpeg'];
+const IMAGE_EXTENSIONS = ['jpg', 'gif', 'png', 'svg', 'webp', 'ico', 'jpeg', 'JPG'];
 const VIDEO_EXTENSIONS = ['MP4', 'mp4', 'MOV', 'mov', '3gp', 'ogg', 'quicktime'];
 
 export const isImage = (mediaUrl: string = ''): boolean => {

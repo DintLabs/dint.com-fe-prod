@@ -33,7 +33,7 @@ interface Props {
   handleNextStories?: () => void;
 }
 
-const images = ["jpg", "gif", "png", "svg", "webp", "ico", "jpeg"];
+const images = ["jpg", "gif", "png", "svg", "webp", "ico", "jpeg", "JPG"];
 const videos = ["mp4", "MP4", "MOV", "mov", "3gp", "ogg", "quicktime"];
 
 const useStyles = makeStyles((theme: Theme) => ({
