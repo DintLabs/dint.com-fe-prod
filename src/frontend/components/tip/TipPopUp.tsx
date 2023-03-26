@@ -331,7 +331,7 @@ const TipPopUp: FC<TipPopUpProps> = ({
                 <Typography
                   sx={{ color: "#7635dc", textDecoration: "none" }}
                   component="a"
-                  href={`https://mumbai.polygonscan.com/tx/${dintTxn.data.Hash}`}
+                  href={`https://polygonscan.com/tx/${dintTxn.data.Hash}`}
                   target="_blank">
                   {truncate(dintTxn.data.Hash, 18)}
                 </Typography>
