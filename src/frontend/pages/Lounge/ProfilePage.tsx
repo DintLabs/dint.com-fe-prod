@@ -540,13 +540,13 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                        {userDetails?.user_follower?.length || 0} Followers
+                      
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                        {userDetails?.user_following?.length || 0} Following
+                      
                       </Typography>
                     </div>
                   </div>
@@ -720,10 +720,10 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                 {counts?.all_posts ?? 0} Post
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}  >
-                {userDetails?.user_follower.length || 0} Followers
+             
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}  >
-                {userDetails?.user_following.length || 0} Following
+              
                 </Typography>
               </div>
 
