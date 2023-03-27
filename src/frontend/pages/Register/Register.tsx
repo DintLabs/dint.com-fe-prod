@@ -458,26 +458,10 @@ const Register = () => {
                 
 
                 <div className="d-flex justify-content-between align-items-center horizontal">
-                  <div className="line" style={{border:toggle ? '1px solid rgba(255, 255, 255, 0.4)' :'1px solid rgba(0, 0, 0, 0.08)'}}></div>
-                  <p className="m-3">Or</p>
-                  <div className="line" style={{border:toggle ? '1px solid rgba(255, 255, 255, 0.4)' :'1px solid rgba(0, 0, 0, 0.08)'}}></div>
+             
                 </div>
                 
 
-                <button
-                      type="button"
-                      onClick={googleSignUp}
-                      className="socialbtn"
-                      style={toggle ? { background : '#353535' , color:"#fff" } : { background : '#fff' , color:"#000"  }}
-                    >
-                      <img
-                        src={require("../../assets/img/socialmedia/googlelogo.png")}
-                        className="mx-2 google-logo"
-                        alt=""
-                        style={{ height: "20px" }}
-                      />{" "}
-                      SignUp with Google
-                    </button>
                 
                   <div
                     style={{
