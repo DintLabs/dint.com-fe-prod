@@ -1,3 +1,5 @@
+import { IUserOwnStories } from '../types/lounge';
+
 export interface EventInterface {
   isLoading: boolean;
   lstEvent: any[];
@@ -80,6 +82,8 @@ export interface UserDataInterface {
   uid?: string | null;
   user_follower:any ;
   user_following:any;
+  user_posts: PostInterface[];
+  user_stories: IUserOwnStories[];
 }
 export interface ConfineUserInterface {
   id: number;

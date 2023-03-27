@@ -46,10 +46,10 @@ import { messagesActions } from "frontend/redux/slices/messages";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "@mui/material";
 import { getUserOwnStories } from "frontend/redux/slices/lounge";
-import ProfileAvatar from './ProfileAvatar';
 import { convertPostDates } from '../../utils/date';
 import Swal from 'sweetalert2';
 import { useLocation } from 'react-router-dom';
+import AvatarComponent from '../../components/common/Avatar';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -523,11 +523,14 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
       >
         <Box sx={{ width: "100%" }}>
           <div className="profile-menu">
-            <ProfileAvatar
-              isEligibleForFetchingPost={isEligibleForFetchingPost}
-              userProfileImage={userDetails?.profile_image}
-              avatar={avatar}
-            />
+            {userDetails && (
+              <AvatarComponent
+                user={userDetails}
+                stories={userDetails.user_stories}
+                hideStories={!isEligibleForFetchingPost}
+                redirectOnCLick={false}
+              />
+            )}
 
                     <div className="post-wrapper-mobile">
                       <Typography
@@ -540,13 +543,13 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                      
+
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                      
+
                       </Typography>
                     </div>
                   </div>
@@ -720,10 +723,10 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                 {counts?.all_posts ?? 0} Post
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}  >
-             
+
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}  >
-              
+
                 </Typography>
               </div>
 

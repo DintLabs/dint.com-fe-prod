@@ -40,7 +40,6 @@ import { toast } from "react-toastify";
 import { getUserOwnStories } from "frontend/redux/slices/lounge";
 import { useSelector } from "react-redux";
 import { RootState, useDispatch } from "frontend/redux/store";
-import StoriesUserOwn from "frontend/components/lounge/StoriesUserOwn";
 import Carousel from "./Carousel";
 import Stories from "react-insta-stories";
 import { config } from "react-spring";
@@ -51,6 +50,7 @@ import TipPopUp from "frontend/components/tip/TipPopUp";
 import React from "react";
 import { createUserStories } from 'frontend/utils/stories';
 import PostItemNew from 'frontend/pages/Lounge/PostItem/PostItem';
+import AvatarComponent from '../../components/common/Avatar';
 
 interface Props {
   createPost: Function;
@@ -117,6 +117,7 @@ const HomeTab = ({ createPost }: Props) => {
   const [selectedStory, setSelectedStory] = useState<any>();
   const userData = useSelector((state: RootState) => state.user.userData);
   const [userStories, setUserStories] = useState<any[]>([]);
+  const { userOwnStories } = useSelector((state: RootState) => state.lounge);
   const [state, setState] = useState<any>({
     goToSlide: 0,
     offsetRadius: 2,
@@ -347,7 +348,8 @@ const HomeTab = ({ createPost }: Props) => {
           dispatch(getUserOwnStories());
           setOpenModal(false);
           setOpenModalMobile(false);
-          handleStoryOnCreateStory(result?.data?.data);
+          setOpenStoryModal('');
+          // handleStoryOnCreateStory(result?.data?.data);
           toast.update(toastId, {
             render: result?.data?.message,
             type: "success",
@@ -681,24 +683,11 @@ const HomeTab = ({ createPost }: Props) => {
                   >
                     <div
                       style={{ position: "relative" }}
-                      onClick={() => {
-                        mobileView
-                          ? setOpenModalMobile(true)
-                          : setOpenModal(true);
-                        setOpenStoryModal("User");
-                      }}
                     >
-                      <Avatar
-                        className="story-avatar"
-                        src={savedUser?.profile_image}
-                        sx={{
-                          width: 92,
-                          height: 92,
-                          borderWidth: "3px",
-                          borderStyle: "solid",
-                          borderColor: toggle ? "#4AA081" : "#4AA081",
-                          position: "relative",
-                        }}
+                      <AvatarComponent
+                        user={savedUser}
+                        stories={userOwnStories}
+                        size={92}
                       />
 
                       {/* Create Story Button */}
@@ -739,7 +728,6 @@ const HomeTab = ({ createPost }: Props) => {
                     </Typography>
                   </div>
                 )}
-                <StoriesUserOwn />
 
                 {storyList?.map((item: any, i: number) => (
                   <React.Fragment key={i}>
