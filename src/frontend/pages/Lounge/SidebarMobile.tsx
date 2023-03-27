@@ -18,7 +18,7 @@ interface Props {
 
 const SidebarMobile = ({ widthScreen }: Props) => {
   const navigate = useNavigate();
-  
+
   const { toggle } = useContext(ThemeContext);
   const { selectedMenu } = useSelector((rootState: RootState) => rootState.newHome);
 
@@ -39,12 +39,12 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         onClose={() => setShowMoreDrawer(false)}
         openFrom="right"
       />
-      <List sx={{ 
-        display: 'flex', 
-        padding: '3% 0%', 
-        backgroundColor: toggle ? "#000" : "#fff", 
+      <List sx={{
+        display: 'flex',
+        padding: '3% 0%',
+        backgroundColor: toggle ? "#000" : "#fff",
         height: '10vh',
-        width: '30px'
+        width: '100vw'
       }}>
         <ListItem
           sx={{
@@ -58,7 +58,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <OtherHousesIcon sx={{height: ICON_SIZE, width: ICON_SIZE }} />
+            <OtherHousesIcon />
           </ListItemAvatar>
         </ListItem>
         <ListItem
@@ -73,7 +73,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <BsSearch size={ICON_SIZE} />
+            <BsSearch />
           </ListItemAvatar>
         </ListItem>
 
@@ -89,7 +89,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <AddIcon sx={{height: ADD_ICON_SIZE, width: ADD_ICON_SIZE }} />
+            <AddIcon />
           </ListItemAvatar>
         </ListItem>
 
@@ -105,10 +105,10 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <TextsmsRoundedIcon sx={{height: ICON_SIZE, width: ICON_SIZE }} />
+            <TextsmsRoundedIcon />
           </ListItemAvatar>
         </ListItem>
-      
+
 
         <ListItem
           sx={{
@@ -122,7 +122,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
           }}
         >
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <AccountCircleRoundedIcon sx={{ height: ICON_SIZE, width: ICON_SIZE}}/>
+            <AccountCircleRoundedIcon />
           </ListItemAvatar>
         </ListItem>
       </List>

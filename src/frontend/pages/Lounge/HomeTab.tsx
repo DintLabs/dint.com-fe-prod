@@ -3,12 +3,10 @@ import {
   Box,
   Button,
   Grid,
-  IconButton,
   ListItemAvatar,
   Modal,
   Tab,
   Tabs,
-  TextField,
   Typography,
   useMediaQuery,
   useTheme,
@@ -41,16 +39,14 @@ import { getUserOwnStories } from "frontend/redux/slices/lounge";
 import { useSelector } from "react-redux";
 import { RootState, useDispatch } from "frontend/redux/store";
 import Carousel from "./Carousel";
-import Stories from "react-insta-stories";
 import { config } from "react-spring";
 import CloseIcon from "@mui/icons-material/Close";
-import { sendMessage } from "frontend/redux/slices/messages";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import TipPopUp from "frontend/components/tip/TipPopUp";
 import React from "react";
 import { createUserStories } from 'frontend/utils/stories';
 import PostItemNew from 'frontend/pages/Lounge/PostItem/PostItem';
 import AvatarComponent from '../../components/common/Avatar';
+import UserStories from '../../components/UserStories/UserStories';
 
 interface Props {
   createPost: Function;
@@ -110,8 +106,6 @@ const HomeTab = ({ createPost }: Props) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openModalMobile, setOpenModalMobile] = useState<boolean>(false);
   const [openStoryModal, setOpenStoryModal] = useState<string>("");
-  const [messageContent, setMessageContent] = useState<string>("test");
-  const inputRef = useRef<any>(null);
 
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
   const [selectedStory, setSelectedStory] = useState<any>();
@@ -127,7 +121,6 @@ const HomeTab = ({ createPost }: Props) => {
   });
   const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false);
   const [profileByUsername, setProfileByUsername] = useState<any>();
-  const [alreadyLike, setAlreadyLike] = useState(false);
   const dispatch = useDispatch();
   const {
     counts,
@@ -392,186 +385,37 @@ const HomeTab = ({ createPost }: Props) => {
     setOpenModalMobile(false);
   };
 
-  const renderData = useCallback(
-    (story: any) => (
-      <TextField
-        inputRef={inputRef}
-        fullWidth
-        color="secondary"
-        onChange={(e) => setMessageContent(e.target.value)}
-        onKeyPress={(e) => {
-          if (e.key === "Enter") {
-            sendMessageHandler(story.id.toString(), userData);
-          }
-        }}
-        placeholder="Send Message"
-        sx={{
-          color: toggle ? "white" : "#161C24",
-          height: 40,
-          ".MuiInputBase-root": {
-            borderRadius: "25px",
-            ".MuiInputBase-input": {
-              height: "40px !important",
-              padding: "0 14px",
-              outline: "none",
-              boxShadow: "none",
-              "&:hover": {
-                borderColor: "transparent",
-                boxShadow: "none",
-              },
-              "&:focus": {
-                boxShadow: "none",
-                outline: "none",
-                borderColor: "red",
-              },
-            },
-          },
-        }}
-      />
-    ),
-    [messageContent, userData]
-  );
-
-  const sendTip = async (story: any) => {
-    try {
-      const { data } = await _axios.post("/api/user/get-profile-by-username/", {
-        custom_username: story.custom_username,
-      });
-
-      if (data.code === 200) {
-        setProfileByUsername(data.data);
-        setOpenPopUpTip(true);
-      } else {
-        toast.error("User is not availabe for tip!!");
-      }
-    } catch (err) {
-      toast.error("User is not availabe!!");
-    }
-  };
-
   useEffect(() => {
     const data: any = [];
     if (storyList.length > 0) {
-      storyList?.map((story: any, index: number, { length }: any) => {
+      storyList?.forEach((story: any, index: number) => {
         data.push({
           key: story?.id,
           content: (
-            <Box
-              sx={{
-                position: "relative",
-                "@media screen and (max-width: 899px)": {
-                  height: "100vh",
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  flex: 1,
-                  flexDirection: "column",
-                  "> div ~ div": {
-                    "> div ~ div": {
-                      height: "100vh !important",
-                      div: {
-                        width: "100%",
-                      },
-                    },
-                  },
-                },
-              }}
-            >
-              <div
-                onClick={() => navigate(`/${story.custom_username}`)}
-                style={{
-                  display: "flex",
-                  gap: "15px",
-                  position: "absolute",
-                  top: 20,
-                  left: 15,
-                  zIndex: 1000,
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
-              >
-                <Avatar
-                  className="story-avatar"
-                  src={story?.profile_image}
-                  sx={{
-                    width: 50,
-                    height: 50,
-                    borderWidth: "3px",
-                    borderStyle: "solid",
-                    borderColor: toggle ? "#4AA081" : "#4AA081",
-                    position: "relative",
-                  }}
-                />
-                <h4 style={{ color: "#fff" }}>{story.display_name}</h4>
-                {/* {story.user_stories.map((user_story: any) => <h4>{moment(user_story.created_at).fromNow()}</h4> )} */}
-              </div>
-              <Stories
-                stories={createUserStories(story)}
-                onStoryEnd={(s: any, st: any) => {
-                  console.log("story ended===", s, st, state.goToSlide);
-                  // setState({
-                  //   ...state,
-                  //   goToSlide: index + 1
-                  // })
-                }}
-                onAllStoriesEnd={(s: any, st: any) => {
-                  console.log("all stories ended", s, st, state.goToSlide);
-                  if (state.goToSlide === length) {
-                    setOpenModal(false);
-                    setOpenModalMobile(false);
-                  } else {
-                    setState({
-                      ...state,
-                      goToSlide: index + 1,
-                    });
-                  }
-                }}
-                onStoryStart={(s: any, st: any) =>
-                  console.log("story started", s, st)
+            <UserStories
+              username={story.custom_username}
+              profileName={story.display_name}
+              avatarUrl={story.profile_image}
+              stories={story.user_stories}
+              onClose={handleClose}
+              onAllStoriesEnd={() => {
+                if (index === storyList.length - 1) {
+                  setOpenModal(false);
+                  setOpenModalMobile(false);
+                } else {
+                  setState((prevState: any) => ({
+                    ...prevState,
+                    goToSlide: prevState.goToSlide + 1
+                  }));
                 }
-                width={window.innerWidth < 900 ? "100%" : undefined}
-                height={window.innerWidth < 900 ? "100%" : undefined}
-              />
-              <CloseIcon
-                onClick={handleClose}
-                style={{
-                  cursor: "pointer",
-                  color: "white",
-                  zIndex: 9999,
-                  position: "absolute",
-                  top: "25px",
-                  right: "15px",
-                }}
-              />
-              <Box
-                sx={{
-                  display: "flex",
-                  position: "absolute",
-                  bottom: 15,
-                  left: 0,
-                  width: "100%",
-                  padding: "0 10px",
-                  zIndex: 999,
-                  "@media screen and (max-width: 899px)": {
-                    position: "sticky",
-                  },
-                }}
-              >
-                {renderData(story)}
-                <IconButton
-                  onClick={() => sendTip(story)}
-                  sx={{ fontSize: "12px" }}
-                >
-                  <MonetizationOnIcon />
-                </IconButton>
-              </Box>
-            </Box>
+              }}
+            />
           ),
         });
       });
       setUserStories(data);
     }
-  }, [storyList, userData, alreadyLike, state.goToSlide]);
+  }, [storyList, userData, state.goToSlide, state]);
 
   const handleTouchStart = (evt: any) => {
     if (!state.enableSwipe) {
@@ -614,27 +458,6 @@ const HomeTab = ({ createPost }: Props) => {
       }
     }
   };
-
-  const sendMessageHandler = useCallback(
-    async (receiverId: string, userData: any) => {
-      const messageContent = inputRef?.current?.value;
-      if (messageContent.trim().length > 0) {
-        const res = await dispatch(
-          sendMessage({
-            reciever: receiverId,
-            sender: userData?.id?.toString(),
-            content: messageContent.trim(),
-            media: "", // Add a default value for the media property
-          })
-        );
-        if (res) {
-          toast.success("Message sent successful!!");
-        }
-      }
-      setMessageContent("");
-    },
-    [messageContent, userData]
-  );
 
   // for popup tip
   const handleClickOpen = () => {

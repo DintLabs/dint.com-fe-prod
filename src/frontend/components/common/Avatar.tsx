@@ -1,12 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router';
 import { IUserOwnStories } from 'frontend/types/lounge';
 import { UserDataInterface } from 'frontend/interfaces/reduxInterfaces';
 import { Avatar, Box, Modal, useMediaQuery } from '@mui/material';
-import Stories from 'react-insta-stories';
-import CloseIcon from '@mui/icons-material/Close';
-import { Story } from 'react-insta-stories/dist/interfaces';
-import { createUserStories } from '../../utils/stories';
+import UserStories from '../UserStories/UserStories';
 
 const DEFAULT_AVATAR_SIZE_MOBILE = 92;
 const DEFAULT_AVATAR_SIZE_DESKTOP = 175;
@@ -40,10 +37,6 @@ function AvatarComponent({
       ? DEFAULT_AVATAR_SIZE_MOBILE
       : DEFAULT_AVATAR_SIZE_DESKTOP;
     }, [isMobile, size]);
-
-  const formattedStories: Story[] = React.useMemo(() => createUserStories({
-    user_stories: stories,
-  }), [stories]);
 
   const handleClick = React.useCallback(() => {
     if (stories.length > 0 && !hideStories) {
@@ -79,73 +72,17 @@ function AvatarComponent({
           alignItems: 'center',
         }}
       >
-        <Box
-          sx={{
-            position: 'relative',
-            '@media screen and (max-width: 899px)': {
-              height: '100%', width: '100%', display: 'flex', alignItems: 'center',flex: 1,flexDirection: 'column',
-              '> div': {
-                '> div ~ div': {
-                  flex:1,
-                  'div': {
-                    width: '100%',
-                  },
-                },
-              },
-            }
+        <UserStories
+          stories={stories}
+          username={user.custom_username}
+          profileName={user.display_name ?? user.custom_username}
+          avatarUrl={user.profile_image}
+          onAllStoriesEnd={() => setStoriesOpened(false)}
+          onClose={(event) => {
+            event.stopPropagation();
+            setStoriesOpened(false);
           }}
-        >
-          <div
-            onClick={() => navigate(`/${user?.custom_username}`)}
-            style={{
-              display:'flex',
-              gap: '15px',
-              position: 'absolute',
-              top: 20,
-              left: 15,
-              zIndex: 1000,
-              alignItems: "center",
-              cursor: "pointer"
-            }}
-          >
-            <Avatar
-              className="story-avatar"
-              src={user?.profile_image}
-              sx={{
-                width: 50,
-                height: 50,
-                borderWidth: "3px",
-                borderStyle: "solid",
-                borderColor: "#4AA081",
-                position: "relative",
-              }}
-            />
-            <h4 style={{color: '#fff'}}>{user?.display_name}</h4>
-          </div>
-          <Stories
-            keyboardNavigation
-            stories={formattedStories}
-            onStoryEnd={(s: any, st: any) => console.log("story ended", s, st)}
-            onAllStoriesEnd={(s: any, st: any) => setStoriesOpened(false)}
-            onStoryStart={(s: any, st: any) => console.log("story started", s, st)}
-            width={window.innerWidth < 900 ? "100%" : undefined}
-            height={window.innerWidth < 900 ? "100%" : undefined}
-          />
-          <CloseIcon
-            onClick={(e: any) => {
-              e.stopPropagation();
-              setStoriesOpened(false);
-            }}
-            style={{
-              cursor: 'pointer',
-              color: 'white',
-              zIndex: 9999,
-              position: 'absolute',
-              top: '25px',
-              right: '15px'
-            }}
-          />
-        </Box>
+        />
       </Modal>
     </Box>
   );

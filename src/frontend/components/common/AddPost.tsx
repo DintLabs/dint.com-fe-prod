@@ -2,12 +2,13 @@ import React, { MouseEvent, useContext, useState } from 'react'
 import { ThemeContext } from '../../contexts/ThemeContext'
 import { uploadMedia } from '../../redux/actions/commonActions'
 import { postTypes } from 'frontend/data'
-import { dispatch } from 'frontend/redux/store'
+import { dispatch, RootState } from 'frontend/redux/store';
 import { toast } from 'react-toastify'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import ImageIcon from '@mui/icons-material/Image'
 import { Box, Button, Divider, IconButton, Input, Stack } from '@mui/material'
 import './post.scss'
+import { useSelector } from 'react-redux';
 
 interface Props {
   createPost: Function
@@ -26,13 +27,13 @@ const AddPost = ({ createPost, pageId }: Props) => {
   const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false)
   const [loading, setLoading] = useState(false)
   const { toggle } = useContext(ThemeContext)
+  const loggedInUser = useSelector((state: RootState) => state.user.userData);
 
   const onCreatePost = async () => {
     if (!loading) {
       setLoading(true)
       const toastId = toast.loading('Uploading File...')
-      const user = JSON.parse(localStorage.getItem('userData') ?? '{}')
-      if (!user.id) {
+      if (!loggedInUser?.id) {
         toast.update(toastId, {
           type: 'error',
           render: "Can't find User Id",
@@ -58,7 +59,7 @@ const AddPost = ({ createPost, pageId }: Props) => {
                       : video
                       ? postTypes.video.value
                       : postTypes.text.value,
-                    user: user.id,
+                    user: loggedInUser.id,
                     media: res || '',
                     content,
                     page: pageId,
@@ -76,7 +77,7 @@ const AddPost = ({ createPost, pageId }: Props) => {
         } else {
           await createPost(toastId, {
             type: postTypes.text.value,
-            user: user.id,
+            user: loggedInUser.id,
             content,
             page: pageId,
           })
@@ -161,8 +162,8 @@ const AddPost = ({ createPost, pageId }: Props) => {
         >
           {/* we haven't track */}
           {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <video width='300px' controls>
-            <source src={video} id='video_here' />
+          <video width='300px' controls preload="metadata">
+            <source src={`${video}#t=0.001`} id='video_here' />
             Your browser does not support HTML5 video.
           </video>
         </div>

@@ -197,42 +197,56 @@ const NewHome = () => {
         </Grid>
       </>
     )
-  }, [createPost, location.pathname, params.username, widthScreen, mobileView])
+  }, [createPost, location.pathname, params.username, widthScreen, mobileView]);
 
-  return isPrimaryLoader ? (
-    <PageSkeleton />
-  ) : isViewPage ? (
-    <ViewPage />
-  ) : (
+  if (isPrimaryLoader) {
+    return <PageSkeleton />;
+  }
+
+  if (isViewPage) {
+    return <ViewPage />;
+  }
+
+  return (
     <>
       <Helmet>
         <title>Lounge</title>
         <meta name='' content='' />
       </Helmet>
       <Box style={{ margin: 0 }}>
-        <Grid container>
-          <Grid item xs={0} md={1} className='desktop-nav'>
-            {userData && !!userData.id && <Sidebar />}
-          </Grid>
-          <Grid item className='mobile-nav'>
+        {mobileView ? (
+          <Box display="flex" flexDirection="column">
             {userData && !!userData.id && (
-              // isMobileScreen &&
-              <>
-                <MobileTopHeader
-                  userName={userData.display_name || ''}
-                  avatar={userData.profile_image || ''}
-                />
-                <SidebarMobile widthScreen={widthScreen} />
-              </>
+              <MobileTopHeader
+                userName={userData.display_name || ''}
+                avatar={userData.profile_image || ''}
+              />
             )}
+
+            <Box flexGrow="1">
+              {isLounge ? renderComponent : null}
+            </Box>
+
+            {userData && !!userData.id && (
+              <Box position="fixed" bottom="0">
+                <SidebarMobile widthScreen={widthScreen} />
+              </Box>
+            )}
+          </Box>
+        ) : (
+          <Grid container>
+            <Grid item xs={0} md={1} className='desktop-nav'>
+              {userData && !!userData.id && <Sidebar />}
+            </Grid>
+
+            <Grid item xs={12} md={10}>
+              {isLounge ? renderComponent : null}
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={10}>
-            {isLounge ? renderComponent : null}
-          </Grid>
-        </Grid>
+        )}
       </Box>
     </>
-  )
+  );
 }
 
 export default NewHome

@@ -67,8 +67,8 @@ const CustomInfiniteScrollForMedia = ({
                           <PlayArrowIcon />
                         </IconButton>
                       )}
-                      <video width="100%" height="100%" autoPlay={false}>
-                        <source src={data.media as string} id="video_here" />
+                      <video width="100%" height="100%" preload="metadata" autoPlay={false}>
+                        <source src={`${data.media}#t=0.001` as string} id="video_here" />
                         Your browser does not support HTML5 video.
                       </video>
                     </Card>

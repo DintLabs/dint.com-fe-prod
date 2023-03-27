@@ -4,4 +4,6 @@ export interface IUserOwnStories {
   name: string;
   story: string;
   user: number;
+  liked_story: any[];
+  total_likes: number;
 }

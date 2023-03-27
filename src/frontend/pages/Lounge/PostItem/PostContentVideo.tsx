@@ -15,7 +15,7 @@ function PostContentVideo({
       {/* we don't have captions to show, so disable the rule below */}
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video width="100%" onClick={onClick} controls>
-        <source src={src} id="video_here" />
+        <source src={`${src}#t=0.001`} id="video_here" />
         Your browser does not support HTML5 video.
       </video>
     </Box>
