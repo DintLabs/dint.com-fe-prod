@@ -75,8 +75,8 @@ export default function SellToken() {
     if (!cardSelect) {
       return toast.warning('Please add a bank account to withdrawal')
     }
-    if (isNaN(Number(data.amount)) || Number(data.amount) < 50) {
-      return toast.error('The amount should be at least $50')
+    if (isNaN(Number(data.amount)) || Number(data.amount) < 1) {
+      return toast.error('The amount should be at least $1')
     }
     try {
       setInProgress(true)
@@ -84,43 +84,45 @@ export default function SellToken() {
         amount: parseInt(data.amount),
         user_id: id,
       }
+      
       if (sendDetail) {
-        _axios
-          .post(`/api/user/withdraw-dint/`, sendDetail)
+        _axios.post(`/api/user/withdraw-dint/`, sendDetail)
           .then((res: any) => {
-            setLoading(true)
-            if (res?.data && res.data.code === 400) {
-              setLoading(false)
-              toast.error('Action Failed')
+            setLoading(true);
+            if (res?.data && res.data.code === 201) {
+              setLoading(false);
+              toast.success('Token sent successfully.');
+              navigate('/dint-wallet');
             } else {
-              _axios
-                .post(`/api/user/request_payouts/`, {
+              _axios.post(`/api/user/request_payouts/`, {
                   amount: parseInt(data.amount),
                 })
                 .then((res: any) => {
                   if (res?.data && res.data.code === 400) {
-                    setLoading(false)
-                    toast.error('Action Failed')
+                    setLoading(false);
+                    toast.error('Action Failed');
                   } else {
-                    setLoading(false)
-                    toast.success('Account Updated successfully.')
-                    return navigate('/dint-wallet')
+                    setLoading(false);
+                    toast.success('Account updated successfully.');
+                    navigate('/dint-wallet');
                   }
                 })
                 .catch((error: any) => {
-                  toast.error('Action Failed')
-                  console.error('error in update bank', error)
-                })
+                  setLoading(false);
+                  toast.error('Action Failed');
+                  console.error('error in update bank', error);
+                });
             }
           })
           .catch((error: any) => {
-            toast.error('Action Failed')
-            console.error('error in update bank', error)
-          })
-        setInProgress(false)
+            setLoading(false);
+            toast.error('Action Failed');
+            console.error('error in withdraw DINT', error);
+          });
+        setInProgress(false);
       }
-    } catch (err) {
-      setInProgress(false)
+    } catch (error) {
+      console.error('An error occurred:', error);
     }
   }
   function getBankDetails() {
@@ -151,6 +153,9 @@ export default function SellToken() {
   useEffect(() => {
     getBankDetails()
   }, [])
+
+
+
   return (
     <Box
       id='postsListScrollableDiv'
