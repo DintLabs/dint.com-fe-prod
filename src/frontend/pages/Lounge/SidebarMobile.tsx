@@ -28,10 +28,10 @@ const SidebarMobile = ({ widthScreen }: Props) => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    px: widthScreen > 375 ? '' : '0px'
+    px: 0,
+    width: '20%',
   };
-  const ICON_SIZE = 40;
-  const ADD_ICON_SIZE = 50;
+
   return (
     <>
       <MoreOptionsDrawer

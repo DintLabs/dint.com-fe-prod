@@ -24,7 +24,6 @@ import {
   useContext,
   useEffect,
   useState,
-  useRef,
   useLayoutEffect,
 } from "react";
 
@@ -41,7 +40,6 @@ import { RootState, useDispatch } from "frontend/redux/store";
 import Carousel from "./Carousel";
 import { config } from "react-spring";
 import CloseIcon from "@mui/icons-material/Close";
-import TipPopUp from "frontend/components/tip/TipPopUp";
 import React from "react";
 import { createUserStories } from 'frontend/utils/stories';
 import PostItemNew from 'frontend/pages/Lounge/PostItem/PostItem';
@@ -108,7 +106,6 @@ const HomeTab = ({ createPost }: Props) => {
   const [openStoryModal, setOpenStoryModal] = useState<string>("");
 
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
-  const [selectedStory, setSelectedStory] = useState<any>();
   const userData = useSelector((state: RootState) => state.user.userData);
   const [userStories, setUserStories] = useState<any[]>([]);
   const { userOwnStories } = useSelector((state: RootState) => state.lounge);
@@ -119,8 +116,6 @@ const HomeTab = ({ createPost }: Props) => {
     enableSwipe: true,
     config: config.gentle,
   });
-  const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false);
-  const [profileByUsername, setProfileByUsername] = useState<any>();
   const dispatch = useDispatch();
   const {
     counts,
@@ -360,26 +355,6 @@ const HomeTab = ({ createPost }: Props) => {
     []
   );
 
-  const handleStoryOnCreateStory = (objStory: any) => {
-    setTimeout(() => {
-      const userStoriesItem = {
-        ...objStory,
-        story: objStory.story.replace(process.env.REACT_APP_API_URL, ""),
-      };
-      userStoriesItem.story.replace(process.env.REACT_APP_API_URL, "");
-      const objStoryItem = {
-        custom_username: savedUser?.custom_username,
-        display_name: savedUser?.display_name,
-        id: savedUser?.id,
-        profile_image: savedUser?.id,
-        user_stories: [userStoriesItem],
-      };
-      setSelectedStory(objStoryItem);
-      setOpenStoryModal("Follower");
-      setOpenModal(true);
-    }, 500);
-  };
-
   const handleClose = () => {
     setOpenModal(false);
     setOpenModalMobile(false);
@@ -459,15 +434,6 @@ const HomeTab = ({ createPost }: Props) => {
     }
   };
 
-  // for popup tip
-  const handleClickOpen = () => {
-    setOpenPopUpTip(true);
-  };
-
-  const handleCloseTipModal = () => {
-    setOpenPopUpTip(false);
-  };
-
   useEffect(() => {
     openModalMobile
       ? (document.body.style.overflow = "hidden")
@@ -511,6 +477,7 @@ const HomeTab = ({ createPost }: Props) => {
                         user={savedUser}
                         stories={userOwnStories}
                         size={92}
+                        hideStoriesActions
                       />
 
                       {/* Create Story Button */}
@@ -561,7 +528,6 @@ const HomeTab = ({ createPost }: Props) => {
                         if (item?.user_stories?.length > 0) {
                           setOpenModal(true);
                           setOpenStoryModal("Follower");
-                          setSelectedStory(item);
                           createUserStories(item);
                           setState({
                             ...state,
@@ -934,13 +900,6 @@ const HomeTab = ({ createPost }: Props) => {
           </Box>
         </Box>
       </Box>
-      <TipPopUp
-        user={profileByUsername}
-        onClose={handleCloseTipModal}
-        setOpenPopUpTip={setOpenPopUpTip}
-        onOpen={handleClickOpen}
-        openPopUpTip={openPopUpTip}
-      />
     </>
   );
 };

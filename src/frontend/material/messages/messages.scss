@@ -1,7 +1,7 @@
 @import './../utilities/colors.scss';
 
 .messages-container {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 2%);
   overflow: hidden;
   .user-list {
     display: flex;
@@ -47,15 +47,17 @@
     }
     .message-list {
       overflow: auto;
-      padding: 8px;
-      padding-bottom: 60px;
+      padding: 8px 0;
+
       .message-list-divider {
         margin-bottom: 22px;
+
         .MuiDivider-wrapper {
           position: relative;
           top: 50%;
         }
       }
+
       .sender-message {
         // .message-time {
         //   align-self: flex-end;
@@ -95,9 +97,7 @@
       }
     }
     .message-input {
-      position: absolute;
       min-width: 100%;
-      bottom: 0;
       background-color: $primary-bg-color;
     }
   }

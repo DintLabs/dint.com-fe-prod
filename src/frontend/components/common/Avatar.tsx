@@ -13,6 +13,7 @@ type AvatarProps = {
   stories: IUserOwnStories[];
   size?: number;
   hideStories?: boolean;
+  hideStoriesActions?: boolean;
   redirectOnCLick?: boolean;
 };
 
@@ -22,6 +23,7 @@ function AvatarComponent({
   size,
   hideStories,
   redirectOnCLick,
+  hideStoriesActions,
 }: AvatarProps) {
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width:600px)');
@@ -82,6 +84,7 @@ function AvatarComponent({
             event.stopPropagation();
             setStoriesOpened(false);
           }}
+          hideActions={hideStoriesActions}
         />
       </Modal>
     </Box>

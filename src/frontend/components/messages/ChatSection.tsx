@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, memo, useCallback } from "react";
+import React, { useState, useContext, useEffect, memo } from "react";
 import _axios from "frontend/api/axios";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import {
@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import { BsChatLeftTextFill } from "react-icons/bs";
 import { FiMoreVertical } from "react-icons/fi";
 import { MdSend } from "react-icons/md";
 import { useNavigate, useParams } from "react-router";
@@ -17,17 +16,15 @@ import { AiOutlineLeft } from "react-icons/ai";
 
 import { FlexRow } from "frontend/reusable/reusableStyled";
 import { sendMessage } from "frontend/redux/slices/messages";
-import { RootState, useDispatch, useSelector } from "frontend/redux/store";
+import { useDispatch } from "frontend/redux/store";
 import MessageList from "./MessageList";
 import TipPopUp from "../tip/TipPopUp";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { fetchAllChatsList } from "../../redux/slices/messages";
 import SendIcon from "@mui/icons-material/Send";
 import { Button } from "@mui/material";
 import NewMessage from "frontend/components/messages/NewMessage";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import AddChatMedia from "frontend/pages/Lounge/AddChatMedia";
-import { toast } from "react-toastify";
 import { HOME_SIDE_MENU, setNewHomeSliceChanges } from '../../redux/slices/newHome';
 
 let ws: any;
@@ -43,17 +40,16 @@ function ChatSection(props: ChatSectionProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toggle } = useContext(ThemeContext);
-  const [chatListLoader, setChatListLoader] = useState(true);
 
+  const [isChatLoading, setIsChatLoading] = React.useState<boolean>(true);
+  const [isSendLoading, setIsSendLoading] = React.useState<boolean>(false);
 
   const [openPopUpTip, setOpenPopUpTip] = useState<boolean>(false);
 
-  const { messagesList } = useSelector((state: RootState) => state.messages);
   const [userChats, setUserChats] = useState<any>([]);
   const [messageContent, setMessageContent] = useState("");
   const [isAddNewModalOpen, setIsAddNewModalOpen] = useState(false);
   const [openMedia, setOpenMedia] = useState(false);
-  const [media,setMedia] = useState()
 
   useEffect(() => {
     ws = new WebSocket(
@@ -61,38 +57,45 @@ function ChatSection(props: ChatSectionProps) {
     );
 
     ws.onmessage = function (e: any) {
-      const newdata = JSON.parse(e.data);
-      setUserChats((prev: any) => [newdata.message, ...prev]);
-      props.setNewMessage((prev: any) => [newdata.message, ...prev]);
+      try {
+        const { message, type } = JSON.parse(e.data);
+        if (type === 'notification') { // skip notification event
+          return;
+        }
+
+        if (userChats.every((e: any) => e.id !== message.id)) {
+          setUserChats((prev: any) => [message, ...prev]);
+          props.setNewMessage((prev: any) => [message, ...prev]);
+        }
+      } catch (error) {
+        console.error('Error in ws.onmessage: ', error);
+      }
     };
-    fetchUserChat();
+
+    if (props.selectedUser.id > 0) {
+        _axios.get(`api/chat/get-chat-by-user/${props.selectedUser.id}`)
+          .then(({ data }: { data: any }) => {
+            setUserChats(data.data);
+            setIsChatLoading(false);
+          })
+          .catch((error: Error) => {
+            console.error('Error while loading chat:', error.message)
+          });
+    }
 
     return () => {
       ws.close();
     };
   }, [props.selectedUser]);
 
-  const fetchUserChat = async () => {
-    if (props.selectedUser.id > 0) {
-      try {
-        const { data } = await _axios.get(
-          `api/chat/get-chat-by-user/${props.selectedUser.id}`
-        );
-
-        setUserChats(data.data);
-        setChatListLoader(false);
-      } catch (err: any) {
-        console.error("err ===>", err.message);
-      }
-    }
-  };
-
   const sendMessageHandler = async (attachedMediaUrl?: string) => {
-    if (
-      (messageContent.trim().length > 0 || attachedMediaUrl?.length)&&
-      props.selectedUser.id !== -1 &&
-      props.loggedInUser.id
-      ) {
+    const hasMessage = messageContent.trim().length > 0 || attachedMediaUrl?.length;
+    const chatSelected = props.selectedUser.id !== -1;
+    const loggedIn = !!props.loggedInUser.id;
+
+    if (loggedIn && chatSelected && hasMessage && !isSendLoading) {
+      setIsSendLoading(true);
+
       const res = await dispatch(
         sendMessage({
           reciever: props.selectedUser.id.toString(),
@@ -102,21 +105,12 @@ function ChatSection(props: ChatSectionProps) {
         })
       );
       if (res) {
-        console.log("res --->", res);
         ws.send(JSON.stringify(res));
-        fetchUserChat();
       }
     }
-    setMessageContent("");
-  };
 
-  const handleClickOpen = () => {
-    setOpenPopUpTip(true);
-  };
-
-  const handleClose = () => {
-    console.log("modal close")
-    setOpenPopUpTip(false);
+    setIsSendLoading(false);
+    setMessageContent('');
   };
 
   const handleModalOpen = () => {
@@ -133,50 +127,22 @@ function ChatSection(props: ChatSectionProps) {
     setOpenMedia(!openMedia);
   };
 
-  const addNewMedia = (media: any) => {
-    // if (media.type === 'image') {
-    //   setPhotoMedia((prev) => (prev.length ? [media, ...prev] : prev));
-    // }
-    // if (media.type === 'video' && videoPosts.length) {
-    //   setVideoMedia ((prev) => (prev.length ? [media, ...prev] : prev));
-    // }
-    setMedia(media);
-  };
-
-  const sendMedia = useCallback(
-    async (toastId: string, data: any) => {
-      try {
-        const result = await _axios.post('/api/posts/create/', data)
-        if (result?.data?.data) addNewMedia(result.data.data)
-        setTimeout(() => {
-          toast.update(toastId, {
-            render: 'Media send successful!',
-            type: 'success',
-            isLoading: false,
-          })
-        }, 1000)
-
-        setTimeout(() => {
-          toast.dismiss()
-        }, 3000)
-      } catch (err: any) {
-        toast.error(err.toString())
-      }
-    },
-    [addNewMedia]
-  )
-
   return (
     <>
       <TipPopUp
         user={props.selectedUser}
-        onClose={handleClose}
+        onOpen={() => setOpenPopUpTip(true)}
+        onClose={() => setOpenPopUpTip(false)}
         setOpenPopUpTip={setOpenPopUpTip}
-        onOpen={handleClickOpen}
         openPopUpTip={openPopUpTip}
       />
 
-      <AddChatMedia openMedia={openMedia} onOpenMedia={onOpenMedia} sendMessageHandler={sendMessageHandler} />
+      <AddChatMedia
+        openMedia={openMedia}
+        onOpenMedia={onOpenMedia}
+        sendMessageHandler={sendMessageHandler}
+      />
+
       {props?.selectedUser?.id !== -1 ? (
         <Box
           className="chat-section chat-container"
@@ -185,7 +151,7 @@ function ChatSection(props: ChatSectionProps) {
               ? params.uid
                 ? { width: "100%" }
                 : { width: 0 }
-              : { width: "60%" }
+              : { width: "65%" }
           }>
           {/* {/ Header /} */}
           <Stack
@@ -232,12 +198,10 @@ function ChatSection(props: ChatSectionProps) {
           {/* {/ Message list /} */}
 
           <MessageList
-            messages={messagesList}
             loggedInUser={props.loggedInUser}
+            chatListLoader={isChatLoading}
             userChats={userChats}
-            chatListLoader={chatListLoader} selectedUser={undefined}          />
-
-          {/* {/ footer /} */}
+          />
 
           <Stack
             direction="row"
@@ -252,13 +216,8 @@ function ChatSection(props: ChatSectionProps) {
               onChange={(e) => {
                 setMessageContent(e.target.value);
               }}
-              // onKeyDown={(e) => {
-              //   if (e.code === "Enter") {
-              //     sendMessageHandler();
-              //   }
-              // }}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
                   sendMessageHandler();
                 }
               }}
@@ -273,13 +232,15 @@ function ChatSection(props: ChatSectionProps) {
             <IconButton onClick={onOpenMedia}>
               <PermMediaIcon />
             </IconButton>
+
             <FlexRow
               p="8px 0 8px 8px"
-              onClick={() => handleClickOpen()}
+              onClick={() => setOpenPopUpTip(true)}
               ai="center"
               cursor="pointer">
               <MonetizationOnIcon />
             </FlexRow>
+
             <IconButton onClick={() => sendMessageHandler()}>
               <MdSend />
             </IconButton>
@@ -292,8 +253,8 @@ function ChatSection(props: ChatSectionProps) {
           justifyContent="center"
           className="chat-section"
           spacing={2}
-          width="60%">
-          {/* <BsChatLeftTextFill fontSize={50} /> */}
+          width="60%"
+        >
           <IconButton sx={{color:"black" , border:"1px solid" , padding:"2%"}}>
             <SendIcon sx={{height:"3vw" , width:"3vw" , transform:"rotate(-20deg)"}}/>
           </IconButton>
@@ -301,23 +262,26 @@ function ChatSection(props: ChatSectionProps) {
            Your Messages
           </Typography>
           <Typography className="secondary-text-color">
-            Send private message or phots to your friends
+            Send private message or photos to your friends
           </Typography>
+
           <Button
-          onClick={handleModalOpen}
-          sx={{
-            background: '#EFEFEF',
-            color: 'black',
-            padding: '10px 20px',
-          }} >
+            onClick={handleModalOpen}
+            sx={{
+              background: '#EFEFEF',
+              color: 'black',
+              padding: '10px 20px',
+            }}
+          >
             Send Message
           </Button>
+
           {isAddNewModalOpen && (
-                  <NewMessage
-                    open={isAddNewModalOpen}
-                    handleClose={handleModalClose}
-                  />
-                )}
+            <NewMessage
+              open={isAddNewModalOpen}
+              handleClose={handleModalClose}
+            />
+          )}
         </Stack>
       ) : null}
     </>

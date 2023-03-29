@@ -17,6 +17,7 @@ import { dispatch, RootState, useSelector } from 'frontend/redux/store';
 import { getKeys } from 'frontend/redux/actions/createWallet';
 
 export default function MobileTopHeader({ userName, avatar }: { userName: string, avatar: string }) {
+  const [hasShadow, setHasShadow] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [notificationsLength, setNotificationsLength] = React.useState();
   const navigate = useNavigate();
@@ -31,11 +32,9 @@ export default function MobileTopHeader({ userName, avatar }: { userName: string
   };
 
   const routeurl = useParams();
-
   const menuId = 'primary-search-account-menu';
 
   const walletBalance = async () => {
-
     await dispatch(getKeys());
   };
 
@@ -51,11 +50,30 @@ export default function MobileTopHeader({ userName, avatar }: { userName: string
     walletBalance();
 
   }, []);
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > 70 && !hasShadow) {
+        setHasShadow(true)
+      }
+
+      if (window.scrollY <= 70 && hasShadow) {
+        setHasShadow(false);
+      }
+    };
+
+    document.addEventListener('scroll', onScroll);
+
+    return () => {
+      document.removeEventListener('scroll', onScroll);
+    };
+  }, [hasShadow]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         className="mobile-menu"
-        sx={{ background: toggle ? '#151c24' : '#fff' }}
+        sx={{ background: toggle ? '#151c24' : '#fff', boxShadow: hasShadow ? 1 : 0 }}
         position="fixed"
       >
         <Toolbar>

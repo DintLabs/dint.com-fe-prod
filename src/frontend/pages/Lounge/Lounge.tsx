@@ -228,7 +228,7 @@ const NewHome = () => {
             </Box>
 
             {userData && !!userData.id && (
-              <Box position="fixed" bottom="0">
+              <Box position="fixed" bottom="0" sx={{ boxShadow: 3 }}>
                 <SidebarMobile widthScreen={widthScreen} />
               </Box>
             )}
