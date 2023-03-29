@@ -67,11 +67,6 @@ const TipPopUp: FC<TipPopUpProps> = ({
    
 
     if (amount >= 1) {
-      // toast.update(toastId, {
-      //   render: "Sending...",
-      //   type: "info",
-      //   isLoading: true,
-      // });
       const sendDetail = {
         sender_id: userData?.id,
         reciever_id: user?.id,
