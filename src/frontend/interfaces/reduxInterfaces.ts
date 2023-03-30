@@ -84,6 +84,8 @@ export interface UserDataInterface {
   user_following:any;
   user_posts: PostInterface[];
   user_stories: IUserOwnStories[];
+  total_followers?: number;
+  total_following?: number;
 }
 export interface ConfineUserInterface {
   id: number;

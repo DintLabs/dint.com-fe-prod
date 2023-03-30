@@ -48,6 +48,7 @@
     .message-list {
       overflow: auto;
       padding: 8px 0;
+      flex-grow: 1;
 
       .message-list-divider {
         margin-bottom: 22px;
@@ -59,27 +60,29 @@
       }
 
       .sender-message {
-        // .message-time {
-        //   align-self: flex-end;
-        // }
         .message {
-          background: #272727;
+          background: #4AA081;
           padding: 8px;
           border-radius: 8px;
-          word-break: break-all;
           color: $primary-color;
+        }
+
+        .message-time {
+          color: $inactive-chip-bg;
+          text-align: right;
         }
       }
       .receiver-message {
-        // .message-time {
-        //   align-self: flex-start;
-        // }
         .message {
           color: $primary-color;
           background: #434343;
           padding: 8px;
           border-radius: 8px;
-          word-break: break-all;
+        }
+
+        .message-time {
+          color: $secondary-color;
+          text-align: right;
         }
       }
 
@@ -87,12 +90,9 @@
         position: relative;
         display: flex;
         margin-bottom: 8px;
+
         .message-container {
           max-width: 65%;
-          .message-time {
-            color: $secondary-color;
-            text-align: right;
-          }
         }
       }
     }
@@ -115,6 +115,6 @@
 
 @media (max-width: 900px) {
   .messages-container {
-    height: calc(100vh - 175px);
+    height: calc(100dvh - 100px);
   }
 }

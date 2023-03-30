@@ -17,7 +17,6 @@ type UserStoriesProps = {
   onStoryEnd?: (index: number) => void;
   onAllStoriesEnd?: Function;
   onClose: React.MouseEventHandler<SVGSVGElement>;
-  hideActions?: boolean;
 };
 
 function UserStories({
@@ -29,7 +28,6 @@ function UserStories({
   onStoryEnd,
   onAllStoriesEnd,
   onClose,
-  hideActions,
 }: UserStoriesProps) {
   const navigate = useNavigate();
   const [currentStoryIndex, setCurrentStoryIndex] = React.useState(0);
@@ -130,12 +128,10 @@ function UserStories({
         }}
       />
 
-      {!hideActions && (
-        <StoryFooter
-          username={username}
-          story={stories[currentStoryIndex]}
-        />
-      )}
+      <StoryFooter
+        username={username}
+        story={stories[currentStoryIndex]}
+      />
     </Box>
   );
 }

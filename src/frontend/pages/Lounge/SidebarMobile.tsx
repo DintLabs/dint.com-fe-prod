@@ -8,7 +8,7 @@ import { HOME_SIDE_MENU, setNewHomeSliceChanges } from 'frontend/redux/slices/ne
 import { dispatch, RootState, useSelector } from 'frontend/redux/store';
 import { useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { ThemeContext } from "frontend/contexts/ThemeContext";
 import { useContext } from "react";
 
@@ -16,8 +16,9 @@ interface Props {
   widthScreen: number;
 }
 
-const SidebarMobile = ({ widthScreen }: Props) => {
+const SidebarMobile = ({}: Props) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { toggle } = useContext(ThemeContext);
   const { selectedMenu } = useSelector((rootState: RootState) => rootState.newHome);
@@ -32,6 +33,10 @@ const SidebarMobile = ({ widthScreen }: Props) => {
     width: '20%',
   };
 
+  if (location.pathname.includes('messages/user/')) {
+    return null;
+  }
+
   return (
     <>
       <MoreOptionsDrawer
@@ -43,7 +48,7 @@ const SidebarMobile = ({ widthScreen }: Props) => {
         display: 'flex',
         padding: '3% 0%',
         backgroundColor: toggle ? "#000" : "#fff",
-        height: '10vh',
+        height: '8vh',
         width: '100vw'
       }}>
         <ListItem

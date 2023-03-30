@@ -276,7 +276,7 @@ const Messages = () => {
       );
     }, 10000000);
   }, [renderUsers]);
- 
+
 
   useEffect(() => {
     fetchNext();
@@ -318,11 +318,11 @@ const Messages = () => {
   return (
     <>
         <Stack sx={useMediaQuery("(min-width:899px)")?{
-        display:"none" 
+        display:"none"
       }:{ padding:"1% 2%" ,marginTop: '60px' , justifyContent:"space-between" , display:"flex" , flexDirection:"row" }}>
         <Typography sx={{ color:toggle ? "white" : ""}}><ArrowBackIcon onClick={()=>navigate(-1)}/>Dint</Typography>
-       
-        <Box> 
+
+        <Box>
         <MoreHorizIcon sx={{ color:toggle ? "white" : "black"}} />
         <PostAddIcon sx={{ color:toggle ? "white" : "black"}} onClick={handleModalOpen}  className="cursor-pointer"/>
         </Box>
@@ -378,7 +378,7 @@ const Messages = () => {
                   sx={{width:"100%" , textAlign:'center' , color:toggle ? "white" : ""}}
                   className="capitalize-text notranslate"
                   variant="subtitle1">
-                  Dint 
+                  Dint
                   {/* <ExpandMoreIcon /> */}
                 </Typography>
               )}
@@ -401,8 +401,8 @@ const Messages = () => {
           </ClickAwayListener>
           <Stack sx={useMediaQuery("(min-width:899px)")
                 ?{display:"none"} :{margin:"1%"}} >
-          <TextField 
-              value={''} 
+          <TextField
+              value={''}
               fullWidth
               size="small"
               placeholder="Search"
@@ -430,11 +430,11 @@ const Messages = () => {
               <AddIcon sx={{ background:"#4AA081",top:"0%" , left:"65%", position:"absolute" , borderRadius:"50px"}}/>
               <Typography sx={{ color:toggle ? "white" : ""}}>{userData?.display_name}</Typography>
             </Box>
-          
+
             {allChatsList.map((user: any) => {
               return (
                 <>
-                  <Box sx={{margin:"1%" , textAlign:"center" , maxWidth:"min-content"}}>
+                  <Box key={user.id} sx={{margin:"1%" , textAlign:"center" , maxWidth:"min-content"}}>
                     <Avatar src={user.profile_image} sx={{ height:"60px" , width:"60px"}} />
                     <Typography sx={{ color:toggle ? "white" : ""}}>{user.display_name}</Typography>
                    </Box>
@@ -444,7 +444,7 @@ const Messages = () => {
             )}
               </Stack>
           </Stack>
-         
+
           <Divider sx={useMediaQuery("(min-width:899px)") ? {} :{display:"none"}} />
           <Stack
             // direction="row"
@@ -453,8 +453,8 @@ const Messages = () => {
             // alignItems="center"
             // sx={{ p: { xs: 0.5, md: 1, xl: 2 } }}
             >
-            {useMediaQuery("(min-width:899px)") ? 
-            <Box 
+            {useMediaQuery("(min-width:899px)") ?
+            <Box
             sx={{
               '& .Mui-selected': {
                 color: '#4aa081 !important'
@@ -470,7 +470,7 @@ const Messages = () => {
                 {/* <Tab sx={{width:"100%"}}label={'General'}/> */}
                 {/* <Tab sx={{width:"33%"}}label={'Requests'}/> */}
               {/* </Tabs> */}
-            </Box> 
+            </Box>
             :<Box sx={{display:"flex" , justifyContent:"left" , margin:'2%'}}>
               {/* <Typography sx={{padding:"3px 3%" , borderRadius:"20px" , background:"#EFEFEF"}}>Primary</Typography> */}
               <Typography sx={{ padding:"3px 3%" , borderRadius:"20px" ,background:"#EFEFEF"}}>General</Typography>

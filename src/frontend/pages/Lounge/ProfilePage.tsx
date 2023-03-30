@@ -294,7 +294,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     }
 
     return false;
-  }, [userDetails]);
+  }, [savedUser?.custom_username, userDetails]);
 
   const fetchPosts = async (
     userId: number,
@@ -526,7 +526,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
             {userDetails && (
               <AvatarComponent
                 user={userDetails}
-                stories={userDetails.user_stories}
+                stories={userDetails.user_stories ?? []}
                 hideStories={!isEligibleForFetchingPost}
                 redirectOnCLick={false}
               />
@@ -543,13 +543,13 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-
+                        {userDetails?.user_follower?.length || userDetails?.total_followers || 0} Followers
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-
+                        {userDetails?.user_following?.length || userDetails?.total_following || 0} Following
                       </Typography>
                     </div>
                   </div>
@@ -813,6 +813,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
             }}
           ></Box>
         </div>
+
         {isEligibleForFetchingPost && (
           <>
             <Box className="tab-main-wrapper" id="postId">
@@ -986,12 +987,15 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
           </>
         )}
       </Box>
-      {!isEligibleForFetchingPost && (
+
+      {!isEligibleForFetchingPost && !isLoading && (
         <Box
           style={{
             border: `1px solid ${theme.palette.grey[700]}`,
             borderRadius: 10,
             marginTop: 20,
+            marginLeft: '2.5%',
+            marginRight: '2.5%',
             padding: 20,
           }}
         >
@@ -1009,7 +1013,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
               <Typography
                 sx={{
                   fontSize: "12px",
-                  color: "white",
+                  color: toggle ? '#fff' : '#000',
                   textAlign: "center",
                   padddingTop: 2,
                 }}
@@ -1024,7 +1028,11 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                 to
               </Typography>
               <Typography
-                sx={{ fontSize: "12px", color: "white", textAlign: "center" }}
+                sx={{
+                  fontSize: '12px',
+                  color: toggle ? '#fff' : '#000',
+                  textAlign: 'center',
+                }}
               >
                 see their photos and videos.
               </Typography>

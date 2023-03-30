@@ -1,8 +1,9 @@
 import React from 'react';
+import moment from 'moment';
 import { Box } from '@mui/material';
-import { getLocalTime } from 'frontend/utils';
 import Loader from '../common/skeletons/UserListItemSkeleton';
 import MessageItem from './MessageItem';
+import { convertDateToLocal } from '../../utils/date';
 
 type MessageListProp = {
   loggedInUser: any;
@@ -39,7 +40,7 @@ const MessageList = ({ chatListLoader, userChats, loggedInUser }: MessageListPro
               media = {message.media}
               messageId={message.id}
               isSender={loggedInUser.id === message.sender.id}
-              time={getLocalTime(message.created_at).format('hh:mm a')}
+              time={moment(convertDateToLocal(message.created_at)).format('hh:mm a')}
             />
           );
         })}

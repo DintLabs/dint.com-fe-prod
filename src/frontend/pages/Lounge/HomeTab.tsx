@@ -34,7 +34,7 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import CreateStory from "./CreateStory";
 import { toast } from "react-toastify";
-import { getUserOwnStories } from "frontend/redux/slices/lounge";
+import { getUserOwnStories } from 'frontend/redux/slices/lounge';
 import { useSelector } from "react-redux";
 import { RootState, useDispatch } from "frontend/redux/store";
 import Carousel from "./Carousel";
@@ -477,7 +477,6 @@ const HomeTab = ({ createPost }: Props) => {
                         user={savedUser}
                         stories={userOwnStories}
                         size={92}
-                        hideStoriesActions
                       />
 
                       {/* Create Story Button */}

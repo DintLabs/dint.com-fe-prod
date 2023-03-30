@@ -8,9 +8,15 @@ type UseRichMessagePayload = {
   text?: string;
   className?: string;
   style?: React.CSSProperties;
+  usernameColor?: string;
 };
 
-export default function useRichMessage({ text, className = '', style = {} }: UseRichMessagePayload) {
+export default function useRichMessage({
+  text,
+  className = '',
+  style = {},
+  usernameColor = '#4AA081',
+}: UseRichMessagePayload) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -27,7 +33,7 @@ export default function useRichMessage({ text, className = '', style = {} }: Use
             key={i}
             component="span"
             className={className}
-            sx={{ ...style, color: '#4AA081', cursor: 'pointer' }}
+            sx={{ ...style, color: usernameColor, cursor: 'pointer' }}
             onClick={() => {
               dispatch(setNewHomeSliceChanges({ selectedMenu: HOME_SIDE_MENU.HOME }));
               navigate(`/${username}`);
