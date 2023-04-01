@@ -605,25 +605,25 @@ const HomeTab = ({ createPost }: Props) => {
                   className={`${
                     toggle && value === 0 && "active-tab"
                   } custom-tab-list`}
-                  label={`All (${counts?.all_posts ?? 0})`}
+                  label={`All`}
                 />
                 <Tab
                   className={`${
                     toggle && value === 1 && "active-tab"
                   } custom-tab-list`}
-                  label={`Text (${counts?.text_posts ?? 0})`}
+                  label={`Text`}
                 />
                 <Tab
                   className={`${
                     toggle && value === 2 && "active-tab"
                   } custom-tab-list`}
-                  label={`Photos (${counts?.image_posts ?? 0})`}
+                  label={`Photos`}
                 />
                 <Tab
                   className={`${
                     toggle && value === 3 && "active-tab"
                   } custom-tab-list`}
-                  label={`Videos (${counts?.video_posts ?? 0})`}
+                  label={`Videos`}
                 />
               </Tabs>
             </Box>
