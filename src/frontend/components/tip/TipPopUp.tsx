@@ -80,6 +80,7 @@ const TipPopUp: FC<TipPopUpProps> = ({
           reciever_id: user?.id,
           amount: amount,
         };
+       
         if (sendDetail) {
           await _axios
             .post(`api/user/send-dint/`, sendDetail)
@@ -87,11 +88,13 @@ const TipPopUp: FC<TipPopUpProps> = ({
               setDintTxn(response.data);
               if (response.data.code == 201) {
                 setLoading(false);
-                toast.update(toastId, {
-                  render: "Dint Sent Successfully",
-                  type: "success",
-                  isLoading: false,
-                });
+                setTimeout(() => {
+                  toast.update(toastId, {
+                    render: "Dint Sent Successfully",
+                    type: "success",
+                    isLoading: false,
+                  });
+                }, 180000); // wait for 3 minutes before displaying success message
               } else {
                 setLoading(false);
                 toast.update(toastId, {
@@ -101,7 +104,6 @@ const TipPopUp: FC<TipPopUpProps> = ({
                 });
               }
             })
-
             .catch((error: any) => {
               setLoading(false);
               console.log("err", error);
@@ -112,6 +114,9 @@ const TipPopUp: FC<TipPopUpProps> = ({
               });
             });
         }
+        
+
+
       }else{
           toast.update(toastId, {
             render:`Insufficient Funds!`,
@@ -120,10 +125,7 @@ const TipPopUp: FC<TipPopUpProps> = ({
           });
         setLoading(false);
         setLowBalance(true);
-      }
-
-
-      
+      }   
     } else {
       toast.update(toastId, {
         render: "Amount Should not be  less then 1",
