@@ -82,19 +82,30 @@ const TipPopUp: FC<TipPopUpProps> = ({
         };
        
         if (sendDetail) {
+          let responseReceived = false;
+          const timeout = setTimeout(() => {
+            if (!responseReceived) {
+              setLoading(false);
+              toast.update(toastId, {
+                render: "Something went wrong!",
+                type: "error",
+                isLoading: false,
+              });
+            }
+          }, 180000);
           await _axios
             .post(`api/user/send-dint/`, sendDetail)
             .then((response: any) => {
+              responseReceived = true;
               setDintTxn(response.data);
               if (response.data.code == 201) {
+                clearTimeout(timeout);
                 setLoading(false);
-                setTimeout(() => {
-                  toast.update(toastId, {
-                    render: "Dint Sent Successfully",
-                    type: "success",
-                    isLoading: false,
-                  });
-                }, 180000); // wait for 3 minutes before displaying success message
+                toast.update(toastId, {
+                  render: "Dint Sent Successfully",
+                  type: "success",
+                  isLoading: false,
+                });
               } else {
                 setLoading(false);
                 toast.update(toastId, {
@@ -113,19 +124,16 @@ const TipPopUp: FC<TipPopUpProps> = ({
                 isLoading: false,
               });
             });
-        }
-        
-
-
-      }else{
+        } else {
           toast.update(toastId, {
-            render:`Insufficient Funds!`,
+            render: `Insufficient Funds!`,
             type: "error",
             isLoading: false,
           });
-        setLoading(false);
-        setLowBalance(true);
-      }   
+          setLoading(false);
+          setLowBalance(true);
+        }  
+      }
     } else {
       toast.update(toastId, {
         render: "Amount Should not be  less then 1",
@@ -140,7 +148,7 @@ const TipPopUp: FC<TipPopUpProps> = ({
   const handleConfirmation = () =>{
     setLowBalance(false);
   }
-
+  
   return (
     <Dialog
       open={openPopUpTip}
