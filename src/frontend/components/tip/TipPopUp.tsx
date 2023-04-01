@@ -93,39 +93,36 @@ const TipPopUp: FC<TipPopUpProps> = ({
               });
             }
           }, 180000);
-          await _axios
-              .post(`api/user/send-dint/`, sendDetail, {
-      timeout: 180000,
-    })
-            .then((response: any) => {
-              responseReceived = true;
-              setDintTxn(response.data);
-              if (response.data.code == 201) {
-                clearTimeout(timeout);
-                setLoading(false);
-                toast.update(toastId, {
-                  render: "Dint Sent Successfully",
-                  type: "success",
-                  isLoading: false,
-                });
-              } else {
-                setLoading(false);
-                toast.update(toastId, {
-                  render: "Something went wrong!",
-                  type: "error",
-                  isLoading: false,
-                });
-              }
-            })
-            .catch((error: any) => {
+          try {
+            const response = await _axios.post(`api/user/send-dint/`, sendDetail, { timeout: 180000 });
+            responseReceived = true;
+            setDintTxn(response.data);
+            if (response.data.code == 201) {
+              clearTimeout(timeout);
               setLoading(false);
-              console.log("err", error);
+              toast.update(toastId, {
+                render: "Dint Sent Successfully",
+                type: "success",
+                isLoading: false,
+              });
+            } else {
+              setLoading(false);
               toast.update(toastId, {
                 render: "Something went wrong!",
                 type: "error",
                 isLoading: false,
               });
+            }
+          } catch (error) {
+            setLoading(false);
+            console.log("err", error);
+            toast.update(toastId, {
+              render: "Something went wrong!",
+              type: "error",
+              isLoading: false,
             });
+          }
+                
         } else {
           toast.update(toastId, {
             render: `Insufficient Funds!`,
