@@ -94,7 +94,9 @@ const TipPopUp: FC<TipPopUpProps> = ({
             }
           }, 180000);
           await _axios
-            .post(`api/user/send-dint/`, sendDetail)
+              .post(`api/user/send-dint/`, sendDetail, {
+      timeout: 180000,
+    })
             .then((response: any) => {
               responseReceived = true;
               setDintTxn(response.data);
