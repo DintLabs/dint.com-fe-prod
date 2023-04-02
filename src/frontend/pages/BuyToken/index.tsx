@@ -96,13 +96,12 @@ export default function BuyToken() {
           .post(`${process.env.REACT_APP_API_LINK}/api/checkout`, sendDetail)
           .then((res: any) => {
             const { data } = res;
-            if(data.received === true){
-              toast.loading('Plaese wait...');
-              dispatch(getDintBalance()).then((res:any)=>{
-                toast.dismiss();
-                toast.success("Payment successful")
-                navigate('/dint-wallet')
-              })
+            if(data.paid === true){
+              toast.loading('Please wait...');
+              toast.dismiss();
+              toast.success("Payment successful")
+              navigate('/dint-wallet'); // Redirect to '/dint-wallet'
+              dispatch(getDintBalance()).then((res:any)=>{})
             }else{
               toast.error('Payment Unsuccessful!')
             }
