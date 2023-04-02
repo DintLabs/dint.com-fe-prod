@@ -63,9 +63,9 @@ const TipPopUp: FC<TipPopUpProps> = ({
   };
   const sendClick = async () => {
     setLoading(true);
+    setOpenPopUpTip(false); // close popup
     const toastId = toast.loading("");
    
-
     if (amount >= 1) {
       const sendDetail = {
         sender_id: userData?.id,
