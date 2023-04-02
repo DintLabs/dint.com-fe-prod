@@ -96,7 +96,7 @@ export default function BuyToken() {
           .post(`${process.env.REACT_APP_API_LINK}/api/checkout`, sendDetail)
           .then((res: any) => {
             const { data } = res;
-            if(data.paid === true){
+            if(data.received === true){
               toast.loading('Plaese wait...');
               dispatch(getDintBalance()).then((res:any)=>{
                 toast.dismiss();
