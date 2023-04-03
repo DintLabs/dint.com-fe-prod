@@ -2,7 +2,7 @@ import * as ethers from 'ethers'; // We pull ethers into our project
 import { createSlice } from '@reduxjs/toolkit';
 import { AppDispatch, store } from '../../store';
 
-const provider = new ethers.providers.JsonRpcProvider(`${process.env.REACT_APP_JSON_RPC_MUMBAI_URL}`); // We set up connection to blockchain
+const provider = new ethers.providers.JsonRpcProvider(`${process.env.REACT_APP_JSON_RPC_URL}`); // We set up connection to blockchain
 
 
 type walletState = {

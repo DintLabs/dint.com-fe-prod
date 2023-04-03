@@ -4,11 +4,11 @@ import { FaSortAmountDown } from 'react-icons/fa';
 import { AppDispatch, store } from '../../store';
 
 
-const provider = new ethers.providers.JsonRpcProvider(`${process.env.REACT_APP_JSON_RPC_MUMBAI_URL}`) // mumbai, polygon, eth mainnet
+const provider = new ethers.providers.JsonRpcProvider(`${process.env.REACT_APP_JSON_RPC_URL}`) // mumbai, polygon, eth mainnet
 
 export const sendMatic = (data: any) => async (dispatch: AppDispatch) => {
   const provider = new ethers.providers.JsonRpcProvider(
-    process.env.REACT_APP_JSON_RPC_MUMBAI_URL // mumbai, polygon, eth mainnet
+    process.env.REACT_APP_JSON_RPC_URL // mumbai, polygon, eth mainnet
   );
   // private key of account that holds MATIC.
   // Caution: this account must have MATIC/ETH to cover gas fees!

@@ -2,11 +2,11 @@ import { ethers } from 'ethers';
 import { createSlice } from '@reduxjs/toolkit';
 import { AppDispatch, store } from '../../store';
 
-const provider = new ethers.providers.JsonRpcProvider(`${process.env.REACT_APP_JSON_RPC_MUMBAI_URL}`) // mumbai, polygon, eth mainnet
+const provider = new ethers.providers.JsonRpcProvider(`${process.env.REACT_APP_JSON_RPC_URL}`) // mumbai, polygon, eth mainnet
 
 export const transferDint = (data: any) => async (dispatch: AppDispatch) => {
   const provider = new ethers.providers.JsonRpcProvider(
-    process.env.REACT_APP_JSON_RPC_MUMBAI_URL // mumbai, polygon, eth mainnet
+    process.env.REACT_APP_JSON_RPC_URL // mumbai, polygon, eth mainnet
   );
   // private key of account that holds DINT.
   // Caution: this account must have MATIC/ETH to cover gas fees!
