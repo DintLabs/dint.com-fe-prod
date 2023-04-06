@@ -527,13 +527,13 @@ function ProfilePage({ username }: ProfilePageProps) {
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                        {pluralize(userDetails?.user_follower?.length || userDetails?.total_followers || 0, 'Follower', 'Followers')}
+                      
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                        {userDetails?.user_following?.length || userDetails?.total_following || 0} Following
+                      
                       </Typography>
                     </div>
                   </div>
@@ -641,10 +641,10 @@ function ProfilePage({ username }: ProfilePageProps) {
                   {pluralize(counts?.all_posts ?? 0, 'Post', 'Posts')}
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}>
-                  {pluralize(userDetails?.user_follower?.length || userDetails?.total_followers || 0, 'Follower', 'Followers')}
+                
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}  >
-                  {userDetails?.user_following?.length || userDetails?.total_following || 0} Following
+                 
                 </Typography>
               </div>
 
@@ -747,7 +747,7 @@ function ProfilePage({ username }: ProfilePageProps) {
                   iconPosition="start"
                   label={
                     <div className="profile-tab-text">
-                      All ({counts?.all_posts ?? 0})
+                      All 
                     </div>
                   }
                 />
@@ -759,7 +759,7 @@ function ProfilePage({ username }: ProfilePageProps) {
                   iconPosition="start"
                   label={
                     <div className="profile-tab-text">
-                      Text ({counts?.text_posts ?? 0})
+                      Text 
                     </div>
                   }
                 />
@@ -771,7 +771,7 @@ function ProfilePage({ username }: ProfilePageProps) {
                   iconPosition="start"
                   label={
                     <div className="profile-tab-text">
-                      Photos ({counts?.image_posts ?? 0})
+                      Photos 
                     </div>
                   }
                 />
@@ -783,7 +783,7 @@ function ProfilePage({ username }: ProfilePageProps) {
                   iconPosition="start"
                   label={
                     <div className="profile-tab-text">
-                      Videos ({counts?.video_posts ?? 0})
+                      Videos 
                     </div>
                   }
                 />
