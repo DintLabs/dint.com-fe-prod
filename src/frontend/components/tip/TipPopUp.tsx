@@ -63,9 +63,9 @@ const TipPopUp: FC<TipPopUpProps> = ({
   };
   const sendClick = async () => {
     setLoading(true);
-    setOpenPopUpTip(false); // close popup
     const toastId = toast.loading("");
    
+
     if (amount >= 1) {
       const sendDetail = {
         sender_id: userData?.id,
@@ -80,59 +80,50 @@ const TipPopUp: FC<TipPopUpProps> = ({
           reciever_id: user?.id,
           amount: amount,
         };
-       
         if (sendDetail) {
-          let responseReceived = false;
-          const timeout = setTimeout(() => {
-            if (!responseReceived) {
+          await _axios
+            .post(`api/user/send-dint/`, sendDetail)
+            .then((response: any) => {
+              setDintTxn(response.data);
+              if (response.data.code == 201) {
+                setLoading(false);
+                toast.update(toastId, {
+                  render: "Dint Sent Successfully",
+                  type: "success",
+                  isLoading: false,
+                });
+              } else {
+                setLoading(false);
+                toast.update(toastId, {
+                  render: "Something went wrong!",
+                  type: "error",
+                  isLoading: false,
+                });
+              }
+            })
+
+            .catch((error: any) => {
               setLoading(false);
+              console.log("err", error);
               toast.update(toastId, {
                 render: "Something went wrong!",
                 type: "error",
                 isLoading: false,
               });
-            }
-          }, 180000);
-          try {
-            const response = await _axios.post(`api/user/send-dint/`, sendDetail, { timeout: 180000 });
-            responseReceived = true;
-            setDintTxn(response.data);
-            if (response.data.code == 201) {
-              clearTimeout(timeout);
-              setLoading(false);
-              toast.update(toastId, {
-                render: "Dint Sent Successfully",
-                type: "success",
-                isLoading: false,
-              });
-            } else {
-              setLoading(false);
-              toast.update(toastId, {
-                render: "Something went wrong!",
-                type: "error",
-                isLoading: false,
-              });
-            }
-          } catch (error) {
-            setLoading(false);
-            console.log("err", error);
-            toast.update(toastId, {
-              render: "Something went wrong!",
-              type: "error",
-              isLoading: false,
             });
-          }
-                
-        } else {
+        }
+      }else{
           toast.update(toastId, {
-            render: `Insufficient Funds!`,
+            render:`Insufficient Funds!`,
             type: "error",
             isLoading: false,
           });
-          setLoading(false);
-          setLowBalance(true);
-        }  
+        setLoading(false);
+        setLowBalance(true);
       }
+
+
+      
     } else {
       toast.update(toastId, {
         render: "Amount Should not be  less then 1",
@@ -147,7 +138,7 @@ const TipPopUp: FC<TipPopUpProps> = ({
   const handleConfirmation = () =>{
     setLowBalance(false);
   }
-  
+
   return (
     <Dialog
       open={openPopUpTip}
