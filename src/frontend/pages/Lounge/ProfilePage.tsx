@@ -16,7 +16,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import Button from "@mui/material/Button";
 import Tab from "@mui/material/Tab";
 import _axios from "frontend/api/axios";
 import PostItemSkeleton from "frontend/components/common/skeletons/PostItemSkeleton";
@@ -44,12 +43,14 @@ import moment from "moment";
 import { RootState, useDispatch } from 'frontend/redux/store';
 import { messagesActions } from "frontend/redux/slices/messages";
 import { useSelector } from "react-redux";
-import { useMediaQuery } from "@mui/material";
 import { getUserOwnStories } from "frontend/redux/slices/lounge";
 import { convertPostDates } from '../../utils/date';
 import Swal from 'sweetalert2';
 import { useLocation } from 'react-router-dom';
-import AvatarComponent from '../../components/common/Avatar';
+import AvatarComponent from 'frontend/components/common/Avatar';
+import { pluralize } from 'frontend/utils/formatters';
+import ProfileActionButton from 'frontend/components/common/ProfileActionButton';
+import useRichMessage from '../../hooks/useRichMessage';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -86,9 +87,8 @@ type PostPaginationPayload = {
 
 type ProfilePageProps = {
   username: string | null | undefined;
-  avatar?: string;
 }
-function ProfilePage({ username, avatar }: ProfilePageProps) {
+function ProfilePage({ username }: ProfilePageProps) {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -122,12 +122,8 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
   const [photoPosts, setPhotoPosts] = useState<PostInterface[]>([]);
   const [textPosts, setTextPosts] = useState<PostInterface[]>([]);
   const [videoPosts, setVideoPosts] = useState<PostInterface[]>([]);
-  const [subscriptions, setSubscriptions] = useState<PostInterface[]>([]);
   const [paginationPosts, setPaginationPosts] =
     useState<PaginationPostsInerface>(DEFAULT_POSTS_PAGINATION);
-  const {userData} = useSelector((state: any) => state.user);
-  const [isUserProfile , setIsUserProfile ] = useState<boolean>(false)
-  const [storyList , setStoryList] = useState();
 
   const setPosts = (
     setPostsPayload: ((prevPosts: PostInterface[]) => PostInterface[]) | PostInterface[],
@@ -164,13 +160,6 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
       length: 5
     });
 
-    const [fetchVideoPostPayload, setFetchVideoPostPayload] = useState<PostPaginationPayload>({
-      page: null,
-      post_type: 'video',
-      start: 0,
-      length: 5
-    });
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
   const handleScroll = useCallback(() => {
     const windowHeight =
       "innerHeight" in window
@@ -215,18 +204,26 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     value,
     userDetails,
   ]);
-  useEffect(()=>{
-    setIsUserProfile(userData?.id === userDetails?.id)
-    getStoryList()
-  },[userDetails])
 
-  const getStoryList = async () => {
-    dispatch(getUserOwnStories());
-    const result = await _axios.get("api/user/get-stories/", {});
-    if (result?.data?.code === 200) {
-      setStoryList(result?.data?.data);
+  const isMyProfile = React.useMemo(
+    () => loggedInUser && loggedInUser.custom_username === userDetails?.custom_username,
+    [loggedInUser, userDetails?.custom_username]
+  );
+
+  const userBio = useRichMessage({
+    text: userDetails?.bio ?? '',
+    style: {
+      fontSize: '12px',
+      color: toggle ? '#fff' : '#000',
+    },
+  });
+
+  useEffect(() => {
+    if (isMyProfile) {
+      dispatch(getUserOwnStories());
     }
-  };
+  },[dispatch, isMyProfile])
+
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -355,7 +352,6 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     setIsLoadingUserDetails(false);
   };
 
-
   React.useEffect(() => {
     if (username) {
       setIsLoadingUserDetails(true);
@@ -474,20 +470,8 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
     setOpenPopUpTip(false);
   };
 
-  const handleClickOpen = () => {
-    setOpenPopUpTip(true);
-  };
-
   const fetchImageHandler = () => {
     setFetchImagePostPayload((prevState: PostPaginationPayload) => {
-      return {
-        ...prevState,
-        start: prevState.start + prevState.length
-      };
-    });
-  };
-  const fetchVideoHandler = () => {
-    setFetchVideoPostPayload((prevState: PostPaginationPayload) => {
       return {
         ...prevState,
         start: prevState.start + prevState.length
@@ -537,19 +521,19 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                       >
-                        {counts?.all_posts ?? 0} Post
+                        {pluralize(counts?.all_posts ?? 0, 'Post', 'Posts')}
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                       
+                        {pluralize(userDetails?.user_follower?.length || userDetails?.total_followers || 0, 'Follower', 'Followers')}
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                        
+                        {userDetails?.user_following?.length || userDetails?.total_following || 0} Following
                       </Typography>
                     </div>
                   </div>
@@ -584,129 +568,63 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                 {!loggedInUser || (loggedInUser.custom_username !== userDetails?.custom_username && !isLoadingUserDetails) ? (
                   <Box className="btn-group-follow">
                     {userDetails?.is_followed === true && (
-                      <Button
+                      <ProfileActionButton
+                        label={isFollowLoading ? `Loading...` : `Following`}
                         onClick={unfollow}
-                        variant="contained"
-                        sx={{
-                          color: "#353535",
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          boxShadow: "none",
-                          width: "100%",
-                          ":hover": {
-                            backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          },
-                        }}
-                      >
-                    {isFollowLoading ? `Loading...` : `Following`}
-                      </Button>
+                      />
                     )}
                     {userDetails?.is_followed === false && (
-                      <Button
+                      <ProfileActionButton
+                        label={isFollowLoading ? `Loading...` : `Follow`}
                         onClick={follow}
-                        variant="contained"
-                        sx={{
-                          color: "#353535",
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          boxShadow: "none",
-                          width: "100%",
-                          ":hover": {
-                            backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          },
-                        }}
-                      >
-                        {isFollowLoading ? `Loading...` : `Follow`}
-                      </Button>
+                      />
                     )}
                     {userDetails?.is_followed === "Request Sent" && (
-                      <Button
+                      <ProfileActionButton
+                        label={isFollowLoading ? `Loading...` : `Cancel Request`}
                         onClick={cancelRequest}
-                        variant="contained"
-                        sx={{
-                          color: "#353535",
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          boxShadow: "none",
-                          width: "100%",
-                          ":hover": {
-                            backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          },
-                        }}
-                      >
-                        {isFollowLoading ? `Loading...` : `Cancel Request`}
-                      </Button>
+                      />
                     )}
-                    <Button
-                      variant="contained"
-                      size="medium"
-                      sx={{
-                        color: "#353535",
-                        backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                        boxShadow: "none",
-                        width: "100%",
-                        ":hover": {
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                        },
-                      }}
+                    <ProfileActionButton
+                      label="Message"
                       onClick={() => {
                         if (!loggedInUser) {
                           return openLoginPopup();
                         }
-                        dispatch(messagesActions.addNewUserInChat(userDetails));
-                        navigate(
-                          `/lounge/messages/user/${
-                            userDetails && userDetails.id
-                          }`
-                        );
-                      }}
-                    >
-                      Message
-                    </Button>
-                    {!userDetails?.is_private && userDetails?.is_followed !== "Request Sent" && <Box className="btn-group-follow">
-                      <Button
-                        variant="contained"
-                        sx={{
-                          color: "#353535",
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          boxShadow: "none",
-                          width: "100%",
-                          ":hover": {
-                            backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          },
-                          whiteSpace: "nowrap",
-                          px: 4,
-                        }}
-                        onClick={() => setShowShareProfileModal(true)}
-                      >
-                        Share profile
-                      </Button>
 
-                      {showShareProfileModal && (
-                        <ShareProfileModal
-                          open={showShareProfileModal}
-                          onClose={() => setShowShareProfileModal(false)}
+                        dispatch(messagesActions.addNewUserInChat(userDetails));
+                        navigate(`/lounge/messages/user/${userDetails && userDetails.id}`);
+                      }}
+                    />
+                    {!userDetails?.is_private && userDetails?.is_followed !== "Request Sent" && (
+                      <Box className="btn-group-follow">
+                        <ProfileActionButton
+                          label="Share Profile"
+                          onClick={() => setShowShareProfileModal(true)}
                         />
-                      )}
-                    </Box>}
+
+                        {showShareProfileModal && (
+                          <ShareProfileModal
+                            open={showShareProfileModal}
+                            onClose={() => setShowShareProfileModal(false)}
+                          />
+                        )}
+                      </Box>
+                    )}
                   </Box>
                 ) : (
                   <div className="btn-group-follow-wrapper">
                     <Box className="btn-group-follow">
-                      <Button
-                        variant="contained"
-                        sx={{
-                          color: "#353535",
-                          backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          boxShadow: "none",
-                          width: "100%",
-                          ":hover": {
-                            backgroundColor: toggle ? "#fff" : "#EFEFEF",
-                          },
-                          whiteSpace: 'nowrap',
-                          px: 4
-                        }}
+                      {isMyProfile && (
+                        <ProfileActionButton
+                          label="Edit Profile"
+                          onClick={() => navigate('/settings/profile')}
+                        />
+                      )}
+                      <ProfileActionButton
+                        label="Share Profile"
                         onClick={() => setShowShareProfileModal(true)}
-                      >
-                        Share profile
-                      </Button>
+                      />
 
                      {showShareProfileModal && (
                        <ShareProfileModal
@@ -719,14 +637,14 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                 )}
               </Stack>
               <div className="post-wrapper-desktop">
-                <Typography color={toggle ? "#fff" : "#000"} >
-                {counts?.all_posts ?? 0} Post
+                <Typography color={toggle ? "#fff" : "#000"}>
+                  {pluralize(counts?.all_posts ?? 0, 'Post', 'Posts')}
+                </Typography>
+                <Typography color={toggle ? "#fff" : "#000"}>
+                  {pluralize(userDetails?.user_follower?.length || userDetails?.total_followers || 0, 'Follower', 'Followers')}
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}  >
-
-                </Typography>
-                <Typography color={toggle ? "#fff" : "#000"}  >
-
+                  {userDetails?.user_following?.length || userDetails?.total_following || 0} Following
                 </Typography>
               </div>
 
@@ -752,7 +670,7 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                     </strong>
                   </Typography>
                   <Typography sx={{ color: "text.secondary" }}>
-                    {isEligibleForFetchingPost === true &&
+                    {isEligibleForFetchingPost &&
                     userDetails?.is_online === true
                       ? "Available Now"
                       : moment
@@ -763,11 +681,8 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                   </Typography>
                 </Box>
                 {userDetails?.bio && (
-                  <Typography
-                    variant="body1"
-                    sx={{ color: toggle ? "#fff" : "#000", fontSize: "12px" }}
-                  >
-                    {userDetails?.bio}
+                  <Typography variant="body1">
+                    {userBio}
                   </Typography>
                 )}
                 <Box
@@ -872,18 +787,6 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
                     </div>
                   }
                 />
-                {/* <Tab
-                  className={`profile-tab ${
-                    toggle && value === 4 && "active-tab"
-                  } profile-tab-list`}
-                  icon={<LocalOfferOutlinedIcon />}
-                  iconPosition="start"
-                  label={
-                    <div className="profile-tab-text">
-                      Subscription ({counts?.subscriptions ?? 0})
-                    </div>
-                  }
-                /> */}
               </Tabs>
             </Box>
 
@@ -947,42 +850,6 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
               ) : (
                 <NothingToShow padding={14} color={toggle ? "#fff" : "#000"} />
               )}
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              <div className="image-wrapper">
-                {subscriptions.length ? (
-                  subscriptions.map((item, i) => {
-                    return (
-                      <Box
-                        style={{
-                          border: `1px solid ${theme.palette.grey[400]}`,
-                          borderRadius: "10px",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <Box sx={{ textAlign: "center" }}></Box>
-                      </Box>
-                    );
-                  })
-                ) : (
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      textAlign: "center",
-                      color: toggle ? "#fff" : "#000",
-                    }}
-                  >
-                    No Subscriptions added!
-                  </Typography>
-                )}
-                {isLoading && (
-                  <>
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                    <PostItemSkeleton />
-                  </>
-                )}
-              </div>
             </TabPanel>
           </>
         )}
@@ -1049,16 +916,9 @@ function ProfilePage({ username, avatar }: ProfilePageProps) {
       />
     </>
   );
-};
-
-export default ProfilePage;
-function setImage(imageURL: string) {
-  throw new Error("Function not implemented.");
 }
 
-  function html2canvas(avatarElement: Element | null) {
-    throw new Error("Function not implemented.");
-  }
+export default ProfilePage;
 
 function setError(arg0: string) {
   throw new Error("Function not implemented.");

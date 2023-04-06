@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { Box, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import React from 'react';
+import { Box, Typography } from '@mui/material';
+import { PostInterface } from 'frontend/interfaces/postInterface';
+import { ThemeContext } from 'frontend/contexts/ThemeContext';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import FullScreenModal from "./FullScreenModal";
-import PostItem from '../../pages/Lounge/PostItem/PostItem';
-import { PostInterface } from '../../interfaces/postInterface';
+import PostItem from 'frontend/pages/Lounge/PostItem/PostItem';
+import FullScreenModal from './FullScreenModal';
 
 
 type ViewMediaModalProps = {
@@ -24,16 +24,28 @@ type ViewMediaModalProps = {
 };
 
 const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
-  const [fullScreenModal , setFullScreenModal] = useState<boolean>(false);
-  const { toggle } = useContext(ThemeContext);
-  const [Post , setPost] = useState();
-  const [postData, setPostData] = useState(props.dataList ?? []);
+  const { toggle } = React.useContext(ThemeContext);
 
-  useEffect(() => {
+  const [fullScreenModal, setFullScreenModal] = React.useState<boolean>(false);
+  const [postData, setPostData] = React.useState(props.dataList ?? []);
+  const [post, setPost] = React.useState();
+
+  React.useEffect(() => {
     setPostData(props?.dataList || []);
   }, [props.dataList]);
 
-  useEffect(() => goToViolation(),[]);
+  React.useEffect(() => {
+    setTimeout(() => {
+      const postEl = document.getElementById(`${props.selectedMedia.id}`);
+
+      if (postEl) {
+        window.scrollTo({
+          top: postEl.getBoundingClientRect().top + window.scrollY - 60,
+          behavior: 'smooth',
+        });
+      }
+    },100)
+  },[props.selectedMedia.id]);
 
 
   const handlePostLike = (likes: any[], postId: number) => {
@@ -83,16 +95,10 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
     }
   };
 
-  const goToViolation=()=>{
-    setTimeout(()=>{
-      document.getElementById(`${props.selectedMedia.id}`)?.scrollIntoView()
-    },100)
-  };
-
   if (fullScreenModal) {
     return (
       <FullScreenModal
-        post={Post}
+        post={post}
         open={fullScreenModal}
         handleClose={handleClose}
         userDetails={props?.userDetails}

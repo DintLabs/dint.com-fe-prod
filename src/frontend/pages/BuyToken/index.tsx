@@ -97,11 +97,12 @@ export default function BuyToken() {
           .then((res: any) => {
             const { data } = res;
             if(data.paid === true){
-              toast.loading('Please wait...');
-              toast.dismiss();
-              toast.success("Payment successful")
-              navigate('/dint-wallet'); // Redirect to '/dint-wallet'
-              dispatch(getDintBalance()).then((res:any)=>{})
+              toast.loading('Plaese wait...');
+              dispatch(getDintBalance()).then((res:any)=>{
+                toast.dismiss();
+                toast.success("Payment successful")
+                navigate('/dint-wallet')
+              })
             }else{
               toast.error('Payment Unsuccessful!')
             }

@@ -24,6 +24,7 @@ import { BsDiscord, BsInstagram, BsTwitter } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
 import { ThemeContext } from '../../../contexts/ThemeContext';
+import { useNavigate } from 'react-router';
 
 const TWITTER_PROFILE_URL = 'https://twitter.com/';
 const INSTAGRAM_PROFILE_URL = 'https://instagram.com/';
@@ -32,6 +33,7 @@ const DISCORD_PROFILE_URL = 'https://discordapp.com/users/';
 const ProfileSettings = () => {
   const theme = useTheme();
   const userHook = useUser();
+  const navigate = useNavigate();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
 
   const { handleSubmit, formState, watch, control, setValue } = useForm();
@@ -89,33 +91,33 @@ const ProfileSettings = () => {
     };
 
     try {
-      const result = await _axios.put('api/user/update-profile-by-token/', dataWithSocials);
+      const { data } = await _axios.put('api/user/update-profile-by-token/', dataWithSocials);
+      const { data: userData } = data;
 
-      if (result.data.data) {
-        // const savedUser = JSON.parse(localStorage.getItem('userData') ?? '{}');
-        // localStorage.setItem('userData', JSON.stringify({ ...savedUser, ...result.data.data }));
+      if (userData) {
+        userHook.setCurrentUser({ ...userHook.reduxUser, ...userData });
 
-        userHook.setCurrentUser({ ...userHook.reduxUser, ...result.data.data });
+        setValue('custom_username', userData.custom_username);
+        setValue('display_name', userData.display_name);
+        setValue('bio', userData.bio);
+        setValue('city', userData.city);
+        setValue('twitter', userData.twitter?.replace(TWITTER_PROFILE_URL, ''));
+        setValue('instagram', userData.instagram?.replace(INSTAGRAM_PROFILE_URL, ''));
+        setValue('discord', userData.discord?.replace(DISCORD_PROFILE_URL, ''));
 
-        setValue('custom_username', result?.data?.data?.custom_username);
-        setValue('display_name', result?.data?.data?.display_name);
-        setValue('bio', result?.data?.data?.bio);
-        setValue('city', result?.data?.data?.city);
-        setValue('twitter', result?.data?.data?.twitter?.replace(TWITTER_PROFILE_URL, ''));
-        setValue('instagram', result?.data?.data?.instagram?.replace(INSTAGRAM_PROFILE_URL, ''));
-        setValue('discord', result?.data?.data?.discord?.replace(DISCORD_PROFILE_URL, ''));
+        setTimeout(() => {
+          toast.update(id, {
+            render: 'Profile Updated Successful!',
+            type: 'success',
+            isLoading: false
+          });
+        }, 1000);
+
+        setTimeout(() => {
+          toast.dismiss();
+          navigate(`/${userData.custom_username}`);
+        }, 2000);
       }
-      setTimeout(() => {
-        toast.update(id, {
-          render: 'Profile Updated Successful!',
-          type: 'success',
-          isLoading: false
-        });
-      }, 1000);
-
-      setTimeout(() => {
-        toast.dismiss();
-      }, 2000);
     } catch (err: any) {
       toast.dismiss();
       toast.error(err.message);
@@ -133,6 +135,54 @@ const ProfileSettings = () => {
   return (
     <div>
       <BackBlock title="Profile Settings" />
+<<<<<<< HEAD
+
+      <Box display="flex" alignItems="center" justifyContent="space-between">
+        <Box sx={{ position: 'relative', top: 5, left: 20 }}>
+          <Badge
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right'
+            }}
+            color="success"
+            overlap="circular"
+            badgeContent=" "
+            variant="dot"
+          >
+            <Avatar src={user?.profile_image} sx={{ width: 75, height: 75 }} />
+          </Badge>
+          <MUIButton
+            style={{
+              maxWidth: '20px',
+              maxHeight: '20px',
+              minWidth: '20px',
+              minHeight: '20px',
+              padding: 0,
+              borderRadius: 10
+            }}
+            size="small"
+            variant="contained"
+            component="label"
+            sx={{
+              position: 'absolute',
+              left: 0,
+              bottom: 10
+            }}
+          >
+            <input
+              hidden
+              accept="image/*,.jpg, .jpeg, .png"
+              type="file"
+              onChange={handleProPicChange}
+            />
+            <BiCloudUpload />
+          </MUIButton>
+        </Box>
+
+        <MUIButton variant="contained" component="label">
+          <input hidden accept="image/*,.jpg, .jpeg, .png" type="file" onChange={handleProPicChange} />
+          Upload avatar
+=======
       <div
         style={{
           display: 'flex',
@@ -190,8 +240,10 @@ const ProfileSettings = () => {
             onChange={handleProPicChange}
           />
           <BiCloudUpload />
+>>>>>>> parent of ffc2ba7 (Merge pull request #192 from DintLabs/feature/rework-redux-wallet)
         </MUIButton>
       </Box>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack gap={2} mt={2} ml={isLargeScreen ? 3 : 0}>
           <UsernameInput

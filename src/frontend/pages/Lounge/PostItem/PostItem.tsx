@@ -77,6 +77,7 @@ function PostItem({
       borderRadius="10px"
       margin="0 2.5% 30px"
     >
+      <div id={`${post.id}`} className="anchor" />
       <PostHeader author={post.user} createdAt={post.created_at} />
       {renderPostContent()}
       <PostActions
