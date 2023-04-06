@@ -16,7 +16,7 @@ import UsernameInput from 'frontend/components/username/UsernameInput';
 import useUser from 'frontend/hooks/useUser';
 import { fetchUserData } from 'frontend/redux/slices/user';
 import { dispatch } from 'frontend/redux/store';
-import { UploadCoverPhoto, UploadProfilePicture } from 'frontend/services/profileService';
+import { UploadProfilePicture } from 'frontend/services/profileService';
 import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BiCloudUpload } from 'react-icons/bi';
@@ -53,18 +53,6 @@ const ProfileSettings = () => {
   useEffect(() => {
     fetchUserDataFn();
   }, []);
-
-  const handleCoverPhotoChange =  (e: any) => {
-    if (e.target.files && e.target.files.length) {
-      UploadCoverPhoto(e.target.files[0]).then(result => {
-        if (result?.success && user) {
-          userHook.setCurrentUser({ ...user, banner_image: result?.data?.banner_image || '' });
-          // setUser({ ...user, banner_image: result?.data?.banner_image || '' });
-        }
-      })
-      toast.dismiss();
-    }
-  };
 
   const handleProPicChange = (e: any) => {
     if (e.target.files && e.target.files.length) {
@@ -135,7 +123,6 @@ const ProfileSettings = () => {
   return (
     <div>
       <BackBlock title="Profile Settings" />
-<<<<<<< HEAD
 
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Box sx={{ position: 'relative', top: 5, left: 20 }}>
@@ -182,65 +169,6 @@ const ProfileSettings = () => {
         <MUIButton variant="contained" component="label">
           <input hidden accept="image/*,.jpg, .jpeg, .png" type="file" onChange={handleProPicChange} />
           Upload avatar
-=======
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'flex-end',
-          width: '100%',
-          height: 250,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundImage: `url(${user?.banner_image || ''})`
-        }}
-      >
-        <MUIButton variant="contained" component="label" sx={{ m: 1 }}>
-          <input hidden accept="image/*,.jpg, .jpeg, .png" type="file" onChange={handleCoverPhotoChange} />
-          Upload cover photo
-        </MUIButton>
-      </div>
-      <Box sx={{ position: 'relative', bottom: 15, left: 20, right: 30 }}>
-        <Badge
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right'
-          }}
-          color="success"
-          overlap="circular"
-          badgeContent=" "
-          variant="dot"
-        >
-          <Avatar src={user?.profile_image} sx={{ width: 75, height: 75 }} />
-        </Badge>
-        <MUIButton
-          style={{
-            maxWidth: '20px',
-            maxHeight: '20px',
-            minWidth: '20px',
-            minHeight: '20px',
-            padding: 0,
-            borderRadius: 10
-          }}
-          size="small"
-          variant="contained"
-          component="label"
-          sx={{
-            position: 'absolute',
-            left: 0,
-            bottom: 10
-          }}
-        >
-          <input
-            hidden
-            accept="video/*,image/*"
-            multiple
-            type="file"
-            onChange={handleProPicChange}
-          />
-          <BiCloudUpload />
->>>>>>> parent of ffc2ba7 (Merge pull request #192 from DintLabs/feature/rework-redux-wallet)
         </MUIButton>
       </Box>
 

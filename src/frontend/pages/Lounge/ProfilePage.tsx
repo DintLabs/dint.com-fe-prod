@@ -910,9 +910,7 @@ function ProfilePage({ username }: ProfilePageProps) {
       <TipPopUp
         user={userDetails}
         onClose={handleClose}
-        setOpenPopUpTip={setOpenPopUpTip}
-        onOpen={handleClickOpen}
-        openPopUpTip={openPopUpTip}
+        open={openPopUpTip}
       />
     </>
   );

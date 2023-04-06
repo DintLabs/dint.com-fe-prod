@@ -2,7 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import _axios from 'frontend/api/axios';
-import { MdDelete } from 'react-icons/md';
+// import { MdDelete } from 'react-icons/md';
 import { Box, IconButton, TextField } from '@mui/material';
 import { RootState, useDispatch } from 'frontend/redux/store';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
@@ -12,7 +12,7 @@ import TipPopUp from 'frontend/components/tip/TipPopUp';
 import { IUserOwnStories } from 'frontend/types/lounge';
 import { UserDataInterface } from 'frontend/interfaces/reduxInterfaces';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
-import { deleteStory } from 'frontend/redux/slices/lounge';
+// import { deleteStory } from 'frontend/redux/slices/lounge';
 
 type StoryFooterProps = {
   username: string;
@@ -71,13 +71,10 @@ function StoryFooter({
     }
   }, [isOwner, username]);
 
-  const handleDelete = async () => {
-    if (!isOwner) return;
-
-    // TODO: uncomment after API implementation
-    // await dispatch(deleteStory(story.id));
-    console.log('Mocked story delete:', story.id);
-  };
+  // const handleDelete = async () => {
+  //   if (!isOwner) return;
+  //   await dispatch(deleteStory(story.id));
+  // };
 
   return (
     <Box
@@ -95,11 +92,7 @@ function StoryFooter({
         flexDirection: isOwner ? 'row-reverse' : 'row',
       }}
     >
-      {isOwner ? (
-        <IconButton onClick={handleDelete}>
-          <MdDelete />
-        </IconButton>
-      ) : (
+      {isOwner ? null : (
         <>
           <TextField
             fullWidth
@@ -154,9 +147,7 @@ function StoryFooter({
             <TipPopUp
               user={userData}
               onClose={() => setTipOpened(false)}
-              openPopUpTip={tipOpened}
-              onOpen={() => {}}
-              setOpenPopUpTip={setTipOpened}
+              open={tipOpened}
             />
           )}
         </>

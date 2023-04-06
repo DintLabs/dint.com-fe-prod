@@ -507,9 +507,7 @@ const ViewMediaModal = (props: ViewMediaModalProps) => {
                       <TipPopUp
                         user={post?.user}
                         onClose={handleCloseTip}
-                        setOpenPopUpTip={setOpenPopUpTip}
-                        onOpen={handleClickOpen}
-                        openPopUpTip={openPopUpTip}
+                        open={openPopUpTip}
                       />
                     </>
                   )}

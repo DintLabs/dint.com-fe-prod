@@ -22,6 +22,7 @@ import { setWalletSliceChanges, getKeys } from 'frontend/redux/actions/createWal
 import { useTheme, Typography, FormControl, TextField, Stack, Alert } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { ThemeContext } from '../../contexts/ThemeContext';
+import { getWalletBalance } from '../../redux/slices/wallet';
 
 export interface DialogTitleProps {
   id: string;
@@ -41,7 +42,7 @@ export default function KeysDialog() {
   const { handleSubmit, formState, watch, control, setValue } = useForm();
 
   React.useEffect(() => {
-    dispatch(getKeys());
+    dispatch(getWalletBalance());
   }, [isPhrase, privatesKey])
 
   const handleClose = () => {

@@ -272,9 +272,7 @@ const FullScreenModal = (props: fullScreenModalProps) => {
         <TipPopUp
           user={props.post.user}
           onClose={handleCloseTip}
-          setOpenPopUpTip={setOpenPopUpTip}
-          onOpen={handleClickOpen}
-          openPopUpTip={openPopUpTip}
+          open={openPopUpTip}
         />
       </DialogContent>
     </Dialog>

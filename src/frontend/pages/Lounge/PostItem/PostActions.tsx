@@ -260,10 +260,8 @@ function PostActions({
       {tipDialogOpened && (
         <TipPopUp
           user={post.user}
-          onOpen={() => setTipDialogOpened(true)}
           onClose={() => setTipDialogOpened(false)}
-          setOpenPopUpTip={setTipDialogOpened}
-          openPopUpTip={tipDialogOpened}
+          open={tipDialogOpened}
         />
       )}
     </Box>

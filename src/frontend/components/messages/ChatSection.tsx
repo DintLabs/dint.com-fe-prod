@@ -131,10 +131,8 @@ function ChatSection(props: ChatSectionProps) {
     <>
       <TipPopUp
         user={props.selectedUser}
-        onOpen={() => setOpenPopUpTip(true)}
         onClose={() => setOpenPopUpTip(false)}
-        setOpenPopUpTip={setOpenPopUpTip}
-        openPopUpTip={openPopUpTip}
+        open={openPopUpTip}
       />
 
       <AddChatMedia
@@ -229,9 +227,9 @@ function ChatSection(props: ChatSectionProps) {
                 },
               }}
             />
-            <IconButton onClick={onOpenMedia}>
-              <PermMediaIcon />
-            </IconButton>
+            {/*<IconButton onClick={onOpenMedia}>*/}
+            {/*  <PermMediaIcon />*/}
+            {/*</IconButton>*/}
 
             <FlexRow
               p="8px 0 8px 8px"

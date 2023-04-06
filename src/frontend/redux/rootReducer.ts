@@ -17,6 +17,7 @@ import subscriptionsReducer from "./slices/subscriptions";
 import subscribersReducer from "./slices/subscribers";
 import loungeReducer from "./slices/lounge";
 import commonReducer from "./slices/common";
+import walletStateReducer from './slices/wallet';
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +36,7 @@ const reducers = combineReducers({
   newHome: newHomeReducer,
   lounge: loungeReducer,
   wallet: createWalletReducer,
+  walletState: walletStateReducer,
   metamask: metamaskReducer,
   user: userReducer,
   messages: messagesReducer,

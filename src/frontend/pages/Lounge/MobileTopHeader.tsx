@@ -14,16 +14,14 @@ import { useParams } from 'react-router';
 import _axios from 'frontend/api/axios';
 import { AccountBalanceWallet } from '@mui/icons-material';
 import { dispatch, RootState, useSelector } from 'frontend/redux/store';
-import { getKeys } from 'frontend/redux/actions/createWallet';
+import { getWalletBalance } from 'frontend/redux/slices/wallet';
 
 export default function MobileTopHeader({ userName, avatar }: { userName: string, avatar: string }) {
   const [hasShadow, setHasShadow] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [notificationsLength, setNotificationsLength] = React.useState();
   const navigate = useNavigate();
-  const { balance } = useSelector(
-    (rootState: RootState) => rootState.wallet,
-  );
+  const { balance } = useSelector((rootState: RootState) => rootState.walletState);
 
   const { toggle } = useContext(ThemeContext);
 
@@ -34,10 +32,6 @@ export default function MobileTopHeader({ userName, avatar }: { userName: string
   const routeurl = useParams();
   const menuId = 'primary-search-account-menu';
 
-  const walletBalance = async () => {
-    await dispatch(getKeys());
-  };
-
   React.useEffect(() => {
     const getUnseenMessagesLength = async () => {
       await _axios.get('/api/chat/get-unseen-message/').then((res: any) => {
@@ -47,8 +41,7 @@ export default function MobileTopHeader({ userName, avatar }: { userName: string
       });
     };
     getUnseenMessagesLength();
-    walletBalance();
-
+    dispatch(getWalletBalance());
   }, []);
 
   React.useEffect(() => {

@@ -1,11 +1,8 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router";
-import _axios from "frontend/api/axios";
 import { toast } from "react-toastify";
-import { truncate } from "../common/utils";
-
 import {
   Avatar,
   Button,
@@ -25,123 +22,81 @@ import {
 import { UserDataInterface } from "frontend/interfaces/reduxInterfaces";
 import { FlexRow } from "frontend/reusable/reusableStyled";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { useSelector, RootState } from "frontend/redux/store";
-import { ethers } from "ethers";
+import { useSelector, RootState, useDispatch } from 'frontend/redux/store';
 import { Box } from "@mui/material";
 import LowBalanceModal from "../common/LowBalanceModal";
+import { sendTip } from 'frontend/redux/slices/wallet';
 
 interface TipPopUpProps {
   user: UserDataInterface | null;
-  openPopUpTip: boolean;
-  setOpenPopUpTip: React.Dispatch<React.SetStateAction<boolean>>;
+  open: boolean;
   onClose: () => void;
-  onOpen: () => void;
 }
 
-const TipPopUp: FC<TipPopUpProps> = ({
-  openPopUpTip,
-  setOpenPopUpTip,
-  onClose,
-  onOpen,
-  user,
-}) => {
+const TipPopUp: FC<TipPopUpProps> = ({ open, onClose, user }) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { toggle } = useContext(ThemeContext);
+
   const userData = useSelector((state: any) => state.user.userData);
-  const { address, balance } = useSelector(
-    (rootState: RootState) => rootState.wallet
-  );
+  const { balance } = useSelector((state: RootState) => state.walletState);
 
   const { control } = useForm();
   const [amount, setAmount] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [dintTxn, setDintTxn] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
   const [lowBalance, setLowBalance] = useState(false);
   const goToProfile = () => {
     navigate(`/${user && user.custom_username}`);
   };
+
   const sendClick = async () => {
-    setLoading(true);
+    if (!user || !userData) return;
+
+    setIsLoading(true);
     const toastId = toast.loading("");
-   
 
-    if (amount >= 1) {
-      const sendDetail = {
-        sender_id: userData?.id,
-        reciever_id: user?.id,
-        amount: amount,
-      };
-      if(amount < balance){
-        setLoading(false);
-        console.log("more----", amount, balance);
-        const sendDetail = {
-          sender_id: userData?.id,
-          reciever_id: user?.id,
-          amount: amount,
-        };
-        if (sendDetail) {
-          await _axios
-            .post(`api/user/send-dint/`, sendDetail)
-            .then((response: any) => {
-              setDintTxn(response.data);
-              if (response.data.code == 201) {
-                setLoading(false);
-                toast.update(toastId, {
-                  render: "Dint Sent Successfully",
-                  type: "success",
-                  isLoading: false,
-                });
-              } else {
-                setLoading(false);
-                toast.update(toastId, {
-                  render: "Something went wrong!",
-                  type: "error",
-                  isLoading: false,
-                });
-              }
-            })
-
-            .catch((error: any) => {
-              setLoading(false);
-              console.log("err", error);
-              toast.update(toastId, {
-                render: "Something went wrong!",
-                type: "error",
-                isLoading: false,
-              });
-            });
-        }
-      }else{
-          toast.update(toastId, {
-            render:`Insufficient Funds!`,
-            type: "error",
-            isLoading: false,
-          });
-        setLoading(false);
-        setLowBalance(true);
-      }
-
-
-      
-    } else {
+    if (amount < 1) {
       toast.update(toastId, {
-        render: "Amount Should not be  less then 1",
-        type: "error",
+        render: 'Amount should not be less then 1',
         isLoading: false,
+        type: 'error',
       });
-      setLoading(false);
+      setIsLoading(false);
+      return;
     }
+
+    if (amount > balance) {
+      toast.update(toastId, {
+        render: 'Insufficient Funds!',
+        isLoading: false,
+        type: 'error',
+      });
+      setIsLoading(false);
+      setLowBalance(true);
+      return;
+    }
+
+    dispatch(sendTip({
+      senderId: userData.id,
+      receiverId: user.id,
+      amount,
+    }));
+
+    setIsLoading(false);
+    toast.update(toastId, {
+      render: 'Transaction has been created. You can see details in the wallet history',
+      isLoading: false,
+      type: 'success',
+    });
+
+    onClose();
     setTimeout(() => toast.dismiss(), 2000);
   };
 
-  const handleConfirmation = () =>{
-    setLowBalance(false);
-  }
-
   return (
     <Dialog
-      open={openPopUpTip}
+      open={open}
       onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
@@ -294,49 +249,15 @@ const TipPopUp: FC<TipPopUpProps> = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ p: "10px 24px 20px" }}>
-          <Button disabled={loading} onClick={onClose}>
+          <Button disabled={isLoading} onClick={onClose}>
             CANCEL
           </Button>
-          <Button disabled={loading} onClick={sendClick} autoFocus>
+          <Button disabled={isLoading} onClick={sendClick} autoFocus>
             SEND TIP
           </Button>
         </DialogActions>
-        {dintTxn ? (
-          <>
-            <Box sx={{ p: "10px 24px 20px" }}>
-              <Typography
-                sx={{ color: "#6a6a6a" }}
-                component={"h6"}
-                // sx={{ color: "text.secondary" }}
-              >
-                <Typography
-                  component={"span"}
-                  sx={{ color: "#000000", fontWeight: "bold" }}>
-                  Status:
-                </Typography>{" "}
-                {dintTxn.message}
-              </Typography>
 
-              <Typography
-                sx={{ color: "#000000", fontWeight: "bold" }}
-                component={"h6"}
-                // sx={{ color: "text.secondary" }}
-              >
-                Transaction Hash:{" "}
-                <Typography
-                  sx={{ color: "#7635dc", textDecoration: "none" }}
-                  component="a"
-                  href={`https://polygonscan.com/tx/${dintTxn.data.Hash}`}
-                  target="_blank">
-                  {truncate(dintTxn.data.Hash, 18)}
-                </Typography>
-              </Typography>
-            </Box>
-          </>
-        ) : (
-          ""
-        )}
-        {loading === true ? (
+        {isLoading && (
           <>
             <Box
               sx={{
@@ -354,11 +275,13 @@ const TipPopUp: FC<TipPopUpProps> = ({
               <CircularProgress />
             </Box>
           </>
-        ) : (
-          ""
         )}
       </Box>
-      <LowBalanceModal isOpen={lowBalance} handleClose={() => handleConfirmation()} />
+
+      <LowBalanceModal
+        isOpen={lowBalance}
+        handleClose={() => setLowBalance(false)}
+      />
     </Dialog>
   );
 };

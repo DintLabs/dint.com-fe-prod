@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useState, useContext } from 'react';
 import {
   Box,
   useTheme,
   useMediaQuery,
   Card,
-  CardContent,
-  CardHeader,
   Avatar,
   Typography,
   Button,
@@ -16,148 +14,64 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Collapse,
-  Menu,
-  MenuItem,
   Paper,
   Divider,
-} from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import * as axios from "axios";
+} from '@mui/material';
 import {
-  dispatch,
   RootState,
   useDispatch,
   useSelector,
-  AppDispatch,
-} from "frontend/redux/store";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import QrCodeIcon from "@mui/icons-material/QrCode";
-import SendIcon from "@mui/icons-material/Send";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import AddIcon from "@mui/icons-material/Add";
-import { getKeys } from "frontend/redux/actions/createWallet";
-import { getMaticBalance } from "frontend/redux/actions/wallet/getMaticBalance";
-import { getDintBalance } from "frontend/redux/actions/wallet/getDintBalance";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router";
-import QrScanDialog from "./QrScanDialog";
-import SendDialog from "./SendDialog";
-import POLYGON_ICON from "../../assets/img/web3/matic-token.png";
-import DINT_POLYGON_ICON from "../../assets/img/web3/dint-polygon-logo.png";
-import DINT_LOGO from "../../assets/img/web3/dint-token.png";
-import DOLLAR_ICON from "../../assets/img/icons/withdraw_icon.png";
-import PLUS_ICON from "../../assets/img/icons/buy_icon.png";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { margin } from "@mui/system";
-import _axios from "frontend/api/axios";
-import { Context } from "react";
+} from 'frontend/redux/store';
+import { useNavigate } from 'react-router';
+import QrScanDialog from './QrScanDialog';
+import SendDialog from './SendDialog';
+import DINT_LOGO from '../../assets/img/web3/dint-token.png';
+import DOLLAR_ICON from '../../assets/img/icons/withdraw_icon.png';
+import PLUS_ICON from '../../assets/img/icons/buy_icon.png';
+import { ThemeContext } from '../../contexts/ThemeContext';
+import { getTransactionsList, getWalletBalance } from '../../redux/slices/wallet';
+import { capitalize } from 'lodash';
+import { getMaticBalance } from 'frontend/redux/actions/wallet/getMaticBalance';
+import { getDintBalance } from 'frontend/redux/actions/wallet/getDintBalance';
 
 const DintWallet = () => {
   const theme = useTheme();
-  const paymentFormRef = useRef();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { toggle } = useContext(ThemeContext);
+
   const [isQrScan, setIsQrScan] = useState(false);
   const [isSend, setIsSend] = useState(false);
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
   const [open, setOpen] = useState(false);
-  const [openMatic, setOpenMatic] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [maticPrice, setMaticPrice] = useState<any>("");
-  const openAnchorEl = Boolean(anchorEl);
-  const { address, balance } = useSelector(
-    (rootState: RootState) => rootState.wallet
-  );
-  const { maticWallet } = useSelector(
-    (rootState: RootState) => rootState.maticBalance
-  );
-  const { name, symbol } = useSelector(
-    (rootState: RootState) => rootState.dintBalance
-  );
-  const [displayAssets, setdisplayAssets] = useState(true);
-  const [activitesData, setActivitesData] = useState([]);
+  const {
+    address,
+    balance,
+    transactions,
+  } = useSelector((rootState: RootState) => rootState.walletState);
+
+  const [displayAssets, setDisplayAssets] = useState(true);
   const mobileView = useMediaQuery("(max-width:899px)");
 
   useEffect(() => {
-    getActivitiesData();
-  }, [1]);
-
-  const getActivitiesData = async () => {
-    await _axios
-      .get("api/user/get_payouts_by_token/")
-      .then((res: any) => {
-        if (res?.data?.data) setActivitesData(res.data.data);
-      })
-      .catch((error: any) => {
-        console.log("error fetch bank details", error);
-        toast.error("Action Failed");
-      });
-  };
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      await dispatch(getKeys());
-      await axios
-        .default(
-          `${process.env.REACT_APP_COINGECKO_API}simple/price?ids=matic-network&vs_currencies=usd`
-        )
-        .then(({ data }: any) => {
-          setMaticPrice(data["matic-network"].usd);
-        });
-      await dispatch(getMaticBalance());
-      await dispatch(getDintBalance());
-    }, 5000);
-
-    return () => clearInterval(interval);
+    dispatch(getTransactionsList());
+    dispatch(getWalletBalance());
+    dispatch(getMaticBalance());
+    dispatch(getDintBalance());
   }, []);
-
-  const openQrScan = () => {
-    setIsQrScan(true);
-  };
-
-  const openSend = async () => {
-    setIsSend(true);
-  };
 
   const handleClose = () => {
     setIsQrScan(false);
     setIsSend(false);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    window.open(
-      `${process.env.REACT_APP_POLYGON_EXPLORER}${address}`,
-      "_blank"
-    );
-    setAnchorEl(null);
-  };
-
-  const copyContent = async () => {
-    try {
-      await navigator.clipboard.writeText(address);
-      toast.success("Content copied to clipboard");
-    } catch (err) {
-      console.error("Failed to copy: ", err);
-    }
-  };
-  const navigate = useNavigate();
-  const url = "https://www.moonpay.com/buy/matic";
-
-  const dintPrice = 1;
-
   const onWithdrawal = async () => {
-    // navigate("/en/fiat/withdraw/EUR");
     navigate("/en/fiat/withdraw");
   };
+
   const onBuyToken = () => {
     navigate("/buy-dint-token");
   };
-
-  const { toggle } = useContext(ThemeContext);
 
   return (
     <>
@@ -329,7 +243,7 @@ const DintWallet = () => {
           }
         >
           <Box
-            onClick={() => setdisplayAssets(true)}
+            onClick={() => setDisplayAssets(true)}
             sx={
               mobileView
                 ? {
@@ -354,7 +268,7 @@ const DintWallet = () => {
             <Typography sx={{ fontWeight: "bold" }}>Assets</Typography>
           </Box>
           <Box
-            onClick={() => setdisplayAssets(false)}
+            onClick={() => setDisplayAssets(false)}
             sx={
               mobileView
                 ? {
@@ -403,7 +317,7 @@ const DintWallet = () => {
                 ${balance}
               </Typography> */}
             {/* </Grid>
-          </Grid> 
+          </Grid>
              */}
             <TableContainer component={Paper}>
               <Table aria-label="simple table">
@@ -503,7 +417,7 @@ const DintWallet = () => {
                       </Box>
                       <Typography className="text-center py-2" onClick={() => setOpen(!open)} variant="caption" display="block" color="text.secondary">
                         Click to collapse <KeyboardArrowUpIcon sx={{ fontSize: "14px" }}  />
-                      </Typography> 
+                      </Typography>
                       <Box sx={{textAlign: 'center' }}>
                         <Button
                           id="basic-button"
@@ -577,8 +491,8 @@ const DintWallet = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody sx={{ overflow: "auto", height: "30%" }}>
-                  {activitesData.length > 0 ? (
-                    activitesData?.map((activity: any) => (
+                  {transactions.length > 0 ? (
+                    transactions.map((transaction) => (
                       <TableRow
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
@@ -609,7 +523,7 @@ const DintWallet = () => {
                               }}
                             >
                               <span style={{ fontWeight: "700" }}>
-                                {activity.accountNumber}
+                                {address}
                               </span>
                             </div>
                           </div>
@@ -622,7 +536,7 @@ const DintWallet = () => {
                           }}
                         >
                           <span style={{ fontWeight: "bold" }}>
-                            ${activity.amount}{" "}
+                            ${transaction.amount}{" "}
                           </span>
                         </TableCell>
                         <TableCell
@@ -633,7 +547,7 @@ const DintWallet = () => {
                           }}
                         >
                           <span style={{ fontWeight: "bold" }}>
-                            {activity.paid ? "Success" : "Pending"}
+                            {capitalize(transaction.status)}
                           </span>
                         </TableCell>
                       </TableRow>
@@ -677,9 +591,6 @@ const DintWallet = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            {/* <div>
-              <p style={{ color: "black" }}>Coming Soon...</p>
-            </div> */}
           </Card>
         )}
 
