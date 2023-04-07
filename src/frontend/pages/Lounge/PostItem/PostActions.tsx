@@ -138,17 +138,18 @@ function PostActions({
         addLikeForPost(loggedInUser.id, post.id)
       );
 
+      const newLikes = [...(post?.like_post || []), likeResp];
+
       const updatedPost = {
         ...post,
-        like_post: [...(post?.like_post || []), likeResp],
+        like_post: newLikes,
         total_likes: currentTotalLikes + 1,
       };
       setLiked(true);
       setPost(updatedPost);
       updatePost(updatedPost);
-      if (onPostChange) {
-        onPostChange();
-      }
+      if (onPostChange) onPostChange();
+      if (onPostLike) onPostLike(newLikes, updatedPost.id)
       setLikeInProgress(false);
     }
   };

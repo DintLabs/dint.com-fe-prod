@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet';
 import storyImage from "frontend/assets/img/web3/story-1.png";
 import PlayCircleOutlineOutlinedIcon from "@mui/icons-material/PlayCircleOutlineOutlined";
 import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
@@ -18,7 +19,6 @@ import {
 } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import _axios from "frontend/api/axios";
-import PostItemSkeleton from "frontend/components/common/skeletons/PostItemSkeleton";
 import { DEFAULT_POSTS_PAGINATION, postTypes } from "frontend/data";
 import useAuth from "frontend/hooks/useAuth";
 import useUser from "frontend/hooks/useUser";
@@ -29,7 +29,6 @@ import {
 import { PostInterface } from "frontend/interfaces/postInterface";
 import { UserDataInterface } from "frontend/interfaces/reduxInterfaces";
 import React, {
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -78,16 +77,17 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-type PostPaginationPayload = {
-  page: number | null;
-  start: number;
-  length: number;
-  post_type: string;
-};
-
 type ProfilePageProps = {
   username: string | null | undefined;
 }
+
+const TABS = {
+  ALL: 0,
+  TEXT: 1,
+  IMAGE: 2,
+  VIDEO: 3,
+};
+
 function ProfilePage({ username }: ProfilePageProps) {
   const dispatch = useDispatch();
 
@@ -100,7 +100,7 @@ function ProfilePage({ username }: ProfilePageProps) {
   const userHook = useUser();
   const theme = useTheme();
 
-  const [value, setValue] = useState(0);
+  const [tab, setTab] = useState(TABS.ALL);
   const [userDetails, setUserDetails] = useState<UserDataInterface | null>(
     null
   );
@@ -122,8 +122,6 @@ function ProfilePage({ username }: ProfilePageProps) {
   const [photoPosts, setPhotoPosts] = useState<PostInterface[]>([]);
   const [textPosts, setTextPosts] = useState<PostInterface[]>([]);
   const [videoPosts, setVideoPosts] = useState<PostInterface[]>([]);
-  const [paginationPosts, setPaginationPosts] =
-    useState<PaginationPostsInerface>(DEFAULT_POSTS_PAGINATION);
 
   const setPosts = (
     setPostsPayload: ((prevPosts: PostInterface[]) => PostInterface[]) | PostInterface[],
@@ -134,6 +132,9 @@ function ProfilePage({ username }: ProfilePageProps) {
 
     setPostsLocal(convertPostDates(postsToUpdate));
   };
+
+  const [paginationPosts, setPaginationPosts] =
+    useState<PaginationPostsInerface>(DEFAULT_POSTS_PAGINATION);
 
   const [paginationPhotoPosts, setPaginationPhotoPosts] =
     useState<PaginationPostsInerface>({
@@ -153,57 +154,26 @@ function ProfilePage({ username }: ProfilePageProps) {
       post_type: postTypes.video.value,
     });
 
-    const [fetchImagePostPayload, setFetchImagePostPayload] = useState<PostPaginationPayload>({
-      page: null,
-      post_type: "",
-      start: 0,
-      length: 5
-    });
-
-  const handleScroll = useCallback(() => {
-    const windowHeight =
-      "innerHeight" in window
-        ? window.innerHeight
-        : document.documentElement.offsetHeight;
-    const { body } = document;
-    const html = document.documentElement;
-    const docHeight = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight
-    );
-    const currentHeight = windowHeight + window.pageYOffset;
-    if (currentHeight + 900 >= docHeight) {
-      if (!isLoading) {
-        let pagination = null;
-        if (value === 0) {
-          pagination = paginationPosts;
-        } else if (value === 1) {
-          pagination = paginationTextPosts;
-        } else if (value === 2) {
-          pagination = paginationPhotoPosts;
-        } else if (value === 3) {
-          pagination = paginationVideoPosts;
-        }
-        if (userDetails && pagination && !isLoading && pagination.hasNext) {
-          fetchPosts(userDetails.id, {
-            ...pagination,
-            start: pagination.start + 5,
-          });
-        }
+  const handleScroll = () => {
+    if (!isLoading) {
+      let pagination = null;
+      if (tab === TABS.ALL) {
+        pagination = paginationPosts;
+      } else if (tab === TABS.TEXT) {
+        pagination = paginationTextPosts;
+      } else if (tab === TABS.IMAGE) {
+        pagination = paginationPhotoPosts;
+      } else if (tab === TABS.VIDEO) {
+        pagination = paginationVideoPosts;
+      }
+      if (userDetails && pagination && !isLoading && pagination.hasNext) {
+        fetchPosts(userDetails.id, {
+          ...pagination,
+          start: pagination.start + 6,
+        });
       }
     }
-  }, [
-    paginationPosts,
-    paginationPhotoPosts,
-    paginationTextPosts,
-    paginationVideoPosts,
-    isLoading,
-    value,
-    userDetails,
-  ]);
+  };
 
   const isMyProfile = React.useMemo(
     () => loggedInUser && loggedInUser.custom_username === userDetails?.custom_username,
@@ -223,14 +193,6 @@ function ProfilePage({ username }: ProfilePageProps) {
       dispatch(getUserOwnStories());
     }
   },[dispatch, isMyProfile])
-
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [handleScroll]);
 
   const savedUser = userHook.reduxUser;
 
@@ -256,7 +218,7 @@ function ProfilePage({ username }: ProfilePageProps) {
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    setTab(newValue);
   };
 
   const getUserPostCounts = async (userId: number) => {
@@ -331,7 +293,7 @@ function ProfilePage({ username }: ProfilePageProps) {
   };
 
   const fetchUserDetails = async (onlyDetails = false) => {
-    setValue(0);
+    setTab(TABS.ALL);
     try {
       const { data } = await _axios.post("/api/user/get-profile-by-username/", {
         custom_username: username,
@@ -364,23 +326,23 @@ function ProfilePage({ username }: ProfilePageProps) {
   useEffect(() => {
     let list = [];
     let pagination = null;
-    if (value === 0) {
+    if (tab === 0) {
       list = JSON.parse(JSON.stringify(posts));
       pagination = JSON.parse(JSON.stringify(paginationPosts));
-    } else if (value === 1) {
+    } else if (tab === 1) {
       list = JSON.parse(JSON.stringify(textPosts));
       pagination = JSON.parse(JSON.stringify(paginationTextPosts));
-    } else if (value === 2) {
+    } else if (tab === 2) {
       list = JSON.parse(JSON.stringify(photoPosts));
       pagination = JSON.parse(JSON.stringify(paginationPhotoPosts));
-    } else if (value === 3) {
+    } else if (tab === 3) {
       list = JSON.parse(JSON.stringify(videoPosts));
       pagination = JSON.parse(JSON.stringify(paginationVideoPosts));
     }
     if (userDetails && !list?.length) {
       fetchPosts(userDetails.id, pagination);
     }
-  }, [value]);
+  }, [tab]);
 
   const postDeleted = (postId: number) => {
     setPosts((p) => p.filter((prev) => prev.id !== postId));
@@ -391,6 +353,15 @@ function ProfilePage({ username }: ProfilePageProps) {
     if (userDetails) {
       getUserPostCounts(userDetails?.id);
     }
+  };
+
+  const handlePostUpdate = (post: PostInterface) => {
+    const updateFn = (posts: PostInterface[]) => posts.map((p) => p.id === post.id ? post : p);
+
+    setPosts(updateFn);
+    setTextPosts(updateFn);
+    setPhotoPosts(updateFn);
+    setVideoPosts(updateFn);
   };
 
   const follow = async () => {
@@ -406,11 +377,10 @@ function ProfilePage({ username }: ProfilePageProps) {
       );
       if (data?.code === 200) {
         await fetchUserDetails(true);
-        toast.success(
-          `Follow request sent to ${
-            userDetails?.display_name || userDetails?.custom_username
-          }`
-        );
+        const successMessage = userDetails?.is_private
+            ? 'You`re following request has been sent.'
+            : `You're now following ${userDetails?.display_name || userDetails?.custom_username}.`;
+        toast.success(successMessage);
       } else {
         toast.error(data?.message || "Unable to process request");
       }
@@ -470,15 +440,6 @@ function ProfilePage({ username }: ProfilePageProps) {
     setOpenPopUpTip(false);
   };
 
-  const fetchImageHandler = () => {
-    setFetchImagePostPayload((prevState: PostPaginationPayload) => {
-      return {
-        ...prevState,
-        start: prevState.start + prevState.length
-      };
-    });
-  };
-
   if (!user) {
     return (
       <Typography variant="h2" sx={{ textAlign: 'center' }}>
@@ -495,6 +456,18 @@ function ProfilePage({ username }: ProfilePageProps) {
       //   borderRight: `1px solid ${theme.palette.grey[700]}`,
       // }}
       >
+        {userDetails && (
+            <Helmet>
+              <title>
+                {`${userDetails.display_name || userDetails.custom_username} | Dint`}
+              </title>
+              <meta
+                name="description"
+                content="Dint Events, buy event tickets. Use your digital assets to create event tickets"
+              />
+              {}
+            </Helmet>
+        )}
      <div className="profile-wrapper-wrapper">
   <Box
     className="main-profile-wrapper"
@@ -527,13 +500,13 @@ function ProfilePage({ username }: ProfilePageProps) {
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                      
+
                       </Typography>
                       <Typography
                         className="followers-tab-wrap"
                         color={toggle ? "#fff" : "#000"}
                         >
-                      
+
                       </Typography>
                     </div>
                   </div>
@@ -641,10 +614,10 @@ function ProfilePage({ username }: ProfilePageProps) {
                   {pluralize(counts?.all_posts ?? 0, 'Post', 'Posts')}
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}>
-                
+
                 </Typography>
                 <Typography color={toggle ? "#fff" : "#000"}  >
-                 
+
                 </Typography>
               </div>
 
@@ -733,7 +706,7 @@ function ProfilePage({ username }: ProfilePageProps) {
           <>
             <Box className="tab-main-wrapper" id="postId">
               <Tabs
-                value={value}
+                value={tab}
                 variant="fullWidth"
                 onChange={handleChange}
                 sx={{ borderTop: `1px solid ${theme.palette.grey[700]}` }}
@@ -741,111 +714,115 @@ function ProfilePage({ username }: ProfilePageProps) {
               >
                 <Tab
                   className={`profile-tab ${
-                    toggle && value === 0 && "active-tab"
+                    toggle && tab === TABS.ALL && "active-tab"
                   } profile-tab-list`}
                   icon={<BrokenImageOutlinedIcon />}
                   iconPosition="start"
                   label={
                     <div className="profile-tab-text">
-                      All 
+                      All
                     </div>
                   }
                 />
                 <Tab
                   className={`profile-tab ${
-                    toggle && value === 1 && "active-tab"
+                    toggle && tab === TABS.TEXT && "active-tab"
                   } profile-tab-list`}
                   icon={<TextSnippetOutlinedIcon />}
                   iconPosition="start"
                   label={
                     <div className="profile-tab-text">
-                      Text 
+                      Text
                     </div>
                   }
                 />
                 <Tab
                   className={`profile-tab ${
-                    toggle && value === 2 && "active-tab"
+                    toggle && tab === TABS.IMAGE && "active-tab"
                   } profile-tab-list`}
                   icon={<PhotoLibraryOutlinedIcon />}
                   iconPosition="start"
                   label={
                     <div className="profile-tab-text">
-                      Photos 
+                      Photos
                     </div>
                   }
                 />
                 <Tab
                   className={`profile-tab ${
-                    toggle && value === 3 && "active-tab"
+                    toggle && tab === TABS.VIDEO && "active-tab"
                   } profile-tab-list`}
                   icon={<PlayCircleOutlineOutlinedIcon />}
                   iconPosition="start"
                   label={
                     <div className="profile-tab-text">
-                      Videos 
+                      Videos
                     </div>
                   }
                 />
               </Tabs>
             </Box>
 
-            <TabPanel value={value} index={0}>
+            <TabPanel value={tab} index={TABS.ALL}>
               {posts?.length > 0 ? (
                 <MediaList
                   mediaList={posts}
                   totalMedia={counts.all_posts}
-                  fetchMoreMedia={fetchImageHandler}
+                  fetchMoreMedia={handleScroll}
                   loader={isLoading}
                   userDetails={userDetails}
                   getUserPostCounts={getUserPostCounts}
                   postDeleted={postDeleted}
+                  onPostUpdate={handlePostUpdate}
                 />
               ) : (
                 <NothingToShow padding={14} color={toggle ? "#fff" : "#000"} />
               )}
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={tab} index={TABS.TEXT}>
               {textPosts?.length > 0 ? (
                 <MediaList
                   mediaList={textPosts}
                   totalMedia={counts.text_posts}
-                  fetchMoreMedia={fetchImageHandler}
+                  fetchMoreMedia={handleScroll}
                   loader={isLoading}
                   userDetails={userDetails}
                   getUserPostCounts={getUserPostCounts}
                   postDeleted={postDeleted}
+                  onPostUpdate={handlePostUpdate}
                 />
               ) : (
                 <NothingToShow padding={14} color={toggle ? "#fff" : "#000"} />
               )}
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={tab} index={TABS.IMAGE}>
               {photoPosts?.length > 0 ? (
                 <MediaList
                   mediaList={photoPosts}
                   totalMedia={counts.image_posts}
-                  fetchMoreMedia={fetchImageHandler}
+                  fetchMoreMedia={handleScroll}
                   loader={isLoading}
                   userDetails={userDetails}
                   getUserPostCounts={getUserPostCounts}
                   postDeleted={postDeleted}
+                  onPostUpdate={handlePostUpdate}
                 />
               ) : (
                 <NothingToShow padding={14} color={toggle ? "#fff" : "#000"} />
               )}
             </TabPanel>
 
-            <TabPanel value={value} index={3}>
+            <TabPanel value={tab} index={TABS.VIDEO}>
               {videoPosts?.length > 0 ? (
                 <MediaList
                   mediaList={videoPosts}
                   totalMedia={counts.video_posts}
-                  fetchMoreMedia={fetchImageHandler}
+                  fetchMoreMedia={handleScroll}
                   loader={isLoading}
                   userDetails={userDetails}
                   getUserPostCounts={getUserPostCounts}
                   postDeleted={postDeleted}
+                  onPostUpdate={handlePostUpdate}
                 />
               ) : (
                 <NothingToShow padding={14} color={toggle ? "#fff" : "#000"} />

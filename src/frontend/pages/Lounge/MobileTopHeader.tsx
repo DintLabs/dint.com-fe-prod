@@ -17,16 +17,20 @@ import { dispatch, RootState, useSelector } from 'frontend/redux/store';
 import { getWalletBalance } from 'frontend/redux/slices/wallet';
 
 export default function MobileTopHeader({ userName, avatar }: { userName: string, avatar: string }) {
+  const navigate = useNavigate();
+  const { toggle } = useContext(ThemeContext);
+
   const [hasShadow, setHasShadow] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [notificationsLength, setNotificationsLength] = React.useState();
-  const navigate = useNavigate();
+  const loggedInUser = useSelector((state: RootState) => state.user.userData);
   const { balance } = useSelector((rootState: RootState) => rootState.walletState);
-
-  const { toggle } = useContext(ThemeContext);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+    if (loggedInUser) {
+      navigate(`/${loggedInUser.custom_username}`);
+    }
   };
 
   const routeurl = useParams();
@@ -158,9 +162,6 @@ export default function MobileTopHeader({ userName, avatar }: { userName: string
                 sx={{
                   width: 92,
                   height: 92,
-                  borderWidth: '3px',
-                  borderStyle: 'solid',
-                  borderColor: toggle ? '#4AA081' : '#4AA081',
                 }}
               />
             </IconButton>

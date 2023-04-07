@@ -100,7 +100,7 @@ export const DEFAULT_POSTS_PAGINATION = {
     }
   ],
   start: 0,
-  length: 5,
+  length: 6,
   hasNext: true,
   search: {
     value: '',
@@ -205,7 +205,7 @@ export const settingsSubmenuAccount = [
 ];
 
 export const settingsSubmenuSocialAccount = [
-  
+
   {
     name: 'Google account',
     href: '/settings/display/account/google',

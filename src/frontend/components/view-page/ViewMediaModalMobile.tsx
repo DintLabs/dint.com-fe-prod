@@ -61,6 +61,9 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
     );
 
     setPostData(newMediaList);
+    if (props.onLikePost) {
+      props.onLikePost(likes, postId);
+    }
   };
 
   const onBookMark = (isBookmark: Boolean, postId: number) => {

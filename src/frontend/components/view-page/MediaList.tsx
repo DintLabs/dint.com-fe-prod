@@ -18,6 +18,7 @@ type MediaListProps = {
   userDetails?: any;
   getUserPostCounts?: (id: number) => void;
   postDeleted?: (id: number) => void;
+  onPostUpdate?: (post: PostInterface) => void;
   isPage?: Boolean;
 };
 
@@ -104,12 +105,20 @@ const MediaList = (props: MediaListProps) => {
       setSelectedMedia(prevMedia);
     }
   };
-  const onLikePost = (post: any[], postId: number) => {
-    setSelectedMedia((prev: any) => ({ ...prev, like_post: post }));
+  const onLikePost = (likes: any[], postId: number) => {
+    const updatedItem = (prev: any) => ({
+      ...prev,
+      like_post: likes,
+      total_likes: likes.length,
+    });
+    setSelectedMedia(updatedItem);
     const newMediaList = mediaList.map((item: any) =>
-      item.id === postId ? { ...item, like_post: post } :item
+      item.id === postId ? updatedItem(item) : item
     );
     setMediaList(newMediaList);
+    if (props.onPostUpdate) {
+      props.onPostUpdate(newMediaList.find((item) => item.id === postId));
+    }
   };
 
   const onBookMark = (isBookmark: Boolean, postId: number) => {
