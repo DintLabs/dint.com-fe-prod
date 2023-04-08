@@ -328,6 +328,7 @@ const Login = () => {
     <>
       {/* <MainNavbar /> */}
       <Helmet>
+      <link rel="canonical" href="https://dint.com"/>
         <title>{'Empowering Musicians, Artists, and Entertainers to Enhance Earnings - Dint Club'}</title>
         <meta name="description" content="Discover Dint Club, the referral-based social network for musicians, artists, and entertainers. Join now to connect with peers, showcase your talents, and boost your earnings through NFTs and our monetization features. Sign up and start growing your network today!" />
       </Helmet>
@@ -451,75 +452,3 @@ const Login = () => {
 };
 
 export default Login;
-
-// <br />
-// <br />
-// <div
-//   className="login_divs"
-//   style={{ maxWidth: "350px", margin: "0 auto" }}
-// >
-//   <div className="container">
-//     <div className="header">{/* <h1>{props.islogin}</h1> */}</div>
-
-//     <div className="form-control">
-//       <label htmlFor="email">
-//         Email
-//         <input
-//           id="email"
-//           type="email"
-//           placeholder="Email"
-//           value={email}
-//           onChange={(e: any) => setEmail(e.target.value)}
-//         />
-//       </label>
-//     </div>
-
-//     <div className="form-control">
-//       <label htmlFor="password">
-//         Password
-//         <input
-//           id="password"
-//           type="password"
-//           placeholder="Password"
-//           value={password}
-//           onChange={(e: any) => setPassword(e.target.value)}
-//         />
-//       </label>
-//       <button
-//         id="forgotpassBtn"
-//         type="button"
-//         onClick={forgotPassClicked}
-//       >
-//         <span id="forgotPassText">Forgot Password?</span>{" "}
-//       </button>
-//     </div>
-
-//     <p id="error_signup">{error_msg_login}</p>
-//     <button id="signup_btn" type="button" onClick={loginClicked}>
-//       Log In
-//     </button>
-
-//     <p id="signup_line">
-//       Not registered Yet?{" "}
-//       <Link to={`/auth/signup${location?.search}`}>
-//         <span id="signup_here"> Sign Up</span>
-//       </Link>
-//     </p>
-//     <div
-//       style={{
-//         display: "flex",
-//         justifyContent: "center",
-//         alignItems: "center",
-//       }}
-//     >
-//       <button
-//         type="button"
-//         onClick={googleSignin}
-//         className="authbtnsocial"
-//         style={{ backgroundColor: "red" }}
-//       >
-//         Google
-//       </button>
-//     </div>
-//   </div>
-// </div>
