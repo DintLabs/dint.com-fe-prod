@@ -310,73 +310,6 @@ const Login = () => {
     // }
   };
 
-  // const fbSignin = () => {
-  //   const provider = new FacebookAuthProvider();
-  //   signInWithPopup(auth, provider)
-  //     .then((result) => {
-  //       // The signed-in user info.
-  //       const { user } = result;
-  //       console.log(user);
-  //       props.loginStateChange();
-  //       props.setemail(user.email);
-  //       // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-  //       const credential = FacebookAuthProvider.credentialFromResult(result);
-  //       const { accessToken } = credential;
-
-  //       // ...
-  //     })
-  //     .catch((error) => {
-  //       // Handle Errors here.
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       // The email of the user's account used.
-  //       const { email } = error.customData;
-  //       // The AuthCredential type that was used.
-  //       const credential = FacebookAuthProvider.credentialFromError(error);
-
-  //       // ...
-  //     });
-  // };
-
-  // const appleSignin = () => {
-  //   const provider = new OAuthProvider('apple.com');
-  //   signInWithPopup(auth, provider)
-  //     .then((result) => {
-  //       // The signed-in user info.
-  //       const { user } = result;
-
-  //       console.log(user);
-  //       props.loginStateChange();
-  //       props.setemail(user.email);
-  //       // Apple credential
-  //       // const credential = OAuthProvider.credentialFromResult(result);
-  //       // const { accessToken } = credential;
-  //       // const { idToken } = credential;
-
-  //       // ...
-  //     })
-  //     .catch((error) => {
-  //       // Handle Errors here.
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       // The email of the user's account used.
-  //       const { email } = error.customData;
-  //       // The credential that was used.
-  //       const credential = OAuthProvider.credentialFromError(error);
-
-  //       // ...
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   onAuthStateChanged(authInstance, (user) => {
-  //     if (user) {
-  //       navigate(redirectUrl);
-  //     } else {
-  //       console.log('user is not loggedin');
-  //     }
-  //   });
-  // }, []);
 
   const onSuccessLogin = () => {
     if (location?.search) {
@@ -395,18 +328,21 @@ const Login = () => {
     <>
       {/* <MainNavbar /> */}
       <Helmet>
-        <title>{'Dint - Social Media with Referral Monetization powered by Smart Contracts'}</title>
-        <meta name="description" content="Dint is a new social media platform with referral-based monetization, smart contracts, and content earning opportunities. Earn money by referring friends and their activity. Create content and earn through tips and subscriptions. With Dint, you're in control of your earnings." />
+        <title>{'Empowering Musicians, Artists, and Entertainers to Enhance Earnings - Dint Club'}</title>
+        <meta name="description" content="Discover Dint Club, the referral-based social network for musicians, artists, and entertainers. Join now to connect with peers, showcase your talents, and boost your earnings through NFTs and our monetization features. Sign up and start growing your network today!" />
       </Helmet>
       {/* <NavbarHome /> */}
       <div className="main-container-login">
         <div className="left-container">
           <img  className="bg-left-img" src={require("../../assets/img/bg/bg_login.png")} alt="responsive image"/>
           
-          <p className="left-head position-absolute notranslate">Dint</p>
+          <p className="left-head position-absolute notranslate">Dint Club</p>
           <div className="bg-left-content d-flex justify-content-center">
             <div className="left-text">
-              <p > Earn money by referring friends and their activity. Create content and earn through tips and subscriptions. With <span className="notranslate">Dint</span>, you're in control of your earnings.</p>
+              <p >Discover  <span className="notranslate">Dint Club</span>, the referral-based social network for musicians, artists, and entertainers. 
+                Join now to connect with peers, showcase your talents, and boost your earnings through NFTs and our monetization features. 
+                Sign up and start growing your network today!
+          </p>
               </div>
           </div>
         </div>
