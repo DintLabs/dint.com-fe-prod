@@ -83,7 +83,7 @@ const Login = () => {
               navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
             }
             else{
-              toast.success("User Login Successful!");
+              toast.success("Login Successful!");
               onSuccessLogin();
             }
             // onSuccessLogin();
@@ -103,12 +103,12 @@ const Login = () => {
                     navigate('/auth/refer' , {state : {for : 'login' ,email :data.data.email}})
                   }
                   else{
-                    toast.success("User Login Successful!");
+                    toast.success("Login Successful!");
                     onSuccessLogin();
                   }
                   // onSuccessLogin();
                 } else {
-                  toast.error("User Not Found");
+                  toast.error("Not Found");
                 }
               });
           }
@@ -340,9 +340,7 @@ const Login = () => {
           <p className="left-head position-absolute notranslate">Dint Club</p>
           <div className="bg-left-content d-flex justify-content-center">
             <div className="left-text">
-              <p >Discover  <span className="notranslate">Dint Club</span>, the referral-based social network for musicians, artists, and entertainers. 
-                Join now to connect with peers, showcase your talents, and boost your earnings through NFTs and our monetization features. 
-                Sign up and start growing your network today!
+              <p >Sign up to support your favorite musicians, artists, and entertainers. 
           </p>
               </div>
           </div>
