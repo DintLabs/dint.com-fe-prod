@@ -105,8 +105,8 @@ const SecondaryFooter = () => {
                         <p className={colorStyle}>@2023 <span className="notranslate">Dint</span></p>
 
                         <div className="d-flex">
-                            <a target="_blank" href="https://twitter.com/dint"><img className="social-logos" src={require("../../assets/img/socialmedia/twitter.png")} /></a>
-                            <a target="_blank" href="http://instagram.com/dint"><img className="social-logos" src={require("../../assets/img/socialmedia/instagramlogo.png")} /></a>
+                            <a target="_blank" rel="noopener noreferrer"  href="https://twitter.com/dint"><img className="social-logos" src={require("../../assets/img/socialmedia/twitter.png")} /></a>
+                            <a target="_blank" rel="noopener noreferrer" href="http://instagram.com/dint"><img className="social-logos" src={require("../../assets/img/socialmedia/instagramlogo.png")} /></a>
                         </div>
                         <Accordion  
                           onClick={(e) => e.stopPropagation()}
