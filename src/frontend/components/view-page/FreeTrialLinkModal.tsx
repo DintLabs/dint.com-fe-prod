@@ -51,58 +51,108 @@ const FreeTrialLinkModal = (props: FreeTrialLinkModalProps) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <form onSubmit={handleSubmit(handleCreateTrial)} autoComplete="off">
-        <Stack direction="column" className="free-trial-link-modal" spacing={2}>
-          {/* header */}
-          <Stack direction="row">
-            <Typography className="primary-text-color" textTransform="uppercase">
-              Free trial
-            </Typography>
-          </Stack>
-          {/* body */}
-          <Stack direction="column" spacing={2}>
-            <Grid container>
-              <Grid item sm={12} md={12} lg={6} pr={1}>
-                <Controller
-                  name="offer_limit"
-                  control={control}
-                  rules={{
-                    required: 'Please select offer limit!'
-                  }}
-                  render={({ field, fieldState }) => {
-                    return (
-                      <Autocomplete
-                        {...field}
-                        value={
-                          field.value >= 0
-                            ? PROMOTION_OFFER_LIMIT_OPTIONS.find(
-                                (option) => option.value === field.value
-                              )
-                            : null
-                        }
-                        options={PROMOTION_OFFER_LIMIT_OPTIONS}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Offer limit"
-                            variant="outlined"
-                            className="mui-outlinedInput-with-label"
-                            error={!!fieldState.error}
-                            helperText={fieldState.error?.message}
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <Grid item xs={10} sm={10} md={6} lg={4} style={{
+          border: '1px solid',
+          borderRadius: '16px',
+          backgroundColor: '#151517',
+        }}>
+          <form onSubmit={handleSubmit(handleCreateTrial)} autoComplete="off">
+            <Stack
+              direction="column"
+              sx={{ padding: '16px' }}
+              spacing={2}
+            >
+              {/* header */}
+              <Stack direction="row">
+                <Typography className="primary-text-color" textTransform="uppercase">
+                  Free trial
+                </Typography>
+              </Stack>
+              {/* body */}
+              <Stack direction="column" spacing={2}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={12} lg={6}>
+                    <Controller
+                      name="offer_limit"
+                      control={control}
+                      rules={{
+                        required: 'Please select offer limit!'
+                      }}
+                      render={({ field, fieldState }) => {
+                        return (
+                          <Autocomplete
+                            {...field}
+                            value={
+                              field.value >= 0
+                                ? PROMOTION_OFFER_LIMIT_OPTIONS.find(
+                                  (option) => option.value === field.value
+                                )
+                                : null
+                            }
+                            options={PROMOTION_OFFER_LIMIT_OPTIONS}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Offer limit"
+                                variant="outlined"
+                                className="mui-outlinedInput-with-label"
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                              />
+                            )}
+                            onChange={(_, data) => field.onChange(data?.value)}
                           />
-                        )}
-                        onChange={(_, data) => field.onChange(data?.value)}
-                      />
-                    );
-                  }}
-                />
-              </Grid>
-              <Grid item sm={12} md={12} lg={6} pl={1}>
+                        );
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={12} lg={6}>
+                    <Controller
+                      name="offer_expiration"
+                      control={control}
+                      rules={{
+                        required: 'Please select offer expiration!'
+                      }}
+                      render={({ field, fieldState }) => {
+                        return (
+                          <Autocomplete
+                            {...field}
+                            value={
+                              field.value >= 0
+                                ? PROMOTION_OFFER_EXPIRATION_OPTIONS.find(
+                                  (option) => option.value === field.value
+                                )
+                                : null
+                            }
+                            options={PROMOTION_OFFER_EXPIRATION_OPTIONS}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Offer expiration"
+                                variant="outlined"
+                                className="mui-outlinedInput-with-label"
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                              />
+                            )}
+                            onChange={(_, data) => field.onChange(data?.value)}
+                          />
+                        );
+                      }}
+                    />
+                  </Grid>
+                </Grid>
                 <Controller
-                  name="offer_expiration"
+                  name="trial_duration"
                   control={control}
                   rules={{
-                    required: 'Please select offer expiration!'
+                    required: 'Please select free trail duration!'
                   }}
                   render={({ field, fieldState }) => {
                     return (
@@ -111,15 +161,15 @@ const FreeTrialLinkModal = (props: FreeTrialLinkModalProps) => {
                         value={
                           field.value >= 0
                             ? PROMOTION_OFFER_EXPIRATION_OPTIONS.find(
-                                (option) => option.value === field.value
-                              )
+                              (option) => option.value === field.value
+                            )
                             : null
                         }
                         options={PROMOTION_OFFER_EXPIRATION_OPTIONS}
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Offer expiration"
+                            label="Free trial duration"
                             variant="outlined"
                             className="mui-outlinedInput-with-label"
                             error={!!fieldState.error}
@@ -131,58 +181,25 @@ const FreeTrialLinkModal = (props: FreeTrialLinkModalProps) => {
                     );
                   }}
                 />
-              </Grid>
-            </Grid>
-            <Controller
-              name="trial_duration"
-              control={control}
-              rules={{
-                required: 'Please select free trail duration!'
-              }}
-              render={({ field, fieldState }) => {
-                return (
-                  <Autocomplete
-                    {...field}
-                    value={
-                      field.value >= 0
-                        ? PROMOTION_OFFER_EXPIRATION_OPTIONS.find(
-                            (option) => option.value === field.value
-                          )
-                        : null
-                    }
-                    options={PROMOTION_OFFER_EXPIRATION_OPTIONS}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Free trial duration"
-                        variant="outlined"
-                        className="mui-outlinedInput-with-label"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
-                      />
-                    )}
-                    onChange={(_, data) => field.onChange(data?.value)}
-                  />
-                );
-              }}
-            />
-          </Stack>
-          {/* footer */}
-          <Stack
-            className="promotion-modal-footer"
-            direction="row"
-            spacing={2}
-            justifyContent="flex-end"
-          >
-            <Button variant="outlined" onClick={handleModalClose}>
-              Cancel
-            </Button>
-            <LoadingButton variant="contained" type="submit" loading={addFreeTrialLoader}>
-              Create
-            </LoadingButton>
-          </Stack>
-        </Stack>
-      </form>
+              </Stack>
+              {/* footer */}
+              <Stack
+                className="promotion-modal-footer"
+                direction="row"
+                spacing={2}
+                justifyContent="flex-end"
+              >
+                <Button variant="outlined" onClick={handleModalClose}>
+                  Cancel
+                </Button>
+                <LoadingButton variant="contained" type="submit" loading={addFreeTrialLoader}>
+                  Create
+                </LoadingButton>
+              </Stack>
+            </Stack>
+          </form>
+        </Grid>
+      </Grid>
     </Modal>
   );
 };

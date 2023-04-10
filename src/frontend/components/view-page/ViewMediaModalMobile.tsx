@@ -5,7 +5,7 @@ import { PostInterface } from 'frontend/interfaces/postInterface';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PostItem from 'frontend/pages/Lounge/PostItem/PostItem';
-import FullScreenModal from './FullScreenModal';
+// import FullScreenModal from './FullScreenModal';
 
 
 type ViewMediaModalProps = {
@@ -26,9 +26,9 @@ type ViewMediaModalProps = {
 const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
   const { toggle } = React.useContext(ThemeContext);
 
-  const [fullScreenModal, setFullScreenModal] = React.useState<boolean>(false);
+  // const [fullScreenModal, setFullScreenModal] = React.useState<boolean>(false);
   const [postData, setPostData] = React.useState(props.dataList ?? []);
-  const [post, setPost] = React.useState();
+  // const [post, setPost] = React.useState();
 
   React.useEffect(() => {
     setPostData(props?.dataList || []);
@@ -55,7 +55,7 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
       total_likes: likes.length,
     })
 
-    setPost(getUpdatedPost);
+    // setPost(getUpdatedPost);
     const newMediaList = postData.map((item: any) =>
       item.id === postId ? getUpdatedPost(item) : item
     );
@@ -66,52 +66,48 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
     }
   };
 
-  const onBookMark = (isBookmark: Boolean, postId: number) => {
-    setPost((prev: any) => ({ ...prev, is_bookmarked: isBookmark }));
-    const newMediaList = postData.map((item: any) =>
-      item.id === postId ? { ...item, is_bookmarked: isBookmark } :item
-    );
-    setPostData(newMediaList);
-  }
+  // const onBookMark = (isBookmark: Boolean, postId: number) => {
+  //   setPost((prev: any) => ({ ...prev, is_bookmarked: isBookmark }));
+  //   const newMediaList = postData.map((item: any) =>
+  //     item.id === postId ? { ...item, is_bookmarked: isBookmark } :item
+  //   );
+  //   setPostData(newMediaList);
+  // }
 
-  const startFullScreenView = (Post:any) => {
-    setPost(Post)
-    setFullScreenModal(true)
-  }
-  const handleClose = () => {
-    setFullScreenModal(false)
-  }
-  const fetchNextPost = (postId: number) => {
-    const currentMediaIndex = postData?.findIndex((media:any) => media?.id === postId);
-    if (currentMediaIndex >= 0) {
-      const nextMedia = postData[currentMediaIndex + 1];
-      nextMedia && setPost(nextMedia)
-    }
-  };
+  // const handleClose = () => {
+  //   setFullScreenModal(false)
+  // }
+  // const fetchNextPost = (postId: number) => {
+  //   const currentMediaIndex = postData?.findIndex((media:any) => media?.id === postId);
+  //   if (currentMediaIndex >= 0) {
+  //     const nextMedia = postData[currentMediaIndex + 1];
+  //     nextMedia && setPost(nextMedia)
+  //   }
+  // };
 
   //   to display the prev media in the open modal
-  const fetchPrevPost = (postId: number) => {
-    const currentMediaIndex = postData?.findIndex((media:any) => media?.id === postId);
-    if (currentMediaIndex >= 0) {
-      const nextMedia = postData[currentMediaIndex - 1];
-      nextMedia && setPost(nextMedia)
-    }
-  };
+  // const fetchPrevPost = (postId: number) => {
+  //   const currentMediaIndex = postData?.findIndex((media:any) => media?.id === postId);
+  //   if (currentMediaIndex >= 0) {
+  //     const nextMedia = postData[currentMediaIndex - 1];
+  //     nextMedia && setPost(nextMedia)
+  //   }
+  // };
 
-  if (fullScreenModal) {
-    return (
-      <FullScreenModal
-        post={post}
-        open={fullScreenModal}
-        handleClose={handleClose}
-        userDetails={props?.userDetails}
-        fetchNextPost={fetchNextPost}
-        fetchPrevPost={fetchPrevPost}
-        onLikePost={handlePostLike}
-        onBookmark={onBookMark}
-      />
-    );
-  }
+  // if (fullScreenModal) {
+  //   return (
+  //     <FullScreenModal
+  //       post={post}
+  //       open={fullScreenModal}
+  //       handleClose={handleClose}
+  //       userDetails={props?.userDetails}
+  //       fetchNextPost={fetchNextPost}
+  //       fetchPrevPost={fetchPrevPost}
+  //       onLikePost={handlePostLike}
+  //       onBookmark={onBookMark}
+  //     />
+  //   );
+  // }
 
   if (!props.open) {
     return null;
@@ -161,7 +157,7 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
           <PostItem
             key={`mobile_view-${item.id}-${i}`}
             post={item}
-            onClickMedia={startFullScreenView}
+            // onClickMedia={startFullScreenView}
             onPostDelete={(postId) => {
               if (props?.onDelete) {
                 props?.onDelete(postId);

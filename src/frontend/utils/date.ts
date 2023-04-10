@@ -5,10 +5,13 @@ const BROWSER_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const SERVER_TIMEZONE = 'Asia/Colombo';
 const DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 
-export const convertDateToLocal = (date: string | Date) => moment
+export const convertDateToLocal = (
+  date: string | Date,
+  outputFormat?: string,
+) => moment
   .tz(date as string, DATE_FORMAT, SERVER_TIMEZONE)
   .tz(BROWSER_TIMEZONE)
-  .format(DATE_FORMAT);
+  .format(outputFormat ?? DATE_FORMAT);
 
 export const convertPostDates = (
   posts: PostInterface[]

@@ -18,12 +18,8 @@ const PromotionCampaignCard = (props: PromotionCampaignCardProps) => {
   const handleDeletePromotionCampaign = () => {
     if (props?.campaignDetails?.id >= 0) {
       setDeleteLoader(true);
-      dispatch(deleteCampaign(props?.campaignDetails?.id)).then((res: boolean) => {
-        if (res) {
-          setDeleteLoader(false);
-        } else {
-          setDeleteLoader(false);
-        }
+      dispatch(deleteCampaign(props?.campaignDetails?.id)).then(() => {
+        setDeleteLoader(false);
       });
     }
   };
@@ -45,7 +41,7 @@ const PromotionCampaignCard = (props: PromotionCampaignCardProps) => {
             className="secondary-text-color"
           >{`For ${getCampaignTypeLabelFromValue(
             props?.campaignDetails?.campaign_type
-          )}`}</Typography>
+          )?.toLowerCase()}`}</Typography>
         </Stack>
         <IconButton size="small" onClick={handleDeletePromotionCampaign}>
           <DeleteIcon fontSize="small" />

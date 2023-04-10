@@ -4,16 +4,21 @@ import { viewPageActions } from './viewPage';
 
 type PageState = {
   pageData: any;
+  isLoading: boolean;
 };
 
 const initialState: PageState = {
-  pageData: null
+  pageData: null,
+  isLoading: false,
 };
 
 const slice = createSlice({
   name: 'page',
   initialState,
   reducers: {
+    setLoading(state, action) {
+      return { ...state, isLoading: action.payload };
+    },
     getPageData(state, action) {
       return { ...state, pageData: action.payload };
     },
@@ -31,6 +36,15 @@ const slice = createSlice({
 
 export default slice.reducer;
 export const pageActions = slice.actions;
+
+export const getPageByUserId = (userId: number) => {
+  return async (dispatch: any) => {
+    dispatch(slice.actions.setLoading(true));
+    const { data } = await axios.get(`api/page/list_by_user_id/${userId}/`);
+    dispatch(slice.actions.setLoading(false));
+    dispatch(slice.actions.getPageData(data.data[0]));
+  };
+};
 
 export const createPage = (payload: any) => async (dispatch: any) => {
   try {

@@ -109,7 +109,7 @@ export const getTransactionsList = () => {
       const transactions: Transaction[] = (data.data ?? []).map((raw: any, i: number) => {
         return {
           id: `${Date.now().toString()}_${i}`,
-          date: raw.accountNumber,
+          date: raw.created_at,
           amount: raw.amount,
           status: raw.paid ? 'success' : 'failed',
           txHash: raw.txHash,
@@ -149,17 +149,17 @@ export const sendTip = ({
         amount,
       })
         .then(({ data }: { data: any }) => {
-          if (data.status === 400) {
+          if (data.code === 400) {
             return dispatch(slice.actions.deleteTransaction(transactionId));
           }
 
-          const updates: Transaction = data.status === 200 ? {
+          const updates: Transaction = data.code === 201 ? {
             ...transaction,
-            txHash: data.data.txHash,
+            txHash: data.data.Hash,
             status: 'success',
           } : {
             ...transaction,
-            txHash: data?.data?.txHash ?? '',
+            txHash: data?.data?.Hash ?? '',
             status: 'failed',
           };
 

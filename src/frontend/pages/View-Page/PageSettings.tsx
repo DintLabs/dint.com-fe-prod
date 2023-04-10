@@ -15,7 +15,7 @@ import SubscriptionBundleCard from 'frontend/components/view-page/SubscriptionBu
 import { useSelector } from 'react-redux';
 import { dispatch, RootState } from 'frontend/redux/store';
 import { deleteBundle } from 'frontend/redux/slices/viewPage';
-import { updatePage } from 'frontend/redux/slices/page';
+import {getPageByUserId, updatePage} from 'frontend/redux/slices/page';
 import { LoadingButton } from '@mui/lab';
 import FreeTrialCard from 'frontend/components/view-page/FreeTrialCard';
 import PromotionCampaignCard from 'frontend/components/view-page/PromotionCampaignCard';
@@ -24,16 +24,17 @@ import CheckIcon from '@mui/icons-material/Check';
 import { debounce } from 'lodash';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
-const PageSettings = (props: any) => {
+const PageSettings = () => {
   const navigate = useNavigate();
+  const loggedInUser = useSelector((state: RootState) => state.user.userData);
   const pageData = useSelector((state: RootState) => state?.page?.pageData);
-  const userId = useSelector((state: RootState) => state?.viewPage?.pageData?.user?.id);
   const viewPageData = useSelector((state: RootState) => state?.viewPage?.pageData);
   const {
     register,
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors }
   } = useForm({
     mode: 'onChange',
@@ -44,7 +45,8 @@ const PageSettings = (props: any) => {
     register: register2,
     handleSubmit: handleSubmit2,
     reset: reset2,
-    formState: { errors: errors2 }
+    formState: { errors: errors2 },
+    setValue: setValue2,
   } = useForm({
     mode: 'onChange',
     defaultValues: { subscribe_amount: pageData?.subscribe_amount }
@@ -64,28 +66,33 @@ const PageSettings = (props: any) => {
   const [saveUsernameLoader, setSaveUsernameLoader] = useState<boolean>(false);
   const [isUsernameIsAvailable, setIsUsernameIsAvailable] = useState<boolean>(false);
 
+  React.useEffect(() => {
+    if (loggedInUser?.id) {
+      dispatch(getPageByUserId(loggedInUser.id));
+    }
+  }, [loggedInUser]);
+
+  React.useEffect(() => {
+    if (pageData) {
+      setValue('page_name', pageData.page_name);
+      setValue2('subscribe_amount', pageData.subscribe_amount);
+    }
+  }, [pageData]);
+
   const handleSavePageUsername = (data: any) => {
-    if (pageData?.id && userId) {
+    if (pageData?.id && loggedInUser?.id) {
       setSaveUsernameLoader(true);
-      dispatch(updatePage(pageData?.id, { ...data, user: userId })).then((res: boolean) => {
-        if (res) {
-          setSaveUsernameLoader(false);
-        } else {
-          setSaveUsernameLoader(false);
-        }
+      dispatch(updatePage(pageData?.id, { ...data, user: loggedInUser.id })).then(() => {
+        setSaveUsernameLoader(false);
       });
     }
   };
 
   const handleSaveSubscriptionAmount = (data: any) => {
-    if (pageData?.id && userId) {
+    if (pageData?.id && loggedInUser?.id) {
       setAddSubscriptionLoader(true);
-      dispatch(updatePage(pageData?.id, { ...data, user: userId })).then((res: boolean) => {
-        if (res) {
-          setAddSubscriptionLoader(false);
-        } else {
-          setAddSubscriptionLoader(false);
-        }
+      dispatch(updatePage(pageData?.id, { ...data, user: loggedInUser.id })).then(() => {
+        setAddSubscriptionLoader(false);
       });
     }
   };
@@ -208,13 +215,12 @@ const PageSettings = (props: any) => {
             <form onSubmit={handleSubmit(handleSavePageUsername)} autoComplete="off">
               <Stack spacing={1} sx={{ borderBottom: '1px solid', p: 2 }}>
                 <TextField
-                  label="Username"
                   variant="outlined"
                   fullWidth
                   className="mui-outlinedInput-with-label"
                   {...register('page_name', {
                     pattern: {
-                      value: /^[a-zA-Z0-9.\-_$@*!]{3,30}$/,
+                      value: /^[a-z0-9.\-_$@*!]{3,30}$/,
                       message: 'Please enter valid username!'
                     },
                     required: 'Please enter valid username!'
@@ -340,8 +346,8 @@ const PageSettings = (props: any) => {
               </Typography>
             </Stack>
 
-            {pageData?.campaign_page?.length > 0 ? (
-              <PromotionCampaignCard campaignDetails={pageData?.campaign_page?.[0]} />
+            {viewPageData?.campaign_page?.length > 0 ? (
+              <PromotionCampaignCard campaignDetails={viewPageData.campaign_page[0]} />
             ) : (
               <Button
                 variant="contained"
@@ -363,7 +369,7 @@ const PageSettings = (props: any) => {
               Offer several months of subsciprtion as a discounted bundle.
             </Typography>
             {/* list of bundles */}
-            {pageData?.subscription_tier_page?.map((bundle: any) => (
+            {viewPageData?.subscription_tier_page?.map((bundle: any) => (
               <SubscriptionBundleCard
                 key={bundle?.id}
                 months={+bundle?.validity_in_months}
@@ -396,11 +402,12 @@ const PageSettings = (props: any) => {
               Create and share seperate links with free trial subcsription.
             </Typography>
             {/* Free trials */}
-            {pageData?.trial_page?.length > 0 ? (
+            {viewPageData?.trial_page?.length > 0 ? (
               <Grid container className="free-trial-container">
-                {pageData?.trial_page?.map((item: any) => (
+                {viewPageData.trial_page.map((item: any) => (
                   <Grid
                     item
+                    xs={12}
                     sm={12}
                     md={12}
                     lg={12}

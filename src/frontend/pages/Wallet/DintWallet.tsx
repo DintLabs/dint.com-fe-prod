@@ -33,6 +33,7 @@ import { getTransactionsList, getWalletBalance } from '../../redux/slices/wallet
 import { capitalize } from 'lodash';
 import { getMaticBalance } from 'frontend/redux/actions/wallet/getMaticBalance';
 import { getDintBalance } from 'frontend/redux/actions/wallet/getDintBalance';
+import {convertDateToLocal} from '../../utils/date';
 
 const DintWallet = () => {
   const theme = useTheme();
@@ -516,14 +517,13 @@ const DintWallet = () => {
                             }}
                           >
                             <div
-                              className="mx-4"
                               style={{
                                 display: "flex",
                                 flexDirection: "column",
                               }}
                             >
                               <span style={{ fontWeight: "700" }}>
-                                {address}
+                                {convertDateToLocal(transaction.date, 'LLL')}
                               </span>
                             </div>
                           </div>

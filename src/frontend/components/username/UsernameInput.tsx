@@ -37,7 +37,7 @@ const UsernameInput = ({
 
     try {
       const { data } = await _axios.post('/api/user/get-profile-by-username/', {
-        custom_username: username
+        custom_username: username,
       });
 
       if (data.code === 200) {
@@ -61,19 +61,22 @@ const UsernameInput = ({
         name="custom_username"
         rules={{
           required: true,
-          validate: () => isUniqueUsername
+          validate: () => isUniqueUsername,
+          pattern: /^[a-z0-9\-_$]{3,30}$/,
         }}
         defaultValue={user?.custom_username || ''}
         render={({ field: { onChange, value = '', ref } }: any) => (
           <TextField
-            error={!isUniqueUsername || formState.errors?.custom_username?.type === 'required'}
+            error={!isUniqueUsername || !!formState.errors?.custom_username}
             inputRef={ref}
             value={value}
             label="Username"
             variant="filled"
             onChange={(e: any) => {
-              onChange(e.target.value);
-              checkUnique(e.target.value);
+              const username = e.target.value?.toLowerCase();
+
+              onChange(username);
+              checkUnique(username);
             }}
             sx={{
               flex: 1,

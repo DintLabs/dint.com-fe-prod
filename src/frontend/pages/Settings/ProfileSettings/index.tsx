@@ -15,7 +15,7 @@ import BackBlock from 'frontend/components/submenu/sections/BackBlock';
 import UsernameInput from 'frontend/components/username/UsernameInput';
 import useUser from 'frontend/hooks/useUser';
 import { fetchUserData } from 'frontend/redux/slices/user';
-import { dispatch } from 'frontend/redux/store';
+import {dispatch, RootState} from 'frontend/redux/store';
 import { UploadProfilePicture } from 'frontend/services/profileService';
 import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -25,6 +25,7 @@ import { BsDiscord, BsInstagram, BsTwitter } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { ThemeContext } from '../../../contexts/ThemeContext';
 import { useNavigate } from 'react-router';
+import {useSelector} from 'react-redux';
 
 const TWITTER_PROFILE_URL = 'https://twitter.com/';
 const INSTAGRAM_PROFILE_URL = 'https://instagram.com/';
@@ -35,11 +36,11 @@ const ProfileSettings = () => {
   const userHook = useUser();
   const navigate = useNavigate();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
+  const user = useSelector((state: RootState) => state.user.userData);
 
   const { handleSubmit, formState, watch, control, setValue } = useForm();
   const { toggle } = useContext(ThemeContext);
 
-  const user = userHook.reduxUser;
   // const [user, setUser] = useState(JSON.parse(localStorage.getItem('userData') ?? '{}'));
   const [isUniqueUsername, setIsUniqueUsername] = useState(true);
 
@@ -53,6 +54,18 @@ const ProfileSettings = () => {
   useEffect(() => {
     fetchUserDataFn();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setValue('custom_username', user.custom_username);
+      setValue('display_name', user.display_name);
+      setValue('bio', user.bio);
+      setValue('city', user.city);
+      setValue('twitter', user.twitter?.replace(TWITTER_PROFILE_URL, ''));
+      setValue('instagram', user.instagram?.replace(INSTAGRAM_PROFILE_URL, ''));
+      setValue('discord', user.discord?.replace(DISCORD_PROFILE_URL, ''));
+    }
+  }, [user]);
 
   const handleProPicChange = (e: any) => {
     if (e.target.files && e.target.files.length) {
