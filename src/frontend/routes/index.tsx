@@ -38,7 +38,6 @@ import Register from "frontend/pages/Register/Register";
 import RestrictedList from "frontend/pages/RestrictedList";
 import AddUsers from "frontend/pages/RestrictedList/AddUsers";
 import Settings from "frontend/pages/Settings";
-import TicketCreate from "frontend/pages/TicketCreate/TicketCreate";
 import ViewPage from "frontend/pages/View-Page/ViewPage";
 import MyEvents from "frontend/pages/my-events";
 import AddCard from "frontend/pages/payment/AddCard";
@@ -176,14 +175,6 @@ export default function Router() {
         },
         { path: "/public/events", element: <PublicEvents /> },
         {
-          path: "/ticketcreate",
-          element: (
-            <AuthGuard>
-              <TicketCreate />
-            </AuthGuard>
-          ),
-        },
-        {
           path: "/profile",
           element: (
             <AuthGuard>
@@ -237,7 +228,15 @@ export default function Router() {
           path: "/lounge/events",
           element: (
             <AuthGuard>
-              <MyEvents />
+              <NewHome />
+            </AuthGuard>
+          ),
+        },
+        {
+          path: "/lounge/my-events",
+          element: (
+            <AuthGuard>
+              <NewHome />
             </AuthGuard>
           ),
         },
@@ -246,6 +245,14 @@ export default function Router() {
           element: (
             <AuthGuard>
               <Following />
+            </AuthGuard>
+          ),
+        },
+        {
+          path: '/lounge/events/ticket',
+          element: (
+            <AuthGuard>
+              <NewHome />
             </AuthGuard>
           ),
         },

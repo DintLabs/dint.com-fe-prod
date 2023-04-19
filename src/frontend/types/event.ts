@@ -20,6 +20,7 @@ export interface IEvent {
   venueName?: string;
   valueName?: string;
   balanceFrequency?: string | number;
+  user?: any;
 }
 
 export interface IVenue {

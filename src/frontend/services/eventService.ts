@@ -84,3 +84,12 @@ export const getEvents = async () => {
     };
   }
 };
+
+export const deleteEvent = async (eventId: number): Promise<{ success: boolean }> => {
+  try {
+    const { data } = await _axios.delete(`api/events/delete/${eventId}/`);
+    return { success: +data.code === 200 };
+  } catch (e) {
+    return { success: false };
+  }
+};

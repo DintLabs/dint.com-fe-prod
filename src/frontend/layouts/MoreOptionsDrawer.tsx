@@ -4,6 +4,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import EventIcon from '@mui/icons-material/Event';
 import {
   Avatar,
   Badge,
@@ -45,7 +46,6 @@ import { getFollowerList, getFollowingList } from 'frontend/redux/slices/user';
 import { AppDispatch, RootState } from 'frontend/redux/store';
 import { FlexRow } from 'frontend/reusable/reusableStyled';
 import { useContext, useEffect, useState } from 'react';
-import { setWalletSliceChanges } from 'frontend/redux/actions/createWallet';
 import { getCreditCards } from '../redux/actions/StripeAction';
 import {ThemeContext} from '../contexts/ThemeContext';
 import _axios from 'frontend/api/axios';
@@ -410,13 +410,28 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
           <ListItem
             sx={itemSelectionStyle}
             disablePadding
-onClick={() => navigate('/dint-wallet')}
+            onClick={() => navigate('/dint-wallet')}
           >
             <ListItemButton>
               <ListItemIcon>
                 <AccountBalanceWalletIcon />
               </ListItemIcon>
               <ListItemText primary="Wallet" />
+            </ListItemButton>
+          </ListItem>
+
+          <Divider />
+
+          <ListItem
+            sx={itemSelectionStyle}
+            disablePadding
+            onClick={() => navigate('/lounge/events')}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <EventIcon />
+              </ListItemIcon>
+              <ListItemText primary="Events" />
             </ListItemButton>
           </ListItem>
 

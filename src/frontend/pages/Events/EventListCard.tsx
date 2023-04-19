@@ -1,78 +1,140 @@
+import React from 'react';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
 import { IEvent } from 'frontend/types/event';
-import { useMemo } from 'react';
-import { Button, Card, Col } from 'react-bootstrap';
+import * as Alert from 'frontend/components/common/alert';
+import { deleteEvent } from 'frontend/redux/slices/event';
+import { ThemeContext } from 'frontend/contexts/ThemeContext';
+import { RootState, useSelector, dispatch } from 'frontend/redux/store';
+import POLYGON_ICON from 'frontend/assets/img/web3/matic-token.png';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Divider,
+  Grid,
+  Typography,
+} from '@mui/material';
 import '../../material/Event.css';
-import { getNetworkByUniqueId } from '../../web3/utils';
 
-const EventListCard = ({
-  objEvent,
-  getMetamaskBalance
-}: {
-  objEvent: IEvent;
-  getMetamaskBalance: (selectedEvent: IEvent) => void;
-}) => {
-  const networkData = useMemo(() => {
-    try {
-      if (objEvent?.network) {
-        // const n = parseInt(objEvent?.network.toString(), 10);
-        return getNetworkByUniqueId(objEvent.network);
-      }
-    } catch (e) {
-      return null;
+type EventListCardProps = {
+  event: IEvent,
+  onEventEdit: (event: IEvent) => void;
+}
+
+const EventListCard = ({ event, onEventEdit }: EventListCardProps) => {
+  const navigate = useNavigate();
+  const { toggle } = React.useContext(ThemeContext);
+  const { balance } = useSelector((rootState: RootState) => rootState.walletState);
+  const loggedInUser = useSelector((rootState: RootState) => rootState.user.userData);
+
+  const [details, setDetails] = React.useState<React.ReactNode[]>([]);
+
+  const isOwner = React.useMemo(() => {
+    if (!loggedInUser || !event.user) return false;
+    return loggedInUser.id === event.user.id;
+  }, [event.user, loggedInUser]);
+
+  const handleDelete = (eventId: number) => {
+    dispatch(deleteEvent(eventId))
+      .then(({ success }) => {
+        if (success) {
+          toast.success('Event has been deleted.');
+        }
+      });
+  };
+
+  const generateQrCode = (event: IEvent) => {
+    if (balance < +(event.balanceFrequency ?? 1)) {
+      const config = Alert.configWarnAlert({
+        title: 'Balance not sufficient',
+        text: `Your balance: ${balance}`,
+      });
+      Alert.alert(config);
+      return;
     }
-  }, [objEvent]);
+
+    navigate(
+      '/lounge/events/ticket',
+      {
+        state: {
+          userId: loggedInUser?.id ?? '',
+          eventId: event.eventId,
+        }
+      }
+    );
+  };
+
+  React.useEffect(() => {
+    if (event) {
+      setDetails([
+        `Date: ${event.eventDate}`,
+        `Start Time: ${event.eventstartTime}`,
+        `End Time: ${event.eventEndTime}`,
+        `Venue: ${event.venueName || event.valueName}`,
+        <>{'Network: '}<img src={POLYGON_ICON} alt="polygon" height={20} /></>,
+        `Token Name: ${event.tokenName}`,
+        <>{'Balance Required: '}<b>{event.balanceFrequency}</b></>
+      ]);
+    }
+  }, [event]);
 
   return (
-    <Col md={4}>
-      <Card style={{ margin: 4 }}>
-        <Card.Img variant="top" src={objEvent.eventPhoto} style={{ height: '200px' }} />
-        <Card.Body>
-          <Card.Title>
-            <b>{objEvent.eventName}</b>
-          </Card.Title>
-          <Card.Text>{objEvent.eventDescription}</Card.Text>
-          <hr />
-          <h6>Date: {objEvent.eventDate} </h6>
-          <h6>Start Time: {objEvent.eventstartTime} </h6>
-          <h6>End Time: {objEvent.eventEndTime} </h6>
-          <h6>Venue: {objEvent.venueName || objEvent.valueName} </h6>
-          <h6>
-            Network: {networkData?.name}
-            {networkData?.icon && (
-              <img
-                style={{ width: 44, height: 44 }}
-                src={networkData?.icon}
-                alt={networkData?.SYMBOL}
-                className="network_icon"
-              />
-            )}
-          </h6>
-          <h6>
-            Token Name: {objEvent.tokenName}
-            {objEvent.tokenIcon && (
-              <img
-                src={objEvent.tokenIcon ? objEvent.tokenIcon : ''}
-                alt=""
-                height="22px"
-                style={{ marginBottom: '2px', height: 44, width: 44 }}
-              />
-            )}
-          </h6>
-          <h6>
-            Balance Required: <b> {objEvent.balanceFrequency} </b>
-          </h6>
-          <br />
+    <Grid item xs={12} sm={6} md={4} sx={{p: 1}}>
+      <Card
+        sx={{
+          backgroundColor: toggle ? '#212B36' : '#fff',
+          color: toggle ? '#fff' : '#000',
+        }}
+      >
+        <CardMedia image={event.eventPhoto} sx={{ height: '200px' }} />
+        <CardContent>
+          <Typography gutterBottom variant="h3" component="div">
+            {event.eventName}
+          </Typography>
+          <Divider />
+
+          {details.map((detail, i) => (
+            <Typography key={`${event.eventId}_${i}`} variant="h5" sx={{ mt: 1 }}>
+              {detail}
+            </Typography>
+          ))}
+        </CardContent>
+        <CardActions sx={{ p: 2 }}>
           <Button
-            variant="primary"
-            onClick={() => {
-              getMetamaskBalance(objEvent);
-            }}
+              variant="contained"
+              onClick={() => {
+                generateQrCode(event);
+              }}
           >
-            More Details
+            Get Ticket
           </Button>
-        </Card.Body>
+          {isOwner && (
+            <>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  onEventEdit(event);
+                }}
+              >
+                Edit
+              </Button>
+              <Button
+                color="error"
+                variant="contained"
+                onClick={() => {
+                  handleDelete(event.id as number)
+                }}
+              >
+                Delete
+              </Button>
+            </>
+          )}
+        </CardActions>
       </Card>
-    </Col>
+    </Grid>
   );
 };
 

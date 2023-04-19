@@ -7,16 +7,17 @@ import { databaseInstance } from 'frontend/contexts/FirebaseInstance';
 
 const TicketCreate = () => {
   const [randomNum, setRandomNum] = useState(Math.floor(Math.random() * 100000 + 999999));
-  const location: any = useLocation();
+  const location = useLocation();
+  const { userId, eventId } = location.state;
   const ticketData = {
-    Userid: location.state && location.state.userid ? location?.state?.userid : '',
-    Eventid: location.state && location.state.eventid ? location?.state?.eventid : '',
-    Authid: randomNum
+    Userid: userId ?? '',
+    Eventid: eventId ?? '',
+    Authid: randomNum,
   };
 
   useEffect(() => {
     intervalfunc();
-    set(ref(databaseInstance, `tickets/${location.state?.userid}`), ticketData)
+    set(ref(databaseInstance, `tickets/${userId}`), ticketData)
       .then(() => {
         console.log('Ticket creation done');
       })
@@ -31,11 +32,11 @@ const TicketCreate = () => {
       const rand = Math.floor(Math.random() * 100000 + 999999);
       setRandomNum(rand);
       updateAuthid(rand);
-    }, 60000);
+    }, 60 * 1000);
   };
 
   const updateAuthid = (rand: any) => {
-    update(ref(databaseInstance, `tickets/${location.state?.userid}`), { authid: rand })
+    update(ref(databaseInstance, `tickets/${userId}`), { authid: rand })
       .then(() => {
         console.log('authid update success');
       })
@@ -51,9 +52,7 @@ const TicketCreate = () => {
           <h1>Use <span className="notranslate">Dint</span> Scanner</h1>
           <br />
           <QRCode
-            value={`Eventid :${location.state?.eventid || ''}, Userid:${
-              location.state?.userid || ''
-            } authid:${randomNum}`}
+            value={`Eventid :${eventId}, Userid:${userId} authid:${randomNum}`}
             style={{ fill: 'red' }}
           />
           ,<br />

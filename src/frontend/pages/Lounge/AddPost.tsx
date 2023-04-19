@@ -1,14 +1,12 @@
 import React, { useContext, useState } from 'react'
 import { ThemeContext } from '../../contexts/ThemeContext'
 import { uploadMedia } from 'frontend/services/mediaService'
-import { useDropzone } from 'react-dropzone'
 import { useNavigate } from 'react-router'
 import { postTypes } from 'frontend/data'
 import { toast } from 'react-toastify'
-import isEmpty from 'lodash/isEmpty';
 
 import MultimediaIcon from '../../assets/img/icons/picture.png'
-import { Box, Button, Divider, Input, Stack, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Button, Divider, Input, Stack, useMediaQuery } from '@mui/material'
 import './navbarTab.css'
 
 interface Props {
@@ -18,7 +16,6 @@ interface Props {
 
 const AddPost = ({ widthScreen, createPost }: Props) => {
   const mobileView = useMediaQuery('(max-width:899px)')
-  const theme = useTheme()
   const navigate = useNavigate()
 
   const [file, setFile] = useState<any>({})
@@ -26,7 +23,6 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
   const [video, setVideo] = useState('')
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
-  const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false)
   const { toggle } = useContext(ThemeContext)
 
   const onCreatePost = async (e: any) => {
@@ -48,7 +44,7 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
         return
       }
 
-      if (file) {
+      if (file?.size) {
         try {
           const uploadResult = await uploadMedia(file, 'photos', false, 'post')
           toast.update(toastId, {
@@ -75,11 +71,9 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
 
           setTimeout(() => toast.dismiss(), 2000)
         }
-      }
-
-      if (content && isEmpty(file) && createPost) {
+      } else {
         try {
-          await createPost(toastId, {
+          createPost && await createPost(toastId, {
             type: postTypes.text.value,
             user: user.id,
             content,
@@ -100,13 +94,11 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
         }
       }
 
-      setTimeout(() => {
-        setContent('')
-        setFile(null)
-        setImage('')
-        setLoading(false)
-        setVideo('')
-      }, 2000)
+      setContent('')
+      setFile(null)
+      setImage('')
+      setLoading(false)
+      setVideo('')
     }
   }
 

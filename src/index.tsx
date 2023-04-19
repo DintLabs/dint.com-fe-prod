@@ -7,11 +7,13 @@ import { LoungeProvider } from 'frontend/contexts/LoungeContext';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { AuthProvider } from 'frontend/contexts/FirebaseContext';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import App from './frontend/components/App';
 
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
-import { ThemeProvider } from './frontend/contexts/ThemeContext'
+import { ThemeProvider } from './frontend/contexts/ThemeContext';
 
 const rootElement = document.getElementById('root');
 render(
@@ -30,8 +32,10 @@ render(
     <AuthProvider>
       <LoungeProvider>
         <ThemeProvider>
-          <App />
-          <div id="emoji-picker-portal" />
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <App />
+            <div id="emoji-picker-portal" />
+          </LocalizationProvider>
         </ThemeProvider>
       </LoungeProvider>
     </AuthProvider>
