@@ -8,6 +8,7 @@ import {
   PaginationPostsInerface,
 } from "frontend/interfaces/contextInterface";
 import { convertPostDates } from 'frontend/utils/date';
+import { ActiveTabType } from '../types/lounge';
 
 const useLoungeController = (): ContextInterface => {
   const [counts, setCounts] = useState({
@@ -21,6 +22,7 @@ const useLoungeController = (): ContextInterface => {
   const [textPosts, setTextPostsLocal] = useState<PostInterface[]>([]);
   const [photoPosts, setPhotoPostsLocal] = useState<PostInterface[]>([]);
   const [videoPosts, setVideoPostsLocal] = useState<PostInterface[]>([]);
+  const [activeType, setActiveType] = useState<ActiveTabType>('all');
 
   const [paginationPosts, setPaginationPosts] =
     useState<PaginationPostsInerface>({
@@ -70,14 +72,14 @@ const useLoungeController = (): ContextInterface => {
   };
 
   const addNewPostToContext = (post: PostInterface) => {
-    if (post.type === "text") {
-      setTextPosts((prev) => (prev.length ? [post, ...prev] : prev));
+    if (post.type === 'text' && activeType === 'text' && textPosts.length > 0) {
+      setTextPosts((prev) => [post, ...prev]);
     }
-    if (post.type === "image") {
-      setPhotoPosts((prev) => (prev.length ? [post, ...prev] : prev));
+    if (post.type === 'image' && activeType === 'image' && photoPosts.length > 0) {
+      setPhotoPosts((prev) => [post, ...prev]);
     }
-    if (post.type === "video" && videoPosts.length) {
-      setVideoPosts((prev) => (prev.length ? [post, ...prev] : prev));
+    if (post.type === 'video' && activeType === 'video' && videoPosts.length > 0) {
+      setVideoPosts((prev) => [post, ...prev]);
     }
     setPosts((prev) => [post, ...prev]);
 
@@ -133,6 +135,8 @@ const useLoungeController = (): ContextInterface => {
     getUserPostCounts,
     updatePost,
     resetPosts,
+    activeType,
+    setActiveType,
   };
 };
 

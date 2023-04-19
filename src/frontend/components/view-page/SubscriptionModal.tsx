@@ -31,9 +31,7 @@ type SubscriptionModalProps = {
 const SubscriptionModal = (props: SubscriptionModalProps) => {
   const dispatch: AppDispatch = useDispatch();
   const userData = useSelector((state: RootState) => state?.user?.userData);
-  const { address, balance } = useSelector(
-    (rootState: RootState) => rootState.wallet
-  );
+  const { balance } = useSelector((state: RootState) => state.walletState);
 
   const navigate = useNavigate();
 
@@ -50,7 +48,7 @@ const SubscriptionModal = (props: SubscriptionModalProps) => {
   const [subsTxn, setSubsTxn] = useState<any>();
   const [subsAmount, setSubsAmount] = useState<any>();
   const [lowBalance, setLowBalance] = useState(false);
-  
+
 
   const findSelectedBundle = (id: any) => {
     return props?.pageData?.subscription_tier_page?.find(

@@ -62,7 +62,7 @@ export default function BuyToken() {
     (rootState: RootState) => rootState.newHome
   );
   const userData = useSelector((state: RootState) => state?.user?.userData);
-  const { address } = useSelector((rootState: RootState) => rootState.wallet);
+  const { address } = useSelector((state: RootState) => state.walletState);
   const { toggle } = useContext(ThemeContext);
   const cards = document.getElementsByClassName("cards");
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ export default function BuyToken() {
         walletAddr: address,
         amount: data.amount,
         email: userData?.email,
-        cardDetails:cardSelect 
+        cardDetails:cardSelect
       };
       if (sendDetail) {
         await _axios
@@ -252,7 +252,7 @@ export default function BuyToken() {
                             // className="card"
                               key={index}
                               sx={{
-                                background: toggle  ? "#0b1419" : "white", 
+                                background: toggle  ? "#0b1419" : "white",
                                 borderRadius: "10px",
                                 width:"100%",
                               }}

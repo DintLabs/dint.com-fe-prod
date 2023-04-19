@@ -65,32 +65,11 @@ const Events = () => {
 
         <Grid container sx={{ pt: 2, pb: 9 }}>
           {isInEditMode ? (
-            <>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="end"
-                sx={{
-                  width: '100%',
-                  height: '60px',
-                  color: toggle ? '#fff' : '#000',
-                  px: 1,
-                }}
-
-              >
-                <Button
-                  variant="contained"
-                  onClick={disableEditMode}
-                  startIcon={<ArrowLeftIcon />}
-                >
-                  Back to events
-                </Button>
-              </Box>
-              <CreateOrUpdateEvent
-                event={selectedEvent}
-                onEventUpdate={handleEventUpdate}
-              />
-            </>
+            <CreateOrUpdateEvent
+              event={selectedEvent}
+              onBack={disableEditMode}
+              onEventUpdate={handleEventUpdate}
+            />
           ) : (
             <EventList onEventEdit={handleEventEditClick} />
           )}

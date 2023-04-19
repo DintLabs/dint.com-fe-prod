@@ -6,7 +6,7 @@ import {
   getUserEvents,
   deleteEvent as deleteEventRequest,
 } from 'frontend/services/eventService';
-import { getUserVenues } from 'frontend/services/venueService';
+import { addVenue, getUserVenues } from 'frontend/services/venueService';
 import { IEvent, IVenue } from 'frontend/types/event';
 
 type IEventState = {
@@ -72,6 +72,13 @@ const slice = createSlice({
         userEvents: state.userEvents.filter((event) => event.id !== action.payload),
       }
     },
+    createVenue(state, action) {
+      return {
+        ...state,
+        isLoading: false,
+        userVenues: [...state.userVenues, action.payload],
+      };
+    }
   }
 });
 
@@ -178,4 +185,22 @@ export function deleteEvent(eventId: number) {
       return { success: false };
     }
   }
+}
+
+export function createVenue(payload: any, user: any) {
+  return async (dispatch: any) => {
+    dispatch(slice.actions.startLoading());
+
+    try {
+      const { success, data } = await addVenue(payload);
+      if (success) {
+        dispatch(slice.actions.createVenue({ ...data, user }));
+      }
+
+      return { success };
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+      return { success: false };
+    }
+  };
 }

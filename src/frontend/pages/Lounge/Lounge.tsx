@@ -29,7 +29,6 @@ import Sidebar from './Sidebar'
 import AddPost from './AddPost'
 import Search from '../search/index'
 import CloseIcon from '@mui/icons-material/Close';
-import MyEventsContainer from '../my-events';
 import Events from "../Events/Events";
 import TicketCreate from '../TicketCreate/TicketCreate';
 
@@ -158,7 +157,7 @@ const NewHome = () => {
       return (
         <Grid container sx={{ paddingBottom: '55px' }}>
           <Grid item xs={12} md={12}>
-            <HomeTab createPost={createPost} />
+            <HomeTab />
           </Grid>
         </Grid>
       )
@@ -169,9 +168,7 @@ const NewHome = () => {
     if (location.pathname.includes(HOME_SIDE_MENU.PROCESSWITHDRAWAL)) return <ProcessWithdrawal />;
     if (location.pathname.includes(HOME_SIDE_MENU.NOTIFICATIONS)) return <NotificationsContainer />;
     if (location.pathname === HOME_SIDE_MENU.EVENTS) return <Events />;
-    if (location.pathname === HOME_SIDE_MENU.MY_EVENTS) return <MyEventsContainer />;
     if (location.pathname === HOME_SIDE_MENU.EVENT_TICKET) return <TicketCreate />;
-    if (location.pathname === HOME_SIDE_MENU.CREATE_EVENT) return
     if (location.pathname.includes(HOME_SIDE_MENU.ADD_POST))
       return mobileView ? (
         <Box style={{width: '100%',height: '100%', position: 'fixed', zIndex: 999, background: 'rgba(0,0,0,0.5)'}}>

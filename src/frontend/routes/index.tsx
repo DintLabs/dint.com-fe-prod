@@ -39,7 +39,6 @@ import RestrictedList from "frontend/pages/RestrictedList";
 import AddUsers from "frontend/pages/RestrictedList/AddUsers";
 import Settings from "frontend/pages/Settings";
 import ViewPage from "frontend/pages/View-Page/ViewPage";
-import MyEvents from "frontend/pages/my-events";
 import AddCard from "frontend/pages/payment/AddCard";
 import Search from "frontend/pages/search";
 import { fetchUserData, getConfineUserList } from "frontend/redux/slices/user";
@@ -226,14 +225,6 @@ export default function Router() {
         },
         {
           path: "/lounge/events",
-          element: (
-            <AuthGuard>
-              <NewHome />
-            </AuthGuard>
-          ),
-        },
-        {
-          path: "/lounge/my-events",
           element: (
             <AuthGuard>
               <NewHome />

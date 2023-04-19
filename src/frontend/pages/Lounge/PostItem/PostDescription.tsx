@@ -22,7 +22,10 @@ function PostDescription({
   const navigate = useNavigate();
   const messageContent = useRichMessage({
     text: descriptionText,
-    style: { color: toggle ? "white" : "#161C24", fontWeight: '400 !important' },
+    style: {
+      color: toggle ? 'white' : '#161C24',
+      fontWeight: '400 !important',
+    },
   });
 
   return (
@@ -42,7 +45,11 @@ function PostDescription({
         <Box sx={{ px: 3, marginBottom: 2 }}>
         <span>
             <span
-              style={{ cursor: 'pointer', fontWeight: 600 }}
+              style={{
+                cursor: 'pointer',
+                fontWeight: 600,
+                color: toggle ? 'white' : '#161C24',
+            }}
               onClick={() => navigate(`/${userName}`)}
             >
               {`${userName} `}

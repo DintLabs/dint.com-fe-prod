@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { PostInterface } from "./postInterface";
+import { ActiveTabType } from '../types/lounge';
 
 export interface CountInerface {
   all_posts: number;
@@ -57,4 +58,6 @@ export interface ContextInterface {
   updatePost: (post: PostInterface) => void;
   getUserPostCounts: () => void;
   resetPosts: () => void;
+  activeType: ActiveTabType;
+  setActiveType: Dispatch<SetStateAction<ActiveTabType>>;
 }

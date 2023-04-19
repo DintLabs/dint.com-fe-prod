@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
   Box,
   TextField,
@@ -7,21 +7,16 @@ import {
   FormControl,
   useMediaQuery,
   Typography,
-  IconButton,
   Select,
   MenuItem,
 } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
-import { RootState, useDispatch, useSelector } from 'frontend/redux/store'
+import { RootState, useSelector } from 'frontend/redux/store'
 import { HOME_SIDE_MENU } from 'frontend/redux/slices/newHome'
 import { ThemeContext } from '../../contexts/ThemeContext'
 import _axios from 'frontend/api/axios'
-import PaymentCard from '../Your-Bank/BankingSteps/PaymentCard'
-import { getCreditCards } from 'frontend/redux/actions/StripeAction'
-import discover from '../../assets/img/cc/card_discover.png'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { getDintBalance } from 'frontend/redux/actions/wallet/getDintBalance'
 interface TabPanelProps {
   children?: React.ReactNode
   index: number
@@ -49,15 +44,10 @@ function TabPanel(props: TabPanelProps) {
 
 export default function SellToken() {
   const navigate = useNavigate()
-  const [open] = useState(false)
   const [loading, setLoading] = useState(false)
   const theme = useTheme()
   const [showAddBank, setShowAddBank] = useState(false)
   const [bankData, setBankData] = useState([])
-  const [showBankDetails, setShowBankDetails] = useState(true)
-  const [] = useState(null)
-  const dispatch = useDispatch()
-  const paymentFormRef = useRef()
 
   const [inProgress, setInProgress] = useState(false)
   const { handleSubmit, formState, watch, control, setValue } = useForm()
@@ -65,7 +55,7 @@ export default function SellToken() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.up('sm'))
   const [cardSelect, setCardSelect] = useState()
   const { selectedMenu } = useSelector((rootState: RootState) => rootState.newHome)
-  const { balance } = useSelector((rootState: RootState) => rootState.wallet)
+  const { balance } = useSelector((state: RootState) => state.walletState)
 
   const { toggle } = useContext(ThemeContext)
 
@@ -84,7 +74,7 @@ export default function SellToken() {
         amount: parseInt(data.amount),
         user_id: id,
       }
-      
+
       if (sendDetail) {
         _axios.post(`/api/user/withdraw-dint/`, sendDetail)
           .then((res: any) => {

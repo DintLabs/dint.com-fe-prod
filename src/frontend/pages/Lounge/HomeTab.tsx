@@ -45,10 +45,7 @@ import { createUserStories } from 'frontend/utils/stories';
 import PostItemNew from 'frontend/pages/Lounge/PostItem/PostItem';
 import AvatarComponent from '../../components/common/Avatar';
 import UserStories from '../../components/UserStories/UserStories';
-
-interface Props {
-  createPost: Function;
-}
+import { AxiosResponse } from 'axios';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -56,12 +53,14 @@ interface TabPanelProps {
   value: number;
 }
 interface RespPost {
-  data: { data: PostInterface[] };
+  data: PostInterface[];
   code: number;
   message: string;
   recordsFiltered: number;
   recordsTotal: number;
 }
+
+const PAGE_SIZE = 6;
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -89,7 +88,7 @@ const getTouches = (evt: any) => {
   );
 };
 
-const HomeTab = ({ createPost }: Props) => {
+const HomeTab = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { toggle } = useContext(ThemeContext);
@@ -137,6 +136,7 @@ const HomeTab = ({ createPost }: Props) => {
     paginationVideoPosts,
     setPaginationVideoPosts,
     resetPosts,
+    setActiveType,
   } = useLounge();
 
   const postDeleted = (postId: number) => {
@@ -176,8 +176,10 @@ const HomeTab = ({ createPost }: Props) => {
         } else if (value === 3) {
           pagination = paginationVideoPosts;
         }
+
         if (pagination && !isLoading && pagination.hasNext) {
-          fetchPosts({ ...pagination, start: pagination.start + 5 });
+
+          fetchPosts({ ...pagination, start: pagination.start + PAGE_SIZE });
         }
       }
     }
@@ -260,7 +262,7 @@ const HomeTab = ({ createPost }: Props) => {
     try {
       setIsLoading(true);
 
-      const { data }: RespPost = await _axios.post(
+      const { data }: AxiosResponse<RespPost> = await _axios.post(
         `/api/lounge/pagination/list/`,
         pagination
       );
@@ -280,6 +282,10 @@ const HomeTab = ({ createPost }: Props) => {
         } else if (pagination.post_type === postTypes.video.value) {
           setVideoPosts([...videoPosts, ...data.data]);
           setPaginationVideoPosts(pagination);
+        }
+
+        if (pagination.start + PAGE_SIZE > data.recordsTotal) {
+          setHasNextFalse(pagination.post_type);
         }
       } else {
         setHasNextFalse(pagination.post_type);
@@ -313,6 +319,13 @@ const HomeTab = ({ createPost }: Props) => {
     if (!list?.length) {
       fetchPosts(pagination);
     }
+  }, [value]);
+
+  useEffect(() => {
+    if (value === 0) setActiveType('all');
+    if (value === 1) setActiveType('text');
+    if (value === 2) setActiveType('image');
+    if (value === 3) setActiveType('video');
   }, [value]);
 
   const createNewStory = useCallback(

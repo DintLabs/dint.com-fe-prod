@@ -273,7 +273,16 @@ const MoreOptionsDrawer = ({ open, onClose, openFrom = 'left' }: any) => {
   });
 
   return (
-    <Drawer anchor={openFrom} open={open} onClose={onClose}>
+    <Drawer
+      anchor={openFrom}
+      open={open}
+      onClose={onClose}
+      sx={{
+        '& .MuiListItemButton-root:hover': {
+          backgroundColor: toggle ? 'transparent' : '#919EAB !important',
+        }
+      }}
+    >
       <BoxStyled role="presentation" onClick={onClose} onKeyDown={onClose} className={toggle ? '' : 'white-content'}>
         <Box p={2}>
           <Badge

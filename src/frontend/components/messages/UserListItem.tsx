@@ -1,8 +1,8 @@
-import { Avatar, Typography } from "@mui/material";
-import { Stack } from "@mui/system";
-import { useNavigate } from "react-router";
-import { useContext } from "react";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import React from 'react';
+import { useNavigate } from 'react-router';
+import { Stack, Box } from '@mui/system';
+import { Avatar, Badge, Typography } from '@mui/material';
+import { ThemeContext } from 'frontend/contexts/ThemeContext';
 
 type UserListItemProps = {
   id: number;
@@ -13,18 +13,25 @@ type UserListItemProps = {
   newMessage?: any;
   chatRoom?: any;
   onClickHandler?: () => void;
-  unseenMessages?:any;
+  unseenMessages?: any[];
 };
 
 function UserListItem(props: UserListItemProps) {
   const navigate = useNavigate();
-  const { toggle } = useContext(ThemeContext);
+  const { toggle } = React.useContext(ThemeContext);
 
   let caption =
     props.newMessage?.length > 0 &&
     props.newMessage.find(
       (message: any) => message.chat_room === props.chatRoom
     );
+
+  const unreadCount = React.useMemo(() => {
+    if (!props.unseenMessages?.length) return 0;
+    return props.unseenMessages.filter(
+      (message) => message.chat_room === props.chatRoom
+    ).length;
+  }, [props.chatRoom, props.unseenMessages]);
 
   return (
     <Stack
@@ -55,10 +62,23 @@ function UserListItem(props: UserListItemProps) {
         </Typography>
         <Typography
           variant="caption"
-          sx={{ color: toggle ? "#919eab" : "161c24" }}>
+          sx={{
+            color: toggle ? '#919eab' : '161c24',
+            fontWeight: unreadCount > 0 ? 600 : 400,
+          }}
+        >
           {caption ? caption.content : props.caption}
         </Typography>
       </Stack>
+      {unreadCount > 0 && (
+        <>
+          <Box flexGrow={1} />
+          <Badge
+            badgeContent={unreadCount}
+            color="secondary"
+          />
+        </>
+      )}
     </Stack>
   );
 }

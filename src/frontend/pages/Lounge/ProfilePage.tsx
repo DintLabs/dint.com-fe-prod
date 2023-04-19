@@ -570,7 +570,7 @@ function ProfilePage({ username }: ProfilePageProps) {
                       }}
                     />
                     {!userDetails?.is_private && userDetails?.is_followed !== "Request Sent" && (
-                      <Box className="btn-group-follow">
+                      <>
                         <ProfileActionButton
                           label="Share Profile"
                           onClick={() => setShowShareProfileModal(true)}
@@ -582,7 +582,7 @@ function ProfilePage({ username }: ProfilePageProps) {
                             onClose={() => setShowShareProfileModal(false)}
                           />
                         )}
-                      </Box>
+                      </>
                     )}
                   </Box>
                 ) : (

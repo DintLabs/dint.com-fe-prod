@@ -4,11 +4,12 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
 import { dispatch, RootState } from 'frontend/redux/store';
+import { createEvent, updateEvent } from 'frontend/redux/slices/event';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import { IEvent } from 'frontend/types/event';
-import { createEvent, updateEvent } from 'frontend/redux/slices/event';
 import {
   Grid,
   Button,
@@ -18,12 +19,16 @@ import {
   FormHelperText,
   FormControl,
   InputLabel,
+  Divider,
+  Box,
 } from '@mui/material';
+import CreateVenue from './CreateVenue';
 
 const IMAGE_URL = 'https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
 
 export type CreateOrUpdateEventProps = {
   event?: IEvent;
+  onBack: () => void;
   onEventUpdate?: (updatedEvent: IEvent) => void;
 };
 
@@ -44,9 +49,11 @@ type CreateOrUpdateEventFormState = {
 
 function CreateOrUpdateEvent({
   event,
+  onBack,
   onEventUpdate = () => {}
 }: CreateOrUpdateEventProps) {
   const { toggle } = React.useContext(ThemeContext);
+  const [createVenueOpened, setCreateVenueOpened] = React.useState<boolean>(false);
   const loggedInUser = useSelector((rootState: RootState) => rootState.user.userData);
   const { userVenues } = useSelector((rootState: RootState) => rootState.event);
   const {
@@ -73,6 +80,14 @@ function CreateOrUpdateEvent({
       balanceFrequency: 1,
     }
   });
+
+  const handleBack = () => {
+    if (createVenueOpened) {
+      setCreateVenueOpened(false);
+    } else {
+      onBack();
+    }
+  };
 
   const handleFormSubmit = async (formResult: CreateOrUpdateEventFormState) => {
     if (!loggedInUser) {
@@ -130,7 +145,41 @@ function CreateOrUpdateEvent({
     fullWidth: true,
   }
 
-  return (
+  const withBackButton = (children: React.ReactNode) => {
+    return (
+      <>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="end"
+          sx={{
+            width: '100%',
+            height: '60px',
+            color: toggle ? '#fff' : '#000',
+            px: 1,
+          }}
+
+        >
+          <Button
+            variant="contained"
+            onClick={handleBack}
+            startIcon={<ArrowLeftIcon />}
+          >
+            {createVenueOpened ? 'Back' : 'Back to events'}
+          </Button>
+        </Box>
+        {children}
+      </>
+    );
+  };
+
+  if (createVenueOpened) {
+    return withBackButton(
+      <CreateVenue onClose={() => setCreateVenueOpened(false)} />
+    );
+  }
+
+  return withBackButton(
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <Grid
         container
@@ -185,6 +234,12 @@ function CreateOrUpdateEvent({
                       {venue.venueName}
                     </MenuItem>
                   ))}
+                  <Divider />
+                  <MenuItem
+                    onClick={() => setCreateVenueOpened(true)}
+                  >
+                    + Add venue
+                  </MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -298,88 +353,6 @@ function CreateOrUpdateEvent({
           />
           {formState.errors?.eventEndTime?.type === 'required' && (
             <FormHelperText error>End time is required</FormHelperText>
-          )}
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Controller
-            control={control}
-            name="network"
-            rules={{
-              required: true
-            }}
-            render={({ field }) => (
-              <FormControl {...inputProps}>
-                <InputLabel id="network-label">Network</InputLabel>
-                <Select {...field} {...inputProps} labelId="network-label" disabled>
-                  <MenuItem value="2">Polygon</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
-          {formState.errors?.network?.type === 'required' && (
-            <FormHelperText error>Network is required</FormHelperText>
-          )}
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Controller
-            control={control}
-            name="tokenType"
-            rules={{
-              required: true
-            }}
-            render={({ field }) => (
-              <FormControl {...inputProps}>
-                <InputLabel id="token_type-label">Token Type</InputLabel>
-                <Select {...field} {...inputProps} labelId="token_type-label" disabled>
-                  <MenuItem value="ERC_21">ERC 21</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
-          {formState.errors?.tokenType?.type === 'required' && (
-            <FormHelperText error>Token type is required</FormHelperText>
-          )}
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Controller
-            control={control}
-            name="tokenAddress"
-            rules={{
-              required: true
-            }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                {...inputProps}
-                label="Token Address"
-                placeholder="Token Address"
-              />
-            )}
-          />
-          {formState.errors?.tokenAddress?.type === 'required' && (
-            <FormHelperText error>Token address is required</FormHelperText>
-          )}
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Controller
-            control={control}
-            name="tokenName"
-            rules={{
-              required: true
-            }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                {...inputProps}
-                label="Token Name"
-                placeholder="Token name"
-              />
-            )}
-          />
-          {formState.errors?.tokenName?.type === 'required' && (
-            <FormHelperText error>Token name is required</FormHelperText>
           )}
         </Grid>
 

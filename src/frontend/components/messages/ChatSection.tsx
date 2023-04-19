@@ -253,10 +253,16 @@ function ChatSection(props: ChatSectionProps) {
           spacing={2}
           width="60%"
         >
-          <IconButton sx={{color:"black" , border:"1px solid" , padding:"2%"}}>
-            <SendIcon sx={{height:"3vw" , width:"3vw" , transform:"rotate(-20deg)"}}/>
+          <IconButton
+            sx={{
+              color: toggle ? 'white' : '#161C24',
+              border: '1px solid',
+              padding: '2%',
+            }}
+          >
+            <SendIcon sx={{ height: '3vw', width: '3vw', transform: 'rotate(-20deg)' }} />
           </IconButton>
-          <Typography variant="h2">
+          <Typography variant="h2" color={toggle ? 'white' : '#161C24'}>
            Your Messages
           </Typography>
           <Typography className="secondary-text-color">

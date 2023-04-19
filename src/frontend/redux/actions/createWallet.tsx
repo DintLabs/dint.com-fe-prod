@@ -70,7 +70,7 @@ export const createWallet = () => async (dispatch: AppDispatch) => {
             const encryptPromise = wallet.encrypt(password);
               encryptPromise.then((json) => {
               ethers.Wallet.fromEncryptedJson(json, password).then((wallet) => {
-                
+
                 dispatch(slice.actions.setWalletPhrase({ phrase: wallet.mnemonic.phrase }));
                 dispatch(slice.actions.setWalletPrivateKey({ privateKey: wallet.privateKey }));
                 dispatch(slice.actions.setAddress({ address: wallet.address }));
@@ -90,25 +90,6 @@ export const createWallet = () => async (dispatch: AppDispatch) => {
         }
         return false;
       });
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getKeys = () => async (dispatch: AppDispatch) => {
-  try {
-    const token = localStorage.getItem('apiToken');
-    if (token) {
-      await axios.get('api/user/wallet').then(async (res: any) => {
-      if (res.data.code===200){
-        // dispatch(slice.actions.setWalletPhrase({ phrase: keys.phraseKey }));
-        // dispatch(slice.actions.setWalletPrivateKey({ privateKey: keys.privateKey }));
-        dispatch(slice.actions.setAddress({ address: res.data.data.wallet_address }));
-        dispatch(slice.actions.setBalance({ balance: res.data.data.wallet_balance }));
-      }
-      });
-    
     }
   } catch (error) {
     console.error(error);

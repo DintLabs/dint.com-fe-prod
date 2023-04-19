@@ -1,3 +1,5 @@
+export type ActiveTabType = 'all' | 'text' | 'image' | 'video';
+
 export interface IUserOwnStories {
   created_at: string;
   id: number;

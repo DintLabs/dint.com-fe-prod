@@ -13,10 +13,10 @@ import { toast } from 'react-toastify';
 
 export default function QrScanDialog(props: any) {
   const theme = useTheme();
-  const { address } = useSelector((rootState: RootState) => rootState.wallet);
+  const { address } = useSelector((state: RootState) => state.walletState);
 
   const handleClose = () => {
-    props.handleClose() 
+    props.handleClose()
   };
 
   const copyContent = async () => {

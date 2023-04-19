@@ -25,7 +25,7 @@ const ProcessWithdrawal = () => {
   const navigate = useNavigate();
   const { toggle } = useContext(ThemeContext);
 
-  const { balance } = useSelector((rootState: RootState) => rootState.wallet);
+  const { balance } = useSelector((rootState: RootState) => rootState.walletState);
   const userData = useSelector((state: RootState) => state?.user?.userData);
 
   const [amount, setAmount] = useState<string>("");
@@ -61,7 +61,7 @@ const ProcessWithdrawal = () => {
                 setLoading(false);
                 toast.success("Account Updated successfully.");
                 return navigate("/dint-wallet");
-                
+
               }
             })
             .catch((error: any) => {
@@ -139,9 +139,9 @@ const ProcessWithdrawal = () => {
                         margin: "0px",
                       }}
                     >
-                      Amount to withdraw 
+                      Amount to withdraw
                     </FormHelperText>
-                 
+
                   </Stack>
                   <FilledInput
                     id="filled-adornment-weight"
@@ -188,19 +188,19 @@ const ProcessWithdrawal = () => {
               </Stack>
               <Stack mt={4} className="d-flex">
                 <Stack>
-                 
-               
+
+
                 </Stack>
                 <Stack sx={{ flexDirection: "row" }} mt={3} mb={1}>
-                 
-               
+
+
                 </Stack>
                 <Stack sx={{ flexDirection: "row" }} mb={1}>
-                 
-                
+
+
                 </Stack>
                 <Stack sx={{ flexDirection: "row" }} mb={1}>
-                 
+
                 </Stack>
               </Stack>
               <Stack mt={4} direction="row" sx={{ flexDirection: "row" }}>
@@ -242,7 +242,7 @@ const ProcessWithdrawal = () => {
                     color: toggle ? "white" : "#161C24",
                   }}
                 >
-                
+
                 </Typography>
               </Stack>
             </Stack>
@@ -254,20 +254,20 @@ const ProcessWithdrawal = () => {
             variant="subtitle1"
             style={{ color: toggle ? "white" : "#161C24" }}
           >
-        
+
           </Typography>
           <Stack
             mt={3}
             sx={{ color: toggle ? "white" : "#161C24", fontSize: "12px" }}
           >
             <Stack>
-            
+
             </Stack>
             <Stack mt={3}>
-        
+
             </Stack>
             <Stack mt={3}>
-          
+
             </Stack>
           </Stack>
         </Col>
