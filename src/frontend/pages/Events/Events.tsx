@@ -1,27 +1,38 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router';
 import { IEvent } from 'frontend/types/event';
 import AddIcon from '@mui/icons-material/Add';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import { ThemeContext } from 'frontend/contexts/ThemeContext';
-import { Box, Button, Grid, IconButton, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import { dispatch, RootState, useSelector } from 'frontend/redux/store';
 import { fetchEvents, fetchUserVenues } from 'frontend/redux/slices/event';
+import { getWalletBalance } from 'frontend/redux/slices/wallet';
+import * as Alert from 'frontend/components/common/alert';
 import CreateOrUpdateEvent from './CreateOrUpdateEvent';
 import EventList from './EventList';
-import '../../material/Event.css';
+import EventDetails from './EventDetails';
+
+type DisplayMode = 'default' | 'details' | 'edit';
 
 const Events = () => {
   const theme = useTheme();
-  const { toggle } = React.useContext(ThemeContext);
+  const navigate = useNavigate();
+  const { balance } = useSelector((rootState: RootState) => rootState.walletState);
   const loggedInUser = useSelector((rootState: RootState) => rootState.user.userData);
+  const eventsLoading = useSelector((rootState: RootState) => rootState.event.isLoading);
 
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [selectedEvent, setSelectedEvent] = React.useState<IEvent>();
-  const [isInEditMode, setIsInEditMode] = React.useState(false);
+  const [displayMode, setDisplayMode] = React.useState<DisplayMode>('default');
 
   React.useEffect(() => {
-    dispatch(fetchEvents());
-  }, []);
+    const tasks: Promise<any>[] = [dispatch(fetchEvents())];
+    if (!balance) {
+      tasks.push(dispatch(getWalletBalance()));
+    }
+
+    Promise.all(tasks).then(() => setIsLoading(false));
+  }, [balance]);
 
   React.useEffect(() => {
     if (loggedInUser?.id) {
@@ -31,20 +42,37 @@ const Events = () => {
 
   React.useEffect(() => {
     window.scrollTo({ top: 0 });
-  }, [isInEditMode]);
+  }, [displayMode]);
 
-  const handleEventEditClick = (event: IEvent) => {
+  const enableEditMode = (event: IEvent) => {
     setSelectedEvent(event);
-    setIsInEditMode(true);
+    setDisplayMode('edit');
   };
 
-  const disableEditMode = () => {
-    setIsInEditMode(false);
+  const backToDefaultMode = () => {
+    setDisplayMode('default');
     setSelectedEvent(undefined);
   };
 
-  const handleEventUpdate = () => {
-    disableEditMode();
+  const generateQrCode = (event: IEvent) => {
+    if (balance < +(event.balanceFrequency ?? 1)) {
+      const config = Alert.configWarnAlert({
+        title: 'Balance not sufficient',
+        text: `Your balance: ${balance}`,
+      });
+      Alert.alert(config);
+      return;
+    }
+
+    navigate(
+      '/lounge/events/ticket',
+      {
+        state: {
+          userId: loggedInUser?.id ?? '',
+          eventId: event.eventId,
+        }
+      }
+    );
   };
 
   return (
@@ -64,18 +92,36 @@ const Events = () => {
         </Box>
 
         <Grid container sx={{ pt: 2, pb: 9 }}>
-          {isInEditMode ? (
+          {displayMode === 'default' && (
+            <EventList
+              isLoading={isLoading || eventsLoading}
+              onGetTicket={generateQrCode}
+              onEventDetails={(event) => {
+                setSelectedEvent(event);
+                setDisplayMode('details');
+              }}
+            />
+          )}
+
+          {displayMode === 'edit' && (
             <CreateOrUpdateEvent
               event={selectedEvent}
-              onBack={disableEditMode}
-              onEventUpdate={handleEventUpdate}
+              onBack={backToDefaultMode}
+              onAfterEventUpdate={backToDefaultMode}
             />
-          ) : (
-            <EventList onEventEdit={handleEventEditClick} />
+          )}
+
+          {displayMode === 'details' && selectedEvent && (
+            <EventDetails
+              event={selectedEvent}
+              onBack={backToDefaultMode}
+              onEventEdit={enableEditMode}
+              onGetTicket={generateQrCode}
+            />
           )}
         </Grid>
 
-        {!isInEditMode && (
+        {displayMode === 'default' && (
           <IconButton
             sx={{
               backgroundColor: theme.palette.primary.main,
@@ -87,7 +133,7 @@ const Events = () => {
               }
             }}
             onClick={() => {
-              setIsInEditMode(true);
+              setDisplayMode('edit');
             }}
           >
             <AddIcon sx={{ color: '#fff' }} />

@@ -16,7 +16,12 @@ const TicketCreate = () => {
   };
 
   useEffect(() => {
-    intervalfunc();
+    const intervalRef = setInterval(() => {
+      const rand = Math.floor(Math.random() * 100000 + 999999);
+      setRandomNum(rand);
+      updateAuthid(rand);
+    }, 60 * 1000);
+
     set(ref(databaseInstance, `tickets/${userId}`), ticketData)
       .then(() => {
         console.log('Ticket creation done');
@@ -25,15 +30,11 @@ const TicketCreate = () => {
         console.log(e);
         alert('Error in Ticket Create');
       });
-  }, []);
 
-  const intervalfunc = () => {
-    setInterval(() => {
-      const rand = Math.floor(Math.random() * 100000 + 999999);
-      setRandomNum(rand);
-      updateAuthid(rand);
-    }, 60 * 1000);
-  };
+    return () => {
+      clearInterval(intervalRef);
+    };
+  }, []);
 
   const updateAuthid = (rand: any) => {
     update(ref(databaseInstance, `tickets/${userId}`), { authid: rand })

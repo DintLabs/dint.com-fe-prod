@@ -49,7 +49,7 @@ const Register = () => {
   const [isLoading , setIsLoading] = useState(false)
   useEffect(()=>{
     if(data.state && data.state.referCode){
-      setReferCode(data.state.referCode) 
+      setReferCode(data.state.referCode)
     }else{
       navigate('/auth/refer' , {state :{for:"signup"}})
     }
@@ -58,7 +58,7 @@ const Register = () => {
   // Initialize Firebase
 
   const auth = getAuth();
-  
+
 
   const signup_sub = async () => {
     if (!name) {
@@ -373,7 +373,7 @@ const Register = () => {
                     placeholder="Enter Your Username"
                     value={username}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setUsername(e.target.value)
+                      setUsername(e.target.value.toLowerCase())
                     }
                   />
                 </label>
@@ -431,9 +431,9 @@ const Register = () => {
               <div className="signup-div">
                 <div className="form-check mt-3 mb-4" style={{textAlign:"left"}}>
                   <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-                  <label className="form-check-label mx-2"  htmlFor="exampleCheck1">By Signing Up You Agree to our <Link to={'/terms'}><span className="text-blue"> terms & service and privacy 
+                  <label className="form-check-label mx-2"  htmlFor="exampleCheck1">By Signing Up You Agree to our <Link to={'/terms'}><span className="text-blue"> terms & service and privacy
                     Policy.</span></Link></label>
-                </div> 
+                </div>
                 <button id="signup_btn" type="button" onClick={signup_sub}>
                   Sign Up
                 </button>
@@ -445,7 +445,7 @@ const Register = () => {
                   </Link>
                 </p>
                 </div>
-                    
+
                 <div
                   style={{
                     display: "flex",
@@ -455,14 +455,14 @@ const Register = () => {
                     // marginTop: '20px'
                   }}
                 >
-                
+
 
                 <div className="d-flex justify-content-between align-items-center horizontal">
-             
-                </div>
-                
 
-                
+                </div>
+
+
+
                   <div
                     style={{
                       width: "100%",
@@ -471,7 +471,7 @@ const Register = () => {
                       alignItems: "center",
                     }}
                   >
-                 
+
                   </div>
                 </div>
               </div>

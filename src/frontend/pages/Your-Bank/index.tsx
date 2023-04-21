@@ -4,8 +4,6 @@ import {
   Button,
   Grid,
   IconButton,
-  Menu,
-  MenuItem,
   Modal,
   Stack,
   Typography,
@@ -27,8 +25,11 @@ import Loader from "frontend/components/common/Loader";
 import { toast } from "react-toastify";
 import ThirdPage from "./BankingSteps/ThirdPage";
 import AddHomeWorkOutlinedIcon from "@mui/icons-material/AddHomeWorkOutlined";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddVerificationDocument from "../Lounge/AddVerificationDocument";
+import BankDetailsCard from './BankDetailsCard';
+import { AxiosResponse } from 'axios';
+import { BaseApiResponse } from '../../types/lounge';
+import { Bank } from '../../types/banking';
 
 const style = {
   position: "absolute" as "absolute",
@@ -60,20 +61,26 @@ const BankContainer = () => {
   const theme = useTheme();
   const { toggle } = useContext(ThemeContext);
   const [showAddBank, setShowAddBank] = useState(false);
-  const [bankData, setBankData] = useState([]);
+  const [bankData, setBankData] = useState<Bank[]>([]);
   const [showBankDetails, setShowBankDetails] = useState(true);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [openMenu, setOpenMenu] = useState(null);
 
   const getBankDetails = () => {
     setLoading(true);
     _axios
       .get("api/user/get_bank_accounts/")
-      .then((res: any) => {
-        if (res?.data?.data?.length > 0) {
-          setBankData(res.data.data);
+      .then(({ data }: AxiosResponse<BaseApiResponse<Bank[]>>) => {
+        if (data.code !== 200) {
+          throw new Error(data.message);
+        }
+
+        if (data?.data?.length > 0) {
+          const banks = _.orderBy([...data.data], 'primary', 'desc');
+          setBankData(banks);
           setShowAddBank(false);
-        } else setShowAddBank(true);
+        } else {
+          setShowAddBank(true);
+        }
+
         setLoading(false);
       })
       .catch((error: any) => {
@@ -87,19 +94,9 @@ const BankContainer = () => {
     getBankDetails();
   }, []);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>, index: any) => {
-    setAnchorEl(event.currentTarget);
-    setOpenMenu(index);
-  };
-
   const handleClose = () => {
     toggleVerificationModal(false);
     setOpenModal(false);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-    setOpenMenu(null);
   };
 
   const handleNextStep = (item?: null | any) => {
@@ -128,9 +125,6 @@ const BankContainer = () => {
       addBankAccount();
     }
   };
-  //  useEffect(() => {
-  //   console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!",state)
-  // },[handleNextStep])
 
   const addBankAccount = async () => {
     try {
@@ -174,7 +168,6 @@ const BankContainer = () => {
   }, [state.active]);
 
   const onUpdatePrimary = (bankId: string) => {
-    handleCloseMenu();
     setLoading(true);
 
     _axios
@@ -209,7 +202,7 @@ const BankContainer = () => {
       console.log(data);
       if (data && data.code === 400) {
         toast.error("Action Failed");
-      } else {        
+      } else {
         toast.success("Verification Done");
       }
     } catch (err) {
@@ -218,7 +211,7 @@ const BankContainer = () => {
       console.error(err);
     }
   };
-  
+
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width);
   useLayoutEffect(() => {
     function updateWidth() {
@@ -399,125 +392,13 @@ const BankContainer = () => {
             </>
           )}
           {state.active === 3 && <ThirdPage nextStep={handleNextStep} />}
-          {showBankDetails &&
-            bankData.length &&
-            ([...bankData.filter((d:any) => d.primary === true),...bankData.filter((d:any) => d.primary === false)] || []).map((bank: string | any, index: number) => (
-              <Stack key={index} sx={{ background: "#0b1419" }} p={2} mb={2}>
-                <Stack
-                  direction="row"
-                  gap={1}
-                  sx={{ pr: 1, justifyContent: "space-between" }}
-                >
-                  <Typography
-                    className="primary-text-color"
-                    style={{ fontSize: "16px" }}
-                  >
-                    Account Number:*** *** ****{" "}
-                    {bank ? bank.accountNumber.substr(-4) : ""}
-                  </Typography>
-                  <IconButton
-                    key={index}
-                    aria-controls={
-                      openMenu ? "demo-positioned-menu" : undefined
-                    }
-                    aria-haspopup="true"
-                    aria-expanded={openMenu ? "true" : undefined}
-                    onClick={(e) => handleClick(e, index)}
-                    style={{ width: "10px", height: "5px" }}
-                  >
-                    <MoreHorizIcon />
-                  </IconButton>
-                </Stack>
-                <Stack
-                  direction="row"
-                  gap={2}
-                  pb={2}
-                  sx={{ justifyContent: "space-between" }}
-                >
-                  <Stack direction="row" alignItems="center">
-                    <Stack>
-                      <Menu
-                        aria-labelledby="demo-positioned-button"
-                        anchorEl={anchorEl}
-                        open={openMenu === index}
-                        style={{ padding: "0" }}
-                        onClose={handleCloseMenu}
-                        anchorOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                      >
-                        <MenuItem onClick={() => onUpdatePrimary(bank.id)}>
-                          {bank.primary ? "Not Primary" : "Primary"}
-                        </MenuItem>
-                      </Menu>
-                    </Stack>
-                  </Stack>
-                </Stack>
-                <Stack
-                  direction="row"
-                  gap={2}
-                  pb={2}
-                  sx={{ justifyContent: "space-between" }}
-                >
-                  <Stack>
-                    <Typography
-                      className="secondary-text-color"
-                      style={{ fontSize: "16px" }}
-                      mx={2}
-                    >
-                      Country : {bank.country}
-                    </Typography>
-                  </Stack>
-                  <Stack>
-                    <Typography
-                      className="secondary-text-color"
-                      style={{ fontSize: "16px" }}
-                      mx={2}
-                    >
-                      City : {bank.city}
-                    </Typography>
-                  </Stack>
-                  <Stack>
-                    <Typography
-                      className="secondary-text-color"
-                      style={{ fontSize: "16px" }}
-                      mx={2}
-                    >
-                      State : {bank.state}
-                    </Typography>
-                  </Stack>
-                  <Stack>
-                    <Typography
-                      className="secondary-text-color"
-                      style={{ fontSize: "16px" }}
-                      mx={2}
-                    >
-                      Post Code : {bank.postCode}
-                    </Typography>
-                  </Stack>
-                </Stack>
-                <Stack
-                  direction="row"
-                  gap={2}
-                  mt={1}
-                  sx={{ justifyContent: "space-between" }}
-                >
-                  <Stack>
-                    <Typography
-                      className="primary-text-color"
-                      style={{ fontSize: "14px" }}
-                    >
-                      {bank.primary ? "Primary" : "Not Primary"}
-                    </Typography>
-                  </Stack>
-                </Stack>
-              </Stack>
-            ))}
+          {showBankDetails && bankData.map((bank) => (
+            <BankDetailsCard
+              key={bank.id}
+              bank={bank}
+              onTogglePrimary={onUpdatePrimary}
+            />
+          ))}
         </Grid>
       </Grid>
     </LocalizationProvider>

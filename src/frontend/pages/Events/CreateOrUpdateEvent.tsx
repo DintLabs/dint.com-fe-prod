@@ -4,11 +4,11 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
 import { dispatch, RootState } from 'frontend/redux/store';
+import { uploadMedia } from 'frontend/services/mediaService';
 import { createEvent, updateEvent } from 'frontend/redux/slices/event';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import { IEvent } from 'frontend/types/event';
 import {
   Grid,
@@ -20,16 +20,16 @@ import {
   FormControl,
   InputLabel,
   Divider,
-  Box,
 } from '@mui/material';
 import CreateVenue from './CreateVenue';
+import BackSection from './BackSection';
 
-const IMAGE_URL = 'https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
+const DEFAULT_IMAGE_URL = 'https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
 
 export type CreateOrUpdateEventProps = {
   event?: IEvent;
   onBack: () => void;
-  onEventUpdate?: (updatedEvent: IEvent) => void;
+  onAfterEventUpdate?: (updatedEvent: IEvent) => void;
 };
 
 type CreateOrUpdateEventFormState = {
@@ -50,9 +50,10 @@ type CreateOrUpdateEventFormState = {
 function CreateOrUpdateEvent({
   event,
   onBack,
-  onEventUpdate = () => {}
+  onAfterEventUpdate = () => {}
 }: CreateOrUpdateEventProps) {
   const { toggle } = React.useContext(ThemeContext);
+  const [eventImage, setEventImage] = React.useState<File | null>(null);
   const [createVenueOpened, setCreateVenueOpened] = React.useState<boolean>(false);
   const loggedInUser = useSelector((rootState: RootState) => rootState.user.userData);
   const { userVenues } = useSelector((rootState: RootState) => rootState.event);
@@ -89,6 +90,11 @@ function CreateOrUpdateEvent({
     }
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    setEventImage(file);
+  }
+
   const handleFormSubmit = async (formResult: CreateOrUpdateEventFormState) => {
     if (!loggedInUser) {
       return;
@@ -101,12 +107,37 @@ function CreateOrUpdateEvent({
 
       const getTimeString = (date: moment.Moment) => `${date.format('HH:mm')}:00`;
 
+      let eventPhoto = event ? event.eventPhoto : DEFAULT_IMAGE_URL;
+      if (eventImage) {
+        const toastId = toast.loading('Uploading File...');
+
+        try {
+          const result = await uploadMedia(eventImage, 'photos', false, 'post');
+
+          if (result?.data?.data?.data[0]?.media_file_url) {
+            eventPhoto = result?.data?.data?.data[0]?.media_file_url;
+          }
+          toast.update(toastId, {
+            render: 'Image has been uploaded.',
+            type: 'success',
+            isLoading: false,
+          });
+        } catch (error) {
+          toast.update(toastId, {
+            render: 'Unable to upload the image',
+            type: 'error',
+            isLoading: false,
+          });
+        }
+      }
+
       const payload: any = {
         eventId,
         eventName: formResult.eventName,
         eventDescription: formResult.eventDescription,
-        eventPhoto: IMAGE_URL,
+        eventPhoto,
         user: loggedInUser.id,
+        venue: userVenues.find((v) => v.venueName === formResult.venueName)?.id ?? null,
         valueName: formResult.venueName,
         network: formResult.network,
         tokenAddress: formResult.tokenAddress,
@@ -130,7 +161,7 @@ function CreateOrUpdateEvent({
       if (result.success) {
         reset();
         toast.dismiss();
-        if (onEventUpdate) onEventUpdate({ ...event, ...payload });
+        if (onAfterEventUpdate) onAfterEventUpdate({ ...event, ...payload });
       }
     } catch (error) {
       console.error('Error Occurred in Create event:', error);
@@ -148,26 +179,10 @@ function CreateOrUpdateEvent({
   const withBackButton = (children: React.ReactNode) => {
     return (
       <>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="end"
-          sx={{
-            width: '100%',
-            height: '60px',
-            color: toggle ? '#fff' : '#000',
-            px: 1,
-          }}
-
-        >
-          <Button
-            variant="contained"
-            onClick={handleBack}
-            startIcon={<ArrowLeftIcon />}
-          >
-            {createVenueOpened ? 'Back' : 'Back to events'}
-          </Button>
-        </Box>
+        <BackSection
+          btnText={createVenueOpened ? 'Back' : 'Back to events'}
+          onClick={handleBack}
+        />
         {children}
       </>
     );
@@ -376,6 +391,28 @@ function CreateOrUpdateEvent({
           {formState.errors?.balanceFrequency && (
             <FormHelperText error>{formState.errors?.balanceFrequency.message}</FormHelperText>
           )}
+        </Grid>
+        <Grid item xs={12} md={6} display="flex" sx={{ gap: 2 }}>
+          <TextField
+            {...inputProps}
+            value={eventImage?.name}
+            placeholder="Upload the image..."
+            disabled
+          />
+          <Button
+            variant="contained"
+            aria-label="upload"
+            component="label"
+          >
+            <input
+              hidden
+              accept='image/*'
+              multiple
+              type='file'
+              onChange={handleImageUpload}
+            />
+            Upload
+          </Button>
         </Grid>
       </Grid>
 

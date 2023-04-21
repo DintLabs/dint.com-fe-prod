@@ -340,8 +340,7 @@ const Login = () => {
           <p className="left-head position-absolute notranslate">Dint Club</p>
           <div className="bg-left-content d-flex justify-content-center">
             <div className="left-text">
-              <p >
-              Sign up to support your favorite independent entertainers, content creators, designers, artists, events, subscriptions, and more 
+              <p >Sign up to support your favorite content creators, musicians, artists, and entertainers. 
           </p>
               </div>
           </div>

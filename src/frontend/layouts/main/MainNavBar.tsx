@@ -1,23 +1,13 @@
 import {
-  Autocomplete,
-  Box,
-  InputAdornment,
-  TextField,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import _axios from "frontend/api/axios";
 import useAuth from "frontend/hooks/useAuth";
 import { commonSliceActions } from "frontend/redux/slices/common";
-import { UserDataInterface } from "frontend/interfaces/reduxInterfaces";
 import { AppDispatch, RootState } from "frontend/redux/store";
 
 import React, { useState } from "react";
-import Dropdown from "frontend/reusable/Dropdown";
-
-import { BsSearch } from "react-icons/bs";
-import { CgProfile } from "react-icons/cg";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -25,7 +15,6 @@ import KeysDialog from "frontend/pages/Wallet/KeysDialog";
 
 import MetamaskLogin from "../../components/MetamaskLogin";
 import blacklogo from "../../material/black.png";
-import "../../material/Event.css";
 import mainlogo from "../../material/white.png";
 
 const MainNavBar = () => {
@@ -34,7 +23,6 @@ const MainNavBar = () => {
   const { pathname } = useLocation();
   const theme = useTheme();
   const { logout } = useAuth();
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);

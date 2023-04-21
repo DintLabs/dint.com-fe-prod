@@ -9,3 +9,9 @@ export interface IUserOwnStories {
   liked_story: any[];
   total_likes: number;
 }
+
+export type BaseApiResponse<T> = {
+  code: number;
+  message: string;
+  data: T;
+};

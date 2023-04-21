@@ -5,11 +5,13 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 import EventListCard from './EventListCard';
 
 type EventListProps = {
-  onEventEdit: (event: IEvent) => void;
+  isLoading: boolean;
+  onGetTicket: (event: IEvent) => void;
+  onEventDetails: (event: IEvent) => void;
 };
 
-const EventList = ({ onEventEdit }: EventListProps) => {
-  const { lstEvent, isLoading } = useSelector((rootState: RootState) => rootState.event);
+const EventList = ({ isLoading, onGetTicket, onEventDetails }: EventListProps) => {
+  const { lstEvent } = useSelector((rootState: RootState) => rootState.event);
 
   if (isLoading)
     return (
@@ -21,7 +23,7 @@ const EventList = ({ onEventEdit }: EventListProps) => {
   if (!lstEvent.length)
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Typography component="span">No Events Found. </Typography>
+        <Typography component="span">No Events Found.</Typography>
       </Box>
     );
 
@@ -31,7 +33,8 @@ const EventList = ({ onEventEdit }: EventListProps) => {
         <EventListCard
           key={index}
           event={event}
-          onEventEdit={onEventEdit}
+          onGetTicket={onGetTicket}
+          onEventDetails={onEventDetails}
         />
       ))}
     </>

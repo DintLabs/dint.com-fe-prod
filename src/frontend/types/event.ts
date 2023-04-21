@@ -21,6 +21,7 @@ export interface IEvent {
   valueName?: string;
   balanceFrequency?: string | number;
   user?: any;
+  venue: number;
 }
 
 export interface IVenue {

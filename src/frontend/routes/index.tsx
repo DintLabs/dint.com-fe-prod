@@ -60,19 +60,24 @@ export default function Router() {
   win.objNavigate = useNavigate();
 
   useEffect(() => {
+    const apiToken = localStorage.getItem('apiToken');
+    if (!apiToken) return;
+
     dispatch(fetchUserData());
   }, [dispatch]);
+
   useEffect(() => {
+    const apiToken = localStorage.getItem('apiToken');
+    if (!apiToken) return;
     dispatch(getConfineUserList());
   }, []);
 
   const online = async () => {
-    const obj = {
-      is_online: true,
-    };
+    const apiToken = localStorage.getItem('apiToken');
+    if (!apiToken) return;
 
     await _axios
-      .put(`/api/user/update-status/`, obj)
+      .put(`/api/user/update-status/`, { is_online: true })
       .then((response: any) => {
         console.log("response", response.data);
       })

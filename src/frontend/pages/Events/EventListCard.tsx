@@ -1,11 +1,6 @@
 import React from 'react';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router';
 import { IEvent } from 'frontend/types/event';
-import * as Alert from 'frontend/components/common/alert';
-import { deleteEvent } from 'frontend/redux/slices/event';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
-import { RootState, useSelector, dispatch } from 'frontend/redux/store';
 import POLYGON_ICON from 'frontend/assets/img/web3/matic-token.png';
 import {
   Button,
@@ -17,55 +12,20 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import '../../material/Event.css';
 
 type EventListCardProps = {
   event: IEvent,
-  onEventEdit: (event: IEvent) => void;
+  onEventDetails: (event: IEvent) => void;
+  onGetTicket: (event: IEvent) => void;
 }
 
-const EventListCard = ({ event, onEventEdit }: EventListCardProps) => {
-  const navigate = useNavigate();
+const EventListCard = ({
+  event,
+  onEventDetails,
+  onGetTicket,
+}: EventListCardProps) => {
   const { toggle } = React.useContext(ThemeContext);
-  const { balance } = useSelector((rootState: RootState) => rootState.walletState);
-  const loggedInUser = useSelector((rootState: RootState) => rootState.user.userData);
-
   const [details, setDetails] = React.useState<React.ReactNode[]>([]);
-
-  const isOwner = React.useMemo(() => {
-    if (!loggedInUser || !event.user) return false;
-    return loggedInUser.id === event.user.id;
-  }, [event.user, loggedInUser]);
-
-  const handleDelete = (eventId: number) => {
-    dispatch(deleteEvent(eventId))
-      .then(({ success }) => {
-        if (success) {
-          toast.success('Event has been deleted.');
-        }
-      });
-  };
-
-  const generateQrCode = (event: IEvent) => {
-    if (balance < +(event.balanceFrequency ?? 1)) {
-      const config = Alert.configWarnAlert({
-        title: 'Balance not sufficient',
-        text: `Your balance: ${balance}`,
-      });
-      Alert.alert(config);
-      return;
-    }
-
-    navigate(
-      '/lounge/events/ticket',
-      {
-        state: {
-          userId: loggedInUser?.id ?? '',
-          eventId: event.eventId,
-        }
-      }
-    );
-  };
 
   React.useEffect(() => {
     if (event) {
@@ -104,34 +64,21 @@ const EventListCard = ({ event, onEventEdit }: EventListCardProps) => {
         </CardContent>
         <CardActions sx={{ p: 2 }}>
           <Button
+            variant="contained"
+            onClick={() => {
+              onEventDetails(event)
+            }}
+          >
+            Show details
+          </Button>
+          <Button
               variant="contained"
               onClick={() => {
-                generateQrCode(event);
+                onGetTicket(event);
               }}
           >
             Get Ticket
           </Button>
-          {isOwner && (
-            <>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  onEventEdit(event);
-                }}
-              >
-                Edit
-              </Button>
-              <Button
-                color="error"
-                variant="contained"
-                onClick={() => {
-                  handleDelete(event.id as number)
-                }}
-              >
-                Delete
-              </Button>
-            </>
-          )}
         </CardActions>
       </Card>
     </Grid>

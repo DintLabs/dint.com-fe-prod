@@ -7,14 +7,16 @@ export const addEvent = async (body: any) => {
   });
   try {
     const result = await _axios.post('api/events/create/', body);
+    const success = result.data.code === 201;
+
     toast.update(id, {
-      render: 'Event created successfully',
-      type: 'success',
+      render: success ? 'Event created successfully' : 'Something went wrong!',
+      type: success ? 'success' : 'error',
       isLoading: false
     });
 
     return {
-      success: true,
+      success,
       data: result.data.data
     };
   } catch (e) {

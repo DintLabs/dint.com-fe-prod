@@ -72,7 +72,7 @@ const FirstStep = (props:FirstStepPayload) => {
             )}
           />
         </Stack>
-        
+
         <Stack direction="row" gap={2} mt={2}>
           <Controller
             name="state"
@@ -89,6 +89,7 @@ const FirstStep = (props:FirstStepPayload) => {
                   onChange={(e: any) => onChange(e.target.value)}
                   sx={{
                     backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
+                    color: `${toggle ? '#fff' : '#161C24'}!important`,
                   }}
                 >
                 </TextField>
@@ -113,6 +114,7 @@ const FirstStep = (props:FirstStepPayload) => {
                   onChange={(e: any) => onChange(e.target.value)}
                   sx={{
                     backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
+                    color: `${toggle ? '#fff' : '#161C24'}!important`,
                   }}
                 >
                 </TextField>
@@ -136,6 +138,7 @@ const FirstStep = (props:FirstStepPayload) => {
                   onChange={(e: any) => onChange(e.target.value)}
                   sx={{
                     backgroundColor: toggle ? 'rgba(255, 255, 255, 0.13)' : '#DFE3E8',
+                    color: `${toggle ? '#fff' : '#161C24'}!important`,
                   }}
                 >
                 </TextField>
