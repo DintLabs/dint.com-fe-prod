@@ -2,13 +2,14 @@ import {useState,useEffect} from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import _axios from "../api/axios";
+import { PostInterface } from '../interfaces/postInterface';
 
 export const GetUserBookmark = (type:string) => {
 
   const reduxUser = useSelector((state: RootState) => state.user.userData);
 
-  const [data,setData] = useState([])
-  const [loading,setLoading] = useState(false)
+  const [data, setData] = useState<PostInterface[]>([])
+  const [loading, setLoading] = useState(false)
   const [error,setError] = useState('');
 
   const fetchData = async () => {
@@ -38,5 +39,5 @@ export const GetUserBookmark = (type:string) => {
   const refreshData = ()=>{
     fetchData()
   }
-  return { data,loading,error,refreshData}
+  return { data, loading, error, refreshData, setData };
 }

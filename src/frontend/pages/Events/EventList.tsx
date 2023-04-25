@@ -6,11 +6,10 @@ import EventListCard from './EventListCard';
 
 type EventListProps = {
   isLoading: boolean;
-  onGetTicket: (event: IEvent) => void;
   onEventDetails: (event: IEvent) => void;
 };
 
-const EventList = ({ isLoading, onGetTicket, onEventDetails }: EventListProps) => {
+const EventList = ({ isLoading, onEventDetails }: EventListProps) => {
   const { lstEvent } = useSelector((rootState: RootState) => rootState.event);
 
   if (isLoading)
@@ -33,7 +32,6 @@ const EventList = ({ isLoading, onGetTicket, onEventDetails }: EventListProps) =
         <EventListCard
           key={index}
           event={event}
-          onGetTicket={onGetTicket}
           onEventDetails={onEventDetails}
         />
       ))}

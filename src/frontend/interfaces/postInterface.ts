@@ -74,3 +74,18 @@ export interface PostInterface {
   is_bookmarked: boolean;
   bookmarks_count: number | null;
 }
+
+export type PostsCounts = {
+  all_posts: number;
+  text_posts: number;
+  image_posts: number;
+  video_posts: number;
+};
+
+export interface GetPaginatedPostsResponse {
+  data: PostInterface[];
+  code: number;
+  message: string;
+  recordsFiltered: number;
+  recordsTotal: number;
+}

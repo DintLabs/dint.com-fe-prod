@@ -4,7 +4,7 @@ import PostItemSkeleton from 'frontend/components/common/skeletons/PostItemSkele
 import { useLounge } from 'frontend/contexts/LoungeContext';
 import { postTypes } from 'frontend/data';
 import { PaginationPostsInerface } from 'frontend/interfaces/contextInterface';
-import { PostInterface } from 'frontend/interfaces/postInterface';
+import { LikePostInterface, PostCommentInterface, PostInterface } from 'frontend/interfaces/postInterface';
 import { FlexRow } from 'frontend/reusable/reusableStyled';
 import { useEffect, useState } from 'react';
 import Submenu from 'frontend/components/submenu';
@@ -47,8 +47,41 @@ const HomeTab = () => {
     setPaginationVideoPosts
   } = useLounge();
 
-  const postDeleted = (postId: number) => {
-    setBookmarkedPosts(bookmarkedPosts.filter((prev) => prev.id !== postId));
+  const removeFromBookmarksList = (postId: number) => {
+    setBookmarkedPosts(bookmarkedPosts.filter((prev) => prev.post.id !== postId));
+  };
+
+  const updatePostLikes = (postId: number, likes: LikePostInterface[]) => {
+    setBookmarkedPosts(bookmarkedPosts.map((bookmark) => {
+      if (bookmark.post.id !== postId) {
+        return bookmark;
+      }
+
+      return {
+        ...bookmark,
+        post: {
+          ...bookmark.post,
+          like_post: likes,
+          total_likes: likes.length,
+        },
+      };
+    }));
+  };
+
+  const updatePostComments = (postId: number, comments: PostCommentInterface[]) => {
+    setBookmarkedPosts(bookmarkedPosts.map((bookmark) => {
+      if (bookmark.post.id !== postId) {
+        return bookmark;
+      }
+
+      return {
+        ...bookmark,
+        post: {
+          ...bookmark.post,
+          post_comment: comments,
+        },
+      };
+    }));
   };
 
   const setHasNextFalse = (postType: string) => {
@@ -156,10 +189,15 @@ const HomeTab = () => {
             {bookmarkedPosts.map((item: any) => (
               <PostItem
                 key={`all_bookmarks-${item?.id}`}
-                post={item.post}
-                onPostChange={fetchPosts}
-                onPostDelete={() => postDeleted(item.id)}
-                isBookmarked
+                post={{ ...item.post, is_bookmarked: true }}
+                onPostLike={updatePostLikes}
+                onPostCommentsChange={updatePostComments}
+                onPostBookmark={(postId, bookmarked) => {
+                  if (!bookmarked) {
+                    removeFromBookmarksList(postId);
+                  }
+                }}
+                onPostDelete={removeFromBookmarksList}
               />
             ))}
             {isLoading && (

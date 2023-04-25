@@ -5,11 +5,8 @@ import { dispatch, RootState } from 'frontend/redux/store'
 import { commonSliceActions } from 'frontend/redux/slices/common'
 import { HOME_SIDE_MENU } from 'frontend/redux/slices/newHome'
 import { useSelector } from 'react-redux'
-import { useLounge } from 'frontend/contexts/LoungeContext'
-import { isMobile } from 'frontend/utils'
 import { Helmet } from 'react-helmet'
 import { toast } from 'react-toastify'
-import _axios from 'frontend/api/axios'
 
 import { Box, Grid, Modal, useMediaQuery } from '@mui/material'
 import NotificationsContainer from '../Notifications'
@@ -30,12 +27,11 @@ import AddPost from './AddPost'
 import Search from '../search/index'
 import CloseIcon from '@mui/icons-material/Close';
 import Events from "../Events/Events";
-import TicketCreate from '../TicketCreate/TicketCreate';
+import { createPost } from '../../redux/slices/loungeFeed';
 
 const NewHome = () => {
   const mobileView = useMediaQuery('(max-width:899px)')
   const userData = useSelector((state: RootState) => state?.user?.userData)
-  const { addNewPostToContext } = useLounge()
 
   const [widthScreen, setWidthScreen] = useState<number>(window.screen.width)
   const [isLounge, setIsLounge] = useState<boolean>(false)
@@ -121,11 +117,10 @@ const NewHome = () => {
   //   zIndex: "120",
   // };
 
-  const createPost = useCallback(
+  const handleCreatePost = useCallback(
     async (toastId: string, data: any) => {
       try {
-        const result = await _axios.post('/api/posts/create/', data)
-        if (result?.data?.data) addNewPostToContext(result.data.data)
+        await dispatch(createPost(data));
         setTimeout(() => {
           toast.update(toastId, {
             render: 'Post Added Successful!',
@@ -141,7 +136,7 @@ const NewHome = () => {
         toast.error(err.toString())
       }
     },
-    [addNewPostToContext]
+    []
   )
 
   const handleClose = () => {
@@ -168,7 +163,6 @@ const NewHome = () => {
     if (location.pathname.includes(HOME_SIDE_MENU.PROCESSWITHDRAWAL)) return <ProcessWithdrawal />;
     if (location.pathname.includes(HOME_SIDE_MENU.NOTIFICATIONS)) return <NotificationsContainer />;
     if (location.pathname === HOME_SIDE_MENU.EVENTS) return <Events />;
-    if (location.pathname === HOME_SIDE_MENU.EVENT_TICKET) return <TicketCreate />;
     if (location.pathname.includes(HOME_SIDE_MENU.ADD_POST))
       return mobileView ? (
         <Box style={{width: '100%',height: '100%', position: 'fixed', zIndex: 999, background: 'rgba(0,0,0,0.5)'}}>
@@ -183,11 +177,11 @@ const NewHome = () => {
               zIndex: 9999,
             }}
           />
-          <AddPost createPost={createPost} />
+          <AddPost createPost={handleCreatePost} />
         </Box>
       ) : (
         <Modal open={true} onClose={handleClose}>
-          <AddPost createPost={createPost} />
+          <AddPost createPost={handleCreatePost} />
         </Modal>
       )
     if (location.pathname.includes(HOME_SIDE_MENU.SEARCH)) return <Search />
@@ -201,7 +195,7 @@ const NewHome = () => {
         </Grid>
       </>
     )
-  }, [createPost, location.pathname, params.username, widthScreen, mobileView]);
+  }, [handleCreatePost, location.pathname, params.username, widthScreen, mobileView]);
 
   if (isPrimaryLoader) {
     return <PageSkeleton />;
@@ -211,6 +205,45 @@ const NewHome = () => {
     return <ViewPage />;
   }
 
+  const renderMobileView = () => {
+    return (
+      <Box display="flex" flexDirection="column">
+        {userData && !!userData.id && (
+          <MobileTopHeader
+            userName={userData.display_name || ''}
+            avatar={userData.profile_image || ''}
+          />
+        )}
+
+        <Box flexGrow="1">
+          {isLounge ? renderComponent : null}
+        </Box>
+
+        {userData && !!userData.id && (
+          <Box position="fixed" bottom="0" sx={{ boxShadow: 3 }}>
+            <SidebarMobile widthScreen={widthScreen} />
+          </Box>
+        )}
+      </Box>
+    );
+  };
+
+  const renderDesktopView = () => {
+    if (location.pathname === HOME_SIDE_MENU.EVENTS) return isLounge ? renderComponent : null;
+
+    return (
+      <Grid container>
+        <Grid item xs={0} md={1} className='desktop-nav'>
+          {userData && !!userData.id && <Sidebar />}
+        </Grid>
+
+        <Grid item xs={12} md={10}>
+          {isLounge ? renderComponent : null}
+        </Grid>
+      </Grid>
+    );
+  };
+
   return (
     <>
       <Helmet>
@@ -218,36 +251,7 @@ const NewHome = () => {
         <meta name='' content='' />
       </Helmet>
       <Box style={{ margin: 0 }}>
-        {mobileView ? (
-          <Box display="flex" flexDirection="column">
-            {userData && !!userData.id && (
-              <MobileTopHeader
-                userName={userData.display_name || ''}
-                avatar={userData.profile_image || ''}
-              />
-            )}
-
-            <Box flexGrow="1">
-              {isLounge ? renderComponent : null}
-            </Box>
-
-            {userData && !!userData.id && (
-              <Box position="fixed" bottom="0" sx={{ boxShadow: 3 }}>
-                <SidebarMobile widthScreen={widthScreen} />
-              </Box>
-            )}
-          </Box>
-        ) : (
-          <Grid container>
-            <Grid item xs={0} md={1} className='desktop-nav'>
-              {userData && !!userData.id && <Sidebar />}
-            </Grid>
-
-            <Grid item xs={12} md={10}>
-              {isLounge ? renderComponent : null}
-            </Grid>
-          </Grid>
-        )}
+        {mobileView ? renderMobileView() : renderDesktopView()}
       </Box>
     </>
   );

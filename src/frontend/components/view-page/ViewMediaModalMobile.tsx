@@ -48,7 +48,7 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
   },[props.selectedMedia.id]);
 
 
-  const handlePostLike = (likes: any[], postId: number) => {
+  const handlePostLike = (postId: number, likes: any[]) => {
     const getUpdatedPost = (prev: any) => ({
       ...prev,
       like_post: likes,
@@ -165,7 +165,12 @@ const ViewMediaModalMobile = (props: ViewMediaModalProps) => {
               props.handleClose();
             }}
             onPostLike={handlePostLike}
-            onPostUpdate={props.onPostUpdate}
+            onPostBookmark={(postId, bookmarked) => {
+              props.onPostUpdate({ ...item, is_bookmarked: bookmarked });
+            }}
+            onPostCommentsChange={(postId, comments) => {
+              props.onPostUpdate({ ...item, post_comment: comments });
+            }}
           />
         ))}
       </div>

@@ -18,6 +18,7 @@ import subscribersReducer from "./slices/subscribers";
 import loungeReducer from "./slices/lounge";
 import commonReducer from "./slices/common";
 import walletStateReducer from './slices/wallet';
+import loungeFeedReducer from './slices/loungeFeed';
 
 // ----------------------------------------------------------------------
 
@@ -47,6 +48,7 @@ const reducers = combineReducers({
   common: commonReducer,
   maticBalance: getMaticBalanceReducer,
   dintBalance: getDintBalanceReducer,
+  loungeFeed: loungeFeedReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

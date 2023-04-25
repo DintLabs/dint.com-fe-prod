@@ -50,6 +50,7 @@ import { useNavigate, useRoutes } from "react-router-dom";
 import Following from "../pages/Following/Following";
 import RegistrationRefer from "frontend/pages/RegistrationRefer/RegistrationRefer";
 import HelpSupport from "frontend/pages/Privacy/HelpSupport";
+import TicketCreate from '../pages/TicketCreate/TicketCreate';
 
 // ----------------------------------------------------------------------
 
@@ -196,6 +197,14 @@ export default function Router() {
         </ThemeConfig>
       ),
       children: [
+        {
+          path: '/lounge/events/ticket',
+          element: (
+            <AuthGuard>
+              <TicketCreate />
+            </AuthGuard>
+          ),
+        },
         {
           path: "ig",
           element: <VideoCardsMobileView />,

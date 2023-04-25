@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTheme, Stack, Box, Divider } from '@mui/material';
-import { LikePostInterface, PostInterface } from 'frontend/interfaces/postInterface';
+import { LikePostInterface, PostCommentInterface, PostInterface } from 'frontend/interfaces/postInterface';
 import { RootState } from 'frontend/redux/store';
 import { isImage, isVideo } from 'frontend/utils';
 import PostHeader from './PostHeader';
@@ -15,31 +15,23 @@ import AddCommentForm from '../AddCommentForm';
 
 type PostItemProps = {
   post: PostInterface;
-  onPostChange?: () => void;
-  onPostUpdate?: (post: PostInterface) => void;
-  onPostDelete?: (postId: number) => void;
-  onPostLike?: (likes: LikePostInterface[], postId: number) => void;
+  onPostLike: (postId: number, likes: LikePostInterface[]) => void;
+  onPostBookmark: (postId: number, bookmarked: boolean) => void;
+  onPostCommentsChange: (postId: number, comments: PostCommentInterface[]) => void;
+  onPostDelete: (postId: number) => void;
   onClickMedia?: (post: PostInterface) => void;
-  isBookmarked?: boolean;
 };
 
 function PostItem({
-  post: data,
-  onPostChange,
-  onPostUpdate,
+  post,
   onPostDelete,
-  isBookmarked,
   onPostLike,
+  onPostBookmark,
+  onPostCommentsChange,
   onClickMedia = () => {},
 }: PostItemProps) {
   const theme = useTheme();
   const loggedInUser = useSelector((state: RootState) => state.user.userData);
-
-  const [post, setPost] = React.useState<PostInterface>(data);
-
-  React.useEffect(() => {
-    setPost(data);
-  }, [data]);
 
   const renderPostContent = () => {
     if (post.type === 'text') {
@@ -82,11 +74,9 @@ function PostItem({
       {renderPostContent()}
       <PostActions
         post={post}
-        setPost={setPost}
-        onPostChange={onPostChange}
-        onPostDelete={onPostDelete}
-        isBookmarked={isBookmarked}
         onPostLike={onPostLike}
+        onPostBookmark={onPostBookmark}
+        onPostDelete={onPostDelete}
       />
       <PostDescription
         likesCount={post.total_likes ?? 0}
@@ -98,18 +88,12 @@ function PostItem({
       <PostCommentsSection
         comments={post.post_comment ?? []}
         onAfterLike={(commentId, likedBy) => {
-          const newPost = {
-            ...post,
-            post_comment: post.post_comment.map((comment) => {
-              if (comment.id !== commentId) return comment;
-              return { ...comment, liked_by: likedBy };
-            })
-          };
-          setPost(newPost);
+          const comments = post.post_comment.map((comment) => {
+            if (comment.id !== commentId) return comment;
+            return { ...comment, liked_by: likedBy };
+          });
 
-          if (onPostUpdate) {
-            onPostUpdate(post);
-          }
+          onPostCommentsChange(post.id, comments);
         }}
       />
       <Divider sx={{ mx: 2 }} />
@@ -118,13 +102,12 @@ function PostItem({
           postId={post.id}
           emojiPickerPlacement="top"
           onAfterSaveComment={({ comment }) => {
-            setPost((prevState) => ({
-              ...prevState,
-              post_comment: [
-                ...(prevState.post_comment || []),
-                { ...comment, user: loggedInUser as any },
-              ],
-            }));
+            const comments = [
+              ...(post.post_comment || []),
+              { ...comment, user: loggedInUser as any },
+            ];
+
+            onPostCommentsChange(post.id, comments);
           }}
         />
       </Box>

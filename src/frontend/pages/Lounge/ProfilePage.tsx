@@ -48,7 +48,7 @@ import Swal from 'sweetalert2';
 import { useLocation } from 'react-router-dom';
 import AvatarComponent from 'frontend/components/common/Avatar';
 import { pluralize } from 'frontend/utils/formatters';
-import ProfileActionButton from 'frontend/components/common/ProfileActionButton';
+import Button from 'frontend/components/common/Button';
 import useRichMessage from '../../hooks/useRichMessage';
 
 interface TabPanelProps {
@@ -541,24 +541,24 @@ function ProfilePage({ username }: ProfilePageProps) {
                 {!loggedInUser || (loggedInUser.custom_username !== userDetails?.custom_username && !isLoadingUserDetails) ? (
                   <Box className="btn-group-follow">
                     {userDetails?.is_followed === true && (
-                      <ProfileActionButton
+                      <Button
                         label={isFollowLoading ? `Loading...` : `Following`}
                         onClick={unfollow}
                       />
                     )}
                     {userDetails?.is_followed === false && (
-                      <ProfileActionButton
+                      <Button
                         label={isFollowLoading ? `Loading...` : `Follow`}
                         onClick={follow}
                       />
                     )}
                     {userDetails?.is_followed === "Request Sent" && (
-                      <ProfileActionButton
+                      <Button
                         label={isFollowLoading ? `Loading...` : `Cancel Request`}
                         onClick={cancelRequest}
                       />
                     )}
-                    <ProfileActionButton
+                    <Button
                       label="Message"
                       onClick={() => {
                         if (!loggedInUser) {
@@ -571,7 +571,7 @@ function ProfilePage({ username }: ProfilePageProps) {
                     />
                     {!userDetails?.is_private && userDetails?.is_followed !== "Request Sent" && (
                       <>
-                        <ProfileActionButton
+                        <Button
                           label="Share Profile"
                           onClick={() => setShowShareProfileModal(true)}
                         />
@@ -589,12 +589,12 @@ function ProfilePage({ username }: ProfilePageProps) {
                   <div className="btn-group-follow-wrapper">
                     <Box className="btn-group-follow">
                       {isMyProfile && (
-                        <ProfileActionButton
+                        <Button
                           label="Edit Profile"
                           onClick={() => navigate('/settings/profile')}
                         />
                       )}
-                      <ProfileActionButton
+                      <Button
                         label="Share Profile"
                         onClick={() => setShowShareProfileModal(true)}
                       />

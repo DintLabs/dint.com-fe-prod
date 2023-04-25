@@ -13,10 +13,6 @@ import {
 } from "@mui/material";
 import _axios from "frontend/api/axios";
 import PostItemSkeleton from "frontend/components/common/skeletons/PostItemSkeleton";
-import { useLounge } from "frontend/contexts/LoungeContext";
-import { postTypes } from "frontend/data";
-import { PaginationPostsInerface } from "frontend/interfaces/contextInterface";
-import { PostInterface } from "frontend/interfaces/postInterface";
 import {
   ReactNode,
   SyntheticEvent,
@@ -42,25 +38,25 @@ import { config } from "react-spring";
 import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
 import { createUserStories } from 'frontend/utils/stories';
-import PostItemNew from 'frontend/pages/Lounge/PostItem/PostItem';
+import PostItem from 'frontend/pages/Lounge/PostItem/PostItem';
 import AvatarComponent from '../../components/common/Avatar';
 import UserStories from '../../components/UserStories/UserStories';
-import { AxiosResponse } from 'axios';
+import {
+  setActiveTab,
+  getPosts,
+  resetPosts,
+  setLikes,
+  removePostFromList,
+  setBookmarked,
+  setComments,
+} from 'frontend/redux/slices/loungeFeed';
+import { ActiveTabType } from '../../types/lounge';
 
 interface TabPanelProps {
   children?: ReactNode;
   index: number;
   value: number;
 }
-interface RespPost {
-  data: PostInterface[];
-  code: number;
-  message: string;
-  recordsFiltered: number;
-  recordsTotal: number;
-}
-
-const PAGE_SIZE = 6;
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -94,10 +90,16 @@ const HomeTab = () => {
   const { toggle } = useContext(ThemeContext);
   const mobileView = useMediaQuery("(max-width:899px)");
 
-  const [value, setValue] = useState(0);
+  const { posts, activeTab, isLoading } = useSelector((state: RootState) => state.loungeFeed);
+  const tabIndex = React.useMemo(() => {
+    if (activeTab === 'text') return 1;
+    if (activeTab === 'image') return 2;
+    if (activeTab === 'video') return 3;
+    return 0;
+  }, [activeTab]);
+
   const [suggestionList, setSuggestionList] = useState([]);
   const [storyList, setStoryList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const savedUser = JSON.parse(localStorage.getItem("userData") ?? "{}");
   const [showAddPageButton, setShowAddPageButton] = useState(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -116,35 +118,9 @@ const HomeTab = () => {
     config: config.gentle,
   });
   const dispatch = useDispatch();
-  const {
-    counts,
-    getUserPostCounts,
-    posts,
-    setPosts,
-    textPosts,
-    setTextPosts,
-    photoPosts,
-    setPhotoPosts,
-    videoPosts,
-    setVideoPosts,
-    paginationPosts,
-    setPaginationPosts,
-    paginationTextPosts,
-    setPaginationTextPosts,
-    paginationPhotoPosts,
-    setPaginationPhotoPosts,
-    paginationVideoPosts,
-    setPaginationVideoPosts,
-    resetPosts,
-    setActiveType,
-  } = useLounge();
 
-  const postDeleted = (postId: number) => {
-    setPosts(posts.filter((prev) => prev.id !== postId));
-    setTextPosts(textPosts.filter((prev) => prev.id !== postId));
-    setPhotoPosts(photoPosts.filter((prev) => prev.id !== postId));
-    setVideoPosts(videoPosts.filter((prev) => prev.id !== postId));
-    getUserPostCounts();
+  const fetchPosts = async () => {
+    await dispatch(getPosts());
   };
 
   const handleScroll = useCallback(() => {
@@ -165,32 +141,9 @@ const HomeTab = () => {
     const currentHeight = windowHeight + window.pageYOffset;
 
     if (currentHeight + 900 >= docHeight) {
-      if (!isLoading) {
-        let pagination = null;
-        if (value === 0) {
-          pagination = paginationPosts;
-        } else if (value === 1) {
-          pagination = paginationTextPosts;
-        } else if (value === 2) {
-          pagination = paginationPhotoPosts;
-        } else if (value === 3) {
-          pagination = paginationVideoPosts;
-        }
-
-        if (pagination && !isLoading && pagination.hasNext) {
-
-          fetchPosts({ ...pagination, start: pagination.start + PAGE_SIZE });
-        }
-      }
+      fetchPosts();
     }
-  }, [
-    paginationPosts,
-    paginationPhotoPosts,
-    paginationTextPosts,
-    paginationVideoPosts,
-    isLoading,
-    value,
-  ]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -202,10 +155,6 @@ const HomeTab = () => {
   useEffect(() => {
     getSuggestionList();
     getStoryList();
-
-    return () => {
-      resetPosts();
-    };
   }, []);
 
   useLayoutEffect(() => {
@@ -232,8 +181,13 @@ const HomeTab = () => {
     }
   };
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (event: SyntheticEvent, index: number) => {
+    let value: ActiveTabType = 'all';
+    if (index === 1) value = 'text';
+    if (index === 2) value = 'image';
+    if (index === 3) value = 'video';
+
+    dispatch(setActiveTab(value));
   };
 
   const ShowAddPage = () => {
@@ -244,96 +198,17 @@ const HomeTab = () => {
     }
   };
 
-  const setHasNextFalse = (postType: string) => {
-    if (postType === postTypes.all.value) {
-      setPaginationPosts({ ...paginationPosts, hasNext: false });
-    } else if (postType === postTypes.text.value) {
-      setPaginationTextPosts({ ...paginationTextPosts, hasNext: false });
-    } else if (postType === postTypes.image.value) {
-      setPaginationPhotoPosts({ ...paginationPhotoPosts, hasNext: false });
-    } else if (postType === postTypes.video.value) {
-      setPaginationVideoPosts({ ...paginationVideoPosts, hasNext: false });
-    }
-  };
-
-  const fetchPosts = async (pagination?: PaginationPostsInerface) => {
-    if (isLoading || !pagination?.hasNext) return;
-
-    try {
-      setIsLoading(true);
-
-      const { data }: AxiosResponse<RespPost> = await _axios.post(
-        `/api/lounge/pagination/list/`,
-        pagination
-      );
-
-      setIsLoading(false);
-
-      if (data?.data?.length) {
-        if (pagination.post_type === postTypes.all.value) {
-          setPosts([...posts, ...data.data]);
-          setPaginationPosts(pagination);
-        } else if (pagination.post_type === postTypes.text.value) {
-          setTextPosts([...textPosts, ...data.data]);
-          setPaginationTextPosts(pagination);
-        } else if (pagination.post_type === postTypes.image.value) {
-          setPhotoPosts([...photoPosts, ...data.data]);
-          setPaginationPhotoPosts(pagination);
-        } else if (pagination.post_type === postTypes.video.value) {
-          setVideoPosts([...videoPosts, ...data.data]);
-          setPaginationVideoPosts(pagination);
-        }
-
-        if (pagination.start + PAGE_SIZE > data.recordsTotal) {
-          setHasNextFalse(pagination.post_type);
-        }
-      } else {
-        setHasNextFalse(pagination.post_type);
-      }
-    } catch (err) {
-      setIsLoading(false);
-      setHasNextFalse(pagination.post_type);
-    }
-  };
-
   useEffect(() => {
-    getUserPostCounts();
+    fetchPosts();
+
+    return () => {
+      dispatch(resetPosts());
+    }
   }, []);
-
-  useEffect(() => {
-    let list = [];
-    let pagination = null;
-    if (value === 0) {
-      list = JSON.parse(JSON.stringify(posts));
-      pagination = JSON.parse(JSON.stringify(paginationPosts));
-    } else if (value === 1) {
-      list = JSON.parse(JSON.stringify(textPosts));
-      pagination = JSON.parse(JSON.stringify(paginationTextPosts));
-    } else if (value === 2) {
-      list = JSON.parse(JSON.stringify(photoPosts));
-      pagination = JSON.parse(JSON.stringify(paginationPhotoPosts));
-    } else if (value === 3) {
-      list = JSON.parse(JSON.stringify(videoPosts));
-      pagination = JSON.parse(JSON.stringify(paginationVideoPosts));
-    }
-    if (!list?.length) {
-      fetchPosts(pagination);
-    }
-  }, [value]);
-
-  useEffect(() => {
-    if (value === 0) setActiveType('all');
-    if (value === 1) setActiveType('text');
-    if (value === 2) setActiveType('image');
-    if (value === 3) setActiveType('video');
-  }, [value]);
 
   const createNewStory = useCallback(
     async (toastId: string, userId: string, storyUrl: any, fileType: any) => {
-      // const formData = new FormData();
-      // formData.append("user", userId);
-      // formData.append("story", storyUrl);
-      // formData.append("type", fileType);
+
       const createStory = {
         user: userId,
         type: fileType,
@@ -350,7 +225,6 @@ const HomeTab = () => {
           setOpenModal(false);
           setOpenModalMobile(false);
           setOpenStoryModal('');
-          // handleStoryOnCreateStory(result?.data?.data);
           toast.update(toastId, {
             render: result?.data?.message,
             type: "success",
@@ -605,7 +479,7 @@ const HomeTab = () => {
 
             <Box className="custom-tab-wrapper">
               <Tabs
-                value={value}
+                value={tabIndex}
                 variant="fullWidth"
                 onChange={handleChange}
                 sx={{
@@ -616,99 +490,60 @@ const HomeTab = () => {
               >
                 <Tab
                   className={`${
-                    toggle && value === 0 && "active-tab"
+                    toggle && tabIndex === 0 && "active-tab"
                   } custom-tab-list`}
                   label={`All`}
                 />
                 <Tab
                   className={`${
-                    toggle && value === 1 && "active-tab"
+                    toggle && tabIndex === 1 && "active-tab"
                   } custom-tab-list`}
                   label={`Text`}
                 />
                 <Tab
                   className={`${
-                    toggle && value === 2 && "active-tab"
+                    toggle && tabIndex === 2 && "active-tab"
                   } custom-tab-list`}
                   label={`Photos`}
                 />
                 <Tab
                   className={`${
-                    toggle && value === 3 && "active-tab"
+                    toggle && tabIndex === 3 && "active-tab"
                   } custom-tab-list`}
                   label={`Videos`}
                 />
               </Tabs>
             </Box>
 
-            <TabPanel value={value} index={0}>
-              {posts.map((item) => (
-                <PostItemNew
-                  key={item.id}
-                  post={item}
-                  onPostChange={fetchPosts}
-                  onPostDelete={postDeleted}
-                />
-              ))}
-              {isLoading && (
-                <>
-                  <PostItemSkeleton />
-                  <PostItemSkeleton />
-                  <PostItemSkeleton />
-                </>
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              {textPosts.map((item, i) => (
-                <PostItemNew
-                  key={`textPosts_${i}_${item.id}`}
-                  post={item}
-                  onPostChange={fetchPosts}
-                  onPostDelete={postDeleted}
-                />
-              ))}
-              {isLoading && (
-                <>
-                  <PostItemSkeleton />
-                  <PostItemSkeleton />
-                  <PostItemSkeleton />
-                </>
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              {photoPosts.map((item, i) => (
-                <PostItemNew
-                  key={`photoPosts_${i}_${item.id}`}
-                  post={item}
-                  onPostChange={fetchPosts}
-                  onPostDelete={postDeleted}
-                />
-              ))}
-              {isLoading && (
-                <>
-                  <PostItemSkeleton />
-                  <PostItemSkeleton />
-                  <PostItemSkeleton />
-                </>
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-              {videoPosts.map((item, i) => (
-                <PostItemNew
-                  key={`videoPosts_${i}_${item.id}`}
-                  post={item}
-                  onPostChange={fetchPosts}
-                  onPostDelete={postDeleted}
-                />
-              ))}
-              {isLoading && (
-                <>
-                  <PostItemSkeleton />
-                  <PostItemSkeleton />
-                  <PostItemSkeleton />
-                </>
-              )}
-            </TabPanel>
+            {[0, 1, 2, 3].map((index) => (
+              <TabPanel value={tabIndex} index={index}>
+                {posts.map((item) => (
+                  <PostItem
+                    key={`${item.id}_${index}`}
+                    post={item}
+                    onPostLike={(postId, likes) => {
+                      dispatch(setLikes(postId, likes));
+                    }}
+                    onPostBookmark={(postId, bookmarked) => {
+                      dispatch(setBookmarked(postId, bookmarked));
+                    }}
+                    onPostCommentsChange={(postId, comments) => {
+                      dispatch(setComments(postId, comments));
+                    }}
+                    onPostDelete={(postId) => {
+                      dispatch(removePostFromList(postId));
+                    }}
+                  />
+                ))}
+                {isLoading && (
+                  <>
+                    <PostItemSkeleton />
+                    <PostItemSkeleton />
+                    <PostItemSkeleton />
+                  </>
+                )}
+              </TabPanel>
+            ))}
           </Box>
 
           {/* Mobile Create Stories Modal */}

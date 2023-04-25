@@ -4,6 +4,7 @@ import QRCode from 'react-qr-code';
 import '../../material/tickets.css';
 import { ref, set, update } from 'firebase/database';
 import { databaseInstance } from 'frontend/contexts/FirebaseInstance';
+import BackIconButton from '../../components/BackIconButton';
 
 const TicketCreate = () => {
   const [randomNum, setRandomNum] = useState(Math.floor(Math.random() * 100000 + 999999));
@@ -48,7 +49,8 @@ const TicketCreate = () => {
 
   return (
     <>
-      <div style={{ textAlign: 'center' }}>
+      <BackIconButton />
+      <div style={{ display: 'flex', textAlign: 'center' }}>
         <div id="ticket_parent_div">
           <h1>Use <span className="notranslate">Dint</span> Scanner</h1>
           <br />

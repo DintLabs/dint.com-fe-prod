@@ -7,52 +7,39 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { MdDelete } from 'react-icons/md';
 import { toast } from 'react-toastify';
-import {
-  LikePostInterface,
-  PostInterface,
-  BookmarkPostInterface,
-} from '../../../interfaces/postInterface';
+import { LikePostInterface, PostInterface } from 'frontend/interfaces/postInterface';
 import {
   addBookmarkForPost,
   addLikeForPost,
   deleteBookmarkForPost,
   postDelete,
   unlikeForPost,
-} from '../../../redux/actions/postActions';
+} from 'frontend/redux/actions/postActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { useLounge } from '../../../contexts/LoungeContext';
-import TipPopUp from '../../../components/tip/TipPopUp';
-import { useLocation, useNavigate } from 'react-router';
+import { AppDispatch, RootState } from 'frontend/redux/store';
+import TipPopUp from 'frontend/components/tip/TipPopUp';
+import { useNavigate } from 'react-router';
 
 type PostActionsProps = {
   post: PostInterface;
-  setPost:  React.Dispatch<React.SetStateAction<PostInterface>>;
-  onPostChange?: () => void;
-  onPostDelete?: (postId: number) => void;
-  onPostLike?: (likes: LikePostInterface[], postId: number) => void;
-  isBookmarked?: boolean;
+  onPostBookmark: (postId: number, bookmarked: boolean) => void;
+  onPostLike: (postId: number, likes: LikePostInterface[]) => void;
+  onPostDelete: (postId: number) => void;
 };
 
 function PostActions({
   post,
-  setPost,
-  onPostChange,
-  onPostDelete,
   onPostLike,
-  isBookmarked,
+  onPostBookmark,
+  onPostDelete,
 }: PostActionsProps) {
   const loggedInUser = useSelector((state: RootState) => state.user.userData);
   const dispatch = useDispatch<AppDispatch>();
-  const { updatePost } = useLounge();
-  const location = useLocation();
   const navigate = useNavigate();
 
   const [likeInProgress, setLikeInProgress] = React.useState<boolean>(false);
   const [liked, setLiked] = React.useState<boolean>(false);
-  const [bookmarked, setBookmarked] = React.useState<boolean>(
-    isBookmarked ?? post.is_bookmarked ?? false,
-  );
+  const [bookmarked, setBookmarked] = React.useState<boolean>(post.is_bookmarked ?? false);
 
   const [showSendTip, setShowSendTip] = React.useState<boolean>(true);
   const [canDeletePost, setCanDeletePost] = React.useState(false);
@@ -95,10 +82,6 @@ function PostActions({
     };
   }, [navigate]);
 
-  const isBookmarksPage = React.useMemo(() => {
-    return location.pathname.includes('bookmarks');
-  }, [location.pathname]);
-
   const handleLike = async () => {
     if (!loggedInUser || !loggedInUser.id) {
       toast.error('Please login to continue');
@@ -127,10 +110,7 @@ function PostActions({
       };
 
       setLiked(false);
-      setPost(updatedPost);
-      updatePost(updatedPost);
-      if (onPostChange) onPostChange();
-      if (onPostLike) onPostLike(newLikes, updatedPost.id)
+      onPostLike(updatedPost.id, newLikes)
       setLikeInProgress(false);
     } else {
       setLikeInProgress(true);
@@ -146,10 +126,7 @@ function PostActions({
         total_likes: currentTotalLikes + 1,
       };
       setLiked(true);
-      setPost(updatedPost);
-      updatePost(updatedPost);
-      if (onPostChange) onPostChange();
-      if (onPostLike) onPostLike(newLikes, updatedPost.id)
+      onPostLike(updatedPost.id, newLikes)
       setLikeInProgress(false);
     }
   };
@@ -165,12 +142,10 @@ function PostActions({
       return;
     }
 
-    const bookmarkResp: BookmarkPostInterface = await dispatch(
-      addBookmarkForPost(post.id)
-    );
-    if (bookmarkResp) {
-      setBookmarked(true);
-    }
+    await dispatch(addBookmarkForPost(post.id));
+
+    setBookmarked(true);
+    onPostBookmark(post.id, true);
   };
 
   const deleteBookmark = async () => {
@@ -181,16 +156,11 @@ function PostActions({
 
     await dispatch(deleteBookmarkForPost(post.id));
 
-    if (isBookmarksPage) {
-      if (onPostDelete) {
-        onPostDelete(post.id);
-      }
-    }
-
     setBookmarked(false);
+    onPostBookmark(post.id, false);
   };
 
-  const deletePost = async () => {
+  const handlePostDelete = async () => {
     if (!canDeletePost) {
       toast.error(`User can't delete the post`);
       return;
@@ -202,10 +172,8 @@ function PostActions({
     }
 
     await dispatch(postDelete(post.id));
+    onPostDelete(post.id);
 
-    if (onPostDelete) {
-      onPostDelete(post.id);
-    }
     toast.success('Post has been successfully deleted.');
   };
 
@@ -253,7 +221,7 @@ function PostActions({
 
       {/* "Delete" button */}
       {canDeletePost && (
-        <IconButton onClick={deletePost}>
+        <IconButton onClick={handlePostDelete}>
           <MdDelete />
         </IconButton>
       )}

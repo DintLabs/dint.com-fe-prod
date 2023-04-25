@@ -81,7 +81,9 @@ const useLoungeController = (): ContextInterface => {
     if (post.type === 'video' && activeType === 'video' && videoPosts.length > 0) {
       setVideoPosts((prev) => [post, ...prev]);
     }
-    setPosts((prev) => [post, ...prev]);
+    if (posts.length > 0) {
+      setPosts((prev) => [post, ...prev]);
+    }
 
     getUserPostCounts();
   };

@@ -1,29 +1,34 @@
-import React, { useContext, useState } from 'react'
-import { ThemeContext } from '../../contexts/ThemeContext'
-import { uploadMedia } from 'frontend/services/mediaService'
-import { useNavigate } from 'react-router'
-import { postTypes } from 'frontend/data'
-import { toast } from 'react-toastify'
-
-import MultimediaIcon from '../../assets/img/icons/picture.png'
-import { Box, Button, Divider, Input, Stack, useMediaQuery } from '@mui/material'
-import './navbarTab.css'
+import React from 'react';
+import { toast } from 'react-toastify';
+import { postTypes } from 'frontend/data';
+import { useNavigate } from 'react-router';
+import { uploadMedia } from 'frontend/services/mediaService';
+import { ThemeContext } from 'frontend/contexts/ThemeContext';
+import { Box, Button, Divider, Input, Stack, useMediaQuery } from '@mui/material';
+import MultimediaIcon from 'frontend/assets/img/icons/picture.png';
+import 'frontend/components/common/post.scss';
+import './navbarTab.css';
 
 interface Props {
-  widthScreen?: number
-  createPost?: Function
+  createPost?: Function;
+  hideTextField?: boolean;
+  forSubscription?: boolean;
 }
 
-const AddPost = ({ widthScreen, createPost }: Props) => {
-  const mobileView = useMediaQuery('(max-width:899px)')
-  const navigate = useNavigate()
+const AddPost = ({
+  createPost,
+  hideTextField = false,
+  forSubscription = false,
+}: Props) => {
+  const mobileView = useMediaQuery('(max-width:899px)');
+  const navigate = useNavigate();
 
-  const [file, setFile] = useState<any>({})
-  const [image, setImage] = useState('')
-  const [video, setVideo] = useState('')
-  const [content, setContent] = useState('')
-  const [loading, setLoading] = useState(false)
-  const { toggle } = useContext(ThemeContext)
+  const [file, setFile] = React.useState<any>({});
+  const [image, setImage] = React.useState('');
+  const [video, setVideo] = React.useState('');
+  const [content, setContent] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const { toggle } = React.useContext(ThemeContext);
 
   const onCreatePost = async (e: any) => {
     e.stopPropagation()
@@ -32,8 +37,6 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
     if (!loading) {
       setLoading(true)
       const toastId = toast.loading('Uploading File...')
-      navigate('/lounge')
-
       const user = JSON.parse(localStorage.getItem('userData') ?? '{}')
       if (!user.id) {
         toast.update(toastId, {
@@ -46,23 +49,25 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
 
       if (file?.size) {
         try {
-          const uploadResult = await uploadMedia(file, 'photos', false, 'post')
+          const uploadResult = await uploadMedia(file, 'photos', forSubscription, forSubscription ? undefined : 'post');
           toast.update(toastId, {
             render: 'File Uploaded Successful',
             type: 'success',
             isLoading: false,
-          })
+          });
 
-          const result = createPost && await createPost(toastId, {
-            type: image
-              ? postTypes.image.value
-              : video
-              ? postTypes.video.value
-              : postTypes.text.value,
-            user: user.id,
-            media: uploadResult?.data?.data?.data[0]?.media_file_url || '',
-            content,
-          })
+          if (createPost) {
+            await createPost(toastId, {
+              type: image
+                ? postTypes.image.value
+                : video
+                  ? postTypes.video.value
+                  : postTypes.text.value,
+              user: user.id,
+              media: uploadResult?.data?.data?.data[0]?.media_file_url || '',
+              content,
+            });
+          }
         } catch (exception: any) {
           toast.update('Error adding...', {
             render: exception.toString(),
@@ -92,6 +97,10 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
 
           setTimeout(() => toast.dismiss(), 2000)
         }
+      }
+
+      if (!forSubscription) {
+        navigate('/lounge');
       }
 
       setContent('')
@@ -161,20 +170,24 @@ const AddPost = ({ widthScreen, createPost }: Props) => {
         </Box>
 
         <Divider />
-        <div className='text-content-container'>
-          <Input
-            multiline
-            fullWidth
-            maxRows={5}
-            disableUnderline={true}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder='Compose new post...'
-            className='text-content-input'
-            style={{ color: toggle ? '#ffffff' : '#161C24' }}
-          />
-        </div>
-        <Divider />
+        {!hideTextField && (
+          <>
+            <div className='text-content-container'>
+              <Input
+                multiline
+                fullWidth
+                maxRows={5}
+                disableUnderline={true}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder='Compose new post...'
+                className='text-content-input'
+                style={{ color: toggle ? '#ffffff' : '#161C24' }}
+              />
+            </div>
+            <Divider />
+          </>
+        )}
 
         {image && (
           <div className='position-relative d-flex media-file-preview-container'>

@@ -2,8 +2,8 @@ import React from 'react';
 import { IEvent } from 'frontend/types/event';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
 import POLYGON_ICON from 'frontend/assets/img/web3/matic-token.png';
+import Button from 'frontend/components/common/Button';
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
@@ -16,14 +16,9 @@ import {
 type EventListCardProps = {
   event: IEvent,
   onEventDetails: (event: IEvent) => void;
-  onGetTicket: (event: IEvent) => void;
 }
 
-const EventListCard = ({
-  event,
-  onEventDetails,
-  onGetTicket,
-}: EventListCardProps) => {
+const EventListCard = ({ event, onEventDetails }: EventListCardProps) => {
   const { toggle } = React.useContext(ThemeContext);
   const [details, setDetails] = React.useState<React.ReactNode[]>([]);
 
@@ -64,21 +59,11 @@ const EventListCard = ({
         </CardContent>
         <CardActions sx={{ p: 2 }}>
           <Button
-            variant="contained"
+            label="Show details"
             onClick={() => {
               onEventDetails(event)
             }}
-          >
-            Show details
-          </Button>
-          <Button
-              variant="contained"
-              onClick={() => {
-                onGetTicket(event);
-              }}
-          >
-            Get Ticket
-          </Button>
+          />
         </CardActions>
       </Card>
     </Grid>

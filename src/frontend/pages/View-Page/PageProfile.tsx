@@ -3,7 +3,8 @@ import { getPageCategoryLabelFromValue } from 'frontend/utils'
 import { createPagePost, getPagePosts } from 'frontend/redux/slices/viewPage'
 import { dispatch, RootState } from 'frontend/redux/store'
 import { ThemeContext } from '../../contexts/ThemeContext'
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import SubscriptionSection from '../../components/view-page/SubscriptionSection'
 import SubscriptionModal from 'frontend/components/view-page/SubscriptionModal'
@@ -15,11 +16,13 @@ import PrivateCard from 'frontend/components/common/PrivateCard'
 import coverPhoto from '../../material/images/create-page-cover-photo.png'
 import MediaList from 'frontend/components/view-page/MediaList'
 import TabPanel from '../../components/common/TabPanel'
-import AddPost from 'frontend/components/common/AddPost'
+import AddPost from 'frontend/pages/Lounge/AddPost';
+import AddIcon from '@mui/icons-material/Add';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { Box, Stack } from '@mui/system'
-import { Avatar, Divider, IconButton, Tab, Tabs, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Stack, Avatar, Divider, Modal, IconButton, Tab, Tabs, Typography, useMediaQuery, useTheme } from '@mui/material'
+import BackIconButton from 'frontend/components/BackIconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 type PageProfileProps = {
   isCreator: boolean
@@ -34,10 +37,12 @@ type PostPaginationPayload = {
 
 const PageProfile = (props: PageProfileProps) => {
   const mobileView = useMediaQuery("(max-width:899px)");
-  const theme = useTheme()
+  const theme = useTheme();
+  const navigate = useNavigate();
   const posts = useSelector((state: RootState) => state?.viewPage?.posts)
   const pageData = useSelector((state: RootState) => state?.viewPage?.pageData)
   const userData = useSelector((state: RootState) => state?.user?.userData)
+  const [addPostOpened, setAddPostOpened] = React.useState<boolean>(false);
   const [creatorMenuAnchorEl, setCreatorMenuAnchorEl] = React.useState<null | HTMLElement>(null)
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState<boolean>(false)
@@ -156,6 +161,14 @@ const PageProfile = (props: PageProfileProps) => {
     })
   }
 
+  const createPost = async (toastId: string, payload: any) => {
+    await dispatch(createPagePost(toastId, {
+      ...payload,
+      page: +pageData?.id,
+    }));
+    setAddPostOpened(false);
+  };
+
   return (
     <>
       {/* center side view page and creator page */}
@@ -177,6 +190,8 @@ const PageProfile = (props: PageProfileProps) => {
           className='page-profile-section'
           style={{ backgroundColor: toggle ? '#161C24' : '#FFFFFF' }}
         >
+          <BackIconButton onClick={() => navigate('/lounge')} />
+
           {/* Cover photo */}
           <Box
             className='cover-photo-container full-image-container'
@@ -197,6 +212,15 @@ const PageProfile = (props: PageProfileProps) => {
                 {getPageCategoryLabelFromValue(+pageData?.type) || 'Category'}
               </Typography>
             </Stack>
+
+            <Box display="flex" flexGrow={1} />
+
+            <IconButton
+              onClick={() => setAddPostOpened(true)}
+              sx={{ width: '68px' }}
+            >
+              <AddIcon />
+            </IconButton>
           </Stack>
 
           {/* Description */}
@@ -220,8 +244,45 @@ const PageProfile = (props: PageProfileProps) => {
           )}
 
           {/* Add new Post */}
-
-          {props?.isCreator ? <AddPost createPost={createPagePost} pageId={+pageData?.id} /> : null}
+          {props?.isCreator && !mobileView && (
+            <Modal open={addPostOpened} onClose={() => setAddPostOpened(false)}>
+              <AddPost
+                hideTextField
+                forSubscription
+                createPost={createPost}
+              />
+            </Modal>
+          )}
+          {props?.isCreator && mobileView && addPostOpened && (
+            <Box
+              style={{
+                width: '100%',
+                height: '100%',
+                position: 'fixed',
+                zIndex: 999,
+                background: 'rgba(0,0,0,0.5)',
+                top: 0,
+                left: 0,
+              }}
+            >
+              <CloseIcon
+                onClick={() => setAddPostOpened(false)}
+                style={{
+                  color: 'black',
+                  cursor: 'pointer',
+                  position: 'absolute',
+                  top: '80px',
+                  right: '35px',
+                  zIndex: 9999,
+                }}
+              />
+              <AddPost
+                hideTextField
+                forSubscription
+                createPost={createPost}
+              />
+            </Box>
+          )}
 
           <Divider />
 
@@ -262,9 +323,9 @@ const PageProfile = (props: PageProfileProps) => {
                 isPage={true}
               />
             ) : (
-              <NothingToShow 
-              padding={14} 
-              color={toggle ? "#fff" : "#000"} 
+              <NothingToShow
+                padding={14}
+                color={toggle ? "#fff" : "#000"}
               />
             )
           ) : (
@@ -283,9 +344,9 @@ const PageProfile = (props: PageProfileProps) => {
                 isPage={true}
               />
             ) : (
-              <NothingToShow 
-              padding={14} 
-              color={toggle ? "#fff" : "#000"} 
+              <NothingToShow
+                padding={14}
+                color={toggle ? "#fff" : "#000"}
               />
             )
           ) : (
@@ -336,4 +397,4 @@ const PageProfile = (props: PageProfileProps) => {
   )
 }
 
-export default PageProfile
+export default PageProfile;
