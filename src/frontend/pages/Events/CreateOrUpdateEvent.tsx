@@ -2,13 +2,13 @@ import React from 'react';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import { Controller, useForm } from 'react-hook-form';
 import { dispatch, RootState } from 'frontend/redux/store';
 import { uploadMedia } from 'frontend/services/mediaService';
 import { createEvent, updateEvent } from 'frontend/redux/slices/event';
 import { ThemeContext } from 'frontend/contexts/ThemeContext';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { Controller } from 'react-hook-form';
 import { IEvent } from 'frontend/types/event';
 import {
   Grid,
